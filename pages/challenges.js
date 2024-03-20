@@ -1,3 +1,4 @@
+import Link from "next/link";
 import * as React from "react";
 
 function ChallengesPage() {
@@ -43,7 +44,9 @@ function ChallengesPage() {
     return (
         <div className="flex flex-col pb-2.5 bg-orange-50">
             <header className="flex overflow-hidden relative flex-col px-4 pt-3 pb-20 w-full text-center min-h-[356px] max-md:max-w-full">
+                <Link href="/">
                 <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/651bdb5346aad668426ecb6714d4a05adc01d882b6f7d8d211646feb0d383aae?apiKey=30dce9aa5b094dc98ca07a318d005dda&" alt="" className="object-cover absolute inset-0 size-full" />
+                </Link>
                 <div className="flex relative gap-5 justify-between text-lg font-medium leading-9 text-orange-50 max-md:flex-wrap max-md:max-w-full">
                     <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/39043117b20d899878c336840ffb5f7672ae7817a1f998a0c531ef269b1e5aa8?apiKey=30dce9aa5b094dc98ca07a318d005dda&" alt="" className="shrink-0 my-auto max-w-full aspect-[4.76] w-[156px]" />
                     <div className="justify-center px-3 py-1 bg-red-400 rounded-md"> Connect Wallet </div>
@@ -88,7 +91,7 @@ function ChallengeCard({ challenge }) {
         <article className="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow justify-center text-base leading-6 max-md:mt-6">
                 <div className="flex flex-col pb-7 w-full bg-orange-100 rounded-3xl">
-                    <div className="items-center px-16 pt-5 pb-28 bg-white rounded-3xl text-zinc-600 max-md:px-5"> Challenge <br /> cover img{" "} </div>
+                    {/* <div className="items-center px-16 pt-5 pb-28 bg-white rounded-3xl text-zinc-600 max-md:px-5"> Challenge <br /> cover img{" "} </div> */}
                     <h2 className="mx-6 mt-6 text-xl font-semibold tracking-wide leading-8 text-stone-950 max-md:mx-2.5"> {challenge.name} </h2>
                     <p className="mx-6 mt-3 text-zinc-600 max-md:mx-2.5"> {challenge.summary} </p>
                     <div className="flex gap-2 mx-6 mt-3 font-medium tracking-normal text-center text-yellow-800 leading-[150%] max-md:mx-2.5">

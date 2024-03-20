@@ -4,11 +4,13 @@ import Link from "next/link";
 export default function HowItWorks() {
   return (
     <div className="flex flex-col items-center pt-4 pr-20 pb-20 pl-6 bg-orange-50 max-md:px-5">
+      <Link href="/">
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/65f15083542bf178f275a9998ecc1b5923e574645453e831349893fe691baeea?"
         className="self-start max-w-full aspect-[4.76] w-[156px]"
       />
+      </Link>
       <div className="mt-24 text-7xl font-semibold text-center leading-[87.84px] text-stone-950 max-md:mt-10 max-md:text-4xl">
         How it works
       </div>
@@ -23,7 +25,7 @@ export default function HowItWorks() {
                 Each challenge is focused on a key area like defi or gaming and shows you how to get started. You will find info about each challenge. If you don’t know anything about a topic, no worries! We’ve curated the content you need to get started!
               </div>
               <div className="flex gap-5 mt-14 text-xl font-semibold leading-9 text-center items-center max-md:flex-wrap max-md:mt-10">
-                <Link href="/browse-challenges">
+                <Link href="/challenges">
                   <div className="flex flex-1 gap-4 text-red-400 rounded-xl border border-red-400 border-solid px-4 py-2 justify-center items-center cursor-pointer">
                     <img
                       loading="lazy"
