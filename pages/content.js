@@ -14,21 +14,23 @@ function Content() {
   return (
     <div className="flex flex-col pb-2.5 h-screen bg-orange-50">
       <header className="flex overflow-hidden relative flex-col px-4 pt-3 pb-20 w-full text-center min-h-[356px] max-md:max-w-full">
-        <Link href="/">
+       
           <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/651bdb5346aad668426ecb6714d4a05adc01d882b6f7d8d211646feb0d383aae?apiKey=30dce9aa5b094dc98ca07a318d005dda&"
             alt=""
             className="object-cover absolute inset-0 size-full"
           />
-        </Link>
+       
         <div className="flex relative gap-5 justify-between text-lg font-medium leading-9 text-orange-50 max-md:flex-wrap max-md:max-w-full">
+            <Link href="/">
           <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/39043117b20d899878c336840ffb5f7672ae7817a1f998a0c531ef269b1e5aa8?apiKey=30dce9aa5b094dc98ca07a318d005dda&"
             alt=""
             className="shrink-0 my-auto max-w-full aspect-[4.76] w-[156px]"
           />
+          </Link>
           <div className="justify-center px-3 py-1 bg-red-400 rounded-md">
             {" "}
             Connect Wallet{" "}
@@ -129,10 +131,10 @@ function ChallengeCard({ challenge }) {
               {" "}
               {challenge.category}{" "}
             </div>
-            <div className="justify-center px-4 py-1 bg-orange-200 rounded">
+            {/* <div className="justify-center px-4 py-1 bg-orange-200 rounded">
               {" "}
               Level {challenge.level}{" "}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

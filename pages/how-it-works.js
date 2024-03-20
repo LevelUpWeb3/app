@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function HowItWorks() {
   return (
-    <div className="flex flex-col items-center pt-4 pr-20 pb-20 pl-6 bg-orange-50 max-md:px-5">
+    <div className="flex flex-col items-center pt-4 pr-20 pb-20 pl-6 bg-orange-50 max-md:px-5 h-screen">
       <Link href="/">
       <img
         loading="lazy"

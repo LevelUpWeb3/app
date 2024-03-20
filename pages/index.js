@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center pt-3 bg-orange-50">
+    <div className="flex flex-col items-center h-screen pt-3 bg-orange-50">
       <div className="flex items-center justify-between w-full text-lg font-medium leading-9 text-center text-orange-50 max-w-[1476px] px-5 max-md:flex-wrap max-md:max-w-full">
         {/* Link to Home with LevelUp logo */}
         <Link href="/">
@@ -16,13 +16,13 @@ export default function Home() {
 
         {/* Centered navigation options */}
         <div className="flex-grow flex justify-center gap-5">
-          <Link href="/Content">
+          <Link href="/content">
             <div className="cursor-pointer px-3 py-1 text-black">Content</div>
           </Link>
-          <Link href="/Podcast">
+          <Link href="/podcast">
             <div className="cursor-pointer px-3 py-1 text-black">Podcast</div>
           </Link>
-          <Link href="/Docs">
+          <Link href="/docs">
             <div className="cursor-pointer px-3 py-1 text-black">Docs</div>
           </Link>
         </div>
