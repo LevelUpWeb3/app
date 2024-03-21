@@ -16,14 +16,16 @@ export default function Home() {
 
         {/* Centered navigation options */}
         <div className="flex-grow flex justify-center gap-5">
+          <Link href="/challenges">
+            <div className="cursor-pointer px-3 py-1 text-black">
+              Challenges
+            </div>
+          </Link>
           <Link href="/content">
             <div className="cursor-pointer px-3 py-1 text-black">Content</div>
           </Link>
           <Link href="/podcast">
             <div className="cursor-pointer px-3 py-1 text-black">Podcast</div>
-          </Link>
-          <Link href="/docs">
-            <div className="cursor-pointer px-3 py-1 text-black">Docs</div>
           </Link>
         </div>
 
@@ -85,7 +87,7 @@ export default function Home() {
       <img
         loading="lazy"
         src="/landing.png"
-        className="self-stretch mt-7 w-full aspect-[2.94] max-md:max-w-full"
+        className="self-stretch mt-7 w-full aspect-[2.94] max-md:max-w-full bottom-0"
       />
     </div>
   );
