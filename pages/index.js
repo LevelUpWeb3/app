@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Button from "@/components/Button";
 
 export default function Home() {
   return (
@@ -61,7 +62,7 @@ export default function Home() {
 
       <div className="flex gap-5 mt-9 text-xl font-semibold leading-9 text-center max-md:flex-wrap">
         {/* Browse Challenges Button */}
-        <Link href="/challenges">
+        {/* <Link href="/challenges">
           <div className="cursor-pointer flex flex-1 flex-auto gap-4 px-5 text-red-400 rounded-xl border border-red-400 border-solid">
             <img
               loading="lazy"
@@ -70,9 +71,12 @@ export default function Home() {
             />
             <div className="flex-auto my-auto">Browse challenges</div>
           </div>
-        </Link>
+        </Link> */}
+        <Button href="/challenges" >Get Started</Button>
+        <Button color="secondary" href="/how-it-works">How it works</Button>
+
         {/* How It Works Button */}
-        <Link href="/how-it-works">
+        {/* <Link href="/how-it-works">
           <div className="cursor-pointer flex flex-1 flex-auto gap-5 pr-5 rounded-xl border border-solid border-stone-950 text-stone-950">
             <img
               loading="lazy"
@@ -81,7 +85,7 @@ export default function Home() {
             />
             <div className="flex-auto my-auto">How it works</div>
           </div>
-        </Link>
+        </Link> */}
       </div>
 
       <img
