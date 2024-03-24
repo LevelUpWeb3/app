@@ -2,6 +2,7 @@ import Link from "next/link";
 import * as React from "react";
 import content from "../public/content.json";
 import { useState } from "react";
+import Navigationbar from "@/components/Navigationbar";
 
 function Content() {
   const [challenges, setChallenges] = useState([]);
@@ -12,7 +13,8 @@ function Content() {
   }, []);
 
   return (
-    <div className="flex flex-col pb-2.5 h-screen bg-orange-50">
+    <div className="flex flex-col pb-2.5 h-screen bg-orange-50 h-screen">
+      
       <header className="flex overflow-hidden relative flex-col px-4 pt-3 pb-20 w-full text-center min-h-[356px] max-md:max-w-full">
        
           <img
@@ -23,18 +25,7 @@ function Content() {
           />
        
         <div className="flex relative gap-5 justify-between text-lg font-medium leading-9 text-orange-50 max-md:flex-wrap max-md:max-w-full">
-            <Link href="/">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/39043117b20d899878c336840ffb5f7672ae7817a1f998a0c531ef269b1e5aa8?apiKey=30dce9aa5b094dc98ca07a318d005dda&"
-            alt=""
-            className="shrink-0 my-auto max-w-full aspect-[4.76] w-[156px]"
-          />
-          </Link>
-          <div className="justify-center px-3 py-1 bg-red-400 rounded-md">
-            {" "}
-            Connect Wallet{" "}
-          </div>
+        <Navigationbar />
         </div>
         <h1 className="relative self-center mt-24 mb-9 text-7xl font-semibold leading-[87.84px] text-stone-950 max-md:mt-10 max-md:text-4xl">
           {" "}
@@ -71,9 +62,9 @@ function Content() {
                     ? "text-white bg-stone-950"
                     : "text-stone-950"
                 }`}
-                onClick={() => setSelectedCategory("Gaming")}
+                onClick={() => setSelectedCategory("ZK")}
               >
-                Gaming
+                ZK
               </button>
               <button
                 className={`justify-center items-start px-6 py-2 rounded max-md:px-5 ${
@@ -81,9 +72,9 @@ function Content() {
                     ? "text-white bg-stone-950"
                     : "text-stone-950"
                 }`}
-                onClick={() => setSelectedCategory("NFT")}
+                onClick={() => setSelectedCategory("Smart Contract")}
               >
-                NFT
+                Smart Contract
               </button>
             </div>
           </nav>

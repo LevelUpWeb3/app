@@ -2,6 +2,7 @@ import Link from "next/link";
 import * as React from "react";
 import content from "../public/content.json";
 import { useState } from "react";
+import Navigationbar from "@/components/Navigationbar";
 
 function Content() {
   const [challenges, setChallenges] = useState([]);
@@ -13,34 +14,23 @@ function Content() {
 
   return (
     <div className="flex flex-col pb-2.5 h-screen bg-orange-50">
-      <header className="flex overflow-hidden relative flex-col px-4 pt-3 pb-20 w-full text-center min-h-[356px] max-md:max-w-full">
+       <header className="flex overflow-hidden relative flex-col px-4 pt-3 pb-20 w-full text-center min-h-[356px] max-md:max-w-full">
        
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/651bdb5346aad668426ecb6714d4a05adc01d882b6f7d8d211646feb0d383aae?apiKey=30dce9aa5b094dc98ca07a318d005dda&"
-            alt=""
-            className="object-cover absolute inset-0 size-full"
-          />
-       
-        <div className="flex relative gap-5 justify-between text-lg font-medium leading-9 text-orange-50 max-md:flex-wrap max-md:max-w-full">
-            <Link href="/">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/39043117b20d899878c336840ffb5f7672ae7817a1f998a0c531ef269b1e5aa8?apiKey=30dce9aa5b094dc98ca07a318d005dda&"
-            alt=""
-            className="shrink-0 my-auto max-w-full aspect-[4.76] w-[156px]"
-          />
-          </Link>
-          <div className="justify-center px-3 py-1 bg-red-400 rounded-md">
-            {" "}
-            Connect Wallet{" "}
-          </div>
-        </div>
-        <h1 className="relative self-center mt-24 mb-9 text-7xl font-semibold leading-[87.84px] text-stone-950 max-md:mt-10 max-md:text-4xl">
-          {" "}
-          Podcast{" "}
-        </h1>
-      </header>
+       <img
+         loading="lazy"
+         src="https://cdn.builder.io/api/v1/image/assets/TEMP/651bdb5346aad668426ecb6714d4a05adc01d882b6f7d8d211646feb0d383aae?apiKey=30dce9aa5b094dc98ca07a318d005dda&"
+         alt=""
+         className="object-cover absolute inset-0 size-full"
+       />
+    
+     <div className="flex relative gap-5 justify-between text-lg font-medium leading-9 text-orange-50 max-md:flex-wrap max-md:max-w-full">
+     <Navigationbar />
+     </div>
+     <h1 className="relative self-center mt-24 mb-9 text-7xl font-semibold leading-[87.84px] text-stone-950 max-md:mt-10 max-md:text-4xl">
+       {" "}
+       Podcast{" "}
+     </h1>
+   </header>
       <main className="self-center mt-10 w-full max-w-[1390px] max-md:max-w-full">
         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
           <nav className="flex flex-col w-[15%] max-md:ml-0 max-md:w-full">
@@ -92,7 +82,7 @@ function Content() {
             <div className="flex flex-col grow max-md:mt-10 max-md:max-w-full">
            
               <div className="px-5 mt-7 max-md:max-w-full">
-                <div className="flex flex-wrap gap-6 max-md:flex-col max-md:gap-0">
+                {/* <div className="flex flex-wrap gap-6 max-md:flex-col max-md:gap-0">
                   {challenges
                     .filter(
                       (challenge) =>
@@ -102,7 +92,8 @@ function Content() {
                     .map((challenge, index) => (
                       <ChallengeCard key={index} challenge={challenge} />
                     ))}
-                </div>
+                </div> */}
+                <h1 className="relative self-center mt-24 mb-9 text-7xl font-semibold leading-[87.84px] text-stone-950 max-md:mt-10 max-md:text-4xl"> Coming soon... </h1> 
               </div>
             </div>
           </section>

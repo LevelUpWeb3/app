@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import Navigationbar from "../components/Navigationbar"; // Import the NavigationBar component
 // const ChallengeCard = ({ challenge }) => (
 //   <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
 //     <div className="flex flex-col grow justify-center text-base leading-6 text-zinc-600 max-md:mt-10 max-md:max-w-full">
@@ -12,6 +13,7 @@ import Link from "next/link";
 
 const ChallengeDetails = ({ challenge }) => (
   <div className="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
+     <Navigationbar />
     <div className="flex flex-col self-stretch my-auto font-medium max-md:mt-10 max-md:max-w-full">
       <h1 className="text-4xl tracking-wide leading-[56px] text-stone-950 max-md:max-w-full">
         {challenge.name}

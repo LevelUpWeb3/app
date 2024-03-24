@@ -1,42 +1,12 @@
 import Link from "next/link";
 import Button from "@/components/Button";
+import Navigationbar from "../components/Navigationbar"; // Import the NavigationBar component
+
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center h-screen pt-3 bg-orange-50">
-      <div className="flex items-center justify-between w-full text-lg font-medium leading-9 text-center text-orange-50 max-w-[1476px] px-5 max-md:flex-wrap max-md:max-w-full">
-        {/* Link to Home with LevelUp logo */}
-        <Link href="/">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/cf21546417b806aeeeffda361a7d8c77a4d16b2dc3eae8f7059a2c37953764d7?"
-            className="cursor-pointer shrink-0 my-auto max-w-full aspect-[4.76] w-[156px]"
-            alt="LevelUp Logo"
-          />
-        </Link>
-
-        {/* Centered navigation options */}
-        <div className="flex-grow flex justify-center gap-5">
-          <Link href="/challenges">
-            <div className="cursor-pointer px-3 py-1 text-black">
-              Challenges
-            </div>
-          </Link>
-          <Link href="/content">
-            <div className="cursor-pointer px-3 py-1 text-black">Content</div>
-          </Link>
-          <Link href="/podcast">
-            <div className="cursor-pointer px-3 py-1 text-black">Podcast</div>
-          </Link>
-        </div>
-
-        {/* Connect Wallet Button */}
-        <Link href="/wallet">
-          <div className="cursor-pointer justify-center px-3 py-1 bg-red-400 rounded-md">
-            Connect Wallet
-          </div>
-        </Link>
-      </div>
+      <Navigationbar />
 
       <div className="mt-24 text-7xl font-semibold text-center leading-[88px] text-stone-950 w-[720px] max-md:mt-10 max-md:max-w-full max-md:text-4xl max-md:leading-[54px]">
         Welcome to Level up Challenges!
