@@ -1,0 +1,44 @@
+[
+  {
+    "name": "ZK Speedrun: Noir, Circom, Zokrates",
+    "summary": "This guide will show you how to use Noir, Circom and Zokrates on Scroll in 15 min!",
+    "labels": ["ZK"],
+    "author": "Ahmed",
+    "url": "https://dev.to/turupawn/zk-speedrun-3-dsls-in-15-minutes-noir-circom-zokrates-g3d"
+  },
+  {
+    "name": "5 ways to deploy your smart contract",
+    "summary": "This guide will show you how 5 different ways with different dev tools to deploy a smart contract on Scroll!",
+    "labels": ["Smart Contract"],
+    "author": "Raza",
+    "url": "https://www.razacodes.com/blog/deploy-smartcontract-any-evm"
+  },
+  {
+    "name": "Noir on Scroll",
+    "summary": "This guide will show you how to use Noir on Scroll!",
+    "labels": ["ZK"],
+    "author": "Ahmed",
+    "url": "https://dev.to/filosofiacodigoen/noir-on-scroll-knm"
+  },
+  {
+    "name": "The Complete Python Web3 Stack",
+    "summary": "A guide on how to use Vyper, Ape & Web3.py to write, deploy & interact with smart contracts",
+    "labels": ["Smart Contract"],
+    "author": "Raza",
+    "url": "https://www.razacodes.com/blog/vyper-intro"
+  },
+  {
+    "name": "Ultimate Guide to Attestations!",
+    "summary": "This is the ultimate guide on attestations. We'll go from 0 to 100% with practical examples for developers.",
+    "labels": ["Attestation"],
+    "author": "Ahmed",
+    "url": "https://dev.to/filosofiacodigoen/understand-attestations-ultimate-guide-i8f"
+  },
+  {
+    "name": "How to trade without Oracles",
+    "summary": "This guide will show a novel smart contract solution for onchain pricing without using Oracles",
+    "labels": ["Defi"],
+    "author": "Raza",
+    "url": "https://www.razacodes.com/blog/Guardian-Trading-without-Oracles"
+  }
+]
