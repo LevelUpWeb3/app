@@ -22,7 +22,7 @@ const useCheckViewport = () => {
   const isPortrait = useMediaQuery(theme.breakpoints.down("md"));
   // desktop(orientation: landscape)
   const isLandscape = useMediaQuery(theme.breakpoints.up("md"));
-
+  
   return {
     isDesktop,
     isTabletLandscape,
