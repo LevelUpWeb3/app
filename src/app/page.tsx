@@ -47,15 +47,15 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="flex w-full justify-center gap-[3rem] mt-[3.6rem] mb-[2.6rem] max-md:gap-0 max-md:justify-between">
+        <div className="flex w-full justify-center gap-[3rem] mt-[3.6rem] mb-[2.6rem] max-md:gap-[2rem] max-md:flex-col max-md:items-center ">
           <Button
             href="/challenges"
             color="primary"
-            width={isMobile ? "19rem" : "25rem"}
+            width="25rem"
           >
             Browse challenges
           </Button>
-          <Button href="/how-it-works" width={isMobile ? "15.6rem" : "25rem"}>
+          <Button href="/how-it-works" width="25rem">
             How it works
           </Button>
         </div>
