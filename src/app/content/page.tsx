@@ -8,7 +8,7 @@ function ContentPage({}) {
       <header className="overflow-hidden relative flex items-center justify-center  w-full text-center h-[356px] max-md:max-w-full max-md:h-[18rem]">
         <img
           loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/651bdb5346aad668426ecb6714d4a05adc01d882b6f7d8d211646feb0d383aae?apiKey=30dce9aa5b094dc98ca07a318d005dda&"
+          src="/images/landing/banner.svg"
           alt=""
           className="object-cover absolute inset-0 size-full"
         />

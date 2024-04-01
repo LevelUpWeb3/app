@@ -1,6 +1,5 @@
 import { SvgIcon } from "@mui/material";
 
-import ScrollLogoLightIcon from "@/assets/svgs/common/scroll-logo-light.svg";
 import ScrollLogoIcon from "@/assets/svgs/common/scroll-logo.svg";
 
 const ScrollLogo = (props) => {
@@ -8,7 +7,7 @@ const ScrollLogo = (props) => {
   return (
     <SvgIcon
       sx={{ fontSize: "12rem", height: "auto", verticalAlign: "middle" }}
-      component={light ? ScrollLogoLightIcon : ScrollLogoIcon}
+      component={ScrollLogoIcon}
       inheritViewBox
       {...restProps}
     ></SvgIcon>

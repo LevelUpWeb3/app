@@ -63,7 +63,7 @@ const LandingPage = () => {
       <img
         loading="lazy"
         className="w-full max-md:bottom-0 max-md:absolute"
-        src="/images/landing/landing.png"
+        src="/images/landing/landing.svg"
       />
     </Container>
   );
