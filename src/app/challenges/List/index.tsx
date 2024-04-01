@@ -66,7 +66,7 @@ const Protocols = () => {
   );
 
   useEffect(() => {
-    fetch("/data/markdownData.json")
+    fetch("/data/challenges/markdownData.json")
       .then((res) => res.json())
       .then((data) => {
         setData(data);

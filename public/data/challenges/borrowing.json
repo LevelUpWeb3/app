@@ -1,0 +1,16 @@
+{
+  "id": "borrowing",
+  "name": "Borrowing in 5 Levels",
+  "index": 1,
+  "website": "https://github.com/orgs/LevelUpWeb3/repositories",
+  "docs": "https://github.com/orgs/LevelUpWeb3/repositories",
+  "summary": "Take this challenge to master lending in 5 levels",
+  "labels": [
+    "Defi"
+  ],
+  "content": {
+    "compiledSource": "/*@jsxRuntime automatic @jsxImportSource react*/\nconst {Fragment: _Fragment, jsxDEV: _jsxDEV} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = Object.assign({\n    h2: \"h2\",\n    p: \"p\"\n  }, _provideComponents(), props.components);\n  return _jsxDEV(_Fragment, {\n    children: [_jsxDEV(_components.h2, {\n      children: \"What is this Mission About?1\"\n    }, undefined, false, {\n      fileName: \"<source.js>\",\n      lineNumber: 2,\n      columnNumber: 1\n    }, this), \"\\n\", _jsxDEV(_components.p, {\n      children: \"The summary outlines a progressive learning journey in developing smart contracts for decentralized finance (DeFi), starting from the basics of handling Ethereum transactions, including deposits, withdrawals, and borrowing in Level 1. As learners progress, they delve into handling ERC20 tokens, introduce collateral-based borrowing, and eventually develop advanced collateral management and liquidation strategies, culminating in building a full-featured DeFi lending platform by Level 5. Each level escalates in complexity, from basic transactions to crafting a financial masterpiece that prepares one to be a frontrunner in the blockchain revolution.\"\n    }, undefined, false, {\n      fileName: \"<source.js>\",\n      lineNumber: 4,\n      columnNumber: 1\n    }, this), \"\\n\", _jsxDEV(_components.h2, {\n      children: \"Key Features of the Mission\"\n    }, undefined, false, {\n      fileName: \"<source.js>\",\n      lineNumber: 6,\n      columnNumber: 1\n    }, this)]\n  }, undefined, true, {\n    fileName: \"<source.js>\",\n    lineNumber: 1,\n    columnNumber: 1\n  }, this);\n}\nfunction MDXContent(props = {}) {\n  const {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components);\n  return MDXLayout ? _jsxDEV(MDXLayout, Object.assign({}, props, {\n    children: _jsxDEV(_createMdxContent, props, undefined, false, {\n      fileName: \"<source.js>\"\n    }, this)\n  }), undefined, false, {\n    fileName: \"<source.js>\"\n  }, this) : _createMdxContent(props);\n}\nreturn {\n  default: MDXContent\n};\n",
+    "frontmatter": {},
+    "scope": {}
+  }
+}

@@ -3,7 +3,7 @@ const path = require('path');
 const matter = require('gray-matter');
 
 const markdownDirectory = path.join(process.cwd(), 'src/challenges');
-const outputDirectory = path.join(process.cwd(), 'public/data');
+const outputDirectory = path.join(process.cwd(), 'public/data/challenges');
 
 const processMarkdownFiles = async () => {
   const fileNames = fs.readdirSync(markdownDirectory);
@@ -20,23 +20,35 @@ const processMarkdownFiles = async () => {
       mdxOptions: {
         development: true,
       }
-    }); 
+    });
+    
+    if(!data.name) {
+     return null
+    }
 
-    return {
+    const challengeData = {
       id,
       ...data,
       content: mdxSource
     };
+    const individualOutputPath = path.join(outputDirectory, `${id}.json`);   
+
+    if (!fs.existsSync(outputDirectory)) {
+      fs.mkdirSync(outputDirectory, { recursive: true }); 
+    }
+    fs.writeFileSync(individualOutputPath, JSON.stringify(challengeData, null, 2)); // Pretty print JSON
+
+    return challengeData;
   });
 
-  const allChallengesData = await Promise.all(allChallengesDataPromises); 
+  const allChallengesData = await Promise.all(allChallengesDataPromises);
 
-  const markdownData = allChallengesData.filter(data => data.name).sort(({ index: a }, { index: b }) => {
+  const markdownData = allChallengesData.filter(data => data).sort(({ index: a }, { index: b }) => {
     return a - b;
   });
 
   if (!fs.existsSync(outputDirectory)) {
-    fs.mkdirSync(outputDirectory, { recursive: true }); 
+    fs.mkdirSync(outputDirectory, { recursive: true });
   }
 
   fs.writeFileSync(path.join(outputDirectory, 'markdownData.json'), JSON.stringify(markdownData, null, 2)); // Pretty print JSON
