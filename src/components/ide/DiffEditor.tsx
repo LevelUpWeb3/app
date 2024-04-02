@@ -1,28 +1,35 @@
 "use client";
 
 import React from "react";
-import Editor from "@monaco-editor/react";
+import { DiffEditor } from "@monaco-editor/react";
 
-interface CodeSnippetProps {
+interface DiffEditorProps {
   language: string;
-  codeSnippet: string;
+  code: string;
+  codeSolution: string;
 }
 
-const CodeSnippet = ({ language, codeSnippet }: CodeSnippetProps) => {
+const DiffEditorComponent = ({
+  language,
+  code,
+  codeSolution
+}: DiffEditorProps) => {
   return (
     <div>
-      <Editor
+      <DiffEditor
         height="calc(100vh - 25px)"
         theme="hc-black"
         language={language}
-        value={codeSnippet}
+        original={codeSolution}
+        modified={code}
         options={{
           wordWrap: "on",
           readOnly: true,
-          selectOnLineNumbers: false,
           minimap: { enabled: false },
+          renderSideBySide: false,
           fontSize: 14,
           folding: false,
+          onlyShowAccessibleDiffViewer: true,
           lineNumbersMinChars: 2,
           scrollBeyondLastLine: false,
           automaticLayout: true
@@ -32,4 +39,4 @@ const CodeSnippet = ({ language, codeSnippet }: CodeSnippetProps) => {
   );
 };
 
-export default CodeSnippet;
+export default DiffEditorComponent;

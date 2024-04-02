@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
-import LanguageSelector from "./LanguageSelector";
 
-const CodeEditor = () => {
-  const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("Language Selector");
+interface CodeEditorProps {
+  language: string;
+  code: string;
+  onChange: (code: string) => void;
+}
 
+const CodeEditor = ({ language, code, onChange }: CodeEditorProps) => {
   const onMount: OnMount = (editor, monaco) => {
     const model = editor.getModel();
     const lastLine = model?.getLineCount();
@@ -19,30 +21,21 @@ const CodeEditor = () => {
     editor.focus();
   };
 
-  const onSelect = (language: string) => {
-    setLanguage(language);
-    console.log(language);
-  };
-
   return (
     <div>
-      <LanguageSelector
-        language={language}
-        onSelect={onSelect}
-      />
       <Editor
-        height="75vh"
+        height="calc(100vh - 25px)"
         theme="hc-black"
         language={language}
         defaultValue="// some comment"
         onMount={onMount}
         value={code}
-        onChange={(code) => setCode(code || "")}
+        onChange={(code) => onChange(code || "")}
         options={{
           wordWrap: "on",
           minimap: { enabled: false },
           cursorStyle: "underline",
-          fontSize: 16,
+          fontSize: 14,
           folding: false,
           lineNumbersMinChars: 2,
           scrollBeyondLastLine: false,

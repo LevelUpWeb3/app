@@ -7,9 +7,15 @@ export const LANGUAGE_VERSIONS = {
 
 export const CODE_SNIPPETS = {
   variables: {
-    solidity: `\n//Solidity code below \n// Declare a variable`,
-    vyper: `\n#Vyper code below \n# Declare a variable`,
-    python: `\n#Python code below \n# Declare a variable`,
-    javascript: `\n//Javascript code below \n// Declare a variable`
+    solidity: `//Solidity code below \n// Declare a variable`,
+    vyper: `#Vyper code below \n# Declare a variable`,
+    python: `#Python code below \n# Declare a variable`,
+    javascript: `//Javascript code below \n// Declare a variable`
+  },
+  lesson2: {
+    solidity: `\n//This is lesson 2`,
+    vyper: `\n#This is lesson 2`,
+    python: `\n#This is lesson 2 Python`,
+    javascript: `\n//This is lesson 2 JS`
   }
 };
