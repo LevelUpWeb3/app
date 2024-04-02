@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Header } from "@/components/Header";
+import { SwitchTheme } from "@/components/DarkMode";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +20,26 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("min-h-screen bg-background", inter.className)}>
-        <div className="relative flex min-h-dvh flex-col bg-background">
-          <main className="flex-1">{children}</main>
-        </div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {/* <div className="relative flex min-h-dvh flex-col bg-background">
+            <main className="flex-1">{children}</main>
+          </div> */}
+
+          <div className="flex flex-col">
+            <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b bg-background px-4 shadow-md shadow-zinc-300">
+              <h1 className="text-xl font-semibold">Level Up</h1>
+              {/* pass the title of mdx in playground above */}
+
+              <SwitchTheme className="ml-auto gap-1.5" />
+            </header>
+            <main className="flex-1">{children}</main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

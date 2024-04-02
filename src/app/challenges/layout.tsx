@@ -2,17 +2,15 @@ import { ReactNode } from "react";
 import {
   Book,
   Bot,
-  Code2,
+  Home,
   LifeBuoy,
-  Settings2,
   Share,
   SquareTerminal,
-  SquareUser,
-  Triangle
+  SquareUser
 } from "lucide-react";
 
-import { Badge } from "../../components/Badge";
 import { Button, buttonVariants } from "../../components/Button";
+import { SwitchTheme } from "@/components/DarkMode";
 import {
   Tooltip,
   TooltipContent,
@@ -32,13 +30,16 @@ export default function ChallengesLayout({
     <div className="grid h-screen w-full pl-[53px]">
       <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
         <div className="border-b p-2">
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label="Home"
+          <Link
+            className={buttonVariants({
+              variant: "outline",
+              size: "icon",
+              className: "bg-muted"
+            })}
+            href="/"
           >
-            <Triangle className="size-5 fill-foreground" />
-          </Button>
+            <Home className="size-5" />
+          </Link>
         </div>
         <nav className="grid gap-1 p-2">
           <TooltipProvider>
@@ -47,7 +48,7 @@ export default function ChallengesLayout({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-lg bg-muted"
+                  className="rounded-lg "
                   aria-label="Playground"
                 >
                   <SquareTerminal className="size-5" />
@@ -102,16 +103,16 @@ export default function ChallengesLayout({
                   variant="ghost"
                   size="icon"
                   className="rounded-lg"
-                  aria-label="Settings"
+                  aria-label="Share"
                 >
-                  <Settings2 className="size-5" />
+                  <Share className="size-5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent
                 side="right"
                 sideOffset={5}
               >
-                Settings
+                Share
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -160,18 +161,6 @@ export default function ChallengesLayout({
         </nav>
       </aside>
       <div className="flex flex-col">
-        <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b bg-background px-4">
-          <h1 className="text-xl font-semibold">Level Up</h1>
-          {/* pass the title of mdx in playground above */}
-          <Button
-            variant="outline"
-            size="sm"
-            className="ml-auto gap-1.5 text-sm"
-          >
-            <Share className="size-3.5" />
-            Share
-          </Button>
-        </header>
         <main className="grid gap-4 grid-cols-2 w-full h-[100vh] p-4 sm:w-full md:w-full lg:w-full ">
           <div className="overflow-y-auto items-start">{beginner}</div>
           <div className=" overflow-y-hidden max-h-[100vh] rounded-xl">
