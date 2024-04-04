@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 
 import { Button, buttonVariants } from "../../components/Button";
-import { SwitchTheme } from "@/components/DarkMode";
 import {
   Tooltip,
   TooltipContent,
@@ -117,7 +116,7 @@ export default function ChallengesLayout({
             </Tooltip>
           </TooltipProvider>
         </nav>
-        <nav className="mt-auto grid gap-1 p-2">
+        <nav className="mt-auto grid gap-1 p-2 mb-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

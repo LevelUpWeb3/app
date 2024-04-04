@@ -28,7 +28,7 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
 
   return (
     <Toggle
-      variant="outline"
+      variant="default"
       size="sm"
       className={className}
       aria-label="Toggle theme"

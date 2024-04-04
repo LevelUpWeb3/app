@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Web3AuthWrapper from "@/components/web3auth";
 import { SwitchTheme } from "@/components/DarkMode";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -26,16 +27,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <div className="relative flex min-h-dvh flex-col bg-background">
-            <main className="flex-1">{children}</main>
-          </div> */}
-
           <div className="flex flex-col">
             <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b bg-background px-4 shadow-md shadow-zinc-300">
               <h1 className="text-xl font-semibold">Level Up</h1>
-              {/* pass the title of mdx in playground above */}
-
-              <SwitchTheme className="ml-auto gap-1.5" />
+              <div className="ml-auto flex">
+                <Web3AuthWrapper />
+                <SwitchTheme className="gap-1.5" />
+              </div>
             </header>
             <main className="flex-1">{children}</main>
           </div>
