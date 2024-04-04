@@ -3,5 +3,6 @@
     "trailingComma": "none",
     "singleQuote": false,
     "printWidth": 80,
-    "tabWidth": 4
-  }
+    "tabWidth": 2,
+    "singleAttributePerLine": true
+}
