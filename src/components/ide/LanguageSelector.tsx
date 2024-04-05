@@ -18,7 +18,7 @@ const languages = Object.entries(LANGUAGE_VERSIONS);
 const LanguageSelector = ({ language, onSelect }: LanguageProps) => {
   return (
     <div
-      className="mb-2"
+      className="mb-2 mr-auto mt-1 ml-1"
       style={{ position: "relative", zIndex: 1 }}
     >
       <Select

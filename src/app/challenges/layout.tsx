@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import {
   Book,
   Bot,
@@ -164,7 +164,6 @@ export default function ChallengesLayout({
           <div className="overflow-y-auto items-start">{beginner}</div>
           <div className=" overflow-y-hidden max-h-[100vh] rounded-xl">
             {ide}
-            <div />
           </div>
         </main>
       </div>

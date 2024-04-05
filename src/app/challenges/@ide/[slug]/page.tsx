@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { Card } from "@/components/Card";
+import { Button } from "@/components/Button";
+import Modal from "@/components/ide/Modal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs";
 import CodeEditor from "@/components/ide/CodeEditor";
 import CodeSnippet from "@/components/ide/CodeSnippet";
@@ -14,6 +16,7 @@ const IdePage = () => {
   const [language, setLanguage] = useState("Language Selector");
   const [code, setCode] = useState("");
   const [codeSolution, setCodeSolution] = useState("");
+  const [showModal, setShowModal] = useState(false); //UPDATED FILE
 
   const { slug: paramSlug } = useParams();
   console.log(paramSlug);
@@ -68,10 +71,43 @@ const IdePage = () => {
       {/* </div> */}
       <TabsContent value="editorDiff">
         <Card>
-          <LanguageSelector
-            language={language}
-            onSelect={onSelect}
-          />
+          <div className="flex">
+            <LanguageSelector
+              language={language}
+              onSelect={onSelect}
+            />
+            {codeSolution == code && language !== "Language Selector" ? (
+              <>
+                <Button
+                  variant="ghost"
+                  className="bg-emerald-500 rounded-lg mt-1 mr-1 ml-auto"
+                  onClick={() => setShowModal(true)}
+                >
+                  Correct
+                </Button>
+                <Modal
+                  isOpen={showModal}
+                  isClose={() => setShowModal(false)}
+                  code={code}
+                >
+                  <div>
+                    <h1 className="rounded-xl p-4 text-2xl">
+                      Leveled up: {paramSlug} 🔥
+                    </h1>
+                    <p className="bg-black rounded-xl p-4">{code}</p>
+                  </div>
+                </Modal>
+              </>
+            ) : (
+              <Button
+                variant="ghost"
+                className="bg-rose-500 rounded-lg mt-1 mr-1 ml-auto"
+                onClick={() => setShowModal(false)}
+              >
+                Incorrect
+              </Button>
+            )}
+          </div>
           <DiffEditorComponent
             language={language}
             code={code}
