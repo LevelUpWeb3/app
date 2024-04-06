@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import Modal from "@/components/ide/Modal";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs";
 import CodeEditor from "@/components/ide/CodeEditor";
 import CodeSnippet from "@/components/ide/CodeSnippet";
@@ -17,6 +19,7 @@ const IdePage = () => {
   const [code, setCode] = useState("");
   const [codeSolution, setCodeSolution] = useState("");
   const [showModal, setShowModal] = useState(false); //UPDATED FILE
+  const modalRef = useRef(null); //UPDATED FILE
 
   const { slug: paramSlug } = useParams();
   console.log(paramSlug);
@@ -86,15 +89,24 @@ const IdePage = () => {
                   Correct
                 </Button>
                 <Modal
+                  // ref={modalRef}
                   isOpen={showModal}
                   isClose={() => setShowModal(false)}
                   code={code}
                 >
                   <div>
-                    <h1 className="rounded-xl p-4 text-2xl">
-                      Leveled up: {paramSlug} 🔥
+                    <h1 className="rounded-xl  text-black p-4 text-2xl">
+                      Challenge completed: {paramSlug} 🔥
                     </h1>
-                    <p className="bg-black rounded-xl p-4">{code}</p>
+                    <SyntaxHighlighter
+                      language="solidity"
+                      style={a11yDark}
+                    >
+                      {code}
+                    </SyntaxHighlighter>
+                  </div>
+                  <div className="text-center  text-black mt-4">
+                    <span>🌟 You have successfully leveled up 🌟</span>
                   </div>
                 </Modal>
               </>

@@ -13,7 +13,7 @@ export const CODE_SNIPPETS = {
     javascript: `//Javascript code below \n// Declare a variable`
   },
   lesson2: {
-    solidity: `\n//This is lesson 2`,
+    solidity: `//This is lesson 2\npragma solidity ^0.8.7;\n\ncontract Lesson2 {\n\nstring public name = "Lesson 2";\nuint256 public number = 2;\n\n}`,
     vyper: `\n#This is lesson 2`,
     python: `\n#This is lesson 2 Python`,
     javascript: `\n//This is lesson 2 JS`
