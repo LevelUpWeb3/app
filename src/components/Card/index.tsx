@@ -26,7 +26,6 @@ const Summary = styled(Typography)(() => ({
   lineHeight: "2.4rem",
   marginBottom: "1.2rem",
   color: " #5B5B5B",
-  fontFamily: "Roboto",
 }));
 
 const LabelContainer = styled("div")(() => ({

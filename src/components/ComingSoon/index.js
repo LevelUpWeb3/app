@@ -5,7 +5,7 @@ const ComingSoon = () => {
         src="/images/comming_soon.png"
         className="w-[320px] mb-2 mx-auto max-md:w-[24rem]"
       />
-      <h1 className="font-semibold text-xl">Coming soon...</h1>
+      <h1 className="font-semibold text-xl max-md:text-[18px]">Coming soon...</h1>
     </div>
   );
 };

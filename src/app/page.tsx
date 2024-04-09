@@ -7,7 +7,9 @@ import Layout from "@/components/Layout";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 const Container = styled(Box)({
-  minHeight: "calc(100vh - 6.2rem)",
+  height: "calc(100vh - 65px)",
+  minHeight: "64rem",
+  position: 'relative'
 });
 
 const StyledBox = styled(Box)({
@@ -41,7 +43,7 @@ const LandingPage = () => {
             <div className="text-[1.8rem] tracking-normal leading-[2.8rem] text-center max-md:text-[1.4rem] max-md:leading-[2rem]">
               Total challenges
             </div>
-            <div className="text-[4rem] tracking-wide leading-[56px] text-center font-[Roboto] max-md:text-[2rem] max-md:leading-[2.8rem]">
+            <div className="text-[4rem] tracking-wide leading-[56px] text-center font-develop max-md:text-[2rem] max-md:leading-[2.8rem]">
               20
             </div>
           </div>

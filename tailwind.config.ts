@@ -122,6 +122,7 @@ const config: Config = {
     fontFamily: {
       sans: ['"TransSansPremium"', ...defaultTheme.fontFamily.sans],
       display: ['"TransSansPremium"', ...defaultTheme.fontFamily.sans],
+      develop: ['"Roboto Flex"', ...defaultTheme.fontFamily.sans],
     },
     screens: {
       sm: "600px",
