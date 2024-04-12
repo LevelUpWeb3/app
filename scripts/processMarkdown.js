@@ -18,7 +18,7 @@ const processMarkdownFiles = async () => {
     const { data, content } = matter(fileContents);
     const mdxSource = await serialize(content, {
       mdxOptions: {
-        development: true,
+        development: 'development' === process.env.NODE_ENV,
       }
     });
     
