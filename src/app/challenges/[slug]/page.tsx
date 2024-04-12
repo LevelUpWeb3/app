@@ -23,7 +23,7 @@ const ChallengeInfo = styled(Box)({
   },
 });
 
-const ChallengeCover = styled("div")({
+const ChallengeCover = styled("img")({
   width: "100%",
   background: "#fff",
   borderRadius: "2rem",
@@ -45,7 +45,7 @@ const Label = styled(Typography)(() => ({
 
 const ChallengeDetails = ({ challengeData }) => (
   <ChallengeInfo>
-    <ChallengeCover  />
+    <ChallengeCover src={challengeData.heroImage} />
     <div className="flex my-[4rem] flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
       <h1 className="text-[4rem] tracking-wide leading-[56px] text-stone-950 max-md:max-w-full">
         {challengeData.name}
@@ -59,7 +59,7 @@ const ChallengeDetails = ({ challengeData }) => (
         ))}
       </div>
       <div className="flex gap-[2.4rem] mt-6 mr-5 text-xl font-semibold leading-9 text-center items-center max-md:flex-wrap max-md:mr-2.5">
-        <Button color="primary" href="">
+        <Button color="primary" href={challengeData.website}>
           Go to Github
         </Button>
         <Button href="">Share</Button>

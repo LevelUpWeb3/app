@@ -103,12 +103,12 @@ const Protocols = () => {
             value={searchParams.network}
             onChange={handleChangeNetwork}
           ></LevelSelect>
-          <ComingSoon />
-          {/* <CardBox>
+      {/*     <ComingSoon /> */}
+          <CardBox>
             {data.filter((item) => item?.name).map((item, index) => (
               <Card content={item} key={index} />
             ))}
-          </CardBox> */}
+          </CardBox>
         </Box>
       </Grid>
     </Container>
