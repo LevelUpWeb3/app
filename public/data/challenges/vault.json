@@ -2,6 +2,7 @@
   "id": "vault",
   "name": "Vault",
   "index": 2,
+  "level": 2,
   "website": "https://github.com/orgs/LevelUpWeb3/repositories",
   "docs": "https://github.com/orgs/LevelUpWeb3/repositories",
   "summary": "Take this challenge to master lending in 5 levels",

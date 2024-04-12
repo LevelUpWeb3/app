@@ -67,6 +67,9 @@ const Card = ({ content, key }) => {
         {content.labels?.map((label, index) => (
           <Label key={index}>{label}</Label>
         ))}
+        {
+          content.level ? <Label >Level {content.level}</Label> : null
+        }
       </LabelContainer>
     </CardArticle>
   );

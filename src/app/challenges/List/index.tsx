@@ -52,11 +52,11 @@ const Protocols = () => {
   const trigger = useScrollTrigger();
   const [searchParams, setSearchParams] = useState({
     category: "All categories",
-    network: CHALLENGE_LEVEL_LIST[0],
+    level: CHALLENGE_LEVEL_LIST[0],
   });
 
   const [data, setData] = useState<any>([]);
-  const [isLoading, setLoading] = useState(true);
+  const [filteredData, setFilteredData] = useState([]);
 
   const [isSticky] = useState(true);
 
@@ -70,9 +70,20 @@ const Protocols = () => {
       .then((res) => res.json())
       .then((data) => {
         setData(data);
-        setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const filteredData = data.filter((item) => {
+      return (
+        (item.labels.includes(searchParams.category) ||
+          searchParams.category === "All categories") &&
+        (`Level${item.level}` === searchParams.level ||
+          searchParams.level === "All levels")
+      );
+    });
+    setFilteredData(filteredData);
+  }, [searchParams, data]);
 
   const handleChangeCategory = (value) => {
     setSearchParams((pre) => ({
@@ -81,10 +92,10 @@ const Protocols = () => {
     }));
   };
 
-  const handleChangeNetwork = (value) => {
+  const handleChangeLevel = (value) => {
     setSearchParams((pre) => ({
       ...pre,
-      network: value,
+      level: value,
     }));
   };
 
@@ -100,14 +111,15 @@ const Protocols = () => {
           <LevelSelect
             top={stickyTop}
             sticky={isSticky}
-            value={searchParams.network}
-            onChange={handleChangeNetwork}
+            value={searchParams.level}
+            onChange={handleChangeLevel}
           ></LevelSelect>
-      {/*     <ComingSoon /> */}
+          {/* <ComingSoon /> */}
           <CardBox>
-            {data.filter((item) => item?.name).map((item, index) => (
-              <Card content={item} key={index} />
-            ))}
+            {filteredData
+              .map((item, index) => (
+                <Card content={item} key={index} />
+              ))}
           </CardBox>
         </Box>
       </Grid>

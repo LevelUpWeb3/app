@@ -2,6 +2,7 @@
   "id": "borrowing",
   "name": "Borrowing in 5 Levels",
   "index": 1,
+  "level": 1,
   "website": "https://github.com/orgs/LevelUpWeb3/repositories",
   "docs": "https://github.com/orgs/LevelUpWeb3/repositories",
   "summary": "Take this challenge to master lending in 5 levels",
