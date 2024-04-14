@@ -22,6 +22,10 @@ const routes: PageMetadata[] = [
     path: "/challenges",
   },
   {
+    name: "Solidity Challenges",
+    path: "/solidity",
+  },
+  {
     name: "Challenge Detail",
     path: "/challenges/:Id",
   },
