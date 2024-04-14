@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote";
 import * as React from "react";
 import Link from "next/link";
-import Button from "@/components/Button";
+import PageButton from "./PageButton";
 import BackSvg from "@/assets/svgs/common/back.svg";
 import Head from "next/head";
 
@@ -23,14 +23,6 @@ const ChallengeInfo = styled(Box)({
   },
 });
 
-const ChallengeCover = styled("img")({
-  width: "100%",
-  background: "#fff",
-  borderRadius: "2rem",
-  height: "100%",
-  minHeight: "27rem",
-});
-
 const Label = styled(Typography)(() => ({
   fontSize: "1.6rem",
   background: "#FFDEB5",
@@ -45,7 +37,6 @@ const Label = styled(Typography)(() => ({
 
 const ChallengeDetails = ({ challengeData }) => (
   <ChallengeInfo>
-    <ChallengeCover src={challengeData.heroImage} />
     <div className="flex my-[4rem] flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
       <h1 className="text-[4rem] tracking-wide leading-[56px] text-stone-950 max-md:max-w-full">
         {challengeData.name}
@@ -97,7 +88,7 @@ export default function ChallengeDetailsPage() {
         <div className="flex flex-col grow shrink-0 basis-0 w-fit max-md:max-w-full">
           <div className="flex gap-3 self-start mt-20 text-lg font-semibold leading-8 whitespace-nowrap text-stone-950 max-md:mt-10">
             <Link
-              href="/challenges"
+              href="/solidity"
               className="flex items-center"
             >
               <SvgIcon
@@ -113,14 +104,12 @@ export default function ChallengeDetailsPage() {
               {data?.content && <ChallengeDetails challengeData={data} />}
             </div>
           </div>
-          <div className="flex gap-5 justify-between self-start mt-[4.8rem] text-xl font-semibold leading-9 text-center max-md:mt-10">
-            <div>About</div>
-          </div>
           <div className="z-10 shrink-0 mt-5 h-1 max-md:max-w-full" />
           <div className="shrink-0 h-px border border-solid mb-[4.8rem] bg-stone-950 border-stone-950 max-md:max-w-full" />
           <div className="markdown-body ">
             {data?.content && <MDXRemote {...data.content} />}
           </div>
+          <PageButton />
         </div>
       </div>
     </>
