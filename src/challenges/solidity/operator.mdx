@@ -1,0 +1,58 @@
+---
+name: Operator
+index: 2
+lesson: 2
+summary: Introduction to Solidity operators
+labels: ["solidity"]
+---
+
+# Operator
+
+Operators link variables, statements and functions together. In Solidity, arithmetic and bit operators can be applied even if two operands do not have same type.
+
+```solidity
+// SPDX-License-Identifier: MIT*pragma solidity ^0.8.24;
+
+contract Operator {
+
+    uint8 public constant x = 1;
+    uint32 public constant y = 4;
+    //x + y = 5;
+}
+```
+
+Ternary operator is used in expressions of the form `<conditional> ? <if-true> : <if-false>`. It evaluates if `<conditional>` is truthy or falsy.
+
+Compound and increment/decrement operators are available as shorthands. For example, `a += e` is equivalent to `a = a + e` .
+
+Other examples:
+
+- `a++` (equivalent to `a += 1` )
+- `a--` (equivalent to `a -= 1` )
+
+`*=` Multiplication assignment operator:
+
+```solidity
+let a = 5; // a is 5
+a *= 2; // a is now 10 (5 * 2)
+```
+
+In this example, `a *= 2` is equivalent to `a = a * 2`. The `*=` operator multiplies the value of `a` by `2` and then assigns the result back to `a`.
+
+`<<=` Left shift assignment operator:
+
+```solidity
+let b = 4; // b is 4 (binary representation: 100)
+b <<= 2; // b is now 16 (binary representation: 10000)
+```
+
+In this example, `b <<= 2` is equivalent to `b = b << 2`. The `<<=` operator shifts the bits of `b` two places to the left. Each shift to the left doubles the number, so shifting `4` (which is `100` in binary) two places to the left results in `16` (which is `10000` in binary).
+
+`>>=` Right shift assignment operator
+
+```solidity
+let c = 16; // c is 16 (binary representation: 10000)
+c >>= 2; // c is now 4 (binary representation: 100)
+```
+
+In this example, `c >>= 2` is equivalent to `c = c >> 2`. The `>>=` operator shifts the bits of `c` two places to the right. Each shift to the right halves the number, so shifting `16` (which is `10000` in binary) two places to the right results in `4` (which is `100` in binary).

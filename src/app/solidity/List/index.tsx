@@ -8,7 +8,7 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { styled } from "@mui/system";
 
 import ComingSoon from "@/components/ComingSoon";
-import { CHALLENGE_LEVEL_LIST, NORMAL_HEADER_HEIGHT } from "@/constants";
+import { NORMAL_HEADER_HEIGHT } from "@/constants";
 import Card from "@/components/Card";
 
 import Challenge from "./Challenge";
@@ -44,14 +44,12 @@ const CardBox = styled(Box)(() => ({
   display: "grid",
   gridTemplateColumns: "repeat(auto-fill, minmax(30rem, 1fr))",
   gap: "2.4rem",
-  // marginTop: "2.4rem",
 }));
 
 const Protocols = () => {
   const trigger = useScrollTrigger();
   const [searchParams, setSearchParams] = useState({
-    category: "All categories",
-    level: CHALLENGE_LEVEL_LIST[0],
+    category: "All challenges",
   });
 
   const [data, setData] = useState<any>([]);
@@ -65,7 +63,7 @@ const Protocols = () => {
   );
 
   useEffect(() => {
-    fetch("/data/challenges/markdownData.json")
+    fetch("/data/challenges/solidity/markdownData.json")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -75,10 +73,8 @@ const Protocols = () => {
   useEffect(() => {
     const filteredData = data.filter((item) => {
       return (
-        (item.labels.includes(searchParams.category) ||
-          searchParams.category === "All categories") &&
-        (`Level${item.level}` === searchParams.level ||
-          searchParams.level === "All levels") // TODO: remove level filter
+        item.name.includes(searchParams.category) ||
+        searchParams.category === "All challenges"
       );
     });
     setFilteredData(filteredData);

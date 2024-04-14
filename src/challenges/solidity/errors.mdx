@@ -1,0 +1,59 @@
+---
+name: Errors
+index: 18
+lesson: 18
+summary: Introduction to errors and how to use it in your smart contracts.
+labels: ["solidity"]
+---
+
+# Errors
+
+Errors in Solidity provide a convenient and gas-efficient way to explain why an operation failed. They can be defined inside and outside of contracts (including interfaces and libraries).
+
+They have to be used together with `revert` statement which causes all changes in the current call to be reverted and passes the error data back to the caller.
+
+Instances of errors can only be created using `revert` statements.
+
+Examples of ways to use custom errors:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+// Error for insufficient balance for transfer. Needed `required` but only
+// `available` available.
+// @param available balance available.
+// @param required requested amount to transfer.
+error InsufficientBalance(uint256 available, uint256 required);
+
+// Error for invalid recipient address
+error InvalidRecipient(address recipient);
+
+// Error for transfer amount being zero
+error ZeroTransfer();
+
+contract MyToken {
+    mapping(address => uint) balance;
+
+    function transfer(address to, uint256 amount) public {
+        if (amount > balance[msg.sender]) {
+            revert InsufficientBalance({
+                available: balance[msg.sender],
+                required: amount
+            });
+        }
+
+        if (to == address(0)) {
+            revert InvalidRecipient(to);
+        }
+
+        if (amount == 0) {
+            revert ZeroTransfer();
+        }
+
+        balance[msg.sender] -= amount;
+        balance[to] += amount;
+    }
+    // ...
+}
+```

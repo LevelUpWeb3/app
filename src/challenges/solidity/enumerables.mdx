@@ -1,0 +1,93 @@
+---
+order: 11
+title: Enumerables
+description: Introduction to enum types and how to use it in your smart contracts.
+difficulty: Beginner
+published: true
+
+name: Enumerables
+index: 11
+lesson: 11
+summary: Introduction to enum types and how to use it in your smart contracts.
+labels: ["solidity"]
+---
+
+# Enumerables
+
+Solidity supports enumerables(enum) and they are useful to keep track of state. Enums are one way to create a user-defined type.
+
+The options are represented by subsequent unsigned integer values starting from `0`.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Game {
+    // Enum representing game status
+    enum Status {
+        NotStarted,
+        InProgress,
+        GameOver,
+        Won
+    }
+
+    // Default value is the first element listed in
+    // definition of the type, in this case "NotStarted"
+    Status public status;
+
+    // Returns uint
+    // NotStarted - 0
+    // InProgress - 1
+    // GameOver   - 2
+    // Won        - 3
+    function getStatus() public view returns (Status) {
+        return status;
+    }
+
+    // Update status by passing uint into input
+    function setStatus(Status _status) public {
+        status = _status;
+    }
+
+    // You can update to a specific enum like this
+    function win() public {
+        status = Status.Won;
+    }
+
+    // delete resets the enum to its first value, 0
+    function reset() public {
+        delete status;
+    }
+}
+```
+
+To declare `enum`:
+
+```solidity// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+// This is saved as 'GameStatus.sol'
+
+enum Status {
+    NotStarted,
+    InProgress,
+    GameOver,
+    Won
+}
+```
+
+To import the `enum` above:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import "./GameStatus.sol";
+
+contract Enum {
+    Status public status;
+
+    function setStatus(Status _status) public {
+        status = _status;
+    }
+}
+```

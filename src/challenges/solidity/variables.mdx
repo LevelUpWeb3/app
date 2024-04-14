@@ -1,0 +1,40 @@
+---
+name: Variables
+index: 5
+lesson: 5
+summary: Introduction to Solidity variables
+labels: ["solidity"]
+---
+
+# Variables
+
+There are 3 types of variables in Solidity:
+
+1. State Variables
+   - Declared outside of functions
+   - Stored on the blockchain
+2. Local Variables
+   - Declared inside functions
+   - Not stored on the blockchain
+3. Global Variables
+   - Provides information about the blockchain
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Variables {
+    // State variables are stored on the blockchain.
+    string public text = "Hello";
+    uint256 public num = 123;
+
+    function doSomething() public {
+        // Local variables are not saved to the blockchain.
+        uint256 i = 456;
+
+        // Here are some global variables
+        uint256 timestamp = block.timestamp; // Current block timestamp
+        address sender = msg.sender; // address of the caller
+    }
+}
+```

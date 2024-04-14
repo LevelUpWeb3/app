@@ -1,0 +1,68 @@
+---
+name: Mapping
+index: 7
+lesson: 7
+summary: Introduction to Solidity mapping
+labels: ["solidity"]
+---
+
+# Mapping
+
+Maps are created with the syntax `mapping(keyType => valueType)`.
+
+The `keyType` can be any built-in value type, bytes, string, enum, or any contract. However, other user-defined or complex types, such as mappings, structs or array types are **not** allowed.
+
+`valueType` can be any type including another mapping or an array.
+
+You can think of mappings as hash table. They are virtually initialized such that every possible key exists and is mapped to a value whose byte-representation is all zeros.
+
+[Hash Table](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Hash_table_3_1_1_0_1_0_0_SP.svg/315px-Hash_table_3_1_1_0_1_0_0_SP.svg.png)
+
+Mappings can only have a data location of `storage`.
+
+They cannot be used as parameters of contract functions that are publicly visible. These restrictions are also true for arrays and structs that contain mappings.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Mapping {
+    // Mapping from address to uint
+    mapping(address => uint256) public myMap;
+
+    function get(address _addr) public view returns (uint256) {
+        // Mapping always returns a value.
+        // If the value was never set, it will return the default value.
+        return myMap[_addr];
+    }
+
+    function set(address _addr, uint256 _i) public {
+        // Update the value at this address
+        myMap[_addr] = _i;
+    }
+
+    function remove(address _addr) public {
+        // Reset the value to the default value.
+        delete myMap[_addr];
+    }
+}
+
+contract NestedMapping {
+    // Nested mapping (mapping from address to another mapping)
+    mapping(address => mapping(uint256 => bool)) public nested;
+
+    function get(address _addr1, uint256 _i) public view returns (bool) {
+        // You can get values from a nested mapping
+        // even when it is not initialized
+        return nested[_addr1][_i];
+    }
+
+    function set(address _addr1, uint256 _i, bool _boo) public {
+        nested[_addr1][_i] = _boo;
+    }
+
+    function remove(address _addr1, uint256 _i) public {
+        delete nested[_addr1][_i];
+    }
+}
+```

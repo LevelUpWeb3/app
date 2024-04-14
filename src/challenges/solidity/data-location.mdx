@@ -1,0 +1,42 @@
+---
+name: Data Location
+index: 16
+lesson: 16
+summary: Introduction to data locations and how to use it in your smart contracts.
+labels: ["solidity"]
+---
+
+# Data Location
+
+There are three data locations: `memory`, `storage` and `calldata`. These keywords are used to specify the location of the data.
+
+- `storage` is location where state variables are stored. Permanent data on the blockchain.
+
+- `memory` is used to hold temporary values. Lifeime of memory variables limited to an external function call.
+
+- `calldata` is non-modifiable, non-persistent location where function arguments are stored (behaves mostly like memory).
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract DataLocations {
+    uint256[] public numbers; // 'numbers' is a state variable and is stored in 'storage'
+
+    // 'arr' is a function argument and is stored in 'calldata'
+    function addToNumbers(uint256[] calldata arr) public {
+        for (uint256 i = 0; i < arr.length; i++) {
+            numbers.push(arr[i]); // 'arr[i]' is read from 'calldata'
+        }
+    }
+
+    // 'x' is a local variable and is stored in 'memory'
+    function calculateSum(uint256[] calldata arr) public pure returns (uint256) {
+        uint256 sum = 0; // 'sum' is a local variable and is stored in 'memory'
+        for (uint256 i = 0; i < arr.length; i++) {
+            sum += arr[i]; // 'arr[i]' is read from 'calldata'
+        }
+        return sum;
+    }
+}
+```
