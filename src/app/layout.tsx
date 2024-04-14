@@ -80,7 +80,10 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.9.0/github-markdown.min.css"
           crossOrigin="anonymous"
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="icon"
+          href="/favicon.ico"
+        />
       </head>
       <body>
         <AppRouterCacheProvider options={{ key: "css" }}>
