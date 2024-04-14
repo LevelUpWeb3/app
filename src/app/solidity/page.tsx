@@ -1,5 +1,6 @@
 "use client";
 
+import List from "./List";
 import { styled } from "@mui/material";
 
 const Header = styled("header")({
@@ -14,6 +15,7 @@ function SolidityChallengePage() {
           Solidity Challenges
         </h1>
       </Header>
+      <List />
     </div>
   );
 }
