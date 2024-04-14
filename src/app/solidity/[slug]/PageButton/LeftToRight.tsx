@@ -55,6 +55,7 @@ const cColor = (color, theme) => {
 const useStyles = makeStyles<any>()((theme, { width, color, whiteButton }) => ({
   wrapper: {
     position: "relative",
+    marginLeft: "auto",
     height: "5.4rem",
     overflow: "hidden",
     borderRadius: "1rem",

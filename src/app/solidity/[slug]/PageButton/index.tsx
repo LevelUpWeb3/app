@@ -32,10 +32,12 @@ const PageButton = () => {
   const nextPage =
     currentPage && pages.find((page) => page.index === currentPage.index + 1);
   const nextTitle = nextPage ? nextPage.name : null;
+  const nextSlug = nextPage ? nextPage.name.replace(/\s|\//g, "-") : null;
 
   const prevPage =
     currentPage && pages.find((page) => page.index === currentPage.index - 1);
   const prevTitle = prevPage ? prevPage.name : null;
+  const prevSlug = prevPage ? prevPage.name.replace(/\s|\//g, "-") : null;
 
   return (
     <div className="flex flex-col">
@@ -44,7 +46,7 @@ const PageButton = () => {
           <RightToLeftButton
             variant="outlined"
             className="group"
-            href={`/solidity/${prevTitle}`}
+            href={`/solidity/${prevSlug}`}
           >
             {prevTitle}
           </RightToLeftButton>
@@ -52,13 +54,13 @@ const PageButton = () => {
         {nextPage ? (
           <LeftToRightButton
             variant="outlined"
-            className="group"
-            href={`/solidity/${nextTitle}`}
+            className="group ml-auto"
+            href={`/solidity/${nextSlug}`}
           >
             {nextTitle}
           </LeftToRightButton>
         ) : (
-          <p className="italic">End of Challenge</p>
+          <p className="mt-2 text-4xl italic">End of Challenges</p>
         )}
       </div>
     </div>
