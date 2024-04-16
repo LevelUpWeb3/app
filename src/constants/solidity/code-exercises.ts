@@ -144,7 +144,7 @@ export const CODE_EXERCISES: CodeTemplatesType = {
     exercise5:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Structs {\n\n// Declare a struct named 'Person' with two properties: 'name' of type string and 'age' of type uint\n// Declare a variable of type 'Person' named 'person'\n// Initialize 'person' with 'name' as 'Alice' and 'age' as 20\n// Create a function 'getPerson' that returns the 'person' variable\n// Create a function 'setPerson' that takes a 'Person' as input and sets the 'person' variable\n}",
   },
-  conditional: {
+  "conditional-statements": {
     exercise1:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract ConditionalStatements {\n\n// Declare a variable of type uint named 'number' and initialize it with the value 10\n// Use an 'if' statement to check if 'number' is greater than 5\n}",
     exercise2:
