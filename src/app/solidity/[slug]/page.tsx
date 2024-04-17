@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { MDXRemote } from "next-mdx-remote";
+import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import * as React from "react";
 import Link from "next/link";
 import PageButton from "./PageButton";
+import IdePage from "./Ide";
 import BackSvg from "@/assets/svgs/common/back.svg";
 import Head from "next/head";
 
@@ -106,10 +108,20 @@ export default function ChallengeDetailsPage() {
           </div>
           <div className="z-10 shrink-0 mt-5 h-1 max-md:max-w-full" />
           <div className="shrink-0 h-px border border-solid mb-[4.8rem] bg-stone-950 border-stone-950 max-md:max-w-full" />
-          <div className="markdown-body ">
-            {data?.content && <MDXRemote {...data.content} />}
-          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 h-screen w-full gap-5 px-[6rem] max-w-[140rem] mx-auto">
+        <div className="markdown-body">
+          {data?.content && (
+            <MDXRemote
+              {...data.content}
+              components={MDXCodeHighlighter}
+            />
+          )}
           <PageButton />
+        </div>
+        <div>
+          <IdePage />
         </div>
       </div>
     </>

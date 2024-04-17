@@ -4,10 +4,6 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LeftToRightButton from "./LeftToRight";
 import RightToLeftButton from "./RightToLeft";
-import {
-  NavigateNextRounded,
-  NavigateBeforeRounded,
-} from "@mui/icons-material";
 
 const PageButton = () => {
   const [pages, setPages] = useState<any[]>([]);
@@ -31,17 +27,22 @@ const PageButton = () => {
 
   const nextPage =
     currentPage && pages.find((page) => page.index === currentPage.index + 1);
-  const nextTitle = nextPage ? nextPage.name : null;
-  const nextSlug = nextPage ? nextPage.name.replace(/\s|\//g, "-") : null;
-
   const prevPage =
     currentPage && pages.find((page) => page.index === currentPage.index - 1);
-  const prevTitle = prevPage ? prevPage.name : null;
-  const prevSlug = prevPage ? prevPage.name.replace(/\s|\//g, "-") : null;
+
+  let nextTitle, nextSlug, prevTitle, prevSlug;
+  if (nextPage) {
+    nextTitle = nextPage.name;
+    nextSlug = nextPage.name.replace(/\s|\//g, "-");
+  }
+  if (prevPage) {
+    prevTitle = prevPage.name;
+    prevSlug = prevPage.name.replace(/\s|\//g, "-");
+  }
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-between mt-6">
+      <div className="flex flex-row justify-between gap-6 mt-2 mb-6">
         {prevPage && (
           <RightToLeftButton
             variant="outlined"

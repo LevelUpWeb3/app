@@ -211,8 +211,15 @@ const Button = (props: ScrollButtonProps) => {
       animate={isHover ? "expanding" : "normal"}
     >
       {!loading && (
-        <IconButton classes={{ root: classes.icon }} component="span" disabled>
-          <SvgIcon component={ArrowRightIcon} inheritViewBox></SvgIcon>
+        <IconButton
+          classes={{ root: classes.icon }}
+          component="span"
+          disabled
+        >
+          <SvgIcon
+            component={ArrowRightIcon}
+            inheritViewBox
+          ></SvgIcon>
         </IconButton>
       )}
       <motion.div
