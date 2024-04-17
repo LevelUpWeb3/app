@@ -59,7 +59,7 @@ const IdePage = () => {
             variant="scrollable"
             scrollButtons="auto"
             sx={tabListStyles}
-            indicatorColor="transparent"
+            TabIndicatorProps={{ style: { display: "none" } }}
           >
             <Tab
               value="exercise1"
