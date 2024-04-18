@@ -52,16 +52,32 @@ contract Primitives {
     int256 public maxInt = type(int256).max;
 
     address public addr = 0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c;
-
-    /*
-    In Solidity, the data type byte represent a sequence of bytes.
-    Solidity presents two type of bytes types :
-
-     - fixed-sized byte arrays
-     - dynamically-sized byte arrays.
-
-     The term bytes in Solidity represents a dynamic array of bytes.
-     It’s a shorthand for byte[] .
-    */bytes1 a = 0xb5; //  [10110101]bytes1 b = 0x56; //  [01010110]// Default values// Unassigned variables have a default valuebool public defaultBoo; // falseuint256 public defaultUint; // 0int256 public defaultInt; // 0address public defaultAddr; // 0x0000000000000000000000000000000000000000
 }
+```
+
+## Bytes in Solidity
+
+In Solidity, the `bytes` data type is used to represent a sequence of bytes. Bytes are useful for storing binary data, such as file contents or cryptographic hashes.
+
+There are two types of byte arrays in Solidity:
+
+- **Fixed-size byte arrays**: These are declared with `bytes1` to `bytes32`. The number indicates the length of the array in bytes. For example, `bytes1` is a byte array of length 1, `bytes2` is a byte array of length 2, and so on up to `bytes32`.
+
+- **Dynamically-sized byte arrays**: These are declared with `bytes`. This type is similar to `byte[]` in other languages.
+
+Here's an example of how to use byte arrays:
+
+```solidity
+// Declare a fixed-size byte array
+bytes1 a = 0xb5; // [10110101]
+bytes1 b = 0x56; // [01010110]
+
+// Declare a bytes10 array
+bytes10 d = 0x68656c6c6f776f726c64; // "helloworld" in hexadecimal
+
+// Declare a bytes32 array
+bytes32 e = 0x68656c6c6f776f726c6420202020202020202020202020202020202020202020; // "helloworld" padded with spaces in hexadecimal
+
+// Declare a dynamically-sized byte array
+bytes memory c = "Hello, world!";
 ```
