@@ -1,0 +1,91 @@
+---
+name: Fallback
+index: 24
+lesson: 24
+summary: Introduction to fallback function and how to use it in your smart contracts.
+labels: ["solidity"]
+---
+
+# Fallback
+
+`fallback` function is activated when:
+
+- A contract is called without any function that exists
+- No data was provided and there is no receive Ether function
+
+A contract can have at most one `fallback` function declared using either:
+
+- `fallback() external payable { ... }`
+- `fallback (bytes calldata input) external payable returns (bytes memory output) { ... }`
+
+If `fallback` function was used in place of a `receive` function, it will only have 2300 gas stipend to limit gas intensive operations.
+
+Notice how `function` keyword is not required when declaring a `fallback` function. All fallback functions must have `external` visibility.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+// Example 1: Receiving Ether
+contract EtherReceiver {
+    uint public totalReceived;
+
+    // This fallback function is used to keep track of the total Ether received by the contract.
+    // It's triggered when Ether is sent to the contract's address in a transaction without data.
+    fallback() external payable {
+        totalReceived += msg.value;
+    }
+}
+
+// Example 2: Proxy Pattern
+contract Proxy {
+    address public implementation;
+
+    constructor(address _implementation) {
+        implementation = _implementation;
+    }
+
+    // This fallback function is used to implement the proxy pattern.
+    // Assuming implementation variable has `delegatecall` function.
+    // It catches any calls that don't match any of the proxy's functions and forwards them to the implementation contract.
+    // It's triggered when a function that doesn't exist in the proxy contract is called.
+    fallback() external payable {
+        (bool success, ) = implementation.delegatecall(msg.data);
+        require(success);
+    }
+}
+
+// Example 3: Default Functionality
+contract DefaultFunctionality {
+    // Event to emit when the fallback function is triggered
+    event FallbackTriggered(string message);
+
+    // This fallback function provides default functionality when no function is specified or the specified function doesn't exist.
+    // It's triggered when the contract is called without specifying any function, or if the function specified doesn't exist in the contract.
+    fallback() external {
+        // Emit an event when the fallback function is triggered
+        emit FallbackTriggered("Fallback function was called.");
+    }
+}
+
+// Example 4: Fallback with bytes type input and output
+contract FallbackWithInputOutput {
+    // Event to emit when the fallback function is triggered
+    event FallbackTriggered(string message, bytes input, bytes output);
+
+    // This fallback function takes an input, performs some operation, and returns an output.
+    // It's triggered when the contract is called without specifying any function, or if the function specified doesn't exist in the contract.
+    fallback(bytes calldata input) external payable returns (bytes memory) {
+        // Perform some operation with the input
+        bytes memory output = new bytes(input.length);
+        for (uint i = 0; i < input.length; i++) {
+            output[i] = input[i];
+        }
+
+        // Emit an event when the fallback function is triggered
+        emit FallbackTriggered("Fallback function was called.", input, output);
+
+        return output;
+    }
+}
+```

@@ -264,4 +264,28 @@ export const CODE_EXERCISES: CodeTemplatesType = {
     exercise5:
       "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract EtherUnits {\n\n// Declare a variable of type uint with the name 'weiToEther' and convert 1e18 wei to ether\n}",
   },
+  payable: {
+    exercise1:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n}",
+    exercise2:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\n}",
+    exercise3:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\n// Create a payable function named 'deposit' that can receive Ether\n}",
+    exercise4:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\n// Create a payable function named 'deposit' that can receive Ether\n// Create a function named 'withdraw' that sends all Ether stored in the contract to the 'recipient' address\n}",
+    exercise5:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\n// Create a payable function named 'deposit' that can receive Ether\n// Create a function named 'withdraw' that sends all Ether stored in the contract to the 'recipient' address\n// Create a receive function that calls the 'deposit' function when the contract receives Ether\n}",
+  },
+  fallback: {
+    exercise1:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\n// Declare a fallback function that increments a uint 'donationsCount' each time it's called\n}",
+    exercise2:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\n// Declare a fallback function that performs a call to an address 'target'\n}",
+    exercise3:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\n// Declare a fallback function that emits an event 'FallbackCalled' with the sender's address\n}",
+    exercise4:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\n// Declare a fallback function that takes a bytes input and returns its length\n}",
+    exercise5:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\n// Declare a fallback function that takes a bytes input, reverses it, and emits an event with the original and reversed input\n}",
+  },
 };

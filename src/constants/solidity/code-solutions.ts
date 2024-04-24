@@ -264,4 +264,28 @@ export const CODE_SOLUTIONS: CodeTemplatesType = {
     exercise5:
       "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract EtherUnits {\n\n// Declare a variable of type uint with the name 'weiToEther' and convert 1e18 wei to ether\nuint weiToEther = 1e18 wei / 1 ether;\n}",
   },
+  payable: {
+    exercise1:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\naddress payable recipient;\n}",
+    exercise2:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\naddress payable recipient;\n\nconstructor() {\n    recipient = payable(msg.sender);\n}\n}",
+    exercise3:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\n// Create a payable function named 'deposit' that can receive Ether\naddress payable recipient;\n\nconstructor() {\n    recipient = payable(msg.sender);\n}\n\nfunction deposit() public payable {}\n}",
+    exercise4:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\n// Create a payable function named 'deposit' that can receive Ether\n// Create a function named 'withdraw' that sends all Ether stored in the contract to the 'recipient' address\naddress payable recipient;\n\nconstructor() {\n    recipient = payable(msg.sender);\n}\n\nfunction deposit() public payable {}\n\nfunction withdraw() public {\n    (bool success,) = recipient.call{value: address(this).balance}('');\n    require(success, 'Failed to send Ether');\n}\n}",
+    exercise5:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Payable {\n\n// Declare a payable address with the name 'recipient'\n// Initialize 'recipient' with the address of the contract deployer in the constructor\n// Create a payable function named 'deposit' that can receive Ether\n// Create a function named 'withdraw' that sends all Ether stored in the contract to the 'recipient' address\n// Create a receive function that calls the 'deposit' function when the contract receives Ether\naddress payable recipient;\n\nconstructor() {\n    recipient = payable(msg.sender);\n}\n\nfunction deposit() public payable {}\n\nfunction withdraw() public {\n    (bool success,) = recipient.call{value: address(this).balance}('');\n    require(success, 'Failed to send Ether');\n}\n\nreceive() external payable {\n    deposit();\n}\n}",
+  },
+  fallback: {
+    exercise1:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\nuint public donationsCount;\n\nfallback() external payable {\n    donationsCount++;\n}\n}",
+    exercise2:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\naddress public target;\n\nfallback() external payable {\n    (bool success, ) = target.call(msg.data);\n    require(success);\n}\n}",
+    exercise3:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\nevent FallbackCalled(address sender);\n\nfallback() external {\n    emit FallbackCalled(msg.sender);\n}\n}",
+    exercise4:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\nfallback(bytes calldata input) external payable returns (uint) {\n    return input.length;\n}\n}",
+    exercise5:
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\nevent FallbackCalled(bytes original, bytes reversed);\n\nfallback(bytes calldata input) external payable returns (bytes memory) {\n    bytes memory reversed = new bytes(input.length);\n    for (uint i = 0; i < input.length; i++) {\n        reversed[i] = input[input.length - 1 - i];\n    }\n    emit FallbackCalled(input, reversed);\n    return reversed;\n}\n}",
+  },
 };
