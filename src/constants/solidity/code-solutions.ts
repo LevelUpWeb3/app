@@ -252,4 +252,16 @@ export const CODE_SOLUTIONS: CodeTemplatesType = {
     exercise5:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Events {\n\n// Emit the 'MyEvent' event with a value of 123 for the indexed 'myParam'\nevent MyEvent(uint256 indexed myParam);\n\nfunction emitMyEvent() public {\n  emit MyEvent(123);\n}\n}",
   },
+  "ether-units": {
+    exercise1:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract EtherUnits {\n\n// Declare a variable of type uint with the name 'weiValue' and initialize it with the value of 1 wei\nuint weiValue = 1 wei;\n}",
+    exercise2:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract EtherUnits {\n\n// Declare a variable of type uint with the name 'gweiValue' and initialize it with the value of 1 gwei\nuint gweiValue = 1 gwei;\n}",
+    exercise3:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract EtherUnits {\n\n// Declare a variable of type uint with the name 'etherValue' and initialize it with the value of 1 ether\nuint etherValue = 1 ether;\n}",
+    exercise4:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract EtherUnits {\n\n// Declare a variable of type uint with the name 'weiToGwei' and convert 1 ether to gwei\nuint weiToGwei = 1 ether / 1 gwei;\n}",
+    exercise5:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract EtherUnits {\n\n// Declare a variable of type uint with the name 'weiToEther' and convert 1e18 wei to ether\nuint weiToEther = 1e18 wei / 1 ether;\n}",
+  },
 };
