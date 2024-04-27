@@ -51,7 +51,7 @@ const PageButton = () => {
           <RightToLeftButton
             variant="outlined"
             className="group"
-            href={`/solidity/${prevSlug}`}
+            href={`/solidity/${prevSlug.toLowerCase()}`}
           >
             {prevTitle}
           </RightToLeftButton>
@@ -60,7 +60,7 @@ const PageButton = () => {
           <LeftToRightButton
             variant="outlined"
             className="group ml-auto"
-            href={`/solidity/${nextSlug}`}
+            href={`/solidity/${nextSlug.toLowerCase()}`}
           >
             {nextTitle}
           </LeftToRightButton>
