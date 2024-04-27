@@ -16,9 +16,10 @@ const MDXCodeHighlighter = {
         }}
         language={match[1]}
         PreTag="div"
-        children={String(children).replace(/\n$/, "")}
         {...props}
-      />
+      >
+        {String(children).replace(/\n$/, "")}
+      </SyntaxHighlighter>
     ) : (
       <code
         className={className}
