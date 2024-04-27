@@ -10,10 +10,9 @@ import {
   ButtonProps,
   CircularProgress,
   IconButton,
-  SvgIcon,
 } from "@mui/material";
 
-import ArrowRightIcon from "@/assets/svgs/common/arrow-right.svg";
+import { NavigateNextRounded } from "@mui/icons-material";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 interface ScrollButtonProps extends ButtonProps {
@@ -56,6 +55,7 @@ const cColor = (color, theme) => {
 const useStyles = makeStyles<any>()((theme, { width, color, whiteButton }) => ({
   wrapper: {
     position: "relative",
+    marginLeft: "auto",
     height: "5.4rem",
     overflow: "hidden",
     borderRadius: "1rem",
@@ -154,7 +154,7 @@ const maskMobile = {
     width: "100%",
   },
 };
-const Button = (props: ScrollButtonProps) => {
+const LeftToRightButton = (props: ScrollButtonProps) => {
   const {
     width,
     color,
@@ -216,10 +216,7 @@ const Button = (props: ScrollButtonProps) => {
           component="span"
           disabled
         >
-          <SvgIcon
-            component={ArrowRightIcon}
-            inheritViewBox
-          ></SvgIcon>
+          <NavigateNextRounded inheritViewBox />
         </IconButton>
       )}
       <motion.div
@@ -256,4 +253,4 @@ const Button = (props: ScrollButtonProps) => {
   );
 };
 
-export default Button;
+export default LeftToRightButton;

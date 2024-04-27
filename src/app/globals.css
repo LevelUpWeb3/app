@@ -122,6 +122,22 @@ div.markdown-body h3 {
   list-style-type: decimal;
 }
 
+/* added formatting to wrap code blocks in mdx */
+.markdown-body code {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+}
+
+.markdown-body {
+  padding-right: 30px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.markdown-body::-webkit-scrollbar {
+  width: -50px;
+}
+
 div.markdown-body img {
   background-color: transparent;
 }

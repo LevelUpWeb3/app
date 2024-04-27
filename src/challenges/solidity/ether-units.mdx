@@ -1,0 +1,34 @@
+---
+name: Ether Units
+index: 22
+lesson: 22
+summary: Introduction to ether units and how to use it in your smart contracts.
+labels: ["solidity"]
+---
+
+# Ether Units
+
+Ether is the native cryptocurrency of the Ethereum blockchain. It is used to pay for transaction fees and computational services on the network.
+
+Ether is divisible into smaller units, with the smallest unit being a `wei`.
+
+A literal number can take a suffix of `wei`, `gwei` or `ether` to specify a subdenomination of Ether. Ether numbers without a postfix (`wei`, `gwei`, `ether`) are assumed to be `wei`.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract EtherUnits {
+    uint256 public oneWei = 1 wei;
+    // 1 wei is equal to 1
+    bool public isOneWei = 1 wei == 1;
+
+    unit256 public oneGwei = 1 gwei;
+    // 1 gwei is equal to 1e9 wei
+    bool public isOneGwei = 1 gwei == 1e9;
+
+    uint256 public oneEther = 1 ether;
+    // 1 ether is equal to 10^18 wei
+    bool public isOneEther = 1 ether == 1e18;
+}
+```

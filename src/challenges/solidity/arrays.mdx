@@ -1,0 +1,81 @@
+---
+name: Arrays
+index: 6
+lesson: 6
+summary: Introduction to Solidity Arrays
+labels: ["solidity"]
+---
+
+# Arrays
+
+Arrays can have a compile-time fixed size, or they can have a dynamic size.
+
+The type of an array of fixed size `k` and element type `T` is written as `T[k]`, and an array of dynamic size as `T[]`.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract ArrayExample {
+    // An array of fixed size 3 and element type uint
+    uint[3] public fixedArray = [1, 2, 3];
+
+    // An array of dynamic size and element type uint
+    uint[] public dynamicArray;
+```
+
+It is possible to mark state variable arrays public and have Solidity create a getter(which you will learn later in the challenges). The numeric index becomes a required parameter for the getter.
+
+More array examples:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Array {
+    // Several ways to initialize an array
+    uint256[] public arr;
+    uint256[] public arr2 = [1, 2, 3];
+    // Fixed sized array, all elements initialize to 0
+    uint256[10] public myFixedSizeArr;
+
+    function get(uint256 i) public view returns (uint256) {
+        return arr[i];
+    }
+
+    // Solidity can return the entire array.
+    // But this function should be avoided for
+    // arrays that can grow indefinitely in length.
+    function getArr() public view returns (uint256[] memory) {
+        return arr;
+    }
+
+    function push(uint256 i) public {
+        // Append to array
+        // This will increase the array length by 1.
+        arr.push(i);
+    }
+
+    function pop() public {
+        // Remove last element from array
+        // This will decrease the array length by 1
+        arr.pop();
+    }
+
+    function getLength() public view returns (uint256) {
+        return arr.length;
+    }
+
+    function remove(uint256 index) public {
+        // Delete does not change the array length.
+        // It resets the value at index to it's default value,
+        // in this case 0
+        delete arr[index];
+    }
+
+    function examples() external {
+        // create array in memory, only fixed size can be created
+        uint256[] memory a = new uint256[](5);
+    }
+}
+```

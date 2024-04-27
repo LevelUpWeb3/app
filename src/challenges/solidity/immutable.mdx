@@ -1,0 +1,28 @@
+---
+name: Immutable
+index: 4
+lesson: 4
+summary: Introduction to immutable in Solidity
+labels: ["solidity"]
+---
+
+# Immutable
+
+Variables declared as `immutable` are a less restricted than those declared as `constant`. Immutable variables can be assigned a value at construction time. The value can be changed at any time before deployment and then it becomes permanent.
+
+One additional restriction is that immutables can only be assigned to inside expressions for which there is no possibility of being executed after creation. This excludes all modifier definitions and functions other than constructors.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Immutable {
+    // coding convention to uppercase constant variables address public immutable MY_ADDRESS;
+    uint256 public immutable MY_UINT;
+
+    constructor(uint256 _myUint) {
+        MY_ADDRESS = msg.sender;
+        MY_UINT = _myUint;
+    }
+}
+```

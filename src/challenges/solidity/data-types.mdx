@@ -1,0 +1,83 @@
+---
+name: Data Types
+index: 1
+lesson: 1
+summary: Introduction to Solidity data types
+labels: ["solidity"]
+---
+
+<img
+  src="/images/solidity/data-types.png"
+  alt="Data Types"
+  style={{
+    width: "100%",
+    height: "auto",
+  }}
+/>
+
+# Data Types
+
+Solidity is a statically typed language, which means that the type of each variable (state and local) needs to be specified. Solidity provides several elementary types such as:
+
+- `bool` (boolean)
+- `uint`,`uint256`,`uint32` (unsigned integer)
+- `int`,`int256`,`int32` (signed integer)
+- `address` (Ethereum address)
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Primitives {
+    bool public boo = true;
+
+    /*
+    uint stands for unsigned integer, meaning non negative integers
+    different sizes are available
+        uint8   ranges from 0 to 2 ** 8 - 1
+        uint16  ranges from 0 to 2 ** 16 - 1
+        ...
+        uint256 ranges from 0 to 2 ** 256 - 1
+    */uint8 public u8 = 1;
+    uint256 public u256 = 456;
+    uint256 public u = 123; // uint is an alias for uint256/*
+    Negative numbers are allowed for int types.
+    Like uint, different ranges are available from int8 to int256
+
+    int256 ranges from -2 ** 255 to 2 ** 255 - 1
+    int128 ranges from -2 ** 127 to 2 ** 127 - 1
+    */int8 public i8 = -1;
+    int256 public i256 = 456;
+    int256 public i = -123; // int is same as int256// minimum and maximum of intint256 public minInt = type(int256).min;
+    int256 public maxInt = type(int256).max;
+
+    address public addr = 0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c;
+}
+```
+
+## Bytes in Solidity
+
+In Solidity, the `bytes` data type is used to represent a sequence of bytes. Bytes are useful for storing binary data, such as file contents or cryptographic hashes.
+
+There are two types of byte arrays in Solidity:
+
+- **Fixed-size byte arrays**: These are declared with `bytes1` to `bytes32`. The number indicates the length of the array in bytes. For example, `bytes1` is a byte array of length 1, `bytes2` is a byte array of length 2, and so on up to `bytes32`.
+
+- **Dynamically-sized byte arrays**: These are declared with `bytes`. This type is similar to `byte[]` in other languages.
+
+Here's an example of how to use byte arrays:
+
+```solidity
+// Declare a fixed-size byte array
+bytes1 a = 0xb5; // [10110101]
+bytes1 b = 0x56; // [01010110]
+
+// Declare a bytes10 array
+bytes10 d = 0x68656c6c6f776f726c64; // "helloworld" in hexadecimal
+
+// Declare a bytes32 array
+bytes32 e = 0x68656c6c6f776f726c6420202020202020202020202020202020202020202020; // "helloworld" padded with spaces in hexadecimal
+
+// Declare a dynamically-sized byte array
+bytes memory c = "Hello, world!";
+```

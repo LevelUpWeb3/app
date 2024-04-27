@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-import remarkGfm from 'remark-gfm'
-import createMDX from '@next/mdx'
-import "./scripts/processMarkdown.js"
+import remarkGfm from "remark-gfm";
+import createMDX from "@next/mdx";
+import "./scripts/processMarkdown.js";
+import "./scripts/processSolidityMarkdown.js";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -12,14 +13,24 @@ const nextConfig = {
   },
   // trailingSlash: true,
   // eslint-disable-next-line
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }) => {
+  webpack: (
+    config,
+    { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
+  ) => {
     config.ignoreWarnings = [
       function ignoreSourcemapsloaderWarnings(warning) {
-        return warning.module && warning.module.resource.includes("node_modules") && warning.details && warning.details.includes("source-map-loader")
+        return (
+          warning.module &&
+          warning.module.resource.includes("node_modules") &&
+          warning.details &&
+          warning.details.includes("source-map-loader")
+        );
       },
-    ]
+    ];
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find(rule => rule.test?.test?.(".svg"))
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test?.(".svg")
+    );
     config.module.rules.push(
       ...[
         {
@@ -64,14 +75,14 @@ const nextConfig = {
           test: /\.md$/,
           use: "raw-loader",
         },
-      ],
-    )
+      ]
+    );
 
-    fileLoaderRule.exclude = /\.svg$/i
+    fileLoaderRule.exclude = /\.svg$/i;
 
-    return config
+    return config;
   },
-}
+};
 
 const withMDX = createMDX({
   extension: /\.mdx?$/,
@@ -79,6 +90,6 @@ const withMDX = createMDX({
     remarkPlugins: [remarkGfm],
     rehypePlugins: [],
   },
-})
+});
 
-export default withMDX(nextConfig)
+export default withMDX(nextConfig);

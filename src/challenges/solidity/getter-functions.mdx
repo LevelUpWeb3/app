@@ -1,0 +1,38 @@
+---
+name: Getter Functions
+index: 10
+lesson: 10
+summary: Introduction to Solidity getter functions and how to use it in your smart contracts.
+labels: ["solidity"]
+---
+
+# Getter Functions
+
+Compiling your contract automatically creates getter functions for all `public` state variables.
+
+Getter functions can be declared `view` or `pure`.
+
+`View` function promises that they will not modify the state.
+
+`Pure` function declares that no state variable will be changed or read. In particular, it should be possible to evaluate a `pure` function at compile-time given only its inputs and `msg.data`, but without any knowledge of the current blockchain state.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract ViewAndPureExample {
+    uint public stateVar = 10;
+
+    // View function
+    // Can read state variables but cannot modify them
+    function viewFunc() public view returns (uint) {
+        return stateVar;
+    }
+
+    // Pure function
+    // Cannot read or modify state variables
+    function pureFunc(uint x, uint y) public pure returns (uint) {
+        return x + y;
+    }
+}
+```

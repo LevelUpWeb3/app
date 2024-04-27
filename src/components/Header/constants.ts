@@ -14,6 +14,11 @@ const navigations = [
     key: "podcast",
     href: "/podcast",
   },
+  {
+    label: "Solidity",
+    key: "solidity",
+    href: "/solidity",
+  },
 ];
 
 export { navigations };

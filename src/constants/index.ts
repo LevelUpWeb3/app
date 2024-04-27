@@ -28,5 +28,29 @@ export const PODCAST_CATEGORY_LIST = [
   "NFT",
   "Gaming",
 ];
+export const SOLIDITY_CHALLENGE_LIST = [
+  "All challenges",
+  "Data Types",
+  "Operator",
+  "Constants",
+  "Immutable",
+  "Variables",
+  "Array",
+  "Mapping",
+  "Visibility",
+  "Functions",
+  "Getter Function",
+  "Enumerables",
+  "Struct",
+  "Conditional (If/Else)",
+  "Loops",
+  "Constructor",
+  "Data Location",
+  "Try/Catch",
+  "Error",
+  "Validation & Assertion",
+  "Function Modifier",
+  "Events",
+];
 
 export const NORMAL_HEADER_HEIGHT = "6.5rem";
