@@ -1,0 +1,15 @@
+{
+  "id": "sending-ether",
+  "name": "Sending Ether",
+  "index": 25,
+  "lesson": 25,
+  "summary": "Introduction to sending ether in your smart contracts.",
+  "labels": [
+    "solidity"
+  ],
+  "content": {
+    "compiledSource": "/*@jsxRuntime automatic @jsxImportSource react*/\nconst {jsx: _jsx} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = Object.assign({\n    h1: \"h1\"\n  }, _provideComponents(), props.components);\n  return _jsx(_components.h1, {\n    children: \"Sending Ether\"\n  });\n}\nfunction MDXContent(props = {}) {\n  const {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components);\n  return MDXLayout ? _jsx(MDXLayout, Object.assign({}, props, {\n    children: _jsx(_createMdxContent, props)\n  })) : _createMdxContent(props);\n}\nreturn {\n  default: MDXContent\n};\n",
+    "frontmatter": {},
+    "scope": {}
+  }
+}
