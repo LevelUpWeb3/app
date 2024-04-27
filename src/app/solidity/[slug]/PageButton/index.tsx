@@ -12,13 +12,17 @@ const PageButton = () => {
 
   useEffect(() => {
     const slug = pathname!.split("/").pop();
-    fetch(`/data/challenges/solidity/${slug}.json`)
+    fetch(
+      `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/${slug}.json`
+    )
       .then((res) => res.json())
       .then((data) => {
         setCurrentPage(data);
       });
 
-    fetch(`/data/challenges/solidity/markdownData.json`)
+    fetch(
+      `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/markdownData.json`
+    )
       .then((res) => res.json())
       .then((data) => {
         setPages(data);
