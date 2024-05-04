@@ -6,6 +6,8 @@ summary: Introduction to transacting ether in your smart contracts.
 labels: ["solidity"]
 ---
 
+import { Mermaid } from "mdx-mermaid/Mermaid";
+
 # Transacting Ether
 
 Ether transactions comprises of two main parts: sending and receiving ether.
@@ -120,12 +122,13 @@ contract ReceiveEtherExample {
 
 Flowchart to determine `fallback` or `receive`:
 
-```mermaid
+<Mermaid
+  chart={`
 graph TD;
     A[Sender] -->|Call Send Ether| B[Contract B];
     B --> |Process call function| C[msg.data empty?];
     C -->|Yes| D["receive() exists?"];
     C -->|No| E["execute fallback()"];
     D -->|Yes| F["execute receive()"];
-    D -->|No| G["execute fallback()"];
-```
+    D -->|No| G["execute fallback()"];`}
+/>

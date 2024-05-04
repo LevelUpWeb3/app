@@ -288,4 +288,16 @@ export const CODE_EXERCISES: CodeTemplatesType = {
     exercise5:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Fallback {\n\n// Declare a fallback function that takes a bytes input, reverses it, and emits an event with the original and reversed input\n}",
   },
+  "transacting-ether": {
+    exercise1:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract TransactingEther {\n\n// Declare a payable address with the name 'recipient' and initialize it with the Ethereum address 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2\n}",
+    exercise2:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract TransactingEther {\n\n// Declare a uint256 variable named 'amount' and initialize it with the value 1 ether\n}",
+    exercise3:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract TransactingEther {\n\n// Implement a function named 'sendEther' that sends 'amount' of Ether to the 'recipient' address using the 'call' method\n}",
+    exercise4:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\n// Step 1: Import the OpenZeppelin ReentrancyGuard contract\n// Step 2: Implement a contract named 'SendEtherGuarded' that inherits from ReentrancyGuard\n// Step 3: Inside the 'SendEtherGuarded' contract, implement a function named 'sendEther' that takes two parameters: an address payable 'recipient' and a uint256 'amount'\n// Step 4: The 'sendEther' function should be external and payable\n// Step 5: Apply the 'nonReentrant' modifier to the 'sendEther' function\n// Step 6: Inside the 'sendEther' function, add a require statement to check that the contract has enough Ether to send\n// Step 7: Still inside the 'sendEther' function, use the 'call' method to send the specified amount of Ether to the specified address\n// Step 8: Add a require statement to check that the call was successful\n",
+    exercise5:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\n// Step 1: Implement a contract named 'SendEtherChecked'\n// Step 2: Inside the 'SendEtherChecked' contract, declare a public mapping named 'balances' that maps addresses to uint256\n// Step 3: Still inside the 'SendEtherChecked' contract, implement a function named 'sendEther' that takes two parameters: an address payable 'recipient' and a uint256 'amount'\n// Step 4: The 'sendEther' function should be public and payable\n// Step 5: Inside the 'sendEther' function, add a require statement to check that the sender has enough Ether to send\n// Step 6: Still inside the 'sendEther' function, update the balances of the sender and the recipient\n// Step 7: Still inside the 'sendEther' function, use the 'call' method to send the specified amount of Ether to the specified address\n// Step 8: Add a require statement to check that the call was successful\n",
+  },
 };

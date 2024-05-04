@@ -13,7 +13,8 @@ const PageButton = () => {
   useEffect(() => {
     const slug = pathname!.split("/").pop();
     fetch(
-      `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/${slug}.json`
+      // `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/${slug}.json`
+      `/data/challenges/solidity/${slug}.json`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -21,7 +22,8 @@ const PageButton = () => {
       });
 
     fetch(
-      `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/markdownData.json`
+      // `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/markdownData.json`
+      `/data/challenges/solidity/markdownData.json`
     )
       .then((res) => res.json())
       .then((data) => {

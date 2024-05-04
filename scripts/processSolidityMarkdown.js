@@ -8,7 +8,7 @@ const outputDirectory = path.join(
   "public/data/challenges/solidity"
 );
 
-const processMarkdownFiles = async () => {
+const processSolidityMarkdownFiles = async () => {
   const fileNames = fs.readdirSync(markdownDirectory);
   const serialize = (await import("next-mdx-remote/serialize")).serialize;
 
@@ -65,4 +65,4 @@ const processMarkdownFiles = async () => {
   ); // Pretty print JSON
 };
 
-processMarkdownFiles().catch(console.error);
+processSolidityMarkdownFiles().catch(console.error);
