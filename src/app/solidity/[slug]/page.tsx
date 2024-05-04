@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { MDXRemote } from "next-mdx-remote";
+import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import * as React from "react";
 import Link from "next/link";
@@ -115,7 +116,7 @@ export default function ChallengeDetailsPage() {
           {data?.content && (
             <MDXRemote
               {...data.content}
-              components={MDXCodeHighlighter}
+              components={{ ...MDXCodeHighlighter, Mermaid }}
             />
           )}
           <PageButton />

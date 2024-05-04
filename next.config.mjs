@@ -2,6 +2,8 @@
 
 import remarkGfm from "remark-gfm";
 import createMDX from "@next/mdx";
+import mdxMermaid from "mdx-mermaid";
+import { Mermaid } from "mdx-mermaid/lib/Mermaid";
 import "./scripts/processMarkdown.js";
 import "./scripts/processSolidityMarkdown.js";
 
@@ -87,8 +89,9 @@ const nextConfig = {
 const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: [remarkGfm, [mdxMermaid.default, { output: "svg" }]],
     rehypePlugins: [],
+    components: { mermaid: Mermaid, Mermaid },
   },
 });
 

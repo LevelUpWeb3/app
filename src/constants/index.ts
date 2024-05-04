@@ -51,6 +51,10 @@ export const SOLIDITY_CHALLENGE_LIST = [
   "Validation & Assertion",
   "Function Modifier",
   "Events",
+  "Ether Units",
+  "Payable",
+  "Fallback",
+  "Transacting Ether",
 ];
 
 export const NORMAL_HEADER_HEIGHT = "6.5rem";
