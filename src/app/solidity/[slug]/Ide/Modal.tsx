@@ -39,13 +39,13 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
   };
 
   const handleWarpcastShare = () => {
-    const text = `I have successfully completed all five ${name} challenge on Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
+    const text = `I have successfully completed all five ${name} challenges in Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
     const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=levelupweb3.xyz`;
     window.open(warpcastUrl, "_blank");
   };
 
   const handleXShare = () => {
-    const text = `I have successfully completed all five ${name} challenge on Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
+    const text = `I have successfully completed all five ${name} challenges in @levelupweb3! Join me in my conquest to level up at levelupweb3.xyz/!`;
     const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(xUrl, "_blank");
   };

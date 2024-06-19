@@ -21,7 +21,7 @@ export const CODE_SOLUTIONS: CodeTemplatesType = {
     exercise1:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Variables {\n\n// Declare a state variable of type uint256 with the name 'totalSupply' and initialize it with the value 1000000\nuint256 totalSupply = 1000000;\n}",
     exercise2:
-      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Variables {\n\n// Inside a function named 'calculate', declare a local variable of type uint256 with the name 'result' and initialize it with the value 500\nfunction calculate() public pure {\nuint256 result = 500;\n}\n}",
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Variables {\n\n// Inside a function named 'calculate', declare a local variable of type uint256 with the name 'result' and initialize it with the value 500\nfunction calculate() public {\nuint256 result = 500;\n}\n}",
     exercise3:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Variables {\n\n// Inside a function named 'getBalance', return the balance of the current contract using the global variable 'balance'\nfunction getBalance() public view returns (uint256) {\nreturn address(this).balance;\n}\n}",
     exercise4:
