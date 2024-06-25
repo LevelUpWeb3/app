@@ -39,11 +39,13 @@ const Label = styled(Typography)(() => ({
   background: "#FFDEB5",
   borderRadius: "0.4rem",
   color: "#84623A",
-  height: "3.2rem",
-  padding: "0 1.6rem",
-  lineHeight: "3.2rem",
+  height: "auto",
+  padding: "0.4rem 1.6rem",
+  lineHeight: "normal",
   fontWeight: "500",
   textAlign: "center",
+  whiteSpace: "normal",
+  overflowWrap: "break-word", // Added break-word to prevent overflow
 }));
 
 const Card = ({ content, key }) => {
@@ -58,7 +60,10 @@ const Card = ({ content, key }) => {
   };
 
   return (
-    <CardArticle key={key} onClick={handleClick}>
+    <CardArticle
+      key={key}
+      onClick={handleClick}
+    >
       <Box>
         <Title> {content.name} </Title>
         <Summary> {content.summary} </Summary>
@@ -67,9 +72,7 @@ const Card = ({ content, key }) => {
         {content.labels?.map((label, index) => (
           <Label key={index}>{label}</Label>
         ))}
-        {
-          content.level ? <Label >Level {content.level}</Label> : null
-        }
+        {content.level ? <Label>Level {content.level}</Label> : null}
       </LabelContainer>
     </CardArticle>
   );
