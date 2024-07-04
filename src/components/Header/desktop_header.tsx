@@ -226,7 +226,10 @@ const App = ({ currentMenu }) => {
 
   const renderSubMenuList = (children) => {
     return children.map((section, idx) => (
-      <SectionList key={idx} dark={dark}>
+      <SectionList
+        key={idx}
+        dark={dark}
+      >
         <Typography
           sx={{
             fontSize: "1.4rem",
@@ -373,10 +376,17 @@ const App = ({ currentMenu }) => {
   };
 
   return (
-    <StyledBox bgColor={navbarBg} dark={dark}>
+    <StyledBox
+      bgColor={navbarBg}
+      dark={dark}
+    >
       <Container>
         <HeaderContainer>
-          <NavLink href="./" className="flex">
+          {/* Fixed NavLink to redirect to home page */}
+          <NavLink
+            href="/"
+            className="flex"
+          >
             <Logo light={dark} />
           </NavLink>
           <Stack
