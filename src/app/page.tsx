@@ -9,7 +9,7 @@ import useCheckViewport from "@/hooks/useCheckViewport";
 const Container = styled(Box)({
   height: "calc(100vh - 65px)",
   minHeight: "64rem",
-  position: 'relative'
+  position: "relative",
 });
 
 const StyledBox = styled(Box)({
@@ -30,14 +30,16 @@ const LandingPage = () => {
         sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
       >
         <div className="pt-32 text-[7.2rem] font-semibold text-center leading-[88px] text-stone-950 w-[720px]  max-md:pt-[6rem] max-md:max-w-full max-md:text-[3.6rem] max-md:leading-[48px]">
-          Welcome to Scroll Level up Challenges!
+          Level Up your Web3 Skills
         </div>
 
         <div className="mt-4 text-[2.6rem] tracking-wide text-center text-stone-950 w-[771px] max-md:max-w-full max-md:text-[1.6rem] max-md:leading-[24px]">
-          With our curated challenges we guide you hands-on how to get building
-          on Scroll with your favourite protocols and dev tools
+          Level Up is your platform to learn Solidity, build real projects, and
+          apply for grants to build the future of Ethereum.
         </div>
 
+        {/* TODO: Revive this section when challenges are revisited */}
+        {/* 
         <div className="flex justify-center mt-7">
           <div className=" w-[24rem] h-[11.6rem] flex-col font-semibold flex justify-center items-center bg-orange-100 rounded-2xl text-stone-950 max-md:w-[12.4rem] max-md:h-[6.8rem]">
             <div className="text-[1.8rem] tracking-normal leading-[2.8rem] text-center max-md:text-[1.4rem] max-md:leading-[2rem]">
@@ -47,18 +49,21 @@ const LandingPage = () => {
               20
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex w-full justify-center gap-[3rem] mt-[3.6rem] mb-[2.6rem] max-md:gap-[2rem] max-md:flex-col max-md:items-center ">
           <Button
-            href="/challenges"
+            href="/solidity"
             color="primary"
             width="25rem"
           >
-            Browse challenges
+            Learn Solidity
           </Button>
-          <Button href="/how-it-works" width="25rem">
-            How it works
+          <Button
+            href="/learn-more"
+            width="25rem"
+          >
+            Learn More
           </Button>
         </div>
       </StyledBox>

@@ -12,7 +12,7 @@ import IdePage from "./Ide";
 import BackSvg from "@/assets/svgs/common/back.svg";
 import Head from "next/head";
 
-import { SvgIcon, Box, Typography } from "@mui/material";
+import { SvgIcon, Box, Typography, Skeleton } from "@mui/material";
 
 import { styled } from "@mui/system";
 
@@ -49,7 +49,7 @@ const ChallengeDetails = ({ challengeData }) => (
   <ChallengeInfo>
     <div className="flex my-[4rem] flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
       <h1 className="text-[4rem] tracking-wide leading-[56px] text-stone-950 max-md:max-w-full">
-        {challengeData.name}
+        Lesson {challengeData.lesson}: {challengeData.name}
       </h1>
       <h4 className="text-[2rem] tracking-wide leading-[28px] text-[#5b5b5b] max-md:max-w-full">
         {challengeData.summary}
@@ -68,14 +68,24 @@ export default function ChallengeDetailsPage() {
   const [isLoading, setLoading] = useState(true);
   const pathname = usePathname();
 
+  // useEffect(() => {
+  //   const loader = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
+
+  //   return () => {
+  //     clearTimeout(loader);
+  //   };
+  // });
+
   useEffect(() => {
     const slug = pathname!.split("/").pop();
     fetch(`/data/challenges/solidity/${slug}.json`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
-        setLoading(false);
       });
+    setLoading(false);
   }, []);
 
   return (
@@ -119,18 +129,36 @@ export default function ChallengeDetailsPage() {
         </div>
       </div>
       <div className="grid grid-cols-2 h-screen w-full gap-5 px-[6rem] max-w-[140rem] mx-auto">
-        <div className="markdown-body">
-          {data?.content && (
-            <MDXRemote
-              {...data.content}
-              components={{ ...MDXCodeHighlighter, Mermaid }}
+        {isLoading ? (
+          <>
+            <Skeleton
+              variant="rounded"
+              className="w-full min-h-screen"
             />
-          )}
-          <PageButton />
-        </div>
-        <div>
-          <IdePage />
-        </div>
+            <Skeleton
+              variant="rounded"
+              className="w-full min-h-screen"
+            />
+          </>
+        ) : (
+          <>
+            <div className="markdown-body">
+              {" "}
+              {data?.content ? (
+                <>
+                  <MDXRemote
+                    {...data.content}
+                    components={{ ...MDXCodeHighlighter, Mermaid }}
+                  />
+                  <PageButton />
+                </>
+              ) : null}
+            </div>
+            <div>
+              <IdePage />
+            </div>
+          </>
+        )}
       </div>
     </>
   );

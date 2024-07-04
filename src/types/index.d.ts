@@ -3,6 +3,10 @@ export {};
 declare global {
   interface Window {
     scrollRequest: (url: string, options?: object) => Promise<T>;
+    // Add Tally type for form embed
+    Tally: {
+      loadEmbeds: () => void;
+    };
   }
 
   interface Error {
