@@ -43,8 +43,8 @@ const routes: PageMetadata[] = [
     path: "/podcast",
   },
   {
-    name: "Grants",
-    path: "/grants",
+    name: "Funding",
+    path: "/funding",
   },
   {
     name: "Learn More",

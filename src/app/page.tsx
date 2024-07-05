@@ -29,13 +29,13 @@ const LandingPage = () => {
       <StyledBox
         sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
       >
-        <div className="pt-32 text-[7.2rem] font-semibold text-center leading-[88px] text-stone-950 w-[720px]  max-md:pt-[6rem] max-md:max-w-full max-md:text-[3.6rem] max-md:leading-[48px]">
+        <div className="pt-32 text-[7.2rem] font-semibold whitespace-nowrap text-center leading-[88px] text-stone-950 w-[720px] max-md:pt-[6rem] max-md:max-w-full max-md:text-[3.6rem] max-md:leading-[48px]">
           Level Up your Web3 Skills
         </div>
 
         <div className="mt-4 text-[2.6rem] tracking-wide text-center text-stone-950 w-[771px] max-md:max-w-full max-md:text-[1.6rem] max-md:leading-[24px]">
           Level Up is your platform to learn Solidity, build real projects, and
-          apply for grants to build the future of Ethereum.
+          apply for funding to build the future of Ethereum.
         </div>
 
         {/* TODO: Revive this section when challenges are revisited */}
