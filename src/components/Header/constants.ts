@@ -21,9 +21,9 @@ const navigations = [
     href: "/podcast",
   },
   {
-    label: "Grants",
-    key: "grants",
-    href: "/grants",
+    label: "Funding",
+    key: "funding",
+    href: "/funding",
   },
 ];
 

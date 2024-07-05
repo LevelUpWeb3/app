@@ -131,7 +131,10 @@ const App = ({ currentMenu }) => {
             sx={{ py: "1rem" }}
             onClick={() => toggleDrawer(false)}
           >
-            <MenuLinkStyledButton href={item.href} dark={dark}>
+            <MenuLinkStyledButton
+              href={item.href}
+              dark={dark}
+            >
               {item.label}
             </MenuLinkStyledButton>
           </ListItem>
@@ -150,13 +153,23 @@ const App = ({ currentMenu }) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <NavLink href="/" className="flex">
+        <NavLink
+          href="/"
+          className="flex"
+        >
           <Box onClick={() => toggleDrawer(false)}>
             <Logo light={dark} />
           </Box>
         </NavLink>
-        <Stack direction="row" spacing="1.6rem" alignItems="center">
-          {showWalletConnector && <WalletToolkit dark={dark}></WalletToolkit>}
+        <Stack
+          direction="row"
+          spacing="1.6rem"
+          alignItems="center"
+        >
+          {/* TODO: Box created to temporarily create placeholder space. Needs to be removed */}
+          <Box sx={{ padding: "3.0rem" }}></Box>
+          {/* Temporarily disasbled for MVP */}
+          {/* {showWalletConnector && <WalletToolkit dark={dark}></WalletToolkit>} */}
           <Menu
             onClick={() => toggleDrawer(!open)}
             className={open ? "active" : ""}

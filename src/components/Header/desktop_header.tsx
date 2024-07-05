@@ -396,7 +396,10 @@ const App = ({ currentMenu }) => {
           >
             <Box>{renderNavigationList()}</Box>
           </Stack>
-          <WalletToolkit dark={dark}></WalletToolkit>
+          {/* TODO: Box created to temporarily create placeholder space. Needs to be removed */}
+          <Box sx={{ padding: "3.0rem" }}></Box>
+          {/* Temporarily disabled in MVP */}
+          {/* <WalletToolkit dark={dark}></WalletToolkit> */}
         </HeaderContainer>
       </Container>
     </StyledBox>
