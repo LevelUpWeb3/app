@@ -18,7 +18,7 @@ export default function LearnMore() {
                 <br />
                 <br />
                 From learning Solidity basics to developer challenges and
-                grants, Level Up aims to be the foundation for every builder —
+                fundings, Level Up aims to be the foundation for every builder —
                 from hobbyists to founders and everything in between.
                 <br />
                 <br />
@@ -37,7 +37,7 @@ export default function LearnMore() {
                 <Button
                   width="25rem"
                   isExternal
-                  href="https://t.me/levelupscroll"
+                  href="https://t.me/+PdNbk5milo1mMTAy"
                 >
                   Join the study group
                 </Button>

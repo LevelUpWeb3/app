@@ -18,30 +18,27 @@ const IdePage = () => {
   };
 
   const theme = useTheme();
-  const tabStyles = (tabValue: string) => ({
-    "&&": {
-      fontSize: "12px",
-      backgroundColor:
-        exercise === tabValue
-          ? lighten(theme.palette.primary.main, 0.5)
-          : "inherit",
-      borderRadius: "5px",
-    },
-    "&&.Mui-selected": {
-      color: "#404040",
-    },
-    "&&:not(.Mui-selected)": {
-      color: tabValue === "exercise1" ? "#404040" : "inherit",
-    },
-    "&.Mui-disabled": {
-      color: exercise === tabValue ? "black" : "#A9A9A9",
-    },
-  });
 
   const tabListStyles = {
     borderColor: "primary.main",
     position: "center",
     borderRadius: "5px",
+  };
+
+  const highlightedStyles = {
+    backgroundColor: "#101010",
+    borderRadius: "5px",
+    color: "white",
+    fontSize: "12px",
+    textAlign: "left",
+  };
+
+  const tooltipAndTabStyles = {
+    backgroundColor: "",
+    borderRadius: "5px",
+    color: "#A9A9A9",
+    fontSize: "12px",
+    textAlign: "left",
   };
 
   return (
@@ -61,31 +58,41 @@ const IdePage = () => {
             sx={tabListStyles}
             TabIndicatorProps={{ style: { display: "none" } }}
           >
-            <Tab
-              value="exercise1"
-              label="Exercise 1"
-              onClick={() => {
-                setExercise("exercise1");
-              }}
-              sx={tabStyles("exercise1")}
-            />
+            <div>
+              <Tab
+                value="exercise1"
+                label="Exercise 1"
+                onClick={() => {
+                  setExercise("exercise1");
+                }}
+                sx={
+                  exercise === "exercise1"
+                    ? highlightedStyles
+                    : tooltipAndTabStyles
+                }
+              />
+            </div>
             <Tooltip
               title={
                 completedExercise < 1 ? "Complete Exercise 1 to unlock" : ""
               }
               placement="top"
             >
-              <div>
+              <span>
                 <Tab
                   value="exercise2"
                   label="Exercise 2"
                   disabled={completedExercise < 1}
-                  sx={tabStyles("exercise2")}
+                  sx={
+                    exercise === "exercise2"
+                      ? highlightedStyles
+                      : tooltipAndTabStyles
+                  }
                   onClick={() => {
                     setExercise("exercise2");
                   }}
                 />
-              </div>
+              </span>
             </Tooltip>
 
             <Tooltip
@@ -94,7 +101,7 @@ const IdePage = () => {
               }
               placement="top"
             >
-              <div>
+              <span>
                 <Tab
                   value="exercise3"
                   label="Exercise 3"
@@ -102,12 +109,16 @@ const IdePage = () => {
                   title={
                     completedExercise < 2 ? "Complete Exercise 2 to unlock" : ""
                   }
-                  sx={tabStyles("exercise3")}
+                  sx={
+                    exercise === "exercise3"
+                      ? highlightedStyles
+                      : tooltipAndTabStyles
+                  }
                   onClick={() => {
                     setExercise("exercise3");
                   }}
                 />
-              </div>
+              </span>
             </Tooltip>
 
             <Tooltip
@@ -116,7 +127,7 @@ const IdePage = () => {
               }
               placement="top"
             >
-              <div>
+              <span>
                 <Tab
                   value="exercise4"
                   label="Exercise 4"
@@ -124,12 +135,16 @@ const IdePage = () => {
                   title={
                     completedExercise < 3 ? "Complete Exercise 3 to unlock" : ""
                   }
-                  sx={tabStyles("exercise4")}
+                  sx={
+                    exercise === "exercise4"
+                      ? highlightedStyles
+                      : tooltipAndTabStyles
+                  }
                   onClick={() => {
                     setExercise("exercise4");
                   }}
                 />
-              </div>
+              </span>
             </Tooltip>
 
             <Tooltip
@@ -138,7 +153,7 @@ const IdePage = () => {
               }
               placement="top"
             >
-              <div>
+              <span>
                 <Tab
                   value="exercise5"
                   label="Exercise 5"
@@ -146,12 +161,16 @@ const IdePage = () => {
                   title={
                     completedExercise < 4 ? "Complete Exercise 4 to unlock" : ""
                   }
-                  sx={tabStyles("exercise5")}
+                  sx={
+                    exercise === "exercise5"
+                      ? highlightedStyles
+                      : tooltipAndTabStyles
+                  }
                   onClick={() => {
                     setExercise("exercise5");
                   }}
                 />
-              </div>
+              </span>
             </Tooltip>
           </TabList>
         </Box>

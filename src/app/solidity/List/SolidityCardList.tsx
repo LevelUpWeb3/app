@@ -71,12 +71,13 @@ const SolidityCardList = ({ content, key }) => {
         </Title>
         <Summary> {content.summary} </Summary>
       </Box>
-      <LabelContainer>
+      {/* TODO: Update labels in future. Temporarily removed for MVP */}
+      {/* <LabelContainer>
         {content.labels?.map((label, index) => (
           <Label key={index}>{label}</Label>
         ))}
         {content.level ? <Label>Level {content.level}</Label> : null}
-      </LabelContainer>
+      </LabelContainer> */}
     </CardArticle>
   );
 };
