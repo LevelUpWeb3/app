@@ -18,7 +18,7 @@ export default function LearnMore() {
                 <br />
                 <br />
                 From learning Solidity basics to developer challenges and
-                fundings, Level Up aims to be the foundation for every builder —
+                funding, Level Up aims to be the foundation for every builder —
                 from hobbyists to founders and everything in between.
                 <br />
                 <br />
