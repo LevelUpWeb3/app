@@ -18,7 +18,7 @@ const Grid = withStyles(Box, (theme) => ({
   root: {
     marginTop: "6.8rem",
     display: "grid",
-    gridTemplateColumns: "max-content 1fr max-content",
+    gridTemplateColumns: "200px 1fr max-content",
     gridTemplateRows: "max-content 1fr",
     rowGap: "3rem",
     columnGap: "7.2rem",
@@ -66,10 +66,10 @@ const List = () => {
     //   return item.labels[0] === value
     // })
     // setFilteredData(filteredData)
-    setSearchParams(pre => ({
+    setSearchParams((pre) => ({
       ...pre,
       category: value,
-    }))
+    }));
   };
 
   return (
