@@ -48,7 +48,7 @@ const Label = styled(Typography)(() => ({
   overflowWrap: "break-word", // Added break-word to prevent overflow
 }));
 
-const Card = ({ content, key }) => {
+const SolidityCardList = ({ content, key }) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -65,17 +65,21 @@ const Card = ({ content, key }) => {
       onClick={handleClick}
     >
       <Box>
-        <Title> {content.name} </Title>
+        <Title>
+          {" "}
+          Lesson {content.lesson}: {content.name}{" "}
+        </Title>
         <Summary> {content.summary} </Summary>
       </Box>
-      <LabelContainer>
+      {/* TODO: Update labels in future. Temporarily removed for MVP */}
+      {/* <LabelContainer>
         {content.labels?.map((label, index) => (
           <Label key={index}>{label}</Label>
         ))}
         {content.level ? <Label>Level {content.level}</Label> : null}
-      </LabelContainer>
+      </LabelContainer> */}
     </CardArticle>
   );
 };
 
-export default Card;
+export default SolidityCardList;

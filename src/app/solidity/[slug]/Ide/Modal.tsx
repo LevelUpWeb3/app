@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode, useRef, useState, useEffect } from "react";
-import { Button, Box, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useParams } from "next/navigation";
 import { X, Close } from "@mui/icons-material";
 import Image from "next/image";
@@ -39,13 +39,13 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
   };
 
   const handleWarpcastShare = () => {
-    const text = `I have successfully completed all five ${name} challenge on Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
+    const text = `I have successfully completed all five ${name} challenges in Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
     const warpcastUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}&embeds[]=levelupweb3.xyz`;
     window.open(warpcastUrl, "_blank");
   };
 
   const handleXShare = () => {
-    const text = `I have successfully completed all five ${name} challenge on Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
+    const text = `I have successfully completed all five ${name} challenges in @levelupweb3! Join me in my conquest to level up at levelupweb3.xyz/!`;
     const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(xUrl, "_blank");
   };
@@ -56,7 +56,7 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
       id="background"
       onClick={handleClose}
     >
-      <Box className="w-[600px] flex flex-col rounded-xl border-2 border-red-400 bg-orange-50">
+      <Box className="w-[600px] flex flex-col rounded-xl border-2 bg-orange-50">
         <Box
           className="p-8 rounded-xl"
           ref={modalRef}
@@ -69,14 +69,14 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
               position: "absolute",
               top: "0",
               right: "0",
+              color: "#101010",
             }}
-            color="primary"
           >
             <Close />
           </IconButton>
           <Box className="flex justify-center items-center mb-5">
             <Image
-              src="/images/comming_soon.png"
+              src="/images/complete-lesson.png"
               alt="Avatar"
               width={250}
               height={250}

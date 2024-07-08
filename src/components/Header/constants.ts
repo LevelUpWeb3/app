@@ -1,8 +1,14 @@
 const navigations = [
+  // TODO: Revive challenges when we have challenges
+  // {
+  //   label: "Challenges",
+  //   key: "challenges",
+  //   href: "/challenges",
+  // },
   {
-    label: "Challenges",
-    key: "challenges",
-    href: "/challenges",
+    label: "Solidity",
+    key: "solidity",
+    href: "/solidity",
   },
   {
     label: "Content",
@@ -14,10 +20,11 @@ const navigations = [
     key: "podcast",
     href: "/podcast",
   },
+  // TODO: Update route as needed if planning to embed inside Level Up
   {
-    label: "Solidity",
-    key: "solidity",
-    href: "/solidity",
+    label: "Grants",
+    key: "grants",
+    href: "https://tally.so/r/mYdQP5",
   },
 ];
 

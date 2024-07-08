@@ -226,7 +226,10 @@ const App = ({ currentMenu }) => {
 
   const renderSubMenuList = (children) => {
     return children.map((section, idx) => (
-      <SectionList key={idx} dark={dark}>
+      <SectionList
+        key={idx}
+        dark={dark}
+      >
         <Typography
           sx={{
             fontSize: "1.4rem",
@@ -373,10 +376,17 @@ const App = ({ currentMenu }) => {
   };
 
   return (
-    <StyledBox bgColor={navbarBg} dark={dark}>
+    <StyledBox
+      bgColor={navbarBg}
+      dark={dark}
+    >
       <Container>
         <HeaderContainer>
-          <NavLink href="./" className="flex">
+          {/* Fixed NavLink to redirect to home page */}
+          <NavLink
+            href="/"
+            className="flex"
+          >
             <Logo light={dark} />
           </NavLink>
           <Stack
@@ -386,7 +396,10 @@ const App = ({ currentMenu }) => {
           >
             <Box>{renderNavigationList()}</Box>
           </Stack>
-          <WalletToolkit dark={dark}></WalletToolkit>
+          {/* TODO: Box created to temporarily create placeholder space. Needs to be removed */}
+          <Box sx={{ padding: "3.0rem" }}></Box>
+          {/* Temporarily disabled in MVP */}
+          {/* <WalletToolkit dark={dark}></WalletToolkit> */}
         </HeaderContainer>
       </Container>
     </StyledBox>

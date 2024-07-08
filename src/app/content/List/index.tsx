@@ -17,7 +17,7 @@ const Grid = withStyles(Box, (theme) => ({
   root: {
     marginTop: "6.8rem",
     display: "grid",
-    gridTemplateColumns: "max-content 1fr max-content",
+    gridTemplateColumns: "200px 1fr max-content",
     gridTemplateRows: "max-content 1fr",
     rowGap: "3rem",
     columnGap: "7.2rem",
@@ -82,7 +82,10 @@ const List = () => {
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CardBox>
             {filteredData.map((item, index) => (
-              <Card content={item} key={index} />
+              <Card
+                content={item}
+                key={index}
+              />
             ))}
           </CardBox>
         </Box>

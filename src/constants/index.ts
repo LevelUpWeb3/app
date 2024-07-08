@@ -3,11 +3,11 @@ export * from "./networks";
 
 export const CHALLENGE_LEVEL_LIST = [
   "All levels",
-  "Level1",
-  "Level2",
-  "Level3",
-  "Level4",
-  "Level5",
+  "Level 1",
+  "Level 2",
+  "Level 3",
+  "Level 4",
+  "Level 5",
 ];
 export const CHALLENGE_CATEGORY_LIST = [
   "All categories",
