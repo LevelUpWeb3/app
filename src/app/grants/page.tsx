@@ -1,20 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Script from "next/script";
 import { styled } from "@mui/material";
 
 const Header = styled("header")({
-  background:
-    'url("/images/funding-banner.png")  center center / cover no-repeat',
+  background: 'url("/images/banner.png")  center center / cover no-repeat',
 });
 
-function FundingPage() {
+function GrantsPage() {
   return (
     <div className="flex flex-col pb-2.5 mt-[-6.5rem]">
-      <Header className="overflow-hidden relative flex items-center justify-center w-full text-center h-[356px] max-md:max-w-full max-md:h-[18rem]">
+      <Header className="overflow-hidden relative flex items-center justify-center  w-full text-center h-[356px] max-md:max-w-full max-md:h-[18rem]">
         <h1 className="relative self-center text-9xl font-semibold leading-[356px] text-stone-950 max-md:text-[3.6rem]">
-          Funding Program
+          Grants Program
         </h1>
       </Header>
       <iframe
@@ -33,4 +32,4 @@ function FundingPage() {
   );
 }
 
-export default FundingPage;
+export default GrantsPage;

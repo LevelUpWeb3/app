@@ -6,8 +6,7 @@ import List from "./List";
 import { styled } from "@mui/material";
 
 const Header = styled("header")({
-  background:
-    'url("/images/podcast-banner.png")  center center / cover no-repeat',
+  background: 'url("/images/banner.png")  center center / cover no-repeat',
 });
 
 function ChallengesPage() {

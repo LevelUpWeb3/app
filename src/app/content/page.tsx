@@ -4,8 +4,7 @@ import List from "./List";
 import { styled } from "@mui/material";
 
 const Header = styled("header")({
-  background:
-    'url("/images/content-banner.png")  center center / cover no-repeat',
+  background: 'url("/images/banner.png")  center center / cover no-repeat',
 });
 
 function ContentPage({}) {

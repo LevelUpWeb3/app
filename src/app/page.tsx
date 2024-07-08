@@ -35,7 +35,7 @@ const LandingPage = () => {
 
         <div className="mt-4 text-[2.6rem] tracking-wide text-center text-stone-950 w-[771px] max-md:max-w-full max-md:text-[1.6rem] max-md:leading-[24px]">
           Level Up is your platform to learn Solidity, build real projects, and
-          apply for funding to build the future of Ethereum.
+          apply for grants to build the future of Ethereum.
         </div>
 
         {/* TODO: Revive this section when challenges are revisited */}
