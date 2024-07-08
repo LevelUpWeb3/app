@@ -20,10 +20,11 @@ const navigations = [
     key: "podcast",
     href: "/podcast",
   },
+  // TODO: Update route as needed if planning to embed inside Level Up
   {
-    label: "Funding",
-    key: "funding",
-    href: "/funding",
+    label: "Grants",
+    key: "grants",
+    href: "https://tally.so/r/mYdQP5",
   },
 ];
 
