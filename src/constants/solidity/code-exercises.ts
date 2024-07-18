@@ -47,7 +47,7 @@ export const CODE_EXERCISES: CodeTemplatesType = {
     exercise2:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Immutable {\n\n// Declare an immutable variable of type string with the name 'TOKEN_NAME' and assign it a value of 'MyToken' in the constructor\n}",
     exercise3:
-      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Immutable {\n\n// Declare an immutable of type string with the name 'TOKEN_TICKER' and assign it a value of 'MTK' in the constructor\n}",
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Immutable {\n\n// Declare an immutable variable of type string with the name 'TOKEN_TICKER' and assign it a value of 'MTK' in the constructor\n}",
     exercise4:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Immutable {\n\n// Declare an immutable variable of type string with the name 'CONTRACT_VERSION' and assign it a value of 'v1.0.0' in the constructor\n}",
     exercise5:
