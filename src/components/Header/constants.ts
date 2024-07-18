@@ -11,6 +11,11 @@ const navigations = [
     href: "/solidity",
   },
   {
+    label: "Hackathon",
+    key: "hackathon",
+    href: "/hackathon",
+  },
+  {
     label: "Content",
     key: "content",
     href: "/content",

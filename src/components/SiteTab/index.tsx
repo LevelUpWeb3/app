@@ -5,17 +5,21 @@ import { Box, Typography } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
 
-const SiteTabContainer = styled(Box)({
-  width: "100%",
-  height: "48px",
-  backgroundColor: "#B5F5EC",
-  justifyContent: "space-between",
-  padding: "1.6rem",
-  alignItems: "center",
-  textAlign: "center",
-});
+import useCheckViewport from "@/hooks/useCheckViewport";
 
 const SiteTab = () => {
+  const { isMobile } = useCheckViewport();
+
+  const SiteTabContainer = styled(Box)(() => ({
+    width: "100%",
+    height: isMobile ? "64px" : "48px",
+    backgroundColor: "#B5F5EC",
+    justifyContent: "space-between",
+    padding: "1.6rem",
+    alignItems: "center",
+    textAlign: "center",
+    overflow: "hidden",
+  }));
   return (
     <SiteTabContainer>
       <Typography
