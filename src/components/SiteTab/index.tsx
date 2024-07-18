@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Box, Typography } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
@@ -29,7 +30,13 @@ const SiteTab = () => {
         }}
       >
         🔥 The Level Up Hackathon by Ethereum Argentina will take place from
-        August 2-4. <strong>Join now!</strong>
+        August 2-4.{" "}
+        <Link
+          href="https://taikai.network/ethargentina/hackathons/level-up-argentina-2024"
+          style={{ textDecoration: "underline" }}
+        >
+          <strong>Join now!</strong>
+        </Link>
       </Typography>
     </SiteTabContainer>
   );
