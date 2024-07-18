@@ -80,8 +80,6 @@ const Protocols = () => {
       );
     });
     setFilteredData(filteredData);
-
-    console.log("Filtered Data: ", filteredData);
   }, [searchParams, data]);
 
   // const handleChangeCategory = (value) => {
@@ -103,10 +101,7 @@ const Protocols = () => {
         {/* <ComingSoon /> */}
         <CardBox>
           {filteredData.map((item, index) => (
-            <SolidityCardList
-              content={item}
-              key={index}
-            />
+            <SolidityCardList content={item} key={index} />
           ))}
         </CardBox>
       </Box>
