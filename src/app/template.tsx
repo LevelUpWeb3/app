@@ -17,10 +17,8 @@ export default function RootLayout({
   const routeName = usePathname();
   const isLandingPagePath = routeName === "/";
 
-  console.log("path: ", isLandingPagePath);
   return (
     <>
-      {/* <SiteTab></SiteTab> */}
       {isLandingPagePath && <SiteTab />}
       <Header></Header>
       {children}
