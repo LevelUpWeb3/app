@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/system";
 
 import Button from "@/components/Button";
-import Layout from "@/components/Layout";
+import SiteTab from "@/components/SiteTab";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 const Container = styled(Box)({
