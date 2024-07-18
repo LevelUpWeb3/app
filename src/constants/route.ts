@@ -17,10 +17,11 @@ const routes: PageMetadata[] = [
     name: "Native zkEVM Layer 2 for Ethereum",
     path: "/",
   },
-  {
-    name: "Challenges",
-    path: "/challenges",
-  },
+  // TODO: Revive this route when we have challenges
+  // {
+  //   name: "Challenges",
+  //   path: "/challenges",
+  // },
   {
     name: "Challenge Detail",
     path: "/challenges/:Id",
@@ -42,8 +43,12 @@ const routes: PageMetadata[] = [
     path: "/podcast",
   },
   {
-    name: "How it works",
-    path: "/how-it-works",
+    name: "Grants",
+    path: "/grants",
+  },
+  {
+    name: "Learn More",
+    path: "/learn-more",
   },
 ];
 
