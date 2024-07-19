@@ -25,6 +25,17 @@ const HackathonPage = () => {
     dynamicPaddingStyle = "pl-[42px]";
   }
 
+  let dynamicImagePositioning = "";
+  if (isDesktop) {
+    dynamicImagePositioning = "right-56";
+  } else if (isTabletLandscape) {
+    dynamicImagePositioning = "right-48";
+  } else if (isTablet) {
+    dynamicImagePositioning = "right-32";
+  } else if (isMobile) {
+    dynamicImagePositioning = "right-16";
+  }
+
   let dynamicSvgWidthStyle = 0;
   if (isDesktop) {
     dynamicSvgWidthStyle = 225;
@@ -61,14 +72,14 @@ const HackathonPage = () => {
               src="/images/hackathon.svg"
               width={dynamicSvgWidthStyle}
               height={dynamicSvgHeightStyle}
-              className="absolute right-12 top-1/2 -translate-y-1/2 transform"
+              className={`absolute ${dynamicImagePositioning} top-1/2 mt-[3.0rem] -translate-y-1/2 transform`}
               alt="Hackathon"
             />
           </h1>
         </div>
       </Header>
       <div
-        className={`relative mx-auto mb-[2rem] mt-[3rem] w-full ${isDesktop ? "max-w-[1536px] pl-[104px] text-9xl" : ""}`}
+        className={`relative mx-auto mb-2 mt-2 w-full ${isDesktop ? "max-w-[1536px] pl-[104px] text-9xl" : ""}`}
       >
         <span
           className={`${isMobile ? "text-4xl" : "text-6xl"} text-stone-950 max-md:text-[3.6rem] ${dynamicPaddingStyle}`}
@@ -76,11 +87,7 @@ const HackathonPage = () => {
           Upcoming
         </span>
       </div>
-      <div
-        className={`mx-auto mb-[2rem] mt-[3rem] w-full ${isDesktop ? "max-w-[1536px] pl-[104px] pr-[104px]" : ""}`}
-      >
-        <List />
-      </div>
+      <List />
     </div>
   );
 };
