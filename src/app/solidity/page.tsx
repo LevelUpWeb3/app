@@ -62,10 +62,10 @@ const SolidityPage = () => {
     <div className="mt-[-6.5rem] flex flex-col pb-2.5">
       <Header className="justify-left relative flex h-[356px] w-full items-center overflow-hidden text-left max-md:h-[18rem] max-md:max-w-full">
         <div
-          className={`relative mx-auto w-full ${isDesktop ? "max-w-[1536px] pl-[104px] text-9xl" : ""}`}
+          className={`relative mx-auto w-full ${isDesktop ? "max-w-[1536px] pl-[104px]" : ""}`}
         >
           <h1
-            className={`${isMobile ? "text-7xl" : "text-8xl"} font-semibold leading-[356px] text-stone-950 max-md:text-[3.6rem] ${dynamicPaddingStyle} `}
+            className={`${isMobile ? "text-3xl" : "text-[56px]"} font-semibold leading-[356px] text-stone-950 max-md:text-[3.6rem] ${dynamicPaddingStyle} `}
           >
             Solidity Challenges
             <Image

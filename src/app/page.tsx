@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/system";
 
 import Button from "@/components/Button";
-import SiteTab from "@/components/SiteTab";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 const Container = styled(Box)({
@@ -29,11 +28,11 @@ const LandingPage = () => {
       <StyledBox
         sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
       >
-        <div className="pt-32 text-[7.2rem] font-semibold whitespace-nowrap text-center leading-[88px] text-stone-950 w-[720px] max-md:pt-[6rem] max-md:max-w-full max-md:text-[3.6rem] max-md:leading-[48px]">
+        <div className="w-[720px] whitespace-nowrap pt-32 text-center text-[7.2rem] font-semibold leading-[88px] text-stone-950 max-md:max-w-full max-md:pt-[6rem] max-md:text-[3.6rem] max-md:leading-[48px]">
           Level Up your Web3 Skills
         </div>
 
-        <div className="mt-4 text-[2.6rem] tracking-wide text-center text-stone-950 w-[771px] max-md:max-w-full max-md:text-[1.6rem] max-md:leading-[24px]">
+        <div className="mt-4 w-[771px] text-center text-[2.6rem] tracking-wide text-stone-950 max-md:max-w-full max-md:text-[1.6rem] max-md:leading-[24px]">
           Level Up is your platform to learn Solidity, build real projects, and
           apply for grants to build the future of Ethereum.
         </div>
@@ -51,25 +50,18 @@ const LandingPage = () => {
           </div>
         </div> */}
 
-        <div className="flex w-full justify-center gap-[3rem] mt-[3.6rem] mb-[2.6rem] max-md:gap-[2rem] max-md:flex-col max-md:items-center ">
-          <Button
-            href="/solidity"
-            color="primary"
-            width="25rem"
-          >
+        <div className="mb-[2.6rem] mt-[3.6rem] flex w-full justify-center gap-[3rem] max-md:flex-col max-md:items-center max-md:gap-[2rem]">
+          <Button href="/solidity" color="primary" width="25rem">
             Learn Solidity
           </Button>
-          <Button
-            href="/learn-more"
-            width="25rem"
-          >
+          <Button href="/learn-more" width="25rem">
             Learn More
           </Button>
         </div>
       </StyledBox>
       <img
         loading="lazy"
-        className="w-full max-md:bottom-0 max-md:absolute"
+        className="mt-[6.8rem] w-full max-md:absolute max-md:bottom-0"
         src="/images/landing.png"
       />
     </Container>

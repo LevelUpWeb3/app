@@ -65,7 +65,7 @@ const ContentPage = () => {
           className={`relative mx-auto w-full ${isDesktop ? "max-w-[1536px] pl-[104px] text-9xl" : ""}`}
         >
           <h1
-            className={`${isMobile ? "text-7xl" : "text-8xl"} font-semibold leading-[356px] text-stone-950 max-md:text-[3.6rem] ${dynamicPaddingStyle} `}
+            className={`${isMobile ? "text-3xl" : "text-[56px]"} font-semibold leading-[356px] text-stone-950 max-md:text-[3.6rem] ${dynamicPaddingStyle} `}
           >
             Content
             <Image
