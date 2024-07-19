@@ -14,15 +14,21 @@ import SolidityCardList from "./SolidityCardList";
 
 // import Challenge from "./Challenge";
 
-const Container = styled(Box)({
-  maxWidth: "140rem",
-  margin: "0 auto",
-  marginTop: "6.8rem",
-  width: "100%",
-  ["@media (max-width: 1400px)"]: {
-    padding: "0 1.6rem",
+const Container = styled(Box)(({ theme }) => ({
+  width: "full",
+  marginTop: "6rem",
+  maxWidth: "1536px",
+  paddingLeft: "104px",
+  paddingRight: "104px",
+  boxSizing: "border-box",
+  [theme.breakpoints.down("lg")]: {
+    maxWidth: "none",
+    padding: "0 58px",
   },
-});
+  [theme.breakpoints.down("sm")]: {
+    padding: "0 16px",
+  },
+}));
 
 // const Grid = withStyles(Box, (theme) => ({
 //   root: {
