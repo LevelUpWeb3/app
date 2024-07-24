@@ -10,18 +10,9 @@ import HackathonCard from "./HackathonCard";
 import Data from "./hackathonList.json";
 
 const Container = styled(Box)(({ theme }) => ({
-  width: "full",
-  maxWidth: "1536px",
-  paddingLeft: "104px",
-  paddingRight: "104px",
+  width: "100%",
+  margin: "0 auto",
   boxSizing: "border-box",
-  [theme.breakpoints.down("lg")]: {
-    maxWidth: "none",
-    padding: "0 58px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: "0 16px",
-  },
 }));
 
 const CardBox = styled(Box)(() => ({

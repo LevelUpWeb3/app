@@ -3,8 +3,8 @@ import Image from "next/image";
 import Button from "@/components/Button";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
-const CardArticle = styled("article")(() => ({
-  padding: "2.4rem",
+const CardArticle = styled("article")(({ theme }) => ({
+  // padding: "4rem",
   background: "#FFF0DD",
   borderRadius: "2rem",
   display: "flex",
@@ -13,41 +13,58 @@ const CardArticle = styled("article")(() => ({
   justifyContent: "space-between",
   marginBottom: "2.4rem",
   position: "relative",
+  [theme.breakpoints.down("md")]: {
+    // padding: "2.4rem",
+  },
 }));
 
-const Title = styled(Typography)(() => ({
-  fontSize: "2rem",
-  lineHeight: "2.8rem",
-  marginBottom: "1.2rem",
+const Title = styled(Typography)(({ theme }) => ({
+  fontSize: "3.2rem",
+  marginBottom: "3.2rem",
   fontWeight: 500,
+  [theme.breakpoints.down("md")]: {
+    fontSize: "2rem",
+    fontWeight: 600,
+    lineHeight: "3.2rem",
+    marginBottom: "1.2rem",
+  },
 }));
 
-const LabelContainer = styled("div")(() => ({
+const LabelContainer = styled("div")(({ theme }) => ({
   display: "flex",
   gap: "2rem",
   marginTop: "1.6rem",
-  marginBottom: "1.6rem",
+  marginBottom: "3.2rem",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    gap: "0.8rem",
+    marginBottom: "1.2rem",
+  },
 }));
 
-const Label = styled(Typography)(() => ({
-  fontSize: "1.35rem",
+const Label = styled(Typography)(({ theme }) => ({
+  fontSize: "1.8rem",
   background: "#FFF8F3",
   borderRadius: "24px",
   color: "#101010",
   height: "auto",
-  padding: "0.4rem 1.0rem",
+  padding: "0.8rem 1.6rem",
   lineHeight: "24px",
   fontWeight: "600",
   textAlign: "center",
   whiteSpace: "normal",
   overflowWrap: "break-word",
+  [theme.breakpoints.down("md")]: {
+    width: "fit-content",
+    fontSize: "1.6rem",
+  },
 }));
 
 const HackathonCard = ({ content }) => {
   const { isMobile } = useCheckViewport();
   return (
     <CardArticle>
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, padding: ['2.4rem','4rem'] }}>
         <LabelContainer>
           <Label>
             <Image
@@ -77,20 +94,24 @@ const HackathonCard = ({ content }) => {
         {isMobile && (
           <img
             src={content.image}
-            style={{ width: "100%", height: "auto", objectFit: "contain" }}
+            style={{ width: "80%", height: "auto", objectFit: "contain" }}
             alt="Hackathon"
-            className="mb-2"
+            className="mx-auto mb-[1.2rem] block"
           />
         )}
-        <Button href={content.url} color="primary" width="25rem">
+        <Button
+          href={content.url}
+          color="primary"
+          width={isMobile ? "100%" : "25rem"}
+        >
           {content.status}
         </Button>
       </Box>
       {!isMobile && (
-        <Box sx={{ position: "absolute", right: 0, top: 0, bottom: 0 }}>
+        <Box>
           <img
             src={content.image}
-            style={{ height: "100%", objectFit: "contain", width: "auto" }}
+            style={{ height: "100%", objectFit: "contain", width: "auto", objectPosition: "bottom" }}
             alt="Hackathon"
           />
         </Box>

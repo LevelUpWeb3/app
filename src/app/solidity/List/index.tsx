@@ -15,19 +15,9 @@ import SolidityCardList from "./SolidityCardList";
 // import Challenge from "./Challenge";
 
 const Container = styled(Box)(({ theme }) => ({
-  width: "full",
-  marginTop: "6rem",
-  maxWidth: "1536px",
-  paddingLeft: "104px",
-  paddingRight: "104px",
+  width: "100%",
+  margin: "6rem auto",
   boxSizing: "border-box",
-  [theme.breakpoints.down("lg")]: {
-    maxWidth: "none",
-    padding: "0 58px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: "0 16px",
-  },
 }));
 
 // const Grid = withStyles(Box, (theme) => ({
