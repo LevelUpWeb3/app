@@ -28,7 +28,7 @@ const LandingPage = () => {
       <StyledBox
         sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
       >
-        <div className="w-[720px] whitespace-nowrap pt-32 text-center text-[7.2rem] font-semibold leading-[88px] text-stone-950 max-md:max-w-full max-md:pt-[6rem] max-md:text-[3.6rem] max-md:leading-[48px]">
+        <div className="pt-32 text-center text-[7.2rem] font-semibold leading-[88px] text-stone-950 max-md:max-w-full max-md:pt-[6rem] max-md:text-[3.6rem] max-md:leading-[48px] max-md:w-[30rem]">
           Level Up your Web3 Skills
         </div>
 
