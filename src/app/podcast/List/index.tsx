@@ -36,9 +36,6 @@ const Container = styled(Box)({
   maxWidth: "140rem",
   margin: "0 auto",
   width: "100%",
-  ["@media (max-width: 1400px)"]: {
-    padding: "0 1.6rem",
-  },
 });
 
 // const CardBox = styled(Box)(() => ({

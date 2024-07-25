@@ -2,9 +2,12 @@
 
 import React from "react";
 
+import { usePathname } from "next/navigation";
+
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
 import Header from "@/components/Header";
+import SiteTab from "@/components/SiteTab";
 import RainbowProvider from "@/contexts/RainbowProvider";
 import ScrollThemeProvider from "@/theme";
 
@@ -20,10 +23,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const routeName = usePathname();
+  const isLandingPagePath = routeName === "/";
+
   return (
     <CacheProvider value={clientSideEmotionCache}>
       <ScrollThemeProvider>
         <RainbowProvider>
+          {isLandingPagePath && <SiteTab />}
           <Header></Header>
           {children}
         </RainbowProvider>

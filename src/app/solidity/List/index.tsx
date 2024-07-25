@@ -14,15 +14,11 @@ import SolidityCardList from "./SolidityCardList";
 
 // import Challenge from "./Challenge";
 
-const Container = styled(Box)({
-  maxWidth: "140rem",
-  margin: "0 auto",
-  marginTop: "6.8rem",
+const Container = styled(Box)(({ theme }) => ({
   width: "100%",
-  ["@media (max-width: 1400px)"]: {
-    padding: "0 1.6rem",
-  },
-});
+  margin: "6rem auto",
+  boxSizing: "border-box",
+}));
 
 // const Grid = withStyles(Box, (theme) => ({
 //   root: {
@@ -80,8 +76,6 @@ const Protocols = () => {
       );
     });
     setFilteredData(filteredData);
-
-    console.log("Filtered Data: ", filteredData);
   }, [searchParams, data]);
 
   // const handleChangeCategory = (value) => {
@@ -103,10 +97,7 @@ const Protocols = () => {
         {/* <ComingSoon /> */}
         <CardBox>
           {filteredData.map((item, index) => (
-            <SolidityCardList
-              content={item}
-              key={index}
-            />
+            <SolidityCardList content={item} key={index} />
           ))}
         </CardBox>
       </Box>
