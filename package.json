@@ -24,6 +24,7 @@
     "@mui/material": "^5.13.5",
     "@mui/material-nextjs": "^5.15.5",
     "@next/mdx": "^14.1.4",
+    "@next/third-parties": "^14.2.5",
     "@rainbow-me/rainbowkit": "^1.2.0",
     "@svgr/webpack": "^8.1.0",
     "@types/mdx": "^2.0.12",

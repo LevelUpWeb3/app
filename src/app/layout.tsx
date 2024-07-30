@@ -9,6 +9,7 @@ import { DEFAULT_METADATA } from "@/constants/route";
 import RainbowProvider from "@/contexts/RainbowProvider";
 import ScrollThemeProvider from "@/theme";
 import { findCurrentRoute } from "@/utils/route";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 import "./globals.css";
 
@@ -84,12 +85,12 @@ export default function RootLayout({
           rel="icon"
           href="/favicon.ico"
         />
+        <GoogleAnalytics gaId="G-7SCKT33C0W" />
       </head>
       <body>
         <AppRouterCacheProvider options={{ key: "css" }}>
           <ScrollThemeProvider>
             <RainbowProvider>{children}</RainbowProvider>
-            {/* <ScrollToTop /> */}
           </ScrollThemeProvider>
         </AppRouterCacheProvider>
       </body>
