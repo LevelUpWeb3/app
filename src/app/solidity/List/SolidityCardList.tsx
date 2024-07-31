@@ -53,7 +53,7 @@ const SolidityCardList = ({ content, key }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    sendGAEvent('event', 'buttonClicked', { value: 'test' })
+    sendGAEvent('event', 'challengeClicked', { value: `Lesson ${content.lesson}: ${content.name}` })
     if (content.url) {
       window.open(content.url);
     } else {

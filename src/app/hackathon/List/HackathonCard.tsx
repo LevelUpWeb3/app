@@ -2,6 +2,7 @@ import { Box, Typography, styled } from "@mui/material";
 import Image from "next/image";
 import Button from "@/components/Button";
 import useCheckViewport from "@/hooks/useCheckViewport";
+import { sendGAEvent } from '@next/third-parties/google'
 
 const CardArticle = styled("article")(({ theme }) => ({
   // padding: "4rem",
@@ -103,6 +104,7 @@ const HackathonCard = ({ content }) => {
           href={content.url}
           color="primary"
           width={isMobile ? "100%" : "25rem"}
+          onClick={() => sendGAEvent('event', 'hackathonClicked', { value: content.name })}
         >
           {content.status}
         </Button>

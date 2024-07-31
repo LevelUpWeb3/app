@@ -164,6 +164,7 @@ const Button = (props: ScrollButtonProps) => {
     children,
     whiteButton,
     isExternal,
+    onClick,
     ...restProps
   } = props;
   const { classes, cx } = useStyles({
@@ -188,7 +189,10 @@ const Button = (props: ScrollButtonProps) => {
     setIsHover();
   };
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    if (onClick) {
+      onClick(e);
+    }
     if (isExternal) {
       window.open(props.href, "_blank");
     } else {
