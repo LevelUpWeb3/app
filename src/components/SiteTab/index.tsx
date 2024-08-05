@@ -29,13 +29,12 @@ const SiteTab = () => {
           textAlign: "center",
         }}
       >
-        🔥 The Level Up Hackathon by Ethereum Argentina will take place from
-        August 2-4.{" "}
+        🔥 Applications for the Level Up Grants Program are open until August 26.{" "}
         <Link
-          href="https://taikai.network/ethargentina/hackathons/level-up-argentina-2024"
+          href="https://tally.so/r/mYdQP5"
           style={{ textDecoration: "underline" }}
         >
-          <strong>Join now!</strong>
+          <strong>Apply now!</strong>
         </Link>
       </Typography>
     </SiteTabContainer>
