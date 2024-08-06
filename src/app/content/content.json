@@ -40,5 +40,19 @@
     "labels": ["Defi"],
     "author": "Raza",
     "url": "https://www.razacodes.com/blog/Guardian-Trading-without-Oracles"
+  },
+  {
+    "name": "Exploring Solidity Objects: Address - Part 1",
+    "summary": "This article explores the use cases of various Solidity objects, starting with the Address object",
+    "labels": ["Smart Contract"],
+    "author": "RH",
+    "url": "https://open.substack.com/pub/rhbdl/p/exploring-solidity-objects-address?r=1v972g&utm_campaign=post&utm_medium=web"
+  },
+  {
+    "name": "Exploring Solidity Objects: Address - Part 2",
+    "summary": "This article continues the exploration of Address object, specifically staticcall and delegatecall",
+    "labels": ["Smart Contract"],
+    "author": "RH",
+    "url": "https://open.substack.com/pub/rhbdl/p/exploring-solidity-objects-address-7d3?r=1v972g&utm_campaign=post&utm_medium=web"
   }
 ]
