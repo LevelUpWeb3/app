@@ -29,7 +29,7 @@ const SiteTab = () => {
           textAlign: "center",
         }}
       >
-        🔥 Applications for the Level Up Grants Program are open until August 26.{" "}
+        🔥 Applications for the Level Up Grants Program are open until August 25.{" "}
         <Link
           href="https://tally.so/r/mYdQP5"
           style={{ textDecoration: "underline" }}
