@@ -2,10 +2,10 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 
-const markdownDirectory = path.join(process.cwd(), "src/challenges/solidity");
-const outputDirectory = path.join(process.cwd(), "public/data/solidity");
+const markdownDirectory = path.join(process.cwd(), "src/contents");
+const outputDirectory = path.join(process.cwd(), "public/data/contents");
 
-const processSolidityMarkdownFiles = async () => {
+const processContentMarkdownFiles = async () => {
   const fileNames = fs.readdirSync(markdownDirectory);
   const serialize = (await import("next-mdx-remote/serialize")).serialize;
 
@@ -19,6 +19,7 @@ const processSolidityMarkdownFiles = async () => {
     const mdxSource = await serialize(content, {
       mdxOptions: {
         development: "development" === process.env.NODE_ENV,
+        // development: true,
       },
     });
 
@@ -62,4 +63,4 @@ const processSolidityMarkdownFiles = async () => {
   ); // Pretty print JSON
 };
 
-processSolidityMarkdownFiles().catch(console.error);
+processContentMarkdownFiles().catch(console.error);
