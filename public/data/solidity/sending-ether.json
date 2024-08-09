@@ -1,0 +1,15 @@
+{
+  "id": "sending-ether",
+  "name": "Sending Ether",
+  "index": 25,
+  "lesson": 25,
+  "summary": "Introduction to sending ether in your smart contracts.",
+  "labels": [
+    "solidity"
+  ],
+  "content": {
+    "compiledSource": "/*@jsxRuntime automatic @jsxImportSource react*/\nconst {jsxDEV: _jsxDEV} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = Object.assign({\n    h1: \"h1\"\n  }, _provideComponents(), props.components);\n  return _jsxDEV(_components.h1, {\n    children: \"Sending Ether\"\n  }, undefined, false, {\n    fileName: \"<source.js>\",\n    lineNumber: 2,\n    columnNumber: 1\n  }, this);\n}\nfunction MDXContent(props = {}) {\n  const {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components);\n  return MDXLayout ? _jsxDEV(MDXLayout, Object.assign({}, props, {\n    children: _jsxDEV(_createMdxContent, props, undefined, false, {\n      fileName: \"<source.js>\"\n    }, this)\n  }), undefined, false, {\n    fileName: \"<source.js>\"\n  }, this) : _createMdxContent(props);\n}\nreturn {\n  default: MDXContent\n};\n",
+    "frontmatter": {},
+    "scope": {}
+  }
+}
