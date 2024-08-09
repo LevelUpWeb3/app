@@ -62,7 +62,7 @@ const Protocols = () => {
 
   const stickyTop = useMemo(
     () => (trigger ? "2rem" : NORMAL_HEADER_HEIGHT),
-    [trigger]
+    [trigger],
   );
 
   useEffect(() => {
@@ -116,10 +116,9 @@ const Protocols = () => {
           ></LevelSelect>
           {/* <ComingSoon /> */}
           <CardBox>
-            {filteredData
-              .map((item, index) => (
-                <Card content={item} key={index} />
-              ))}
+            {filteredData.map((item, index) => (
+              <Card content={item} key={index} />
+            ))}
           </CardBox>
         </Box>
       </Grid>
