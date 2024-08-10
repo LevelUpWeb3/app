@@ -9,7 +9,7 @@ export interface PageMetadata {
 export const DEFAULT_METADATA = {
   name: "",
   description: "Native zkEVM Layer 2 for Ethereum",
-  ogImg: "/og_scroll.png",
+  ogImg: "/images/level-up-metadata.png",
 };
 
 const routes: PageMetadata[] = [
@@ -41,6 +41,10 @@ const routes: PageMetadata[] = [
   {
     name: "Content",
     path: "/content",
+  },
+  {
+    name: "Content",
+    path: "/content/:Slug",
   },
   {
     name: "Podcast",
