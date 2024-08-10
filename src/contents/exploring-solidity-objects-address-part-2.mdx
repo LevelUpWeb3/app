@@ -10,6 +10,22 @@ import YoutubeEmbed from "src/components/YoutubeEmbed";
 
 # Exploring Solidity Objects: Address - Part 2
 
+<div className= "flex">
+    <a href="https://x.com/rh_bdl" target="_blank" rel="noopener noreferrer">
+        <img
+        src="/images/personal/RH.png"
+        alt="RH"
+        style={{ borderRadius: "50%", width: "52px", height: "52px" }}
+        />
+    </a>
+    <div>
+        <p style={{ margin: "0 0 2.5rem 1rem" }}>
+            <span style={{ color: "#6A6A6A" }}>Written by {""}</span> <a href="https://x.com/rh_bdl" target="_blank" rel="noopener noreferrer" style={{ color: "black", fontWeight: "bold"}}>RH</a>
+            <span style={{ display: "block", color: "#6A6A6A", fontSize: "13px" }}>Aug 10, 2024 · 5 min read</span>
+        </p>
+    </div>
+</div>
+
 In [Part 1](https://rhbdl.substack.com/p/exploring-solidity-objects-address?r=1v972g), we explored different `address` members and their use cases. While the previous article explored scenarios involving sending Ether, it is helpful to know that the functionalities extend beyond that.
 
 For instance, the `call` function is a low-level function which has the capability to invoke any function on any target contract by specifying the function signature and arguments in the "data" parameter. **(Security Note: call never reverts. It is our responsibility to handle unsuccessful transaction errors.)**
@@ -29,15 +45,16 @@ Let's utilise the code below to answer these questions!
 <ContentCopy code={`pragma solidity ^0.8.24;
 
 contract Caller {
-    uint256 public value;
+uint256 public value;
 
     function setVars(uint256 _value) public payable {
         value = _value;
     }
+
 }
 
 contract DelegateCaller {
-    uint256 public value;
+uint256 public value;
 
     function setVars(address _callerContract, uint256 _value) public payable {
         // Caller delegated its setVars() function to DelegateCaller Contract
@@ -46,9 +63,10 @@ contract DelegateCaller {
         );
         if (!success) revert("Failed");
     }
+
 }`} language="solidity"/>
 
-When `setVars()` is called in DelegateCaller contract, the `delegatecall` invokes the `setVars()` function in the Caller contract but in the DelegateCaller execution environment. 
+When `setVars()` is called in DelegateCaller contract, the `delegatecall` invokes the `setVars()` function in the Caller contract but in the DelegateCaller execution environment.
 
 Thus, Caller contract has effectively delegated its function to DelegateCaller contract.
 
@@ -64,13 +82,17 @@ Having explored the complexities of `delegatecall`, let’s proceed to explore `
 
 ## **2. staticcall**
 
-In general, `staticcall` does not allow any state modifying instructions or capability to send ether. It will revert if there are any state changes during the function invocation. 
+In general, `staticcall` does not allow any state modifying instructions or capability to send ether. It will revert if there are any state changes during the function invocation.
 
 At a low-level, it disallows opcodes such as CREATE, SSTORE, SELFDESTRUCT, and few [others](https://www.evm.codes/#fa?fork=cancun). Personally, I view `staticcall` as a safer variant of the call function to read state.
 
-<div className="text-center ">
-    <img src="/images/contents/staticcall.png" alt="staticcall example" width="750" />
-    _Figure 1: `staticcall` example_
+<div className="text-center">
+  <img
+    src="/images/contents/staticcall.png"
+    alt="staticcall example"
+    width="750"
+  />
+  _Figure 1: `staticcall` example_
 </div>
 
 In the example above, notice how the `value` variable for StaticCaller contract did not change. It remains as “0” even when Caller contract has been updated to store “100” in its `value` variable. Unlike `delegatecall` which allows state modifying instruction, `staticcall` only reads state of the target contract (Caller contract in this example).
@@ -80,10 +102,11 @@ As a treat, I have also included a function `setVars()` which purposefully calls
 <YoutubeEmbed id="iGQ5z6B1PQw" />
 
 <div className="text-center">
-_Explore this code further here: [staticcall.sol](https://remix.ethereum.org/?#code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IE1JVApwcmFnbWEgc29saWRpdHkgXjAuOC4yNDsKCmNvbnRyYWN0IENhbGxlciB7CiAgICB1aW50MjU2IHB1YmxpYyB2YWx1ZTsKCiAgICBmdW5jdGlvbiBzZXRWYXJzKHVpbnQyNTYgX3ZhbHVlKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgdmFsdWUgPSBfdmFsdWU7CiAgICB9CgogICAgZnVuY3Rpb24gcmVhZFZhbHVlKCkgcHVibGljIHZpZXcgcmV0dXJucyAodWludDI1NikgewogICAgICAgIHJldHVybiB2YWx1ZTsKICAgIH0KfQoKY29udHJhY3QgU3RhdGljQ2FsbGVyIHsKICAgIHVpbnQyNTYgcHVibGljIHZhbHVlOwoKICAgIGZ1bmN0aW9uIHNldFZhcnMoYWRkcmVzcyBfY2FsbGVyQ29udHJhY3QsIHVpbnQyNTYgX3ZhbHVlKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgKGJvb2wgc3VjY2VzcywgKSA9IF9jYWxsZXJDb250cmFjdC5zdGF0aWNjYWxsKAogICAgICAgICAgICBhYmkuZW5jb2RlV2l0aFNpZ25hdHVyZSgic2V0VmFycyh1aW50MjU2KSIsIF92YWx1ZSkKICAgICAgICApOwogICAgICAgIGlmKCFzdWNjZXNzKSByZXZlcnQgKCJFcnJvciBpbiBzdGF0aWNjYWxsIik7CiAgICB9CgogICAgZnVuY3Rpb24gcmVhZFZhcnMoYWRkcmVzcyBfY2FsbGVyQ29udHJhY3QpIHB1YmxpYyB2aWV3IHJldHVybnMgKHVpbnQyNTYpIHsKICAgICAgICAoLCBieXRlcyBtZW1vcnkgZGF0YSkgPSBfY2FsbGVyQ29udHJhY3Quc3RhdGljY2FsbChhYmkuZW5jb2RlV2l0aFNpZ25hdHVyZSgicmVhZFZhbHVlKCkiKSk7CiAgICAgICAgcmV0dXJuIGFiaS5kZWNvZGUoZGF0YSwgKHVpbnQyNTYpKTsKICAgIH0KfQ&lang=en&optimize=false&runs=200&evmVersion=null&version=soljson-v0.8.26+commit.8a97fa7a.js)_
+  _Explore this code further here:
+  [staticcall.sol](https://remix.ethereum.org/?#code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IE1JVApwcmFnbWEgc29saWRpdHkgXjAuOC4yNDsKCmNvbnRyYWN0IENhbGxlciB7CiAgICB1aW50MjU2IHB1YmxpYyB2YWx1ZTsKCiAgICBmdW5jdGlvbiBzZXRWYXJzKHVpbnQyNTYgX3ZhbHVlKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgdmFsdWUgPSBfdmFsdWU7CiAgICB9CgogICAgZnVuY3Rpb24gcmVhZFZhbHVlKCkgcHVibGljIHZpZXcgcmV0dXJucyAodWludDI1NikgewogICAgICAgIHJldHVybiB2YWx1ZTsKICAgIH0KfQoKY29udHJhY3QgU3RhdGljQ2FsbGVyIHsKICAgIHVpbnQyNTYgcHVibGljIHZhbHVlOwoKICAgIGZ1bmN0aW9uIHNldFZhcnMoYWRkcmVzcyBfY2FsbGVyQ29udHJhY3QsIHVpbnQyNTYgX3ZhbHVlKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgKGJvb2wgc3VjY2VzcywgKSA9IF9jYWxsZXJDb250cmFjdC5zdGF0aWNjYWxsKAogICAgICAgICAgICBhYmkuZW5jb2RlV2l0aFNpZ25hdHVyZSgic2V0VmFycyh1aW50MjU2KSIsIF92YWx1ZSkKICAgICAgICApOwogICAgICAgIGlmKCFzdWNjZXNzKSByZXZlcnQgKCJFcnJvciBpbiBzdGF0aWNjYWxsIik7CiAgICB9CgogICAgZnVuY3Rpb24gcmVhZFZhcnMoYWRkcmVzcyBfY2FsbGVyQ29udHJhY3QpIHB1YmxpYyB2aWV3IHJldHVybnMgKHVpbnQyNTYpIHsKICAgICAgICAoLCBieXRlcyBtZW1vcnkgZGF0YSkgPSBfY2FsbGVyQ29udHJhY3Quc3RhdGljY2FsbChhYmkuZW5jb2RlV2l0aFNpZ25hdHVyZSgicmVhZFZhbHVlKCkiKSk7CiAgICAgICAgcmV0dXJuIGFiaS5kZWNvZGUoZGF0YSwgKHVpbnQyNTYpKTsKICAgIH0KfQ&lang=en&optimize=false&runs=200&evmVersion=null&version=soljson-v0.8.26+commit.8a97fa7a.js)_
 </div>
 
-In [ETH CC Brussels](https://ethglobal.com/events/brussels/prizes/scroll), Scroll introduced the experimental [L1SLOAD precompile](https://ethereum-magicians.org/t/rip-7728-l1sload-precompile/20388) which uses `staticcall` under the hood. 
+In [ETH CC Brussels](https://ethglobal.com/events/brussels/prizes/scroll), Scroll introduced the experimental [L1SLOAD precompile](https://ethereum-magicians.org/t/rip-7728-l1sload-precompile/20388) which uses `staticcall` under the hood.
 
 Hackers were able to explore novel methods of resolving ENS address, extending NFT ownership - all on L2. Despite preliminary stage of experimentation, this highlights that the potential opportunities for this function are virtually limitless.
 
