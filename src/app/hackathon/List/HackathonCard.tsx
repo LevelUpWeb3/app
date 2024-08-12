@@ -2,10 +2,9 @@ import { Box, Typography, styled } from "@mui/material";
 import Image from "next/image";
 import Button from "@/components/Button";
 import useCheckViewport from "@/hooks/useCheckViewport";
-import { sendGAEvent } from '@next/third-parties/google'
+import { sendGAEvent } from "@next/third-parties/google";
 
 const CardArticle = styled("article")(({ theme }) => ({
-  // padding: "4rem",
   background: "#FFF0DD",
   borderRadius: "2rem",
   display: "flex",
@@ -14,9 +13,7 @@ const CardArticle = styled("article")(({ theme }) => ({
   justifyContent: "space-between",
   marginBottom: "2.4rem",
   position: "relative",
-  [theme.breakpoints.down("md")]: {
-    // padding: "2.4rem",
-  },
+  [theme.breakpoints.down("md")]: {},
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
@@ -65,7 +62,7 @@ const HackathonCard = ({ content }) => {
   const { isMobile } = useCheckViewport();
   return (
     <CardArticle>
-      <Box sx={{ flex: 1, padding: ['2.4rem','4rem'] }}>
+      <Box sx={{ flex: 1, padding: ["2.4rem", "4rem"] }}>
         <LabelContainer>
           <Label>
             <Image
@@ -104,7 +101,9 @@ const HackathonCard = ({ content }) => {
           href={content.url}
           color="primary"
           width={isMobile ? "100%" : "25rem"}
-          onClick={() => sendGAEvent('event', 'hackathonClicked', { value: content.name })}
+          onClick={() =>
+            sendGAEvent("event", "hackathonClicked", { value: content.name })
+          }
         >
           {content.status}
         </Button>
@@ -113,7 +112,12 @@ const HackathonCard = ({ content }) => {
         <Box>
           <img
             src={content.image}
-            style={{ height: "100%", objectFit: "contain", width: "auto", objectPosition: "bottom" }}
+            style={{
+              height: "100%",
+              objectFit: "contain",
+              width: "auto",
+              objectPosition: "bottom",
+            }}
             alt="Hackathon"
           />
         </Box>

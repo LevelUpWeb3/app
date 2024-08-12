@@ -9,14 +9,14 @@ import { DEFAULT_METADATA } from "@/constants/route";
 import RainbowProvider from "@/contexts/RainbowProvider";
 import ScrollThemeProvider from "@/theme";
 import { findCurrentRoute } from "@/utils/route";
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { pathname, origin } = new URL(headers().get("x-url")!);
   const route = findCurrentRoute(pathname);
-  const title = `Scroll${route ? " – " + route.name : null}`;
+  const title = `Level Up${route ? " – " + route.name : null}`;
   const description = route.description || DEFAULT_METADATA.description;
   const ogImg = route.ogImg || DEFAULT_METADATA.ogImg;
   const twitterImg = route.twitterImg || route.ogImg || DEFAULT_METADATA.ogImg;
@@ -81,10 +81,7 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.9.0/github-markdown.min.css"
           crossOrigin="anonymous"
         />
-        <link
-          rel="icon"
-          href="/favicon.ico"
-        />
+        <link rel="icon" href="/favicon.ico" />
         <GoogleAnalytics gaId="G-7SCKT33C0W" />
       </head>
       <body>

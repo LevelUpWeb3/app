@@ -21,7 +21,7 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
   const slugParam = slug as string;
 
   useEffect(() => {
-    fetch("/data/challenges/solidity/markdownData.json")
+    fetch("/data/solidity/markdownData.json")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -52,13 +52,13 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
 
   return (
     <Box
-      className="inset-0 bg-opacity-25 backdrop-blur-sm z-20 flex justify-center items-center fixed"
+      className="fixed inset-0 z-20 flex items-center justify-center bg-opacity-25 backdrop-blur-sm"
       id="background"
       onClick={handleClose}
     >
-      <Box className="w-[600px] flex flex-col rounded-xl border-2 bg-orange-50">
+      <Box className="flex w-[600px] flex-col rounded-xl border-2 bg-orange-50">
         <Box
-          className="p-8 rounded-xl"
+          className="rounded-xl p-8"
           ref={modalRef}
           sx={{ position: "relative" }}
         >
@@ -74,7 +74,7 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
           >
             <Close />
           </IconButton>
-          <Box className="flex justify-center items-center mb-5">
+          <Box className="mb-5 flex items-center justify-center">
             <Image
               src="/images/complete-lesson.png"
               alt="Avatar"
@@ -82,7 +82,7 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
               height={250}
             />
           </Box>
-          <div className="text-4xl text-center">
+          <div className="text-center text-4xl">
             <p style={{ marginBottom: "20px" }}>
               Congratulations on leveling up! You have completed the{" "}
               <strong>{name}</strong> Challenge 🔥
@@ -121,7 +121,7 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
               </IconButton>
             </Box>
             <IconButton
-              className=" mt-2"
+              className="mt-2"
               onClick={handleWarpcastShare}
               sx={{
                 "&:hover": {

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 import { MDXRemote } from "next-mdx-remote";
 import * as React from "react";
@@ -46,19 +46,19 @@ const Label = styled(Typography)(() => ({
 const ChallengeDetails = ({ challengeData }) => (
   <ChallengeInfo>
     <ChallengeCover src={challengeData.heroImage} />
-    <div className="flex my-[4rem] flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
-      <h1 className="text-[4rem] tracking-wide leading-[56px] text-stone-950 max-md:max-w-full">
+    <div className="my-[4rem] flex flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
+      <h1 className="text-[4rem] leading-[56px] tracking-wide text-stone-950 max-md:max-w-full">
         {challengeData.name}
       </h1>
-      <h4 className="text-[2rem] tracking-wide leading-[28px] text-[#5b5b5b] max-md:max-w-full">
+      <h4 className="text-[2rem] leading-[28px] tracking-wide text-[#5b5b5b] max-md:max-w-full">
         {challengeData.summary}
       </h4>
-      <div className="flex gap-2 self-start mt-6 text-base tracking-normal leading-6 text-center text-yellow-800">
+      <div className="mt-6 flex gap-2 self-start text-center text-base leading-6 tracking-normal text-yellow-800">
         {challengeData.labels?.map((label) => (
           <Label key={label}>{label}</Label>
         ))}
       </div>
-      <div className="flex gap-[2.4rem] mt-6 mr-5 text-xl font-semibold leading-9 text-center items-center max-md:flex-wrap max-md:mr-2.5">
+      <div className="mr-5 mt-6 flex items-center gap-[2.4rem] text-center text-xl font-semibold leading-9 max-md:mr-2.5 max-md:flex-wrap">
         <Button color="primary" href={challengeData.website}>
           Go to Github
         </Button>
@@ -73,9 +73,8 @@ export default function ChallengeDetailsPage() {
   const [isLoading, setLoading] = useState(true);
   const pathname = usePathname();
 
-
   useEffect(() => {
-    const slug = pathname!.split('/').pop();
+    const slug = pathname!.split("/").pop();
     fetch(`/data/challenges/${slug}.json`)
       .then((res) => res.json())
       .then((data) => {
@@ -100,9 +99,9 @@ export default function ChallengeDetailsPage() {
         />
       </Head>
 
-      <div className="flex gap-5 px-[6rem] max-w-[140rem] mx-auto pt-3 pb-16 max-md:flex-wrap max-md:px-[2rem]">
-        <div className="flex flex-col grow shrink-0 basis-0 w-fit max-md:max-w-full">
-          <div className="flex gap-3 self-start mt-20 text-lg font-semibold leading-8 whitespace-nowrap text-stone-950 max-md:mt-10">
+      <div className="mx-auto flex max-w-[140rem] gap-5 px-[6rem] pb-16 pt-3 max-md:flex-wrap max-md:px-[2rem]">
+        <div className="flex w-fit shrink-0 grow basis-0 flex-col max-md:max-w-full">
+          <div className="mt-20 flex gap-3 self-start whitespace-nowrap text-lg font-semibold leading-8 text-stone-950 max-md:mt-10">
             <Link href="/challenges" className="flex items-center">
               <SvgIcon component={BackSvg} className="mr-[1.2rem]" /> Back
             </Link>
@@ -113,12 +112,12 @@ export default function ChallengeDetailsPage() {
               {data?.content && <ChallengeDetails challengeData={data} />}
             </div>
           </div>
-          <div className="flex gap-5 justify-between self-start mt-[4.8rem] text-xl font-semibold leading-9 text-center max-md:mt-10">
+          <div className="mt-[4.8rem] flex justify-between gap-5 self-start text-center text-xl font-semibold leading-9 max-md:mt-10">
             <div>About</div>
           </div>
-          <div className="z-10 shrink-0 mt-5 h-1 max-md:max-w-full" />
-          <div className="shrink-0 h-px border border-solid mb-[4.8rem] bg-stone-950 border-stone-950 max-md:max-w-full" />
-          <div className="markdown-body ">
+          <div className="z-10 mt-5 h-1 shrink-0 max-md:max-w-full" />
+          <div className="mb-[4.8rem] h-px shrink-0 border border-solid border-stone-950 bg-stone-950 max-md:max-w-full" />
+          <div className="markdown-body">
             {data?.content && <MDXRemote {...data.content} />}
           </div>
         </div>

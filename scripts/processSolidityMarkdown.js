@@ -3,10 +3,7 @@ const path = require("path");
 const matter = require("gray-matter");
 
 const markdownDirectory = path.join(process.cwd(), "src/challenges/solidity");
-const outputDirectory = path.join(
-  process.cwd(),
-  "public/data/challenges/solidity"
-);
+const outputDirectory = path.join(process.cwd(), "public/data/solidity");
 
 const processSolidityMarkdownFiles = async () => {
   const fileNames = fs.readdirSync(markdownDirectory);
@@ -41,7 +38,7 @@ const processSolidityMarkdownFiles = async () => {
     }
     fs.writeFileSync(
       individualOutputPath,
-      JSON.stringify(challengeData, null, 2)
+      JSON.stringify(challengeData, null, 2),
     ); // Pretty print JSON
 
     return challengeData;
@@ -61,7 +58,7 @@ const processSolidityMarkdownFiles = async () => {
 
   fs.writeFileSync(
     path.join(outputDirectory, "markdownData.json"),
-    JSON.stringify(markdownData, null, 2)
+    JSON.stringify(markdownData, null, 2),
   ); // Pretty print JSON
 };
 

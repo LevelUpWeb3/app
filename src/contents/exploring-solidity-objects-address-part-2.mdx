@@ -1,0 +1,100 @@
+---
+name: "Exploring Solidity Objects: Address - Part 2"
+index: 2
+summary: Dive into the world of Solidity in pursuit of leveling up! Venturing into delegatecall and staticcall functions!
+author: RH
+authorIcon: https://pbs.twimg.com/profile_images/1751242830398287872/8VKShh46.jpg
+authorLink: https://x.com/rh_bdl
+published: Aug 06, 2024
+readTime: 6 min read
+labels: ["Smart Contract"]
+---
+
+import ContentCopy from "src/components/ContentCopy";
+import YoutubeEmbed from "src/components/YoutubeEmbed";
+
+In [Part 1](https://rhbdl.substack.com/p/exploring-solidity-objects-address?r=1v972g), we explored different `address` members and their use cases. While the previous article explored scenarios involving sending Ether, it is helpful to know that the functionalities extend beyond that.
+
+For instance, the `call` function is a low-level function which has the capability to invoke any function on any target contract by specifying the function signature and arguments in the "data" parameter. **(Security Note: call never reverts. It is our responsibility to handle unsuccessful transaction errors.)**
+
+Now, let's delve into the final two members of the address object: `staticcall` and `delegatecall`. These members are also interchangeably referred as functions - particularly when describing their role in code execution through invocation.
+
+The underlying concept of `staticcall` and `delegatecall` is relatively straightforward, as they are essentially specialized variants of the `call` function.
+
+## **1. delegatecall**
+
+This function allows state modifying instructions while preserving the original contract's context (storage, sender address, and value).
+
+At this point, you might be wondering about the terminology “delegatecall”. How exactly are the function calls “delegated”? Or rather, what is the mode of “delegation” here?
+
+Let's utilise the code below to answer these questions!
+
+<ContentCopy code={`pragma solidity ^0.8.24;
+
+contract Caller {
+uint256 public value;
+
+    function setVars(uint256 _value) public payable {
+        value = _value;
+    }
+
+}
+
+contract DelegateCaller {
+uint256 public value;
+
+    function setVars(address _callerContract, uint256 _value) public payable {
+        // Caller delegated its setVars() function to DelegateCaller Contract
+        (bool success, ) = _callerContract.delegatecall(
+            abi.encodeWithSignature("setVars(uint256)", _value)
+        );
+        if (!success) revert("Failed");
+    }
+
+}`} language="solidity"/>
+
+When `setVars()` is called in DelegateCaller contract, the `delegatecall` invokes the `setVars()` function in the Caller contract but in the DelegateCaller execution environment.
+
+Thus, Caller contract has effectively delegated its function to DelegateCaller contract.
+
+Let's explore further using the video below! (**Watch what happens when `setVars()` was called in DelegateCaller contract.** Observe how the `value` variables change in the context of Caller and DelegateCaller contract.)
+
+<YoutubeEmbed id="IUhr8N_WroI" />
+
+_Were you able to identify the contract that had its `value` variable updated when `delegatecall` was invoked?_
+
+This behavior might seem redundant at first when we can simply use `call` function. However, `delegatecall` enables use cases such as for proxy contracts - where only the implementation contract (i.e. Uniswap V2, V3) is upgraded to preserve the context of the proxy contract.
+
+Having explored the complexities of `delegatecall`, let’s proceed to explore `staticcall` which is relatively simpler!
+
+## **2. staticcall**
+
+In general, `staticcall` does not allow any state modifying instructions or capability to send ether. It will revert if there are any state changes during the function invocation.
+
+At a low-level, it disallows opcodes such as CREATE, SSTORE, SELFDESTRUCT, and few [others](https://www.evm.codes/#fa?fork=cancun). Personally, I view `staticcall` as a safer variant of the call function to read state.
+
+<div className="text-center">
+  <img
+    src="/images/contents/staticcall.png"
+    alt="staticcall example"
+    width="750"
+  />
+  _Figure 1: `staticcall` example_
+</div>
+
+In the example above, notice how the `value` variable for StaticCaller contract did not change. It remains as “0” even when Caller contract has been updated to store “100” in its `value` variable. Unlike `delegatecall` which allows state modifying instruction, `staticcall` only reads state of the target contract (Caller contract in this example).
+
+As a treat, I have also included a function `setVars()` which purposefully calls a state modifying function from the target contract to simulate transaction failure. Watch the video towards the end to learn what happens when `success` returns false.
+
+<YoutubeEmbed id="iGQ5z6B1PQw" />
+
+<div className="text-center">
+  _Explore this code further here:
+  [staticcall.sol](https://remix.ethereum.org/?#code=Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IE1JVApwcmFnbWEgc29saWRpdHkgXjAuOC4yNDsKCmNvbnRyYWN0IENhbGxlciB7CiAgICB1aW50MjU2IHB1YmxpYyB2YWx1ZTsKCiAgICBmdW5jdGlvbiBzZXRWYXJzKHVpbnQyNTYgX3ZhbHVlKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgdmFsdWUgPSBfdmFsdWU7CiAgICB9CgogICAgZnVuY3Rpb24gcmVhZFZhbHVlKCkgcHVibGljIHZpZXcgcmV0dXJucyAodWludDI1NikgewogICAgICAgIHJldHVybiB2YWx1ZTsKICAgIH0KfQoKY29udHJhY3QgU3RhdGljQ2FsbGVyIHsKICAgIHVpbnQyNTYgcHVibGljIHZhbHVlOwoKICAgIGZ1bmN0aW9uIHNldFZhcnMoYWRkcmVzcyBfY2FsbGVyQ29udHJhY3QsIHVpbnQyNTYgX3ZhbHVlKSBwdWJsaWMgcGF5YWJsZSB7CiAgICAgICAgKGJvb2wgc3VjY2VzcywgKSA9IF9jYWxsZXJDb250cmFjdC5zdGF0aWNjYWxsKAogICAgICAgICAgICBhYmkuZW5jb2RlV2l0aFNpZ25hdHVyZSgic2V0VmFycyh1aW50MjU2KSIsIF92YWx1ZSkKICAgICAgICApOwogICAgICAgIGlmKCFzdWNjZXNzKSByZXZlcnQgKCJFcnJvciBpbiBzdGF0aWNjYWxsIik7CiAgICB9CgogICAgZnVuY3Rpb24gcmVhZFZhcnMoYWRkcmVzcyBfY2FsbGVyQ29udHJhY3QpIHB1YmxpYyB2aWV3IHJldHVybnMgKHVpbnQyNTYpIHsKICAgICAgICAoLCBieXRlcyBtZW1vcnkgZGF0YSkgPSBfY2FsbGVyQ29udHJhY3Quc3RhdGljY2FsbChhYmkuZW5jb2RlV2l0aFNpZ25hdHVyZSgicmVhZFZhbHVlKCkiKSk7CiAgICAgICAgcmV0dXJuIGFiaS5kZWNvZGUoZGF0YSwgKHVpbnQyNTYpKTsKICAgIH0KfQ&lang=en&optimize=false&runs=200&evmVersion=null&version=soljson-v0.8.26+commit.8a97fa7a.js)_
+</div>
+
+In [ETH CC Brussels](https://ethglobal.com/events/brussels/prizes/scroll), Scroll introduced the experimental [L1SLOAD precompile](https://ethereum-magicians.org/t/rip-7728-l1sload-precompile/20388) which uses `staticcall` under the hood.
+
+Hackers were able to explore novel methods of resolving ENS address, extending NFT ownership - all on L2. Despite preliminary stage of experimentation, this highlights that the potential opportunities for this function are virtually limitless.
+
+Now that you have equipped yourself with an arsenal of knowledge on the `address` object, you are now capable of address-ing (Hehe! Pun intended) more intermediate to advanced level builds. Can't wait to hear all about how you will be using this knowledge to level up your projects.

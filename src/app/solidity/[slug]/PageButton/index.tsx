@@ -12,19 +12,13 @@ const PageButton = () => {
 
   useEffect(() => {
     const slug = pathname!.split("/").pop();
-    fetch(
-      // `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/${slug}.json`
-      `/data/challenges/solidity/${slug}.json`
-    )
+    fetch(`/data/solidity/${slug}.json`)
       .then((res) => res.json())
       .then((data) => {
         setCurrentPage(data);
       });
 
-    fetch(
-      // `https://raw.githubusercontent.com/LevelUpWeb3/app/main/public/data/challenges/solidity/markdownData.json`
-      `/data/challenges/solidity/markdownData.json`
-    )
+    fetch(`/data/solidity/markdownData.json`)
       .then((res) => res.json())
       .then((data) => {
         setPages(data);
@@ -48,7 +42,7 @@ const PageButton = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-between gap-6 mt-2 mb-6">
+      <div className="mb-6 mt-2 flex flex-row justify-between gap-6">
         {prevPage && (
           <RightToLeftButton
             variant="outlined"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { withStyles } from "tss-react/mui";
 
 import { Box } from "@mui/material";
@@ -12,6 +12,10 @@ import { NORMAL_HEADER_HEIGHT, CONTENT_CATEGORY_LIST } from "@/constants";
 
 import Data from "../content.json";
 import Category from "./Category";
+
+interface DataItem {
+  labels: string[];
+}
 
 const Grid = withStyles(Box, (theme) => ({
   root: {
@@ -45,17 +49,28 @@ const CardBox = styled(Box)(() => ({
 
 const List = () => {
   const trigger = useScrollTrigger();
-  const [filteredData, setFilteredData] = useState(Data);
+  const [combinedData, setCombinedData] = useState<DataItem[]>([]);
+  const [filteredData, setFilteredData] = useState<DataItem[]>([]);
   const [searchParams, setSearchParams] = useState({
     category: CONTENT_CATEGORY_LIST[0],
   });
   const stickyTop = useMemo(
     () => (trigger ? "2rem" : NORMAL_HEADER_HEIGHT),
-    [trigger]
+    [trigger],
   );
 
+  useEffect(() => {
+    fetch("/data/contents/markdownData.json")
+      .then((res) => res.json())
+      .then((markdownData) => {
+        const combined = [...markdownData, ...Data];
+        setCombinedData(combined);
+        setFilteredData(combined);
+      });
+  }, []);
+
   const handleChangeCategory = (value) => {
-    const filteredData = Data.filter((item) => {
+    const filteredData = combinedData.filter((item) => {
       if (value === CONTENT_CATEGORY_LIST[0]) {
         return true;
       }
@@ -79,10 +94,7 @@ const List = () => {
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CardBox>
             {filteredData.map((item, index) => (
-              <Card
-                content={item}
-                key={index}
-              />
+              <Card content={item} key={index} />
             ))}
           </CardBox>
         </Box>

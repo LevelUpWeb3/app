@@ -61,7 +61,7 @@ const Protocols = () => {
   // );
 
   useEffect(() => {
-    fetch("/data/challenges/solidity/markdownData.json")
+    fetch("/data/solidity/markdownData.json")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
