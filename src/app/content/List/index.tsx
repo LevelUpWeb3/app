@@ -63,7 +63,7 @@ const List = () => {
     fetch("/data/contents/markdownData.json")
       .then((res) => res.json())
       .then((markdownData) => {
-        const combined = [...Data, ...markdownData];
+        const combined = [...markdownData, ...Data];
         setCombinedData(combined);
         setFilteredData(combined);
       });

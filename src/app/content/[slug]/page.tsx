@@ -10,9 +10,9 @@ import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import ContentCopy from "@/components/ContentCopy";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
-
-import BackSvg from "@/assets/svgs/common/back.svg";
+import AttributionComponent from "@/components/Attribution";
 import ContentFooter from "@/components/ContentFooter";
+import BackSvg from "@/assets/svgs/common/back.svg";
 
 import { SvgIcon, Skeleton } from "@mui/material";
 
@@ -74,6 +74,20 @@ export default function ContentDetailsPage() {
               {" "}
               {data?.content ? (
                 <>
+                  <h1>{data.name}</h1>
+                  {data.author &&
+                    data.authorIcon &&
+                    data.authorLink &&
+                    data.published &&
+                    data.readTime && (
+                      <AttributionComponent
+                        author={data.author}
+                        authorIcon={data.authorIcon}
+                        authorLink={data.authorLink}
+                        published={data.published}
+                        readTime={data.readTime}
+                      />
+                    )}
                   <MDXRemote
                     {...data.content}
                     components={{
