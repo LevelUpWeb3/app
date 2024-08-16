@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: "0 0 2.4rem 2.4rem",
     border: `1px solid ${(theme as any).vars.palette.text.primary}`,
     borderTop: "none",
-    marginTop: "-2px",
+    marginTop: "-5px",
     transform: "translateX(0) !important",
     transition: "transform 227ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important",
   },
@@ -72,7 +72,7 @@ const Select = (props) => {
   const onOpen = () => {
     setTimeout(() => {
       const popoverEl = document.querySelector(
-        ".select-popover-paper-under"
+        ".select-popover-paper-under",
       ) as HTMLElement;
 
       if (popoverEl) {
@@ -106,7 +106,7 @@ const Select = (props) => {
           paper: cx(
             classes.popover,
             "select-popover-paper-under",
-            !isUnderneath && classes.suspend
+            !isUnderneath && classes.suspend,
           ),
         },
         MenuListProps: { classes: { root: classes.menuList } },
