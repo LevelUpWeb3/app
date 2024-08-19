@@ -28,6 +28,7 @@ const RegionSelect = (props) => {
       }}
       value={value}
       onChange={handleChangeNetwork}
+      showScrollbar
       renderValue={(selected) => (
         <Box display="flex" alignItems="center">
           <Image
