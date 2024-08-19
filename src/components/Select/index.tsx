@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: "0 0 2.4rem 2.4rem",
     border: `1px solid ${(theme as any).vars.palette.text.primary}`,
     borderTop: "none",
-    marginTop: "-5px",
+    marginTop: "-6px",
     transform: "translateX(0) !important",
     transition: "transform 227ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important",
   },
