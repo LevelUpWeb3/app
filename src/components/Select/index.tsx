@@ -60,11 +60,26 @@ const useStyles = makeStyles()((theme) => ({
   },
   menuList: {
     padding: 0,
+    maxHeight: "300px",
+    overflowY: "auto",
+  },
+  menuListWithScrollbar: {
+    overflowY: "scroll",
+    "&::-webkit-scrollbar": {
+      width: "8px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: "#888",
+      borderRadius: "4px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      background: "#555",
+    },
   },
 }));
 
 const Select = (props) => {
-  const { className, ...restProps } = props;
+  const { className, showScrollbar, ...restProps } = props;
   const { classes, cx } = useStyles();
 
   const [isUnderneath, setIsUnderneath] = useState(true);
@@ -109,7 +124,14 @@ const Select = (props) => {
             !isUnderneath && classes.suspend,
           ),
         },
-        MenuListProps: { classes: { root: classes.menuList } },
+        MenuListProps: {
+          classes: {
+            root: cx(
+              classes.menuList,
+              showScrollbar && classes.menuListWithScrollbar,
+            ),
+          },
+        },
         disableAutoFocusItem: true,
       }}
       renderValue={(selected) => {
