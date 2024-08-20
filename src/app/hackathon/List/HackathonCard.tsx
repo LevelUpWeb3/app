@@ -104,8 +104,9 @@ const HackathonCard = ({ content }) => {
           onClick={() =>
             sendGAEvent("event", "hackathonClicked", { value: content.name })
           }
+          disabled={content.buttonDisabled}
         >
-          {content.status}
+          {content.buttonText}
         </Button>
       </Box>
       {!isMobile && (

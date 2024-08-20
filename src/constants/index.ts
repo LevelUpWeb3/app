@@ -1,6 +1,18 @@
 export * from "./common";
 export * from "./networks";
 
+export const HACKATHON_DATE_LIST = ["All time", "Upcoming", "Ended"];
+export const HACKATHON_REGION_LIST = [
+  "All regions",
+  "Africa",
+  "Asia Pacific",
+  "Central America",
+  "Europe",
+  "Middle East",
+  "North America",
+  "South America",
+  "South East Asia",
+];
 export const CHALLENGE_LEVEL_LIST = [
   "All levels",
   "Level 1",

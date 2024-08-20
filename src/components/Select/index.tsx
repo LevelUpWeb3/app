@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: "0 0 2.4rem 2.4rem",
     border: `1px solid ${(theme as any).vars.palette.text.primary}`,
     borderTop: "none",
-    marginTop: "-2px",
+    marginTop: "-6px",
     transform: "translateX(0) !important",
     transition: "transform 227ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important",
   },
@@ -60,11 +60,26 @@ const useStyles = makeStyles()((theme) => ({
   },
   menuList: {
     padding: 0,
+    maxHeight: "300px",
+    overflowY: "auto",
+  },
+  menuListWithScrollbar: {
+    overflowY: "scroll",
+    "&::-webkit-scrollbar": {
+      width: "8px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: "#888",
+      borderRadius: "4px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      background: "#555",
+    },
   },
 }));
 
 const Select = (props) => {
-  const { className, ...restProps } = props;
+  const { className, showScrollbar, ...restProps } = props;
   const { classes, cx } = useStyles();
 
   const [isUnderneath, setIsUnderneath] = useState(true);
@@ -72,7 +87,7 @@ const Select = (props) => {
   const onOpen = () => {
     setTimeout(() => {
       const popoverEl = document.querySelector(
-        ".select-popover-paper-under"
+        ".select-popover-paper-under",
       ) as HTMLElement;
 
       if (popoverEl) {
@@ -106,10 +121,17 @@ const Select = (props) => {
           paper: cx(
             classes.popover,
             "select-popover-paper-under",
-            !isUnderneath && classes.suspend
+            !isUnderneath && classes.suspend,
           ),
         },
-        MenuListProps: { classes: { root: classes.menuList } },
+        MenuListProps: {
+          classes: {
+            root: cx(
+              classes.menuList,
+              showScrollbar && classes.menuListWithScrollbar,
+            ),
+          },
+        },
         disableAutoFocusItem: true,
       }}
       renderValue={(selected) => {
