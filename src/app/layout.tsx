@@ -10,6 +10,7 @@ import RainbowProvider from "@/contexts/RainbowProvider";
 import ScrollThemeProvider from "@/theme";
 import { findCurrentRoute } from "@/utils/route";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 
@@ -87,7 +88,10 @@ export default function RootLayout({
       <body>
         <AppRouterCacheProvider options={{ key: "css" }}>
           <ScrollThemeProvider>
-            <RainbowProvider>{children}</RainbowProvider>
+            <RainbowProvider>
+              {children}
+              <Analytics />
+            </RainbowProvider>
           </ScrollThemeProvider>
         </AppRouterCacheProvider>
       </body>

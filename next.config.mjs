@@ -6,6 +6,7 @@ import mdxMermaid from "mdx-mermaid";
 import { Mermaid } from "mdx-mermaid/lib/Mermaid";
 import "./scripts/processMarkdown.js";
 import "./scripts/processSolidityMarkdown.js";
+import "./scripts/processContentMarkdown.js";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -17,7 +18,7 @@ const nextConfig = {
   // eslint-disable-next-line
   webpack: (
     config,
-    { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
+    { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
   ) => {
     config.ignoreWarnings = [
       function ignoreSourcemapsloaderWarnings(warning) {
@@ -31,7 +32,7 @@ const nextConfig = {
     ];
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.(".svg")
+      rule.test?.test?.(".svg"),
     );
     config.module.rules.push(
       ...[
@@ -77,7 +78,7 @@ const nextConfig = {
           test: /\.md$/,
           use: "raw-loader",
         },
-      ]
+      ],
     );
 
     fileLoaderRule.exclude = /\.svg$/i;
