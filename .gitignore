@@ -38,3 +38,4 @@ next-env.d.ts
 # data files
 /public/data/challenges/*.json
 /public/data/solidity/*.json
+/public/data/contents/*.json
