@@ -1,0 +1,68 @@
+---
+
+name: ERC20 Basics  
+index: 10  
+lesson: 10  
+summary: Introduction to implementing a basic ERC20 token with minting, burning, transferring, and approving functionalities.  
+labels: ["solidity", "ERC20"]  
+
+---
+
+# ERC20 Basics
+
+In this challenge, you will implement a basic ERC20 token contract that includes minting, burning, transferring, and approving functionalities. Follow the instructions provided in the comments to complete the contract.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import "./ERC20.sol";
+
+// Define your ERC20 token contract
+contract MyToken is ERC20 {
+
+    // Constructor that mints the initial supply to the deployer of the contract
+    constructor(uint256 initialSupply) ERC20("MyToken", "MTK") {
+        // Mint the initial supply of tokens to the deployer's address
+    }
+
+    // Function to mint new tokens to a specified address
+    function mint(address to, uint256 amount) public {
+        // Implement the mint function using the _mint internal function
+    }
+
+    // Function to burn tokens from a specified address
+    function burn(address from, uint256 amount) public {
+        // Implement the burn function using the _burn internal function
+    }
+
+    // Function to transfer tokens from the caller's address to a specified address
+    function transfer(address to, uint256 amount) public override returns (bool) {
+        // Implement the transfer function using the _transfer internal function
+    }
+
+    // Function to approve an address to spend a certain amount of tokens on behalf of the caller
+    function approve(address spender, uint256 amount) public override returns (bool) {
+        // Implement the approve function using the _approve internal function
+    }
+
+    // Function to transfer tokens from one address to another using an allowance
+    function transferFrom(address from, address to, uint256 amount) public override returns (bool) {
+        // Implement the transferFrom function using the _transfer and _approve internal functions
+    }
+}
+```
+
+### Instructions
+
+1. **Constructor:** The constructor should initialize the ERC20 token by minting the `initialSupply` to the deployer's address. Use the `_mint` function provided by the ERC20 contract.
+
+2. **Mint Function:** Implement the `mint` function, which should allow you to create new tokens and assign them to a specific address. This function should call the `_mint` function provided by the ERC20 contract.
+
+3. **Burn Function:** Implement the `burn` function, which should allow you to destroy tokens from a specific address, reducing the total supply. Use the `_burn` function provided by the ERC20 contract.
+
+4. **Transfer Function:** Implement the `transfer` function to allow the caller to send tokens to another address. Override the `transfer` function and use the `_transfer` function from the ERC20 contract.
+
+5. **Approve Function:** Implement the `approve` function, allowing the caller to authorize another address to spend a certain amount of tokens on their behalf. Override the `approve` function and use the `_approve` function from the ERC20 contract.
+
+6. **TransferFrom Function:** Implement the `transferFrom` function to allow a spender to transfer tokens from one address to another, using an allowance set by the `approve` function. Override the `transferFrom` function and use the `_transfer` and `_approve` functions to implement this functionality.
