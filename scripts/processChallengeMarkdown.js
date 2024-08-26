@@ -23,8 +23,8 @@ const processChallengeMarkdownFiles = async () => {
       const { data, content } = matter(fileContents);
       const mdxSource = await serialize(content, {
         mdxOptions: {
-          // development: "development" === process.env.NODE_ENV,
-          development: true,
+          development: "development" === process.env.NODE_ENV,
+          // development: true,
         },
       });
 
