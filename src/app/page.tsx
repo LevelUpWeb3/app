@@ -28,7 +28,7 @@ const LandingPage = () => {
       <StyledBox
         sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
       >
-        <div className="pt-32 text-center text-[7.2rem] font-semibold leading-[88px] text-stone-950 max-md:max-w-full max-md:pt-[6rem] max-md:text-[3.6rem] max-md:leading-[48px] max-md:w-[30rem]">
+        <div className="pt-32 text-center text-[7.2rem] font-semibold leading-[88px] text-stone-950 max-md:w-[30rem] max-md:max-w-full max-md:pt-[6rem] max-md:text-[3.6rem] max-md:leading-[48px]">
           Level Up your Web3 Skills
         </div>
 
@@ -37,14 +37,13 @@ const LandingPage = () => {
           apply for grants to build the future of Ethereum.
         </div>
 
-        {/* TODO: Revive this section when challenges are revisited */}
-        {/* 
-        <div className="flex justify-center mt-7">
-          <div className=" w-[24rem] h-[11.6rem] flex-col font-semibold flex justify-center items-center bg-orange-100 rounded-2xl text-stone-950 max-md:w-[12.4rem] max-md:h-[6.8rem]">
-            <div className="text-[1.8rem] tracking-normal leading-[2.8rem] text-center max-md:text-[1.4rem] max-md:leading-[2rem]">
+        {/* TODO: Consider reviving this section when challenges are revisited */}
+        {/* <div className="mt-7 flex justify-center">
+          <div className="flex h-[11.6rem] w-[24rem] flex-col items-center justify-center rounded-2xl bg-orange-100 font-semibold text-stone-950 max-md:h-[6.8rem] max-md:w-[12.4rem]">
+            <div className="text-center text-[1.8rem] leading-[2.8rem] tracking-normal max-md:text-[1.4rem] max-md:leading-[2rem]">
               Total challenges
             </div>
-            <div className="text-[4rem] tracking-wide leading-[56px] text-center font-develop max-md:text-[2rem] max-md:leading-[2.8rem]">
+            <div className="text-center font-develop text-[4rem] leading-[56px] tracking-wide max-md:text-[2rem] max-md:leading-[2.8rem]">
               20
             </div>
           </div>
