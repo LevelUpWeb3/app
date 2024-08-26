@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import createMDX from "@next/mdx";
 import mdxMermaid from "mdx-mermaid";
 import { Mermaid } from "mdx-mermaid/lib/Mermaid";
-import "./scripts/processMarkdown.js";
+import "./scripts/processChallengeMarkdown.js";
 import "./scripts/processSolidityMarkdown.js";
 import "./scripts/processContentMarkdown.js";
 
