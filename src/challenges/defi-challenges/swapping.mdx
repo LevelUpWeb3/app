@@ -1,11 +1,11 @@
 ---
-
-name: Swap  
-index: 11  
-lesson: 11  
-summary: Introduction to implementing a basic swapping contract by understanding Uniswap V2 router.  
-labels: ["defi"]
-
+name: Swap
+index: 11
+lesson: 11
+website: "https://github.com/LevelUpWeb3/ERC20-Mission"
+summary: Introduction to implementing a basic swapping contract by understanding Uniswap V2 router.
+heroImage: "/images/level-up-preview.png"
+labels: ["Defi"]
 ---
 
 # Swap
@@ -51,6 +51,7 @@ The constant product formula is used to calculate how much token B will be recei
 $$ a \cdot b = k $$
 
 Here;
+
 - $a$ denotes the amount of token A,
 - $b$ denotes the amount of token B, and
 - $k$ is a constant (always).
@@ -60,16 +61,19 @@ Here;
 Let's say Alice wants to swap her 1 ETH to DAI.
 
 1. Alice goes to ETH/DAI pool.
+
 - For the sake of simplicity, let us assume there are 10 ETH and 25,000 DAI in the pool. Therefore
-$$k = (10) \times (25,000) = (250,000)$$.
+  $$k = (10) \times (25,000) = (250,000)$$.
 
 2. Alice sends her 1 ETH to the pool.
+
 - Now, the pool has 11 ETH and 25,000 DAI.
 - The pool sends such amount of DAI to Alice that $k$ remains constant.
-$$(11) \times (25,000 - amountDAI) = 250,000$$
-$$amountDAI = 2,272.73$$.
+  $$(11) \times (25,000 - amountDAI) = 250,000$$
+  $$amountDAI = 2,272.73$$.
 
 3. Alice receives 2,272.73 DAI for 1 ETH she had.
+
 - Now the pool has 11 ETH and 22,727.27 DAI.
 - If you multiply these two numbers, you get the same $k=250,000$.
 
@@ -99,10 +103,10 @@ Swaps an exact amount of input tokens for as many output tokens as possible, alo
 1. As you'll use Uniswap V2 Router, you need to define the contract address of it.
 2. For non-WETH cases, you'll need to add an intermediary step into the swapping path, so you need to define WETH address too.
 3. Build the function:
-    a. Recall from the ERC20 mission that you need token approval.
-    b. Define the swapping path.
-    c. Specify the conditional for the case where no token is WETH.
-    d. Call `swapExactTokensForTokens()`.
+   a. Recall from the ERC20 mission that you need token approval.
+   b. Define the swapping path.
+   c. Specify the conditional for the case where no token is WETH.
+   d. Call `swapExactTokensForTokens()`.
 4. Define the needed interface for the router.
 5. Define the needed interface for WETH.
 

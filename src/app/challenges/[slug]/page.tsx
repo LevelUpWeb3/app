@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { MDXRemote } from "next-mdx-remote";
+import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
+import ContentCopy from "@/components/ContentCopy";
 import * as React from "react";
 import Link from "next/link";
 import Button from "@/components/Button";
@@ -43,30 +45,38 @@ const Label = styled(Typography)(() => ({
   textAlign: "center",
 }));
 
-const ChallengeDetails = ({ challengeData }) => (
-  <ChallengeInfo>
-    <ChallengeCover src={challengeData.heroImage} />
-    <div className="my-[4rem] flex flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
-      <h1 className="text-[4rem] leading-[56px] tracking-wide text-stone-950 max-md:max-w-full">
-        {challengeData.name}
-      </h1>
-      <h4 className="text-[2rem] leading-[28px] tracking-wide text-[#5b5b5b] max-md:max-w-full">
-        {challengeData.summary}
-      </h4>
-      <div className="mt-6 flex gap-2 self-start text-center text-base leading-6 tracking-normal text-yellow-800">
-        {challengeData.labels?.map((label) => (
-          <Label key={label}>{label}</Label>
-        ))}
+const ChallengeDetails = ({ challengeData }) => {
+  const text = `I am excited to take on the ${challengeData.name} challenge in Level Up! Join me and let's level up together at levelupweb3.xyz/!`;
+
+  return (
+    <ChallengeInfo>
+      <ChallengeCover src={challengeData.heroImage} />
+      <div className="my-[4rem] flex flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
+        <h1 className="text-[4rem] leading-[56px] tracking-wide text-stone-950 max-md:max-w-full">
+          {challengeData.name}
+        </h1>
+        <h4 className="text-[2rem] leading-[28px] tracking-wide text-[#5b5b5b] max-md:max-w-full">
+          {challengeData.summary}
+        </h4>
+        <div className="mt-6 flex gap-2 self-start text-center text-base leading-6 tracking-normal text-yellow-800">
+          {challengeData.labels?.map((label) => (
+            <Label key={label}>{label}</Label>
+          ))}
+        </div>
+        <div className="mr-5 mt-6 flex items-center gap-[2.4rem] text-center text-xl font-semibold leading-9 max-md:mr-2.5 max-md:flex-wrap">
+          <Button color="primary" href={challengeData.website}>
+            Go to Github
+          </Button>
+          <Button
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`}
+          >
+            Share
+          </Button>
+        </div>
       </div>
-      <div className="mr-5 mt-6 flex items-center gap-[2.4rem] text-center text-xl font-semibold leading-9 max-md:mr-2.5 max-md:flex-wrap">
-        <Button color="primary" href={challengeData.website}>
-          Go to Github
-        </Button>
-        <Button href="">Share</Button>
-      </div>
-    </div>
-  </ChallengeInfo>
-);
+    </ChallengeInfo>
+  );
+};
 
 export default function ChallengeDetailsPage() {
   const [data, setData] = useState<any>([]);
@@ -118,7 +128,12 @@ export default function ChallengeDetailsPage() {
           <div className="z-10 mt-5 h-1 shrink-0 max-md:max-w-full" />
           <div className="mb-[4.8rem] h-px shrink-0 border border-solid border-stone-950 bg-stone-950 max-md:max-w-full" />
           <div className="markdown-body">
-            {data?.content && <MDXRemote {...data.content} />}
+            {data?.content && (
+              <MDXRemote
+                {...data.content}
+                components={{ ...MDXCodeHighlighter, ContentCopy }}
+              />
+            )}
           </div>
         </div>
       </div>
