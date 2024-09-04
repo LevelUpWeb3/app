@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { Button, Snackbar, Alert, AlertColor } from "@mui/material";
+import { callContract, deployContract } from "@/utils/solidity/vm";
+import { unitTests } from "@/constants/solidity/unit-test";
 
 interface SubmitButtonProps {
   code: string;
-  codeSolution: string;
+  lessonId: string;
+  exerciseId: string;
   onSubmission: (isCorrect: boolean) => void;
 }
 
 const SubmitButton = ({
   code,
-  codeSolution,
+  lessonId,
+  exerciseId,
   onSubmission,
 }: SubmitButtonProps) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
-
-  const cleanedCode = code.replace(/\s/g, "");
-  const cleanedCodeSolution = codeSolution.replace(/\s/g, "");
 
   const handleClose = (event?: any, reason?: string) => {
     if (reason === "clickaway") {
@@ -27,15 +28,28 @@ const SubmitButton = ({
   };
 
   const submitCode = () => {
-    if (cleanedCode === cleanedCodeSolution) {
-      setMessage("Awesome, you got it right!");
-      setSeverity("success");
-      onSubmission(true);
-    } else {
-      setMessage("Incorrect, let's try again!");
-      setSeverity("error");
-      onSubmission(false);
+
+    if(!code) {
+      alert("Please write some code first!");
+      return;
     }
+
+    (async () => {
+      console.log("lessonId: ", lessonId, "exerciseId: ", exerciseId);
+      const result = await unitTests[lessonId][exerciseId](code);
+
+      if(result) {
+        setMessage("Awesome, you got it right!");
+        setSeverity("success");
+        onSubmission(true);
+      }
+      else {
+        setMessage("Incorrect, let's try again!");
+        setSeverity("error");
+        onSubmission(false);
+      }
+    })();
+
     setOpen(true);
   };
 
