@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Snackbar, Alert, AlertColor } from "@mui/material";
+import { Button, Snackbar, Alert, AlertColor, CircularProgress } from "@mui/material";
 import { callContract, deployContract } from "@/utils/solidity/vm";
 import { unitTests } from "@/constants/solidity/unit-test";
 
@@ -19,6 +19,7 @@ const SubmitButton = ({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<AlertColor>("success");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = (event?: any, reason?: string) => {
     if (reason === "clickaway") {
@@ -28,17 +29,24 @@ const SubmitButton = ({
   };
 
   const submitCode = () => {
-
-    if(!code) {
+    if (!code) {
       alert("Please write some code first!");
       return;
     }
 
+    setIsLoading(true);
+
     (async () => {
       console.log("lessonId: ", lessonId, "exerciseId: ", exerciseId);
-      const result = await unitTests[lessonId][exerciseId](code);
 
-      if(result) {
+      let result: boolean = false;
+      try {
+        result = (await unitTests[lessonId][exerciseId](code)) as boolean;
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (result) {
         setMessage("Awesome, you got it right!");
         setSeverity("success");
         onSubmission(true);
@@ -48,9 +56,9 @@ const SubmitButton = ({
         setSeverity("error");
         onSubmission(false);
       }
+      setIsLoading(false);
+      setOpen(true);
     })();
-
-    setOpen(true);
   };
 
   return (
@@ -66,8 +74,14 @@ const SubmitButton = ({
           },
         }}
         onClick={submitCode}
+        disabled={isLoading}
       >
-        🌟 Submit
+        {isLoading ? (
+          <CircularProgress size={20} color="inherit" />
+        ) : (
+          "🌟"
+        )}
+        {" Submit"}
       </Button>
       <Snackbar
         open={open}

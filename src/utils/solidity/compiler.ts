@@ -18,15 +18,13 @@ export const compile = async (source: string) => {
   usingVersion = usingVersion.replace('^', '');
 
   const availableVersions = await loadVersions();
-  console.log("Available versions:", availableVersions);
-  console.log("Using version:", usingVersion);
+  console.log("Using solidity version:", usingVersion);
 
   if (!availableVersions.releases[usingVersion]) {
     throw new Error(`Version ${usingVersion} not found. Available versions: ${Object.keys(availableVersions.releases).join(', ')}`);
   }
 
   const versionUrl = `https://binaries.soliditylang.org/bin/${availableVersions.releases[usingVersion]}`;
-  console.log("Compiler URL:", versionUrl);
 
   try {
     const compiled = await solidityCompiler({
