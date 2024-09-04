@@ -1,6 +1,6 @@
 // those unit tests aims to verify the solidity contracts written by the user
 
-import { compileDeployAndCall } from "@/utils/solidity";
+import { compileDeployAndCall, compileDeployAndMultiCall } from "@/utils/solidity";
 import { insertInCode } from "@/utils/solidity/insertInCode";
 
 
@@ -11,14 +11,44 @@ export const unitTests = {
   //   exercise2: {...}
   // }
   "data-types": {
-    exercise1: async (code: string) => {
+    exercise1: async (code: string) => { // boolean
       // add a function to check because if the user does not specify 'public' in the variable declaration, 
       // the compiler won't make a getter for it so the test won't pass even if the user's code is correct 
       // regarding the exercise's request
       const fullCode = insertInCode(code, 'function check() public view returns (bool) {\n\t\treturn myBool;\n\t}');
 
       return await compileDeployAndCall(fullCode, [], "check") === true;
-    }
+    },
+    exercise2: async (code: string) => { // uint
+      // add a function to check because if the user does not specify 'public' in the variable declaration, 
+      // the compiler won't make a getter for it so the test won't pass even if the user's code is correct 
+      // regarding the exercise's request
+      const fullCode = insertInCode(code, 'function check() public view returns (uint256) {\n\t\treturn myUint;\n\t}');
+      return await compileDeployAndCall(fullCode, [], "check") === 123n;
+    },
+    exercise3: async (code: string) => { // int
+      // add a function to check because if the user does not specify 'public' in the variable declaration, 
+      // the compiler won't make a getter for it so the test won't pass even if the user's code is correct 
+      // regarding the exercise's request
+      const fullCode = insertInCode(code, 'function check() public view returns (int32) {\n\t\treturn myInt;\n\t}');
+      return await compileDeployAndCall(fullCode, [], "check") === -123n;
+    },
+    exercise4: async (code: string) => { // address
+      // add a function to check because if the user does not specify 'public' in the variable declaration, 
+      // the compiler won't make a getter for it so the test won't pass even if the user's code is correct 
+      // regarding the exercise's request
+      const fullCode = insertInCode(code, 'function check() public view returns (address) {\n\t\treturn myAddress;\n\t}');
+      return await compileDeployAndCall(fullCode, [], "check") === "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4";
+    },
+    exercise5: async (code: string) => { // myUint, int and address
+      // for each variable, add a function to check because if the user does not specify 'public' in the variable declaration, 
+      // the compiler won't make a getter for it so the test won't pass even if the user's code is correct 
+      // regarding the exercise's request
+      const fullCode = insertInCode(code, 'function checkUint() public view returns (uint256) {\n\t\treturn myUint;\n\t}\nfunction checkInt() public view returns (int) {\n\t\treturn myInt;\n\t}\nfunction checkAddress() public view returns (address) {\n\t\treturn myAddress;\n\t}');
+
+      const expected = [123n, -123n, "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"];
+      return (await compileDeployAndMultiCall(fullCode, [], [{ fctName: "checkUint" }, { fctName: "checkInt" }, { fctName: "checkAddress" }])).every((value, index) => value === expected[index]);
+    },
   },
   "operator": {
     exercise1: async (code: string) => {
