@@ -10,6 +10,36 @@ labels: ["Defi"]
 
 # Swap
 
+In this challenge, you'll implement a basic Uniswap V2-based swapping contract.
+
+```solidity
+pragma solidity ^0.8.7;
+
+contract Swap {
+    // Provide the Uniswap V2 router address and the WETH address
+
+    // Define the constructor
+    constructor(...) {
+        // Initialize the addresses
+    }
+
+    // Create a swap function that takes input and output token addresses,
+    // the input amount, the minimum output amount, and the recipient's address
+    function swap(
+        ...
+    ) external {
+        // Transfer the input tokens from the sender to the contract
+
+        // Approve the Uniswap router to spend the input tokens
+
+        // Define the swapping path: directly between the tokens if either is WETH,
+        // or through WETH otherwise
+
+        // Call the Uniswap router's swapExactTokensForTokens function to execute the swap
+    }
+}
+```
+
 ## Constant Product Formula
 
 The constant product formula is used to calculate how much token B will be received by a user who sends $a$ amount of token A:
