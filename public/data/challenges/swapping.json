@@ -1,8 +1,8 @@
 {
   "id": "swapping",
   "name": "Swap",
-  "index": 11,
-  "lesson": 11,
+  "index": 2,
+  "level": 2,
   "website": "https://github.com/LevelUpWeb3/ERC20-Mission",
   "summary": "Introduction to implementing a basic swapping contract by understanding Uniswap V2 router.",
   "heroImage": "/images/level-up-preview.png",
