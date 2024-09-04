@@ -1,3 +1,5 @@
+// example of use available here: https://github.com/ethereum/remix-project/tree/64bec7b787aefe8ec207fa92a865766e4a38a6be/libs/remix-simulator/test
+
 import { compile } from './compiler';
 import Web3, { Contract } from 'web3';
 
@@ -69,71 +71,3 @@ export const callContract = async (provider: any, contract: { address: string, a
 
   return callResult;
 }
-
-
-
-
-
-
-
-
-
-export const main = async () => {
-  const Provider = (await import('@remix-project/remix-simulator')).Provider;
-  const provider = new Provider({ fork: 'shanghai' });
-  await provider.init();
-
-  const web3 = new Web3(provider);
-
-  const sampleContract = `
-    pragma solidity ^0.8.0;
-    contract SimpleStorage {
-      uint256 private storedData;
-      function set(uint256 x) public {
-        storedData = x;
-      }
-      function get() public view returns (uint256) {
-        return storedData;
-      }
-
-      function hello() public pure returns (string memory) {
-        return "Hello, World!";
-      }
-
-      function getOwner() public view returns (address) {
-        return address(1);
-      }
-    }
-  `;
-
-  const compiled = await compile(sampleContract);
-  const bytecode = compiled.contracts.Compiled_Contracts['SimpleStorage'].evm.bytecode.object;
-  const abi = compiled.contracts.Compiled_Contracts['SimpleStorage'].abi;
-
-  console.log('Compiled contract:', bytecode);
-  console.log("typeof bytecode: ", typeof bytecode);
-  const accounts = await web3.eth.getAccounts();
-  const deployAccount = accounts[0];
-
-  // Deploy contract
-  const contract = new web3.eth.Contract(abi);
-
-  const deployOptions = {
-    data: "0x" + bytecode,
-    arguments: [],
-  };
-
-  const instance = await contract
-    .deploy(deployOptions)
-    .send({
-      from: deployAccount,
-      gas: 3000000n.toString(),
-    });
-
-  console.log('Contract deployed at:', instance.options.address);
-
-  // Interact with the deployed contract
-  const callResult = await instance.methods.hello().call();
-  console.log('Call result:', callResult);
-};
-

@@ -15,8 +15,7 @@ import Head from "next/head";
 import { SvgIcon, Box, Typography, Skeleton } from "@mui/material";
 
 import { styled } from "@mui/system";
-import { callContract, deployContract } from "../../../utils/solidity/vm";
-import { Wallet } from "ethers";
+
 
 const MDXRemote = dynamic(
   () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
