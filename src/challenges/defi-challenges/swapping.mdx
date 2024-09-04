@@ -8,12 +8,13 @@ heroImage: "/images/level-up-preview.png"
 labels: ["Defi"]
 ---
 
+import ContentCopy from "src/components/ContentCopy";
+
 # Swap
 
 In this challenge, you'll implement a basic Uniswap V2-based swapping contract.
 
-```solidity
-pragma solidity ^0.8.7;
+<ContentCopy code={`pragma solidity ^0.8.7;
 
 contract Swap {
     // Provide the Uniswap V2 router address and the WETH address
@@ -37,8 +38,7 @@ contract Swap {
 
         // Call the Uniswap router's swapExactTokensForTokens function to execute the swap
     }
-}
-```
+}`} language="solidity"/>
 
 ## Constant Product Formula
 
@@ -75,8 +75,7 @@ Let's say Alice wants to swap her 1 ETH to DAI.
 
 ## The Essence of the `swapExactTokensForTokens()`
 
-```solidity
-function swapExactTokensForTokens(
+<ContentCopy code = {`function swapExactTokensForTokens(
   uint amountIn,
   uint amountOutMin,
   address[] calldata path,
@@ -84,8 +83,7 @@ function swapExactTokensForTokens(
   uint deadline
 ) external returns (uint[] memory amounts) {
 
-}
-```
+}`} language="solidity"/>
 
 Swaps an exact amount of input tokens for as many output tokens as possible, along the route determined by the path. The first element of path is the input token, the last is the output token, and any intermediate elements represent intermediate pairs to trade through (if, for example, a direct pair does not exist).
 
