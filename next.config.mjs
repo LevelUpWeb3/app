@@ -20,6 +20,10 @@ const nextConfig = {
     config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
   ) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
     config.ignoreWarnings = [
       function ignoreSourcemapsloaderWarnings(warning) {
         return (

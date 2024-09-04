@@ -15,6 +15,8 @@ import Head from "next/head";
 import { SvgIcon, Box, Typography, Skeleton } from "@mui/material";
 
 import { styled } from "@mui/system";
+import { main } from "../../../utils/solidity/compiler";
+import { Wallet } from "ethers";
 
 const MDXRemote = dynamic(
   () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
@@ -87,9 +89,41 @@ export default function ChallengeDetailsPage() {
       });
     setLoading(false);
   }, []);
+  
+  ////////////////////
+  const handleClick = async () => {
+
+    // A simple Solidity contract
+    const sourceCode = `
+pragma solidity ^0.8.0;
+
+contract HelloWorld {
+    string public message;
+
+    constructor() {
+        message = "Hello, World!";
+    }
+
+    function setMessage(string memory newMessage) public {
+        message = newMessage;
+    }
+}
+`;
+    (async () => {
+      // console.log("compiling...");
+      // const compiled = await compile(sourceCode);
+      // console.log("compiled: ", compiled);
+
+      const mainResult = await main();
+      console.log("mainResult: ", mainResult);
+    })();
+
+  }
+  ////////////////////
 
   return (
     <>
+      <button onClick={handleClick}>Click me</button>
       <Head>
         <link
           rel="stylesheet"
