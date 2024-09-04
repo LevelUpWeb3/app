@@ -46,7 +46,12 @@ const Label = styled(Typography)(() => ({
 }));
 
 const ChallengeDetails = ({ challengeData }) => {
-  const text = `I am excited to take on the ${challengeData.name} challenge in Level Up! Join me and let's level up together at levelupweb3.xyz/!`;
+  const text = `I am excited to take on the ${challengeData.name} challenge in Level Up! Join me and let's level up together at levelup.xyz/!`;
+
+  const combinedLabels = [
+    ...(challengeData.labels || []),
+    ...(challengeData.level ? [`Level ${challengeData.level}`] : []),
+  ];
 
   return (
     <ChallengeInfo>
@@ -59,7 +64,7 @@ const ChallengeDetails = ({ challengeData }) => {
           {challengeData.summary}
         </h4>
         <div className="mt-6 flex gap-2 self-start text-center text-base leading-6 tracking-normal text-yellow-800">
-          {challengeData.labels?.map((label) => (
+          {combinedLabels.map((label) => (
             <Label key={label}>{label}</Label>
           ))}
         </div>

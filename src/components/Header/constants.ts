@@ -4,6 +4,11 @@ const navigations = [
     key: "solidity",
     href: "/solidity",
   },
+  {
+    label: "Content",
+    key: "content",
+    href: "/content",
+  },
   // TODO: Revive challenges when we have challenges
   {
     label: "Challenges",
@@ -11,19 +16,14 @@ const navigations = [
     href: "/challenges",
   },
   {
-    label: "Hackathon",
-    key: "hackathon",
-    href: "/hackathon",
-  },
-  {
-    label: "Content",
-    key: "content",
-    href: "/content",
-  },
-  {
     label: "Podcast",
     key: "podcast",
     href: "/podcast",
+  },
+  {
+    label: "Hackathon",
+    key: "hackathon",
+    href: "/hackathon",
   },
   // TODO: Update route as needed if planning to embed inside Level Up
   {
