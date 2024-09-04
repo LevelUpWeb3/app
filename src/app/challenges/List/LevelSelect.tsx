@@ -1,14 +1,13 @@
-import { MenuItem, Typography } from "@mui/material";
+import { MenuItem, Typography, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
 import Select from "@/components/Select";
 import { CHALLENGE_LEVEL_LIST } from "@/constants";
 
-const NetworkSelect = (props) => {
+const LevelSelect = (props) => {
   const { sticky, top, value, onChange } = props;
   const theme = useTheme();
 
-  const handleChangeNetwork = (e) => {
+  const handleChangeLevel = (e) => {
     onChange(e.target.value);
   };
 
@@ -19,6 +18,7 @@ const NetworkSelect = (props) => {
           position: sticky ? "sticky" : "static",
           top,
           zIndex: 1,
+          width: "150px",
         },
 
         [theme.breakpoints.down("md")]: {
@@ -26,23 +26,26 @@ const NetworkSelect = (props) => {
         },
       }}
       value={value}
-      onChange={handleChangeNetwork}
+      onChange={handleChangeLevel}
     >
-      {CHALLENGE_LEVEL_LIST.filter((item) => item !== value).map((item) => (
-        <MenuItem key={item} value={item} sx={{ px: ["1.6rem", "2.4rem"] }}>
-          <Typography
-            sx={{
-              fontSize: ["1.6rem", "2rem"],
-              lineHeight: ["2.4rem", "3.6rem"],
-              fontWeight: 600,
-              cursor: "inherit",
-            }}
-          >
-            {item}
-          </Typography>
+      {CHALLENGE_LEVEL_LIST.map((item) => (
+        <MenuItem key={item} value={item} sx={{ paddingLeft: ["0rem"] }}>
+          <Box display="flex" alignItems="center">
+            <Box width="24px" height="24px" />
+            <Typography
+              sx={{
+                fontSize: ["1.6rem", "2rem"],
+                lineHeight: ["2.4rem", "3.6rem"],
+                fontWeight: 600,
+                cursor: "inherit",
+              }}
+            >
+              {item}
+            </Typography>
+          </Box>
         </MenuItem>
       ))}
     </Select>
   );
 };
-export default NetworkSelect;
+export default LevelSelect;
