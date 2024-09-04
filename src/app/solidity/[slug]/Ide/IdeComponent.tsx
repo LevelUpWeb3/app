@@ -144,7 +144,9 @@ const IdeComponent = ({ exercise, setCompletedExercise }) => {
           >
             <SubmitButton
               code={code}
-              codeSolution={codeSolution}
+              lessonId={slugParam.toLowerCase()}
+              exerciseId={exercise}
+              // codeSolution={codeSolution} // removed. solution verification is done by running the unitTests
               onSubmission={(isCorrect) => {
                 submissionHandler(isCorrect);
               }}
