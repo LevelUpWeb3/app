@@ -1,0 +1,340 @@
+---
+name: "Privacy interfaces on Soldity & zk-WASM"
+index: 1
+summary: Keep users data safe by generating proofs in the browser, on Javascript.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Sep 04, 2024
+readTime: 15 min read
+labels: ["ZK"]
+---
+
+Blockchain users need privacy in their finances, identity, social networks, and more. But web3 is transparent and public. So, how can users protect their anonymity in such an environment?
+
+The key is to create computation proofs in a place where only the user has access, where the user's data is secure. That place is precisely the browser, before the user's data touches the internet. This is what we call client-side proving or browser proving.
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/zn2yfuqumjippdbdlxt4.png"
+    alt="zk private inputs diagram"
+    width="750"
+  />
+  _In order to keep the paramaters private, they should never get out of the browser_
+</div>
+
+Let's get to know, with a practical and simple example, how to create interfaces that make use of zk-wasm, the technology that makes this possible.
+
+## Dependencies
+
+For this example, we will use Circom. If you don't have it installed, you can do so with the following commands.
+
+```bash
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+git clone https://github.com/iden3/circom.git
+cd circom
+cargo build --release
+cargo install --path circom
+npm install -g snarkjs
+```
+
+## 1. Create a circuit
+
+We'll create a very simple example: generating a computation proof for a multiplication a*b=c while keeping a and b private. If you're interested in a more advanced example with a real use case, visit my [my previous article](https://dev.to/filosofiacodigoen/private-smart-contrcts-with-solidity-circom-b67).
+
+Circom allows us to create circuits that generate execution proofs while obfuscating the parameters.
+
+Start by creating the following circuit:
+
+`myCircuit.circom`
+
+```cpp
+pragma circom 2.0.0;
+
+template Multiplier() {
+    signal input a;
+    signal input b;
+    signal output c;
+    c <== a*b;
+ }
+
+ component main = Multiplier();
+```
+
+Now compile it and generate the artifacts that we will use later.
+
+```bash
+circom myCircuit.circom --r1cs --wasm --sym
+snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
+snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
+snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
+snarkjs groth16 setup myCircuit.r1cs pot12_final.ptau myCircuit_0000.zkey
+snarkjs zkey contribute myCircuit_0000.zkey myCircuit_0001.zkey --name="1st Contributor Name" -v
+snarkjs zkey export verificationkey myCircuit_0001.zkey verification_key.json
+```
+
+## 2. Deploy the contracts
+
+The following command will generate a verifier contract in the verifier.sol file. Deploy it on a blockchain of your choice. This contract contains the verifyProof() function, which takes a computation proof made with our circuit as a parameter and returns true if the proof is correct.
+
+Note: This contract is compatible with L1 EVMs, optimistic L2s, but in terms of ZK L2s, it is currently only compatible with Scroll.
+
+```bash
+snarkjs zkey export solidityverifier myCircuit_0001.zkey verifier.sol
+```
+
+Now deploy the following custom logic contract, passing the address of the verifier contract we deployed earlier as a constructor parameter. In this contract, you can add any desired logic in Solidity, such as vote counting in a voting system or the reception or sending of ERC20 tokens in an anonymous DeFi system. In this example, we will only store the result of the multiplication we did in our circuit.
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity >=0.7.0 <0.9.0;
+
+interface ICircomVerifier {
+    function verifyProof(uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[1] calldata _pubSignals) external view returns (bool);
+}
+
+contract CircomCustomLogic {
+    ICircomVerifier circomVerifier;
+    uint public publicInput;
+
+    constructor(address circomVeriferAddress) {
+        circomVerifier = ICircomVerifier(circomVeriferAddress);
+    }
+
+    function sendProof(uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[1] calldata _pubSignals) public {
+        // ZK verification
+        circomVerifier.verifyProof(_pA, _pB, _pC, _pubSignals);
+
+        // Your custom logic
+        publicInput = _pubSignals[0];
+    }
+}
+```
+
+## 3. Build a frontend
+
+Now create this file stricture:
+
+```
+js/
+  blockchain_stuff.js
+  snarkjs.min.js
+json_abi/
+  MyContract.json
+zk_artifacts/
+  myCircuit_final.zkey
+  myCircuit.wasm
+  verification_key.json
+index.html
+```
+
+* `js/snarkjs.min.js`: download [this file](https://github.com/iden3/snarkjs/releases/tag/v0.7.4) that contains snark.js
+* `json_abi/MyContract.json`: the `CircomCustomLogic` contract ABI we just launched, for example on Remix, you can get it by clicking the "ABI" button on the compiler tab.
+* `zk_artifacts`: put in this folder the files we generated previously. Not: Change the `myCircuit_0002.zkey` name for `myCircuit_final.zkey`
+* `index.html` y `js/blockchain_stuff.js` are content is detailed below
+
+The HTML file below describes the graphical interface where we will input the numbers to be multiplied. In a production environment, I would recommend using a frontend framework like React, Vue, or Angular. This example is for educational purposes.
+
+`index.html`
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  <input id="connect_button" type="button" value="Connect" onclick="connectWallet()" style="display: none"></input>
+  <p id="account_address" style="display: none"></p>
+  <p id="web3_message"></p>
+  <p id="contract_state"></p>
+  <input type="input"  value="" id="a"></input>
+  <input type="input"  value="" id="b"></input>
+  <input type="button" value="Send Proof" onclick="_sendProof()"></input>
+  <br>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.5/web3.min.js"></script>
+  <script type="text/javascript" src="js/blockchain_stuff.js"></script>
+  <script type="text/javascript" src="js/snarkjs.min.js"></script>
+</body>
+</html>
+
+<script>
+  function _sendProof()
+  {
+    a = document.getElementById("a").value
+    b = document.getElementById("b").value
+    sendProof(a, b)
+  }
+</script>
+```
+
+Our JavaScript file contains both the logic for generating zk proofs using the snark.js library and the blockchain logic using the web3.js library. In a production environment, I would recommend using TypeScript instead of plain JavaScript; this example is for educational purposes.
+
+`js/blockchain_stuff.js`
+```js
+const NETWORK_ID = 534351
+
+const MY_CONTRACT_ADDRESS = "0xFdAFc996a60bC5fEB307AAF81b1eD0A34a954F06"
+const MY_CONTRACT_ABI_PATH = "./json_abi/MyContract.json"
+var my_contract
+
+var accounts
+var web3
+
+function metamaskReloadCallback() {
+  window.ethereum.on('accountsChanged', (accounts) => {
+    document.getElementById("web3_message").textContent="Se cambió el account, refrescando...";
+    window.location.reload()
+  })
+  window.ethereum.on('networkChanged', (accounts) => {
+    document.getElementById("web3_message").textContent="Se el network, refrescando...";
+    window.location.reload()
+  })
+}
+
+const getWeb3 = async () => {
+  return new Promise((resolve, reject) => {
+    if(document.readyState=="complete")
+    {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum)
+        window.location.reload()
+        resolve(web3)
+      } else {
+        reject("must install MetaMask")
+        document.getElementById("web3_message").textContent="Error: Porfavor conéctate a Metamask";
+      }
+    }else
+    {
+      window.addEventListener("load", async () => {
+        if (window.ethereum) {
+          const web3 = new Web3(window.ethereum)
+          resolve(web3)
+        } else {
+          reject("must install MetaMask")
+          document.getElementById("web3_message").textContent="Error: Please install Metamask";
+        }
+      });
+    }
+  });
+};
+
+const getContract = async (web3, address, abi_path) => {
+  const response = await fetch(abi_path);
+  const data = await response.json();
+
+  const netId = await web3.eth.net.getId();
+  contract = new web3.eth.Contract(
+    data,
+    address
+    );
+  return contract
+}
+
+async function loadDapp() {
+  metamaskReloadCallback()
+  document.getElementById("web3_message").textContent="Please connect to Metamask"
+  var awaitWeb3 = async function () {
+    web3 = await getWeb3()
+    web3.eth.net.getId((err, netId) => {
+      if (netId == NETWORK_ID) {
+        var awaitContract = async function () {
+          my_contract = await getContract(web3, MY_CONTRACT_ADDRESS, MY_CONTRACT_ABI_PATH)
+          document.getElementById("web3_message").textContent="You are connected to Metamask"
+          onContractInitCallback()
+          web3.eth.getAccounts(function(err, _accounts){
+            accounts = _accounts
+            if (err != null)
+            {
+              console.error("An error occurred: "+err)
+            } else if (accounts.length > 0)
+            {
+              onWalletConnectedCallback()
+              document.getElementById("account_address").style.display = "block"
+            } else
+            {
+              document.getElementById("connect_button").style.display = "block"
+            }
+          });
+        };
+        awaitContract();
+      } else {
+        document.getElementById("web3_message").textContent="Please connect to Scroll Testnet";
+      }
+    });
+  };
+  awaitWeb3();
+}
+
+async function connectWallet() {
+  await window.ethereum.request({ method: "eth_requestAccounts" })
+  accounts = await web3.eth.getAccounts()
+  onWalletConnectedCallback()
+}
+
+loadDapp()
+
+const onContractInitCallback = async () => {
+  var publicInput = await my_contract.methods.publicInput().call()
+  var contract_state = "Public input: " + publicInput
+  document.getElementById("contract_state").textContent = contract_state;
+}
+
+const onWalletConnectedCallback = async () => {
+}
+
+
+//// Functions ////
+
+const sendProof = async (a, b) => {
+  document.getElementById("web3_message").textContent="Generating proof...";
+
+  const { proof, publicSignals } = await snarkjs.groth16.fullProve( { a: a, b: b}, "../zk_artifacts/myCircuit.wasm", "../zk_artifacts/myCircuit_final.zkey");
+
+  const vkey = await fetch("../zk_artifacts/verification_key.json").then( function(res) {
+    return res.json();
+  });
+
+  const res = await snarkjs.groth16.verify(vkey, publicSignals, proof);
+
+  pA = proof.pi_a
+  pA.pop()
+  pB = proof.pi_b
+  pB.pop()
+  pC = proof.pi_c
+  pC.pop()
+
+  document.getElementById("web3_message").textContent="Proof generated please confirm transaction.";
+
+  const result = await my_contract.methods.sendProof(pA, pB, pC, publicSignals)
+  .send({ from: accounts[0], gas: 0, value: 0 })
+  .on('transactionHash', function(hash){
+    document.getElementById("web3_message").textContent="Executing...";
+  })
+  .on('receipt', function(receipt){
+    document.getElementById("web3_message").textContent="Success.";    })
+  .catch((revertReason) => {
+    console.log("ERROR! Transaction reverted: " + revertReason.receipt.transactionHash)
+  });
+}
+```
+
+## 4. Try the app
+
+Before testing, you need to adjust the variables NETWORK_ID and MY_CONTRACT_ADDRESS in js/blockchain_stuff.js. NETWORK_ID is the unique identifier of the chain you are using. In this example, I'm using 534351, which represents the Scroll Sepolia Testnet. If you wish to use another chain, I recommend finding the identifier on [chainlist](https://chainlist.org/). Also, place the address of the CircomCustomLogic contract you just deployed into the MY_CONTRACT_ADDRESS variable.
+
+Now you're ready to test the application on any web server. I typically use lite-server for development. Here's how you can install it and start a server, just make sure you are in the project folder:
+
+```bash
+npm install -g lite-server #para instalar
+lite-server #para levantar el servidor
+```
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/a24eo00jc3rbfxe8bgpx.png"
+    alt="ejemplo de circuito multiplicador zk"
+    width="750"
+  />
+  _Once everything is ready this is how your app should look like_
+</div>
