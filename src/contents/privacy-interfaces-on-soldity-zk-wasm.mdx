@@ -1,7 +1,7 @@
 ---
-name: "Privacy interfaces on Soldity & zk-WASM"
-index: 1
-summary: Keep users data safe by generating proofs in the browser, on Javascript.
+name: "Privacy Interfaces on Solidity & zk-WASM"
+index: 4
+summary: Keep users' data safe by generating proofs in the browser, on Javascript.
 author: FilosofiaCodigo
 authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
 authorLink: https://x.com/FilosofiaCodigo
@@ -9,6 +9,8 @@ published: Sep 04, 2024
 readTime: 15 min read
 labels: ["ZK"]
 ---
+
+import ContentCopy from "src/components/ContentCopy";
 
 Blockchain users need privacy in their finances, identity, social networks, and more. But web3 is transparent and public. So, how can users protect their anonymity in such an environment?
 
@@ -20,7 +22,7 @@ The key is to create computation proofs in a place where only the user has acces
     alt="zk private inputs diagram"
     width="750"
   />
-  _In order to keep the paramaters private, they should never get out of the browser_
+  _In order to keep the parameters private, they should never get out of the browser_
 </div>
 
 Let's get to know, with a practical and simple example, how to create interfaces that make use of zk-wasm, the technology that makes this possible.
@@ -29,18 +31,16 @@ Let's get to know, with a practical and simple example, how to create interfaces
 
 For this example, we will use Circom. If you don't have it installed, you can do so with the following commands.
 
-```bash
-curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+<ContentCopy code={`curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 git clone https://github.com/iden3/circom.git
 cd circom
 cargo build --release
 cargo install --path circom
-npm install -g snarkjs
-```
+npm install -g snarkjs`} language="bash"/>
 
 ## 1. Create a circuit
 
-We'll create a very simple example: generating a computation proof for a multiplication a*b=c while keeping a and b private. If you're interested in a more advanced example with a real use case, visit my [my previous article](https://dev.to/filosofiacodigoen/private-smart-contrcts-with-solidity-circom-b67).
+We'll create a very simple example: generating a computation proof for a multiplication a*b=c while keeping a and b private. If you're interested in a more advanced example with a real use case, visit my [my previous article](https://www.levelup.xyz/content/private-smart-contracts-with-solidity-and-circom).
 
 Circom allows us to create circuits that generate execution proofs while obfuscating the parameters.
 
@@ -48,45 +48,45 @@ Start by creating the following circuit:
 
 `myCircuit.circom`
 
-```cpp
-pragma circom 2.0.0;
+<ContentCopy code={`pragma circom 2.0.0;
 
 template Multiplier() {
-    signal input a;
-    signal input b;
-    signal output c;
-    c <== a*b;
- }
+  signal input a;
+  signal input b;
+  signal output c;
+  c <== a*b;
+}
 
- component main = Multiplier();
-```
+component main = Multiplier();`} language="cpp"/>
 
 Now compile it and generate the artifacts that we will use later.
 
-```bash
-circom myCircuit.circom --r1cs --wasm --sym
+<ContentCopy code={`circom myCircuit.circom --r1cs --wasm --sym
 snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
 snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
 snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
 snarkjs groth16 setup myCircuit.r1cs pot12_final.ptau myCircuit_0000.zkey
 snarkjs zkey contribute myCircuit_0000.zkey myCircuit_0001.zkey --name="1st Contributor Name" -v
-snarkjs zkey export verificationkey myCircuit_0001.zkey verification_key.json
-```
+snarkjs zkey export verificationkey myCircuit_0001.zkey verification_key.json`} language="bash"/>
 
 ## 2. Deploy the contracts
 
 The following command will generate a verifier contract in the verifier.sol file. Deploy it on a blockchain of your choice. This contract contains the verifyProof() function, which takes a computation proof made with our circuit as a parameter and returns true if the proof is correct.
 
+For example you can deploy it on Scroll Sepolia by using Foundry.
+
+```
+forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
+```
+
 Note: This contract is compatible with L1 EVMs, optimistic L2s, but in terms of ZK L2s, it is currently only compatible with Scroll.
 
-```bash
-snarkjs zkey export solidityverifier myCircuit_0001.zkey verifier.sol
-```
+<ContentCopy code={`snarkjs zkey export solidityverifier myCircuit_0001.zkey verifier.sol`} language="bash"/>
 
 Now deploy the following custom logic contract, passing the address of the verifier contract we deployed earlier as a constructor parameter. In this contract, you can add any desired logic in Solidity, such as vote counting in a voting system or the reception or sending of ERC20 tokens in an anonymous DeFi system. In this example, we will only store the result of the multiplication we did in our circuit.
 
-```solidity
-// SPDX-License-Identifier: MIT
+`CircomCustomLogic.sol`
+<ContentCopy code={`// SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0 <0.9.0;
 
@@ -109,12 +109,17 @@ contract CircomCustomLogic {
         // Your custom logic
         publicInput = _pubSignals[0];
     }
-}
+}`} language="solidity"/>
+
+Now deploy it on-chain. If you're using forge on Scroll Sepolia you can do it with the following command.
+
+```
+forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS> CircomCustomLogic.sol:CircomCustomLogic
 ```
 
 ## 3. Build a frontend
 
-Now create this file stricture:
+Now create this file structure:
 
 ```
 js/
@@ -129,16 +134,15 @@ zk_artifacts/
 index.html
 ```
 
-* `js/snarkjs.min.js`: download [this file](https://github.com/iden3/snarkjs/releases/tag/v0.7.4) that contains snark.js
+* `js/snarkjs.min.js`: Download [snarkjs-0.7.4.zip](https://github.com/iden3/snarkjs/releases/tag/v0.7.4), which contains the `snarkjs.min.js` library under the `build/` directory.
 * `json_abi/MyContract.json`: the `CircomCustomLogic` contract ABI we just launched, for example on Remix, you can get it by clicking the "ABI" button on the compiler tab.
-* `zk_artifacts`: put in this folder the files we generated previously. Not: Change the `myCircuit_0002.zkey` name for `myCircuit_final.zkey`
-* `index.html` y `js/blockchain_stuff.js` are content is detailed below
+* `zk_artifacts`: put in this folder the files we generated previously. Not: Change the `myCircuit_0002.zkey` name for `myCircuit_final.zkey`.
+* `index.html` y `js/blockchain_stuff.js` are content is detailed below.
 
 The HTML file below describes the graphical interface where we will input the numbers to be multiplied. In a production environment, I would recommend using a frontend framework like React, Vue, or Angular. This example is for educational purposes.
 
 `index.html`
-```html
-<!DOCTYPE html>
+<ContentCopy code={`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -165,14 +169,12 @@ The HTML file below describes the graphical interface where we will input the nu
     b = document.getElementById("b").value
     sendProof(a, b)
   }
-</script>
-```
+</script>`} language="html"/>
 
 Our JavaScript file contains both the logic for generating zk proofs using the snark.js library and the blockchain logic using the web3.js library. In a production environment, I would recommend using TypeScript instead of plain JavaScript; this example is for educational purposes.
 
 `js/blockchain_stuff.js`
-```js
-const NETWORK_ID = 534351
+<ContentCopy code={`const NETWORK_ID = 534351
 
 const MY_CONTRACT_ADDRESS = "0xFdAFc996a60bC5fEB307AAF81b1eD0A34a954F06"
 const MY_CONTRACT_ABI_PATH = "./json_abi/MyContract.json"
@@ -316,8 +318,7 @@ const sendProof = async (a, b) => {
   .catch((revertReason) => {
     console.log("ERROR! Transaction reverted: " + revertReason.receipt.transactionHash)
   });
-}
-```
+}`} language="js"/>
 
 ## 4. Try the app
 
@@ -325,10 +326,8 @@ Before testing, you need to adjust the variables NETWORK_ID and MY_CONTRACT_ADDR
 
 Now you're ready to test the application on any web server. I typically use lite-server for development. Here's how you can install it and start a server, just make sure you are in the project folder:
 
-```bash
-npm install -g lite-server #para instalar
-lite-server #para levantar el servidor
-```
+<ContentCopy code={`npm install -g lite-server #para instalar
+lite-server #para levantar el servidor`} language="bash"/>
 
 <div className="text-center">
   <img

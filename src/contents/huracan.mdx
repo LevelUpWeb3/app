@@ -1,7 +1,7 @@
 ---
 name: "🌀Huracan"
-index: 1
-summary: Lean ZK by deploying a battle tested project.
+index: 5
+summary: Learn ZK by Deploying a Battle Tested Project.
 author: FilosofiaCodigo
 authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
 authorLink: https://x.com/FilosofiaCodigo
@@ -9,6 +9,8 @@ published: Sep 04, 2024
 readTime: 15 min read
 labels: ["ZK", "DeFi"]
 ---
+
+import ContentCopy from "src/components/ContentCopy";
 
 Learning about ZK today is not an easy task. It's a new technology with limited documentation. Huracan was born out of my own need to learn about ZK in a practical way, geared towards developers and engineers.
 
@@ -69,21 +71,18 @@ Below is the code, a brief explanation, and the supporting materials necessary t
 
 ## 2. The Circuit
 
-_Supporting Material: [Private Smart Contracts with Solidity and Circom](https://dev.to/filosofiacodigoen/private-smart-contrcts-with-solidity-circom-b67)_
+_Supporting Material: [Private Smart Contracts with Solidity and Circom](https://www.levelup.xyz/content/private-smart-contracts-with-solidity-and-circom)_
 
 The circuit is responsible for proving that you are part of the Merkle tree, meaning you are one of the depositors without revealing which one you are since you keep the parameters private while generating an inclusion proof that can be verified by a smart contract. Which parameters are kept private? During the deposit, we hash a private key and a nullifier to create a new leaf in the tree. The private key is a private parameter that will later serve to prove that you are the owner of that leaf. The nullifier is another parameter whose hash will be passed to the Solidity contract when redeeming funds, preventing a user from withdrawing funds twice in a row (double spend). The rest of the private parameters help the circuit reconstruct the tree and verify that you are part of it.
 
 We start by installing the `circomlib` library, which contains the Poseidon circuits we will be using in this tutorial.
 
-```bash
-git clone https://github.com/iden3/circomlib.git
-```
+<ContentCopy code={`git clone https://github.com/iden3/circomlib.git`} language="bash"/>
 
 Now we create our `proveWithdrawal` circuit that proves we have deposited in the contract without revealing who we are.
 
 `proveWithdrawal.circom`
-```js
-pragma circom 2.0.0;
+<ContentCopy code={`pragma circom 2.0.0;
 
 include "circomlib/circuits/poseidon.circom";
 
@@ -149,52 +148,47 @@ template proveWithdrawal(levels) {
     root === computedPath[levels - 1];
 }
 
-component main {public [root, recipient]} = proveWithdrawal(2);
-```
+component main {public [root, recipient]} = proveWithdrawal(2);`} language="cpp"/>
 
 To compile the circuit, we need to have both Circom and snarkjs installed. If you don't have them installed, follow the Circom installation guide.
 
 <details>
-<summary>Circom instalation guid</summary>
+<summary>Circom installation guide</summary>
 
 Run the following commands to install circom and snarkjs.
 
-```bash
-curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+<ContentCopy code={`curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 git clone https://github.com/iden3/circom.git
 cd circom
 cargo build --release
 cargo install --path circom
-npm install -g snarkjs
-```
+npm install -g snarkjs`} language="bash"/>
 
 </details>
 
 Generate the trusted setup and zk artifacts we will need later on on the frontend.
 
-```bash
-circom proveWithdrawal.circom --r1cs --wasm --sym
+<ContentCopy code={`circom proveWithdrawal.circom --r1cs --wasm --sym
 snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
 snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
 snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
 snarkjs groth16 setup proveWithdrawal.r1cs pot12_final.ptau proveWithdrawal_0000.zkey
 snarkjs zkey contribute proveWithdrawal_0000.zkey proveWithdrawal_0001.zkey --name="1st Contributor Name" -v
-snarkjs zkey export verificationkey proveWithdrawal_0001.zkey verification_key.json
-```
+snarkjs zkey export verificationkey proveWithdrawal_0001.zkey verification_key.json`} language="bash"/>
 
 We can now generate the `verifier.sol` contract.
 
-```bash
-snarkjs zkey export solidityverifier proveWithdrawal_0001.zkey verifier.sol
-```
+<ContentCopy code={`snarkjs zkey export solidityverifier proveWithdrawal_0001.zkey verifier.sol`} language="bash"/>
 
 ## 3. The Contracts
 
-_Supporting Material: [Solidity in 15 Minutes](https://dev.to/turupawn/como-lanzar-un-dex-paso-a-pasox-2cnm)_
-
 The contracts serve as a guarantee that everything was run correctly. They allow us to keep track of how much has been deposited and verify that the proofs are valid in order to release the funds. It’s important to note that everything happening in the smart contracts is public; this is the part of our system that is not anonymous.
 
-We will use three contracts. The first is the verifier contract that we just generated in the `verifier.sol` file, so go ahead and deploy it now.
+We will use three contracts. The first is the verifier contract that we just generated in the `verifier.sol` file, so go ahead and deploy it now. For example you can use foundry to deploy it on Scroll Sepolia.
+
+```
+forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
+```
 
 The second contract is the Poseidon contract. If you are on Scroll Sepolia, you can simply use the one I've already deployed at `0x52f28FEC91a076aCc395A8c730dCa6440B6D9519`. If you want to use another blockchain, expand and follow the steps:
 
@@ -203,27 +197,22 @@ The second contract is the Poseidon contract. If you are on Scroll Sepolia, you 
 
 The version of Poseidon we use in our circuit and contract must be exactly compatible. Therefore, we use the version in `circomlibjs` as shown. Just make sure to insert your private key and RPC URL in place of `YOURPRIVATEKEY` and `YOURRPCURL`.
 
-```bash
-git clone https://github.com/iden3/circomlibjs.git
+<ContentCopy code={`git clone https://github.com/iden3/circomlibjs.git
 cd circomlibjs
 npm install
 cd ..
 node --input-type=module --eval "import { writeFileSync } from 'fs'; import('./circomlibjs/src/poseidon_gencontract.js').then(({ createCode }) => { const output = createCode(2); writeFileSync('poseidonBytecode', output); })"
-cast send --rpc-url TUURLRPC --private-key TULLAVEPRIVADA --create $(cat bytecode)
-```
+cast send --rpc-url TUURLRPC --private-key TULLAVEPRIVADA --create $(cat bytecode)`} language="bash"/>
 
 On Scroll, I added `--legacy --gas-price 5000000000`, probably when you see this video you won't need to add it. In any case you shouldn't need this in other chains. Regardless, this is the command just as I sent it.
 
-```bash
-cast send --rpc-url TUURLRPC --legacy --gas-price 5000000000 --private-key TULLAVEPRIVADA --create $(cat bytecode)
-```
+<ContentCopy code={`cast send --rpc-url TUURLRPC --legacy --gas-price 5000000000 --private-key TULLAVEPRIVADA --create $(cat bytecode)`} language="bash"/>
 
 </details>
 
 Now deploy the `Huracan` contract by passing the verifier and poseidon addresses as parameters.
 
-```js
-// SPDX-License-Identifier: MIT
+<ContentCopy code={`// SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0 <0.9.0;
 
@@ -305,12 +294,17 @@ contract Huracan {
         require(sent, "Failed to send Ether");
         data;
     }
-}
+}`} language="cpp"/>
+
+Now deploy it on-chain. If you're using forge on Scroll Sepolia you can do it with the following command.
+
+```
+forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS> Huracan.sol:Huracan
 ```
 
 ## 4. The Frontend
 
-_Supporting Material: [Privacy Interfaces with Solidity and zk-WASM](https://dev.to/filosofiacodigoen/privacy-interfaces-on-soldity-zk-wasm-2nd1)_
+_Supporting Material: [Privacy Interfaces with Solidity and zk-WASM](https://www.levelup.xyz/content/privacy-interfaces-on-soldity-zk-wasm)_
 
 The frontend is the graphical interface we will be interacting with. In this demonstration, we will be using HTML and vanilla JS so that developers can adapt it to any frontend framework they are using. Something very important is that the frontend must be capable of producing zk proofs without leaking private information over the internet. This is why zk-WASM is crucial, as it allows us to efficiently generate proofs directly in our browser.
 
@@ -329,7 +323,7 @@ zk_artifacts/
 index.html
 ```
 
-* `js/snarkjs.min.js`: Download [this file](https://github.com/iden3/snarkjs/releases/tag/v0.7.4), which contains the snark.js library.
+* `js/snarkjs.min.js`: Download [snarkjs-0.7.4.zip](https://github.com/iden3/snarkjs/releases/tag/v0.7.4), which contains the `snarkjs.min.js` library under the `build/` directory.
 * `json_abi/Huracan.json`: The ABI of the CircomCustomLogic contract we just deployed (e.g., in Remix). You can obtain it by clicking the "ABI" button in the compilation tab.
 * `json_abi/Poseidon.json`: Use [this file](https://gist.github.com/Turupawn/b89999eb8b00d7507908d6fbf6aa7f0b).
 * `zk_artifacts`: Place the previously generated artifacts in this folder. Note: Rename `proveWithdrawal_0001.zkey` to `proveWithdrawal_final.zkey`.
@@ -338,8 +332,7 @@ index.html
 The HTML file contains the interface necessary for users to interact with Huracán.
 
 `index.html`
-```html
-<!DOCTYPE html>
+<ContentCopy code={`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -380,14 +373,12 @@ The HTML file contains the interface necessary for users to interact with Hurac�
     withdrawRecipient = document.getElementById("withdrawRecipient").value
     withdraw(withdrawPrivateKey, withdrawNullifier, withdrawRecipient)
   }
-</script>
-```
+</script>`} language="html"/>
 
 Al logic related to web3 is placed in the following file. This includes browser and wallet connection, state read and contract function calls.
 
 `js/blockchain_stuff.js`
-```js
-const NETWORK_ID = 534351
+<ContentCopy code={`const NETWORK_ID = 534351
 
 const HURACAN_ADDRESS = "0x8BD32BDC921f5239c0f5d9eaf093B49A67C3b9d0"
 const HURACAN_ABI_PATH = "./json_abi/Huracan.json"
@@ -567,14 +558,12 @@ const sendProofToRelayer = async (pA, pB, pC, publicSignals) => {
   .then(out =>
     console.log(out))
   .catch();
-}
-```
+}`} language="js"/>
 
 Finally, the file that contains all ZK logic. Capable of generating ZK proofs.
 
 `js/zk_stuff.js`
-```js
-async function getMerklePath(leaves) {
+<ContentCopy code={`async function getMerklePath(leaves) {
   if (leaves.length === 0) {
     throw new Error('Leaves array is empty');
   }
@@ -664,8 +653,7 @@ async function getWithdrawalProof(index, privateKey, nullifier, recipient, root)
     pC: pC,
     publicSignals: publicSignals
   }
-}
-```
+}`} language="cpp"/>
 
 ### 5. The Relayer
 
@@ -674,8 +662,7 @@ Generating ZK anonymity proofs makes no sense if we end up posting the transacti
 Let's start by creating the backend file.
 
 `relayer.mjs`
-```js
-import fs from "fs"
+<ContentCopy code={`import fs from "fs"
 import cors from "cors"
 import express from "express"
 import { ethers } from 'ethers';
@@ -709,7 +696,7 @@ async function initAPI() {
   });
 
   app.listen(PORT, () => {
-    console.log(`Listening to port ${PORT}`)
+    console.log(\`Listening to port \${PORT}\`)
   })
 }
 
@@ -754,22 +741,17 @@ app.get('/relay', (req, res) => {
   })
 })
 
-initAPI()
-```
+initAPI()`} language="js"/>
 
 Install the `coors` library to run the relayer locally.
 
-```
-npm install cors express ethers
-```
+<ContentCopy code={`npm install cors express ethers`} language="bash"/>
 
 Now deploy the server by replacing `TUURLRPC`, `TUHURACANADDRESS`, `TULLAVEPRIVADA`, `TUADDRESS` in the following command.
 
-```bash
-RPC_URL=TUURLRPC HURACAN_ADDRESS=TUHURACANADDRESS RELAYER_PRIVATE_KEY=TULLAVEPRIVADA RELAYER_ADDRESS=TUADDRESS node relayer.mjs
-```
+<ContentCopy code={`RPC_URL=TUURLRPC HURACAN_ADDRESS=TUHURACANADDRESS RELAYER_PRIVATE_KEY=TULLAVEPRIVADA RELAYER_ADDRESS=TUADDRESS node relayer.mjs`} language="bash"/>
 
-You are ready to depoist and withdraw funds on Huracan from the web interface.
+You are ready to deposit and withdraw funds on Huracan from the web interface.
 
 <div className="text-center">
   <img

@@ -1,6 +1,6 @@
 ---
 name: "Private Smart Contracts with Solidity & Circom"
-index: 1
+index: 3
 summary: Get started with developing privacy applications by combining Circuits and Smart Contracts.
 author: FilosofiaCodigo
 authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
@@ -10,26 +10,24 @@ readTime: 15 min read
 labels: ["ZK"]
 ---
 
+import ContentCopy from "src/components/ContentCopy";
+
 ZK enables the development of applications with both private data and private execution. This opens the door to many new use cases, like the one we'll create in this guide: an anonymous and secure voting system combining Circom and Solidity.
 
 ## Circom and dependencies
 
 If you don't have Circom installed yet, install it with the following commands. I'm using node v20, but it should work with other versions as well.
 
-```bash
-curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+ <ContentCopy code={` curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 git clone https://github.com/iden3/circom.git
 cd circom
 cargo build --release
 cargo install --path circom
-npm install -g snarkjs
-```
+npm install -g snarkjs`} language="bash"/>
 
 We'll also use the Circom libraries where the Poseidon function that we'll be using is located.
 
-```bash
-git clone https://github.com/iden3/circomlib.git
-```
+ <ContentCopy code={` git clone https://github.com/iden3/circomlib.git`} language="bash"/>
 
 ## 1. Public key creation
 
@@ -39,7 +37,7 @@ The most practical way to achieve this in zk and blockchain is through Merkle tr
 
 Since the tree is public, we will use a set of public-private key pairs so that each voter can cast their vote only once.
 
-You might wonder if we can use the public keys from our Ethereum wallet (e.g., from MetaMask). In future guides like this one, I'll address that topic just as I did with noir. To reach that point, you'll need the fundamentals from this guide. So stay tuned and subscribe!
+You might wonder if we can use the public keys from our Ethereum wallet (e.g., from MetaMask). In future guides like this one, I'll address that topic just as I did with noir. To reach that point, you'll need the fundamentals from this guide. So stay tuned and follow [LevelUp on X](https://x.com/levelupweb3)!
 
 Now, let's create the public keys for the following private keys using the circuit privateKeyHasher.circom below:
 * `111`
@@ -48,8 +46,8 @@ Now, let's create the public keys for the following private keys using the circu
 * `444`
 
 `privateKeyHasher.circom`
-```cpp
-pragma circom 2.0.0;
+
+ <ContentCopy code={` pragma circom 2.0.0;
 
 include "circomlib/circuits/poseidon.circom";
 
@@ -63,22 +61,17 @@ template privateKeyHasher() {
     log(publicKey);
 }
 
-component main = privateKeyHasher();
-```
+component main = privateKeyHasher();`} language="bash"/>
 
 `input.json`
-```json
-{
+<ContentCopy code={`{
     "privateKey": "111"
-}
-```
+}`} language="json"/>
 
 Compile and compute the circuit with the commands below, and you'll see the result in the terminal.
 
-```bash
-circom privateKeyHasher.circom --r1cs --wasm --sym --c
-node privateKeyHasher_js/generate_witness.js privateKeyHasher_js/privateKeyHasher.wasm input.json witness.wtns
-```
+<ContentCopy code={`circom privateKeyHasher.circom --r1cs --wasm --sym --c
+node privateKeyHasher_js/generate_witness.js privateKeyHasher_js/privateKeyHasher.wasm input.json witness.wtns`} language="bash"/>
 
 The result of the 4 private keys should be as follows:
 
@@ -89,7 +82,7 @@ The result of the 4 private keys should be as follows:
 | 333    | 19430878135540641438890585969007029177622584902384053006985767702837167003933    |
 | 444    | 2288143249026782941992289125994734798520452235369536663078162770881373549221    |
 
-Is it necessary to do this through Circom? The answer is no. By using Circom, we're performing a lot of unnecessary computation. For now, we're doing it this way to ensure that the implementation of the Poseidon hashing algorithm we'll use later is compatible. This is not recommended for production projects.
+Is it necessary to do this through Circom? The answer is no. By using Circom, we're performing a lot of unnecessary computation. For now, we're doing it this way to ensure that the implementation of the Poseidon hashing algorithm we'll use later is compatible. This is not recommended for production projects where you should use a hashing algorithm written in Javascript that matches the exact implementation as your contract and circuit.
 
 ## 2. Tree Creation
 
@@ -111,8 +104,7 @@ Next, we're going to generate the Merkle tree branch by branch. Remember that Me
 To generate the complete tree, we'll execute the following function that hashes two leaves to generate their root. We'll do this a total of 3 times because that's what's needed to obtain the root of a tree with 4 leaves: `root = hash(hash(A, B), hash(C, D))`.
 
 `hashLeaves.circom`
-```cpp
-pragma circom 2.0.0;
+<ContentCopy code={`pragma circom 2.0.0;
 
 include "circomlib/circuits/poseidon.circom";
 
@@ -128,25 +120,20 @@ template hashLeaves() {
     log(root);
 }
 
-component main = hashLeaves();
-```
+component main = hashLeaves();`} language="cpp"/>
 
 Here are the inputs needed to generate the first branch. Similarly, you can generate the other branch and the root.
 
 `input.json`
-```json
-{
+<ContentCopy code={`{
     "leftLeaf": "13377623690824916797327209540443066247715962236839283896963055328700043345550",
     "rightLeaf": "3370092681714607727019534888747304108045661953819543369463810453568040251648"
-}
-```
+}`} language="json"/>
 
 Similar to the previous step, with the following commands, the circuit will be compiled and the root will be printed given its two leaves.
 
-```bash
-circom hashLeaves.circom --r1cs --wasm --sym --c
-node hashLeaves_js/generate_witness.js hashLeaves_js/hashLeaves.wasm input.json witness.wtns
-```
+<ContentCopy code={`circom hashLeaves.circom --r1cs --wasm --sym --c
+node hashLeaves_js/generate_witness.js hashLeaves_js/hashLeaves.wasm input.json witness.wtns`} language="bash"/>
 
 This is how the full tree looks like:
 
@@ -170,8 +157,7 @@ To generate a vote, we need to pass the following parameters to the circuit:
 * `pathElements` and `pathIndices`: The minimal information needed to reconstruct the root. This includes `pathElements`, which are the leaf or branch nodes, and pathIndices, which show which path to take for hashing, where 0 represents nodes on the left and 1 represents nodes on the right.
 
 `proveVote.circom`
-```cpp
-pragma circom 2.0.0;
+<ContentCopy code={`pragma circom 2.0.0;
 
 include "circomlib/circuits/poseidon.circom";
 
@@ -248,27 +234,22 @@ template proveVote(levels) {
     nullifier <== nullifierComponent.nullifier;
 }
 
-component main {public [root, proposalId, vote]} = proveVote(2);
-```
+component main {public [root, proposalId, vote]} = proveVote(2);`} language="cpp"/>
 
 `input.json`
-```json
-{
+<ContentCopy code={`{
     "privateKey": "111",
     "root": "172702405816516791996779728912308790882282610188111072512380034048458433129",
     "proposalId": "0",
     "vote": "1",
     "pathElements": ["3370092681714607727019534888747304108045661953819543369463810453568040251648", "11117482755699627218224304590393929490559713427701237904426421590969988571596"],
     "pathIndices": ["0","0"]
-}
-```
+}`} language="json"/>
 
 Let's test if everything works correctly:
 
-```bash
-circom proveVote.circom --r1cs --wasm --sym --c
-node proveVote_js/generate_witness.js proveVote_js/proveVote.wasm input.json witness.wtns
-```
+`} language="cpp"/>circom proveVote.circom --r1cs --wasm --sym --c
+node proveVote_js/generate_witness.js proveVote_js/proveVote.wasm input.json witness.wtns`} language="bash"/>
 
 If there were no issues, nothing should be printed in the terminal.
 
@@ -276,27 +257,27 @@ If there were no issues, nothing should be printed in the terminal.
 
 With the following commands, we carry out the initial ceremony, also known as the trusted setup.
 
-```
-snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
+<ContentCopy code={`snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
 snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
 snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
 snarkjs groth16 setup proveVote.r1cs pot12_final.ptau proveVote_0000.zkey
 snarkjs zkey contribute proveVote_0000.zkey proveVote_0001.zkey --name="1st Contributor Name" -v
-snarkjs zkey export verificationkey proveVote_0001.zkey verification_key.json
-```
+snarkjs zkey export verificationkey proveVote_0001.zkey verification_key.json`} language="json"/>
 
 Next, we generate the verifier contract in Solidity.
 
-```bash
-snarkjs zkey export solidityverifier proveVote_0001.zkey verifier.sol
-```
+<ContentCopy code={`snarkjs zkey export solidityverifier proveVote_0001.zkey verifier.sol`} language="bash"/>
 
-Upon executing this command, a verifier contract will be generated in the file verifier.sol. Now deploy that contract on-chain.
+Upon executing this command, a verifier contract will be generated in the file verifier.sol. Now deploy that contract on-chain. For example you can use foundry to deploy it on Scroll Sepolia.
+
+```
+forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
+```
 
 Next, deploy the following contract on-chain, which contains the logic for voting and proof verification. Pass the address of the verifier contract we just deployed as a parameter in the constructor.
 
-```solidity
-// SPDX-License-Identifier: MIT
+`CircomVoter.sol`
+<ContentCopy code={`// SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0 <0.9.0;
 
@@ -348,18 +329,21 @@ contract CircomVoter {
         else if (vote == 2)
             proposals[proposalId].againstVotes += 1;
     }
-}
+}`} language="solidity"/>
+
+Now deploy it on-chain. If you're using forge on Scroll Sepolia you can do it with the following command.
+
+```
+forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS> CircomVoter.sol:CircomVoter
 ```
 
 Now, create the first proposal for voting by calling the propose() function. For example, you can test by creating a vote with "Should we eat pizza?" as the description and with 1811799232 as the deadline, which expires in 2027.
 
 Next, let's generate a proof in the format required to verify it in Remix.
 
-```bash
-snarkjs groth16 prove proveVote_0001.zkey witness.wtns proof.json public.json
+<ContentCopy code={`snarkjs groth16 prove proveVote_0001.zkey witness.wtns proof.json public.json
 snarkjs groth16 verify verification_key.json public.json proof.json
-snarkjs generatecall
-```
+snarkjs generatecall`} language="bash"/>
 
 Let's pass the result from the terminal as a parameter in Remix, and we'll see how the vote was executed by accessing the data of proposal 0 through the proposals mapping.
 
@@ -368,3 +352,9 @@ Let's pass the result from the terminal as a parameter in Remix, and we'll see h
 </div>
 
 We observe that our vote was counted without revealing who the sender was. Try to cast the same vote again, and you'll see that it won't be possible—the transaction will revert. This is because we nullified the vote so that each voter can only cast one vote.
+
+## Wrapping Up
+
+In this guide, we combined Circom and Solidity to develop a private voting system. We began by creating private keys using Poseidon, a ZK-friendly hashing function, and then moved on to constructing a Merkle tree for managing the set of eligible voters. Following that, we generated proofs and verified them in a Solidity contract. This approach ensures the validity of all votes by verifying them on-chain, while also providing voters with anonymity guarantees by keeping their identity private through ZK proofs.
+
+Please note that in this guide, we did everything via the CLI. UI architecture in ZK private applications is very important because we need to ensure that users' data is never exposed to the internet. We cover that in the [next article](https://www.levelup.xyz/content/privacy-interfaces-on-soldity-zk-wasm), where we use ZK proofs with WASM for fast proving.
