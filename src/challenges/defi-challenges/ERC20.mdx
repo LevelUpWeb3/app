@@ -8,12 +8,13 @@ heroImage: "/images/level-up-preview.png"
 labels: ["Defi"]
 ---
 
+import ContentCopy from "src/components/ContentCopy";
+
 # ERC20 Basics
 
 In this challenge, you will implement a basic ERC20 token contract that includes minting, burning, transferring, and approving functionalities. Follow the instructions provided in the comments to complete the contract.
 
-```solidity
-// SPDX-License-Identifier: MIT
+<ContentCopy code={`// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 import "./ERC20.sol";
@@ -50,8 +51,7 @@ contract MyToken is ERC20 {
     function transferFrom(address from, address to, uint256 amount) public override returns (bool) {
         // Implement the transferFrom function using the _transfer and _approve internal functions
     }
-}
-```
+}`} language="solidity"/>
 
 ### Instructions
 

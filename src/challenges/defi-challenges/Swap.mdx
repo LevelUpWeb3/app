@@ -8,12 +8,14 @@ heroImage: "/images/level-up-preview.png"
 labels: ["Defi"]
 ---
 
+import ContentCopy from "src/components/ContentCopy";
+
 # Swap
 
 In this challenge, you'll implement a basic Uniswap V2-based swapping contract.
 
-```solidity
-pragma solidity ^0.8.7;
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
 
 contract Swap {
     // Provide the Uniswap V2 router address and the WETH address
@@ -37,14 +39,15 @@ contract Swap {
 
         // Call the Uniswap router's swapExactTokensForTokens function to execute the swap
     }
-}
-```
+}`} language="solidity"/>
 
 ## Constant Product Formula
 
 The constant product formula is used to calculate how much token B will be received by a user who sends $a$ amount of token A:
 
-$$ a \cdot b = k $$
+$$ 
+a \cdot b = k 
+$$
 
 Here;
 
@@ -75,17 +78,13 @@ Let's say Alice wants to swap her 1 ETH to DAI.
 
 ## The Essence of the `swapExactTokensForTokens()`
 
-```solidity
-function swapExactTokensForTokens(
+<ContentCopy code={`function swapExactTokensForTokens(
   uint amountIn,
   uint amountOutMin,
   address[] calldata path,
   address to,
   uint deadline
-) external returns (uint[] memory amounts) {
-
-}
-```
+) external returns (uint[] memory amounts) {}`} language="solidity"/>
 
 Swaps an exact amount of input tokens for as many output tokens as possible, along the route determined by the path. The first element of path is the input token, the last is the output token, and any intermediate elements represent intermediate pairs to trade through (if, for example, a direct pair does not exist).
 
@@ -99,10 +98,14 @@ Swaps an exact amount of input tokens for as many output tokens as possible, alo
 1. As you'll use Uniswap V2 Router, you need to define the contract address of it.
 2. For non-WETH cases, you'll need to add an intermediary step into the swapping path, so you need to define WETH address too.
 3. Build the function:
-   a. Recall from the ERC20 mission that you need token approval.
-   b. Define the swapping path.
-   c. Specify the conditional for the case where no token is WETH.
-   d. Call `swapExactTokensForTokens()`.
+
+    a. Recall from the ERC20 mission that you need token approval.
+
+    b. Define the swapping path.
+
+    c. Specify the conditional for the case where no token is WETH.
+
+    d. Call `swapExactTokensForTokens()`.
 4. Define the needed interface for the router.
 5. Define the needed interface for WETH.
 
