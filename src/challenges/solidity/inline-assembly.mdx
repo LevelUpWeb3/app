@@ -1,0 +1,57 @@
+---
+name: Inline Assembly
+index: 26
+lesson: 26
+summary: Introduction to Inline Assembly in Solidity and its use for low-level control over the EVM
+labels: ["solidity"]
+---
+
+Inline Assembly in Solidity allows developers to write low-level code directly within Solidity contracts. It provides fine-grained control over the Ethereum Virtual Machine (EVM) and enables developers to perform operations that are not directly available through Solidity's high-level constructs. Inline Assembly is written using the `assembly` keyword followed by a block of assembly code.
+
+## Purpose of Inline Assembly
+
+Inline Assembly is primarily used for:
+
+- **Optimization**: To reduce gas costs by implementing more efficient low-level operations.
+- **Access to EVM Internals**: Direct access to low-level features and instructions that are not available in high-level Solidity.
+- **Compatibility**: Interacting with legacy smart contracts or performing operations not directly supported by Solidity.
+- 
+## Dangerous Aspects of Inline Assembly
+
+Inline Assembly is a powerful feature in Solidity, but it comes with certain risks and limitations:
+- **Complexity**: Assembly code is more complex and harder to read than high-level Solidity code.
+- **Security Risks**: Incorrectly written assembly code can lead to vulnerabilities and security risks.
+- **Portability**: Assembly code may not be portable across different EVM versions or compilers.
+
+## Example of Inline Assembly
+
+Here is an example illustrating the use of inline assembly in Solidity to perform arithmetic operations:
+
+```solidity
+pragma solidity ^0.8.26;
+
+contract AssemblyExample {
+    // Function to add two numbers using inline assembly
+    function add(uint256 a, uint256 b) public pure returns (uint256 result) {
+        assembly {
+            result := add(a, b)
+        }
+    }
+
+    // Function to save data to the contract storage using inline assembly
+    function setStorageData(uint256 slot, uint256 data) public {
+        assembly {
+            sstore(slot, data)
+        }
+    }
+
+    // Function to get stored data from the contract storage
+    // returns the value stored at the specified slot
+    function getStorageData(
+        uint256 slot
+    ) public view returns (uint256 data) {
+        assembly {
+            data := sload(slot)
+        }
+    }
+}
