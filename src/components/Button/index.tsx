@@ -208,29 +208,22 @@ const Button = (props: ScrollButtonProps) => {
         classes.wrapper,
         innerDisabled && classes.wrapperDisabled,
         loading && classes.wrapperLoading,
-        gloomy && classes.wrapperGloomy
+        gloomy && classes.wrapperGloomy,
       )}
       onHoverStart={handleHover}
       onHoverEnd={handleHover}
       animate={isHover ? "expanding" : "normal"}
     >
       {!loading && (
-        <IconButton
-          classes={{ root: classes.icon }}
-          component="span"
-          disabled
-        >
-          <SvgIcon
-            component={ArrowRightIcon}
-            inheritViewBox
-          ></SvgIcon>
+        <IconButton classes={{ root: classes.icon }} component="span" disabled>
+          <SvgIcon component={ArrowRightIcon} inheritViewBox></SvgIcon>
         </IconButton>
       )}
       <motion.div
         className={cx(
           classes.mask,
           loading && classes.maskLoading,
-          innerDisabled && classes.maskDisabled
+          innerDisabled && classes.maskDisabled,
         )}
         variants={isMobile ? maskMobile : maskDesktop}
       ></motion.div>
@@ -240,7 +233,7 @@ const Button = (props: ScrollButtonProps) => {
             classes.button,
             isHover && !gloomy && !innerDisabled && classes.active,
             loading && classes.buttonLoading,
-            innerDisabled && classes.buttonDisabled
+            innerDisabled && classes.buttonDisabled,
           ),
         }}
         disabled={innerDisabled || gloomy || loading}
