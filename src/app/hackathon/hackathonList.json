@@ -5,9 +5,9 @@
     "location": "Shibuya City, Tokyo",
     "url": "https://www.ethtokyo.com/",
     "image": "/images/hackathon/eth-tokyo.svg",
-    "buttonText": "Join now",
-    "buttonDisabled": "",
-    "status": ["All time", "Upcoming"],
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
     "region": ["All regions", "Asia Pacific"]
   },
   {

@@ -40,12 +40,5 @@
     "labels": ["Defi"],
     "author": "Raza",
     "url": "https://www.razacodes.com/blog/Guardian-Trading-without-Oracles"
-  },
-  {
-    "name": "ERC20",
-    "summary": "This guide will show what ERC20 tokens are and how they work",
-    "category": "Defi",
-    "author": "Furkan",
-    "url": "https://github.com/LevelUpWeb3/ERC20-Mission"
   }
 ]
