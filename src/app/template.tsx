@@ -19,7 +19,8 @@ export default function RootLayout({
 
   return (
     <>
-      {isLandingPagePath && <SiteTab />}
+      {/* TODO: Reveal SiteTab when announcement is needed
+      {isLandingPagePath && <SiteTab />} */}
       <Header></Header>
       {children}
     </>
