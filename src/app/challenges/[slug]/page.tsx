@@ -8,6 +8,8 @@ import ContentCopy from "@/components/ContentCopy";
 import * as React from "react";
 import Link from "next/link";
 import Button from "@/components/Button";
+import ChallengeButton from "@/components/ChallengeButton";
+import HelpAlert from "@/components/HelpAlert";
 import BackSvg from "@/assets/svgs/common/back.svg";
 import Head from "next/head";
 
@@ -127,8 +129,11 @@ export default function ChallengeDetailsPage() {
               {data?.content && <ChallengeDetails challengeData={data} />}
             </div>
           </div>
-          <div className="mt-[4.8rem] flex justify-between gap-5 self-start text-center text-xl font-semibold leading-9 max-md:mt-10">
-            <div>About</div>
+          <div className="mt-[4.8rem] flex items-center justify-between gap-5 text-xl font-semibold max-md:mt-10">
+            <div className="text-left">About</div>
+            <div className="text-right">
+              <HelpAlert />
+            </div>
           </div>
           <div className="z-10 mt-5 h-1 shrink-0 max-md:max-w-full" />
           <div className="mb-[4.8rem] h-px shrink-0 border border-solid border-stone-950 bg-stone-950 max-md:max-w-full" />
@@ -140,6 +145,7 @@ export default function ChallengeDetailsPage() {
               />
             )}
           </div>
+          <ChallengeButton />
         </div>
       </div>
     </>
