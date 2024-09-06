@@ -313,6 +313,3 @@ export const CODE_EXERCISES: CodeTemplatesType = {
       `// SPDX-License-Identifier: MIT\npragma solidity ^0.8.26;\n\ncontract InlineAssembly {\n\tuint256 public a = 255;\n\n\t// Task 1: Create a function named 'getSlot' that:\n\t// - Returns the storage slot of the uint variable 'a'\n\n}\n// tip: use the '.slot' attribute`,
   },
 };
-
-
-
