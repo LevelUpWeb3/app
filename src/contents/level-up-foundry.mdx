@@ -1,0 +1,456 @@
+---
+name: "Level Up: Building with Foundry"
+index: 3
+summary: Learn smart contract development with Foundry, a blazingly fast framework for building and deploying smart contracts!
+author: RH
+authorIcon: https://pbs.twimg.com/profile_images/1751242830398287872/8VKShh46.jpg
+authorLink: https://x.com/rh_bdl
+published: Sep 09, 2024
+readTime: 11 min read
+labels: ["Smart Contract"]
+---
+
+import ContentCopy from "src/components/ContentCopy";
+
+In Level Up, this Foundry module is designed to reduce friction by immediately equipping you with fundamental skills to develop smart contracts on Scroll Sepolia.
+
+In order to facilitate this process, we have curated a simplified structure to help you get started with Foundry on Scroll Sepolia.
+
+If you are feeling adventurous, jump into your code editor and follow along!
+
+## Introduction
+
+**What is Foundry?**
+
+Foundry is a blazingly fast, portable and modular toolkit for Ethereum application development written in Rust.
+
+**Why Foundry?**
+
+- Write all your code ONLY in Solidity (i.e. scripts, tests, all in Solidity!)!
+- Speedrun your developer journey without having to learn multiple languages.
+
+## How Foundry?
+
+Glad you asked 🔥.
+
+Let's dive right in!
+
+## [0]: Install Foundry
+
+Foundry is installed using Foundryup.
+
+<ContentCopy
+  code={`curl -L https://foundry.paradigm.xyz | bash`}
+  language="bash"
+/>
+
+Source your `.zshenv` file to ensure the path is updated.
+
+<ContentCopy code={`source /Users/your_username/.zshenv`} language="bash" />
+
+To verify the installation, run the following command:
+
+<ContentCopy
+  code={`forge --version
+// forge 0.x.x ...
+cast --version
+// cast 0.x.x ...`}
+  language="bash"
+/>
+
+Additional resource from Foundry Book specific to [installation](https://book.getfoundry.sh/getting-started/installation)
+
+## [1]: Create a Foundry Project
+
+Create a new project and navigate into it.
+
+<ContentCopy
+  code={`mkdir foundry-project
+cd foundry-project`}
+  language="bash"
+/>
+
+Run `forge init` in your terminal to create a new Foundry project.
+
+<ContentCopy code={`$foundry-project forge init`} language="bash" />
+
+## [2]: Compiling a Foundry Project
+
+In this example, we will use a simple EtherWallet example below:
+
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract EtherWallet {
+address payable public owner;
+
+    constructor() {
+        owner = payable(msg.sender);
+    }
+
+    receive() external payable {}
+
+    function withdraw(uint _amount) external {
+        require(msg.sender == owner, "caller is not owner");
+        payable(msg.sender).transfer(_amount);
+    }
+
+    function getBalance() external view returns (uint) {
+        return address(this).balance;
+    }
+
+}`} language="solidity"/>
+
+Rename `Contract.sol` in `src/Contract.sol` to `EtherWallet.sol`.
+
+Delete `src/test` folder. We will not be using it in this Speedrun lesson.
+
+Run `forge build` to compile the contract:
+
+<ContentCopy
+  code={`$foundry-project forge build
+`}
+  language="bash"
+/>
+
+Navigate to the `out` folder and you will see the compiled contract `EtherWallet.json`.
+
+## [3]: Deploying on anvil
+
+Anvil is a local testnet node shipped with Foundry.
+
+Run `anvil` in your terminal.
+
+<ContentCopy
+  code={`$foundry-project anvil
+`}
+  language="bash"
+/>
+
+This command spins up a local server hosted on http://localhost:8545 that runs the test network. (Server URL can vary depending on user environment)
+
+To deploy on anvil, run:
+
+<ContentCopy
+  code={`// $foundry-project forge create <NAME CONTRACT> --rpc-url <LOCALHOST> --interactive
+forge create EtherWallet --rpc-url http://localhost:8545 --interactive
+`}
+  language="bash"
+/>
+
+You will be prompted to enter your private key. Go into the anvil terminal, then copy any private key from the terminal.
+
+Paste it in the terminal where you are deploying the contract.
+
+<ContentCopy
+  code={`// $foundry-project forge create <NAME CONTRACT> --rpc-url <LOCALHOST> --interactive
+forge create EtherWallet --rpc-url http://localhost:8545 --interactive
+// paste anvil private key
+`}
+  language="bash"
+/>
+
+After running the command, you should see an output similar to this:
+
+<ContentCopy
+  code={`Deployer: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+Deployed to: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+Transaction hash: 0x4b1d82d3d33674496088b5e92e99494280ffcc1f27035269873a5ca04c432c93
+`}
+  language="bash"
+/>
+
+## [4]: Deploying with Script
+
+Foundry allows you to deploy smart contracts by running a script. Scripts are recognisable through the `s.sol` extension and stored in `/scripts` folder.
+
+This is what a script example named `DeployEtherWallet.s.sol` would look like:
+
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import { Script, console2 } from "forge-std/Script.sol";
+import { EtherWallet } from "../src/EtherWallet.sol";
+
+contract EtherWalletScript is Script {
+function run() external returns (EtherWallet) {
+vm.startBroadcast();
+
+       EtherWallet etherWallet = new EtherWallet();
+
+       vm.stopBroadcast();
+       return etherWallet;
+
+}
+}
+`} language="solidity"/>
+
+Use `anvil` to simulate onchain transactions.
+
+<ContentCopy
+  code={`$foundry-project forge script script/DeployEtherWallet.s.sol --rpc-url http://localhost:8545 --broadcast
+`}
+  language="bash"
+/>
+
+Forge simulates the script and `—broadcast` flag was added to broadcast the transaction.
+
+## [5]: Setting up Deployment Environment
+
+There are two ways to do this in Foundry. One is the traditional way of using a `.env` file and the other is by using Foundry tools. Patrick Collins did an amazing job explaining it [here](https://www.youtube.com/watch?v=VQe7cIpaE54)!
+
+We'll start off with explaining the awesome way using Foundry!
+
+### Using Foundry Tools
+
+Open your local machine terminal and run:
+
+<ContentCopy
+  code={`// cast wallet import <ACCOUNT_NAME> --interactive
+cast wallet import defaultKey --interactive
+`}
+  language="bash"
+/>
+
+You will be prompted to enter your private key and a password to secure `<ACCOUNT_NAME>`.
+
+REMINDER: We recommend to pass your private key and a password on your computer's terminal and NOT the code editor.
+
+For additional security measures:
+
+Leveled up security - Delete your history by running the following command:
+
+<ContentCopy
+  code={`history -c
+`}
+  language="bash"
+/>
+
+Godlike security - Run `rm <TERMINAL_HISTORY>` to delete your terminal history!
+
+<ContentCopy
+  code={`rm .bash_history
+// or rm .zsh_history if you use zsh shell
+`}
+  language="bash"
+/>
+
+Finally, run the command below to see the list of all accounts available:
+
+<ContentCopy
+  code={`cast wallet list
+`}
+  language="bash"
+/>
+
+### Using `.env` File
+
+Create a `.env` file in the root directory of your project.
+
+<ContentCopy
+  code={`$foundry-project touch .env
+`}
+  language="bash"
+/>
+
+File contents would look like this:
+
+<ContentCopy
+  code={`PRIVATE_KEY=0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+RPC_URL=http://localhost:8545
+`}
+  language="bash"
+/>
+
+Load `.env` file in foundry by running:
+
+<ContentCopy
+  code={`$foundry-project source .env
+`}
+  language="bash"
+/>
+
+To deploy a contract, you can now run:
+
+<ContentCopy
+  code={`$foundry-project forge script script/DeployEtherWallet.s.sol --rpc-url $RPC_URL --broadcast --private-key $PRIVATE_KEY
+`}
+  language="bash"
+/>
+
+REMINDER: You should **NEVER** place a private key or a secret phrase in a `.env` file that is associated with real funds! This is a HUGE security risk. (If you have not taken the .env pledge, do it [NOW](https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/5)!)
+
+## [6]: Deploy on Scroll Sepolia Network
+
+### Setting up Scroll Sepolia Network & Testnet Funds
+
+We're almost there to deployment!
+
+First let's add the Scroll network to your metamask.
+
+Head over to [Scroll Sepolia](https://sepolia.scroll.io/portal) and add Scroll Sepolia testnet to your wallet.
+
+Note: Check out this quick [video on X](https://twitter.com/BuildWithScroll/status/1714789104129581454) if you prefer adding Scroll Sepolia via [Chainlist](https://chainlist.org/chain/534351)
+
+Now that we've added the network to our MetaMask, [click here](https://t.me/+PdNbk5milo1mMTAy) to join Level Up Telegram group for Scroll Sepolia ETH or visit the faucet links in [Scroll's Faucet documentation](https://docs.scroll.io/en/user-guide/faucet/).
+
+If you run into issues with testnet eth, please let us know in the Level Up Telegram group.
+
+### Deploying to Scroll Sepolia
+
+Contract deployment uses `forge create` command.
+
+<ContentCopy
+  code={`$foundry-project forge create <CONTRACT_NAME> --rpc-url <NETWORK> --account <ACCOUNT_NAME>
+`}
+  language="bash"
+/>
+
+In this case, the command will look like this:
+
+<ContentCopy
+  code={`$foundry-project forge create EtherWallet --rpc-url https://sepolia-rpc.scroll.io/ --account defaultKey --broadcast
+// optional: add -vvv for verbose output (add v's as needed to increase verbosity)
+`}
+  language="bash"
+/>
+
+Enter your password and voila! Your contract is deployed on Scroll Sepolia!
+
+If you are updating the `RPC_URL` in `.env`, remember to run `source .env` to reload the environment variable changes.
+
+## [7]: Contract Verification
+
+Verifying your contract makes your contract readable on a block explorer like Etherscan or **[Scrollscan](https://sepolia.scrollscan.com/)**. This also provides a user interface for contract interaction.
+
+You will first need API keys to verify your contract via Foundry. Here's how to do this:
+
+1. Create an account at https://scrollscan.com/register
+2. Get API Keys from your account
+
+Here's an explainer [video](https://youtu.be/ks9Cj-lP1Tw?t=360) if you are stuck.
+
+Update your `.env` file to include two new variables:
+
+1. VERIFIER_URL
+2. SCROLLSCAN_API_KEY
+
+Reload the environment variables by running `source .env`.
+
+The command structure for verifying contract is as follows:
+
+<ContentCopy
+  code={`forge verify-contract <CONTRACT_ADDRESS> <CONTRACT_NAME>
+  --verifier-url <BLOCK_EXPLORER_URL> \
+  --etherscan-api-key <SCROLLSCAN_API_KEY> \
+  --constructor-args <CONSTRUCTOR_ARGUMENTS> //if any`}
+  language="bash"
+/>
+
+This is an example of my command with a random contract address:
+
+<ContentCopy
+  code={`forge verify-contract 0x998608B4f83249c4217ADb9060Fb739d4A52C6A2 EtherWallet
+  --verifier-url $VERIFIER_URL \
+  --etherscan-api-key $SCROLLSCAN_API_KEY \
+`}
+  language="bash"
+/>
+
+## [8]: Contract Interaction
+
+You can interact with your smart contract by using the `cast` command.
+
+Here is the general structure to using `cast`:
+
+<ContentCopy
+  code={`cast [options] <CONTRACT_FUNCTION> [args]
+`}
+  language="bash"
+/>
+
+While there are many [options](https://book.getfoundry.sh/reference/cast/cast?highlight=cast#cast) available to interact with contracts, we focus on the two common options: `call` and `send`.
+
+### `call`
+
+To retrieve data from the contract in the blockchain:
+
+<ContentCopy
+  code={`// Get the balance of the contract
+$foundry-project cast call 0x998608B4f83249c4217ADb9060Fb739d4A52C6A2 "getBalance()" --rpc-url $RPC_URL
+`}
+  language="bash"
+/>
+
+NOTE: Private key does not need to be passed in `call` command as it does not require any transaction to be sent.
+
+### `send`
+
+To execute function in the contract:
+
+<ContentCopy
+  code={`// Send 0.1 Ether to the contract
+$foundry-project cast send 0x998608B4f83249c4217ADb9060Fb739d4A52C6A2 --value 100000000000000000 --private-key $PRIVATE_KEY --rpc-url $RPC_URL
+`}
+  language="bash"
+/>
+
+<ContentCopy
+  code={`// Withdraw 0.000099999999999999 Ether
+$foundry-project cast send 0x998608B4f83249c4217ADb9060Fb739d4A52C6A2 "withdraw(uint)" 99999999999999990 --private-key $PRIVATE_KEY --rpc-url $RPC_URL
+`}
+  language="bash"
+/>
+
+## Foundry summary
+
+Congratulations! You made it to the end of speedrunning Foundry Smart Contract Development! 🎉
+
+We have learned that:
+
+- Foundry is a smart contract development toolchain that simplifies the smart contract development.
+- Comes with HUGEEE set of tools to compile, deploy, and interact with smart contracts.
+
+At Level Up, we have identified the five tools that you will commonly use in Foundry. These include:
+
+**1. Create a Foundry project**
+
+<ContentCopy
+  code={`forge init
+`}
+  language="bash"
+/>
+
+**2. Compiling**
+
+<ContentCopy
+  code={`forge build
+`}
+  language="bash"
+/>
+
+**3. Initializing a local blockchain on Foundry**
+
+<ContentCopy
+  code={`anvil
+`}
+  language="bash"
+/>
+
+**4. Contract Deployment**
+
+<ContentCopy
+  code={`forge create <CONTRACT_NAME> --rpc-url <NETWORK> --account <ACCOUNT_NAME>
+`}
+  language="bash"
+/>
+
+**5. Contract Interaction**
+
+<ContentCopy
+  code={`cast [options] <CONTRACT_FUNCTION> [args]
+`}
+  language="bash"
+/>
+
+Now that you have grasped Level Zero of Foundry, you are ready to dive into the world of smart contract development! 🚀
