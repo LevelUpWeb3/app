@@ -22,7 +22,7 @@ const ContentCopy: React.FC<{ code: string; language: string }> = ({
       className: `language-${language}`,
       children: code,
     })}
-    <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+    <div style={{ position: "absolute", top: "1px", right: "10px" }}>
       <CopyButton text={code} />
     </div>
   </div>
