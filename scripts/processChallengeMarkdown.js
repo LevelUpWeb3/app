@@ -2,10 +2,13 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 
-const markdownDirectory = path.join(process.cwd(), "src/challenges");
+const markdownDirectory = path.join(
+  process.cwd(),
+  "src/challenges/defi-challenges",
+);
 const outputDirectory = path.join(process.cwd(), "public/data/challenges");
 
-const processMarkdownFiles = async () => {
+const processChallengeMarkdownFiles = async () => {
   const fileNames = fs.readdirSync(markdownDirectory);
   const serialize = (await import("next-mdx-remote/serialize")).serialize;
 
@@ -21,6 +24,7 @@ const processMarkdownFiles = async () => {
       const mdxSource = await serialize(content, {
         mdxOptions: {
           development: "development" === process.env.NODE_ENV,
+          // development: true,
         },
       });
 
@@ -40,7 +44,7 @@ const processMarkdownFiles = async () => {
       }
       fs.writeFileSync(
         individualOutputPath,
-        JSON.stringify(challengeData, null, 2)
+        JSON.stringify(challengeData, null, 2),
       ); // Pretty print JSON
 
       return challengeData;
@@ -61,8 +65,8 @@ const processMarkdownFiles = async () => {
 
   fs.writeFileSync(
     path.join(outputDirectory, "markdownData.json"),
-    JSON.stringify(markdownData, null, 2)
+    JSON.stringify(markdownData, null, 2),
   ); // Pretty print JSON
 };
 
-processMarkdownFiles().catch(console.error);
+processChallengeMarkdownFiles().catch(console.error);

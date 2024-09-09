@@ -1,29 +1,29 @@
 const navigations = [
-  // TODO: Revive challenges when we have challenges
-  // {
-  //   label: "Challenges",
-  //   key: "challenges",
-  //   href: "/challenges",
-  // },
   {
     label: "Solidity",
     key: "solidity",
     href: "/solidity",
   },
   {
-    label: "Hackathon",
-    key: "hackathon",
-    href: "/hackathon",
-  },
-  {
     label: "Content",
     key: "content",
     href: "/content",
+  },
+  // TODO: Revive challenges when we have challenges
+  {
+    label: "Challenges",
+    key: "challenges",
+    href: "/challenges",
   },
   {
     label: "Podcast",
     key: "podcast",
     href: "/podcast",
+  },
+  {
+    label: "Hackathon",
+    key: "hackathon",
+    href: "/hackathon",
   },
   // TODO: Update route as needed if planning to embed inside Level Up
   {

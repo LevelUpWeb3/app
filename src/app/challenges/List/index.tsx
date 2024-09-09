@@ -27,7 +27,7 @@ const Grid = withStyles(Box, (theme) => ({
   root: {
     marginTop: "6.8rem",
     display: "grid",
-    gridTemplateColumns: "max-content 1fr max-content",
+    gridTemplateColumns: "200px 1fr max-content",
     gridTemplateRows: "max-content 1fr",
     rowGap: "3rem",
     columnGap: "7.2rem",
@@ -75,12 +75,14 @@ const Protocols = () => {
 
   useEffect(() => {
     const filteredData = data.filter((item) => {
-      return (
-        (item.labels.includes(searchParams.category) ||
-          searchParams.category === "All categories") &&
-        (`Level${item.level}` === searchParams.level ||
-          searchParams.level === "All levels")
-      );
+      const categoryMatch =
+        searchParams.category === "All categories" ||
+        item.labels.includes(searchParams.category);
+      const levelMatch =
+        searchParams.level === "All levels" ||
+        `Level ${item.level}` === searchParams.level;
+
+      return categoryMatch && levelMatch;
     });
     setFilteredData(filteredData);
   }, [searchParams, data]);
@@ -114,12 +116,15 @@ const Protocols = () => {
             value={searchParams.level}
             onChange={handleChangeLevel}
           ></LevelSelect>
-          {/* <ComingSoon /> */}
-          <CardBox>
-            {filteredData.map((item, index) => (
-              <Card content={item} key={index} />
-            ))}
-          </CardBox>
+          {filteredData.length === 0 ? (
+            <ComingSoon />
+          ) : (
+            <CardBox>
+              {filteredData.map((item, index) => (
+                <Card content={item} key={index} />
+              ))}
+            </CardBox>
+          )}
         </Box>
       </Grid>
     </Container>

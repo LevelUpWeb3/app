@@ -1,6 +1,6 @@
 import { Box, Typography, styled } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { sendGAEvent } from '@next/third-parties/google'
+import { sendGAEvent } from "@next/third-parties/google";
 
 const CardArticle = styled("article")(() => ({
   padding: "2.4rem",
@@ -31,7 +31,7 @@ const Summary = styled(Typography)(() => ({
 
 const LabelContainer = styled("div")(() => ({
   display: "flex",
-  gap: "2rem",
+  gap: "1rem",
   marginTop: "1.6rem",
 }));
 
@@ -53,7 +53,7 @@ const Card = ({ content, key }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    sendGAEvent('event', 'contentClicked', { value: `${content.name}` })
+    sendGAEvent("event", "contentClicked", { value: `${content.name}` });
     if (content.url) {
       window.open(content.url);
     } else {
@@ -62,10 +62,7 @@ const Card = ({ content, key }) => {
   };
 
   return (
-    <CardArticle
-      key={key}
-      onClick={handleClick}
-    >
+    <CardArticle key={key} onClick={handleClick}>
       <Box>
         <Title> {content.name} </Title>
         <Summary> {content.summary} </Summary>
