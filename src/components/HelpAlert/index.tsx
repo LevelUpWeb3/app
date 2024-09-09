@@ -1,5 +1,5 @@
 import React from "react";
-import { SvgIcon, Box, Typography, Alert, Tooltip } from "@mui/material";
+import { Alert, Tooltip } from "@mui/material";
 import { styled } from "@mui/system";
 import { Telegram } from "@mui/icons-material";
 
