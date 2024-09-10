@@ -97,7 +97,7 @@ export default function ContentDetailsPage() {
                       ContentCopy,
                     }}
                   />
-                  <ContentFooter />
+                  <ContentFooter currentContentIndex={data.index} />
                 </>
               ) : null}
             </div>

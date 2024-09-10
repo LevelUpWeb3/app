@@ -6,9 +6,8 @@ const ComingSoon = () => {
       <div className="max-md:h-[19.5rem]justify-center relative h-[5rem] w-[11rem] self-center max-md:w-[24rem]">
         <Image
           src="/images/coming-soon.png"
-          className="mx-auto ml-2"
+          className="mx-auto ml-2 object-contain"
           fill
-          objectFit="contain"
         />
       </div>
 

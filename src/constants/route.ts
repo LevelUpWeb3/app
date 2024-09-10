@@ -17,15 +17,6 @@ const routes: PageMetadata[] = [
     name: "Native zkEVM Layer 2 for Ethereum",
     path: "/",
   },
-  // TODO: Revive this route when we have challenges
-  // {
-  //   name: "Challenges",
-  //   path: "/challenges",
-  // },
-  // {
-  //   name: "Challenge Detail",
-  //   path: "/challenges/:Id",
-  // },
   {
     name: "Solidity",
     path: "/solidity",
@@ -33,6 +24,15 @@ const routes: PageMetadata[] = [
   {
     name: "Solidity Challenges",
     path: "/solidity/:Slug",
+  },
+  // TODO: Revive this route when we have challenges
+  {
+    name: "Challenges",
+    path: "/challenges",
+  },
+  {
+    name: "Challenge Detail",
+    path: "/challenges/:Id",
   },
   {
     name: "Hackathon",
