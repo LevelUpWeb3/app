@@ -15,6 +15,7 @@ import Category from "./Category";
 
 interface DataItem {
   labels: string[];
+  index: number;
 }
 
 const Grid = withStyles(Box, (theme) => ({
@@ -93,9 +94,11 @@ const List = () => {
         ></Category>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CardBox>
-            {filteredData.map((item, index) => (
-              <Card content={item} key={index} />
-            ))}
+            {filteredData
+              .sort((a, b) => b.index - a.index)
+              .map((item, index) => (
+                <Card content={item} key={index} />
+              ))}
           </CardBox>
         </Box>
       </Grid>
