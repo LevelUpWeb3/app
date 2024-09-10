@@ -59,7 +59,7 @@
   {
     "id": "private-smart-contracts-with-solidity-and-circom",
     "name": "Private Smart Contracts with Solidity & Circom",
-    "index": 3,
+    "index": 4,
     "summary": "Get started with developing privacy applications by combining Circuits and Smart Contracts.",
     "author": "FilosofiaCodigo",
     "authorIcon": "https://avatars.githubusercontent.com/u/707484?s=96&v=4",
@@ -78,7 +78,7 @@
   {
     "id": "privacy-interfaces-on-soldity-zk-wasm",
     "name": "Privacy Interfaces on Solidity & zk-WASM",
-    "index": 4,
+    "index": 5,
     "summary": "Keep users' data safe by generating proofs in the browser, on Javascript.",
     "author": "FilosofiaCodigo",
     "authorIcon": "https://avatars.githubusercontent.com/u/707484?s=96&v=4",
@@ -97,7 +97,7 @@
   {
     "id": "huracan",
     "name": "🌀Huracan",
-    "index": 5,
+    "index": 6,
     "summary": "Learn ZK by Deploying a Battle Tested Project.",
     "author": "FilosofiaCodigo",
     "authorIcon": "https://avatars.githubusercontent.com/u/707484?s=96&v=4",

@@ -21,7 +21,7 @@ export const CHALLENGE_LEVEL_LIST = [
 ];
 export const CHALLENGE_CATEGORY_LIST = [
   "All categories",
-  "Defi",
+  "DeFi",
   "NFT",
   // "Gaming",
 ];
@@ -29,12 +29,12 @@ export const CONTENT_CATEGORY_LIST = [
   "All categories",
   "ZK",
   "Smart Contract",
-  "Defi",
+  "DeFi",
   "Attestation",
 ];
 export const PODCAST_CATEGORY_LIST = [
   "All categories",
-  "Defi",
+  "DeFi",
   "NFT",
   "Gaming",
 ];
