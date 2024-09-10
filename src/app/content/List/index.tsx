@@ -75,7 +75,7 @@ const List = () => {
       if (value === CONTENT_CATEGORY_LIST[0]) {
         return true;
       }
-      return item.labels[0] === value;
+      return item.labels.includes(value);
     });
     setFilteredData(filteredData);
     setSearchParams((pre) => ({
