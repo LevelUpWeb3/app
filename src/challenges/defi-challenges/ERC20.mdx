@@ -1,0 +1,88 @@
+---
+name: ERC20 Basics
+index: 1
+level: 1
+website: "https://github.com/LevelUpWeb3/ERC20-Challenge"
+summary: Introduction to implementing a basic ERC20 token with minting, burning, transferring, and approving functionalities.
+heroImage: "/images/level-up-preview.png"
+labels: ["DeFi"]
+---
+
+import ContentCopy from "src/components/ContentCopy";
+
+# ERC20 Basics
+
+If you haven't completed the Simple Token Swap challenge yet, check it out [here](https://www.levelup.xyz/challenges/simple-token-swap)! 
+
+Most of you are probably familiar with tokens like WETH, USDT, USDC, and many others. Did you know that all of these tokens are designed by following the ERC20 standard?
+
+In this challenge, you will implement a basic ERC20 token contract that includes minting, burning, transferring, and approving functionalities.
+
+## Objective
+
+Your task is to:
+1. Develop your own ERC20 token.
+2. Deploy it to Scroll Sepolia Testnet.
+3. And finally verify it.
+ 
+If you need help with using a smart contract framework for completing this challenge, the [Level Up: Build with Foundry](https://www.levelup.xyz/content/level-up-foundry) guide might be a helpful start!
+
+If you get stuck, feel free to ask for help in [Level Up Telegram group](https://t.me/+PdNbk5milo1mMTAy).
+
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+// Define your ERC20 token contract
+contract MyToken is ERC20 {
+    // Define the global variables for balances, total supply, name, and symbol below
+
+    // Constructor that mints the initial supply to the deployer of the contract
+    constructor(uint256 initialSupply) ERC20("MyToken", "MTK") {
+        // Mint the initial supply of tokens to the deployer's address
+    }
+
+    // Function to mint new tokens to a specified address
+    function mint(address to, uint256 amount) public {
+        // Implement the mint function using the _mint internal function
+    }
+
+    // Function to burn tokens from a specified address
+    function burn(address from, uint256 amount) public {
+        // Implement the burn function using the _burn internal function
+    }
+
+    // Function to transfer tokens from the caller's address to a specified address
+    function transfer(address to, uint256 amount) public override returns (bool) {
+        // Implement the transfer function using the _transfer internal function
+    }
+
+    // Function to approve an address to spend a certain amount of tokens on behalf of the caller
+    function approve(address spender, uint256 amount) public override returns (bool) {
+        // Implement the approve function using the _approve internal function
+    }
+
+    // Function to transfer tokens from one address to another using an allowance
+    function transferFrom(address from, address to, uint256 amount) public override returns (bool) {
+        // Implement the transferFrom function using the _transfer and _approve internal functions
+    }
+
+    function getBalanceOf(address account) public view returns (uint256) {
+        // Implement the getBalanceOf function
+    }
+}`} language="solidity"/>
+
+## Instructions
+
+1. **Constructor:** The constructor should initialize the ERC20 token by minting the `initialSupply` to the deployer's address. Use the `_mint` function provided by the ERC20 contract.
+
+2. **Mint Function:** Implement the `mint` function, which should allow you to create new tokens and assign them to a specific address. This function should call the `_mint` function provided by the ERC20 contract.
+
+3. **Burn Function:** Implement the `burn` function, which should allow you to destroy tokens from a specific address, reducing the total supply. Use the `_burn` function provided by the ERC20 contract.
+
+4. **Transfer Function:** Implement the `transfer` function to allow the caller to send tokens to another address. Override the `transfer` function and use the `_transfer` function from the ERC20 contract.
+
+5. **Approve Function:** Implement the `approve` function, allowing the caller to authorize another address to spend a certain amount of tokens on their behalf. Override the `approve` function and use the `_approve` function from the ERC20 contract.
+
+6. **TransferFrom Function:** Implement the `transferFrom` function to allow a spender to transfer tokens from one address to another, using an allowance set by the `approve` function. Override the `transferFrom` function and use the `_transfer` and `_approve` functions to implement this functionality.

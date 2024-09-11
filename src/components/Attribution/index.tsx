@@ -36,7 +36,7 @@ const AttributionComponent: React.FC<AttributionProps> = ({
             rel="noopener noreferrer"
             style={{ color: "black", fontWeight: "bold" }}
           >
-            RH
+            {author}
           </Link>
           <span
             style={{ display: "block", color: "#6A6A6A", fontSize: "13px" }}

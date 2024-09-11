@@ -18,25 +18,23 @@ export const CHALLENGE_LEVEL_LIST = [
   "Level 1",
   "Level 2",
   "Level 3",
-  "Level 4",
-  "Level 5",
 ];
 export const CHALLENGE_CATEGORY_LIST = [
   "All categories",
-  "Defi",
+  "DeFi",
   "NFT",
-  "Gaming",
+  // "Gaming",
 ];
 export const CONTENT_CATEGORY_LIST = [
   "All categories",
   "ZK",
   "Smart Contract",
-  "Defi",
+  "DeFi",
   "Attestation",
 ];
 export const PODCAST_CATEGORY_LIST = [
   "All categories",
-  "Defi",
+  "DeFi",
   "NFT",
   "Gaming",
 ];

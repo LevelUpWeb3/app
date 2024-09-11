@@ -15,6 +15,7 @@ import Category from "./Category";
 
 interface DataItem {
   labels: string[];
+  index: number;
 }
 
 const Grid = withStyles(Box, (theme) => ({
@@ -74,7 +75,7 @@ const List = () => {
       if (value === CONTENT_CATEGORY_LIST[0]) {
         return true;
       }
-      return item.labels[0] === value;
+      return item.labels.includes(value);
     });
     setFilteredData(filteredData);
     setSearchParams((pre) => ({
@@ -93,9 +94,11 @@ const List = () => {
         ></Category>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CardBox>
-            {filteredData.map((item, index) => (
-              <Card content={item} key={index} />
-            ))}
+            {filteredData
+              .sort((a, b) => b.index - a.index)
+              .map((item, index) => (
+                <Card content={item} key={index} />
+              ))}
           </CardBox>
         </Box>
       </Grid>

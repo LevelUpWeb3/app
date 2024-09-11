@@ -1,0 +1,144 @@
+---
+name: Simple Token Swap
+index: 2
+level: 2
+website: "https://github.com/LevelUpWeb3/SimpleTokenSwap-Challenge"
+summary: Introduction to implementing a simple token swap contract by understanding Uniswap swap function.
+heroImage: "/images/level-up-preview.png"
+labels: ["DeFi"]
+---
+
+import ContentCopy from "src/components/ContentCopy";
+
+# Simple Token Swap
+
+If you haven't completed the ERC20 basic challenge yet, check it out [here](https://www.levelup.xyz/challenges/ERC20)! 
+
+You have now grasped the functionality of ERC20 tokens. Ever wondered how you can use these tokens to swap to another token for decentralized finance use cases (i.e WETH to USDC)?
+
+In this challenge, you will implement a simple Uniswap token swap contract.
+
+## Objective
+
+Your task is to:
+1. Develop your own contract with Swap functionality.
+2. Deploy it to Scroll Sepolia Testnet.
+3. And finally verify it.
+ 
+If you need help with using a smart contract framework for completing this challenge, the [Level Up: Build with Foundry](https://www.levelup.xyz/content/level-up-foundry) guide might be a helpful start!
+
+If you get stuck, feel free to ask for help in [Level Up Telegram group](https://t.me/+PdNbk5milo1mMTAy).
+
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+// Implement Uniswap swap interface
+// Implement library to help with token transfers
+
+contract SimpleTokenSwap {
+// Define the Uniswap Router address and the WETH address variable
+
+    // Define the constructor
+    constructor(...) {
+        // Initialize the addresses
+    }
+
+    // Create a swap function that takes input and output token addresses,
+    // the input amount, the minimum output amount, and the recipient's address
+    function swap(
+        ...
+    ) external {
+        // Transfer the input tokens from the sender to the contract
+
+        // Approve the Uniswap router to spend the input tokens
+
+        // Define the exact input swapping path to swap maximum amount of receiving token
+
+        // Call the Uniswap router's exactInputSingle function to execute the swap
+    }
+}`} language="solidity"/>
+
+## Constant Product Formula
+
+The constant product formula is used to calculate how much token B will be received by a user who sends _a_ amount of token A:
+
+```latex
+a · b = k
+```
+
+Here;
+
+- _a_ denotes the amount of token A,
+- _b_ denotes the amount of token B, and
+- _k_ is a constant (always).
+
+### How does it work?
+
+Let's say Alice wants to swap her 1 ETH to DAI.
+
+1. Alice goes to ETH/DAI pool.
+
+- For the sake of simplicity, let us assume there are 10 ETH and 25,000 DAI in the pool. Therefore
+```latex
+  k = (10) × (25,000) = (250,000)
+```
+
+2. Alice sends her 1 ETH to the pool.
+
+- Now, the pool has 11 ETH and 25,000 DAI.
+- The pool sends such amount of DAI to Alice that _k_ remains constant.
+```latex  
+  (11) × (25,000 - amountDAI) = 250,000
+  amountDAI = 2,272.73
+```
+
+3. Alice receives 2,272.73 DAI for 1 ETH she had.
+
+- Now the pool has 11 ETH and 22,727.27 DAI.
+- If you multiply these two numbers, you get the same _k=250,000_.
+
+## The Essence of the `exactInputSingle()`
+
+<ContentCopy
+  code={`ISwapRouter.ExactInputSingleParams memory params =
+ISwapRouter.ExactInputSingleParams({
+    tokenIn: ABC,
+    tokenOut: WETH
+    fee: poolFee,
+    recipient: msg.sender,
+    deadline: block.timestamp,
+    amountIn: amountIn,
+    amountOutMinimum: 0,
+    sqrtPriceLimitX96: 0
+});
+
+// The call to exactInputSingle executes the swap.
+amountOut = swapRouter.exactInputSingle(params);`} language="solidity"
+/>
+
+Swaps an exact amount of input tokens for as many output tokens as possible. The first element of path is the input token (ABC), the last is the output token (WETH).
+
+## Key Point
+
+- As you will use an external function from Uniswap Router, you need to know what kind of new types are needed to implement. Understanding the structs for the respective swap function is crucial.
+
+## Build the Contract
+
+1. As you'll use Uniswap Router, you need to define the contract address of it.
+2. Implement the Uniswap swap interface.
+3. Implement a library to help with token transfers.
+4. Build the function:
+
+   a. Transfer input tokens from sender to this contract.
+   
+   b. Recall from the ERC20 mission that you need token approval.
+
+   c. Define the exact input swapping path to swap maximum amount of receiving token.
+
+   d. Call `exactInputSingle()` to execute the swap
+
+
+## Further Reading
+
+1. [A Comprehensive Deep Dive to AMMs](https://medium.com/@arbnom/navigating-the-defi-landscape-a-comprehensive-deep-dive-to-amms-954020ec23b)
+2. [Overview of Uniswap](https://docs.uniswap.org/contracts/v4/overview)

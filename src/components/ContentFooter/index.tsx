@@ -10,6 +10,11 @@ import Data from "../../app/content/content.json";
 
 interface DataItem {
   labels: string[];
+  index: number;
+}
+
+interface ContentFooterProps {
+  currentContentIndex: number;
 }
 
 const CardBox = styled(Box)(() => ({
@@ -29,7 +34,9 @@ const shuffleArray = (array: any[]) => {
   }
   return array;
 };
-const ContentFooter = () => {
+const ContentFooter: React.FC<ContentFooterProps> = ({
+  currentContentIndex,
+}) => {
   const [combinedData, setCombinedData] = useState<DataItem[]>([]);
   const [filteredData, setFilteredData] = useState<DataItem[]>([]);
 
@@ -38,10 +45,13 @@ const ContentFooter = () => {
       .then((res) => res.json())
       .then((markdownData) => {
         const combined = [...Data, ...markdownData];
-        setCombinedData(combined);
-        setFilteredData(shuffleArray(combined));
+        const filtered = combined.filter(
+          (item) => item.index !== currentContentIndex,
+        );
+        setCombinedData(filtered);
+        setFilteredData(shuffleArray(filtered));
       });
-  }, []);
+  }, [currentContentIndex]);
 
   return (
     <div className="max-h-96">
