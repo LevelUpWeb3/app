@@ -1,0 +1,350 @@
+---
+name: "L1SLOAD guide: Read the L1 state from L2"
+index: 7
+summary: This precompile unlocks the Keystore and more, learn how to use it with examples.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Sep 04, 2024
+readTime: 15 min read
+labels: ["Protocol"]
+---
+
+Seamless cross-chain account abstraction features will be possible thanks to the [Keystore](https://notes.ethereum.org/@vbuterin/minimal_keystore_rollup). Were users will be able to control multiple smart contract accounts, on multiple chains, with a single key. This will bring rollups closer and provide the so long waited good UX for end users in a [rollup centric Ethereum](https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698).
+
+In order to make this happen, we need to be able to read the L1 data from L2 rollups which is currently a very expensive process. That's why Scroll [introduced](https://scroll.io/blog/towards-the-wallet-endgame-with-keystore) the `L1SLOAD` precompile that is able to read the L1 State fast and cheap. Safe wallet is already creating [a proof of concept](https://github.com/5afe/safe-scroll-keystore) [introduced at Safecon Berlin 2024](https://www.youtube.com/watch?v=hHmOo7A3vNU) of this work and I think this is just the begining: DeFi, gamming, social and many more types of corss-chain applications are possible with this.
+
+Let's now learn, with examples, the basics of this new primitive that is set to open the door to a new way of interacting with Ethereum.
+
+## 1. Connect your wallet to the devnet
+
+Currently, `L1SLOAD` is available only on the Scroll Devnet. Please don't confuse it with the Scroll Sepolia Testnet. Although both are deployed on top of Sepolia Testnet, they are separate chains.
+
+Let's start by connecting our wallet to Scroll Devnet:
+
+* Name: `Scroll Devnet`
+* RPC: `https://l1sload-rpc.scroll.io`
+* Chain id: `2227728`
+* Symbol: `Sepolia ETH`
+* Explorer: `https://l1sload-blockscout.scroll.io`
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4myzwxva7wdp6j2vskcl.png"
+    alt="staticcall example"
+    width="750"
+  />
+  _Connect to Scroll Devnet_
+</div>
+
+## 2. Get some funds on the L2 devnet
+
+There are two methods for obtaining funds on the Scroll Devnet. Choose whichever option you prefer.
+
+<details>
+<summary>Telegram faucet bot (recommended)</summary>
+
+Join [this telegram group](https://t.me/scroll_l1sload_devnet_bot) and type `/drop YOURADDRESS` (e.g. `/drop 0xd8da6bf26964af9d7eed9e03e53415d37aa96045`) to receive funds directly to your account.
+
+</details>
+
+<details>
+<summary>Sepolia Bridge</summary>
+
+You can bridge Sepolia ETH from Sepolia Testnet to Sepolia Devnet through the Scroll Messenger. There are different ways of achieving this but in this case we're going to use Remix.
+
+Let's start by connecting your wallet with Sepolia ETH to Sepolia Testnet. Remember you can get some Sepolia ETH for free [from a faucet](https://sepoliafaucet.com/).
+
+Now compile the following interface.
+
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity >=0.7.0 <0.9.0;
+
+interface ScrollMessanger {
+    function sendMessage(address to, uint value, bytes memory message, uint gasLimit) external payable;
+}`} language="solidity"/>
+
+Next, on the Deploy & Run tab connect the following contract address: `0x9810147b43D7Fa7B9a480c8867906391744071b3`.
+
+
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/opjs8r2ojy7epjmijjbw.png"
+    alt="staticcall example"
+    width="500"
+  />
+  _Connect Scroll Messenger Interface on Remix_
+</div>
+
+You can now send ETH by calling the `sendMessage` function. As explained below:
+
+* to: Your EOA wallet address. The the ETH recipient on L2
+* value: The amount you wish to receive on L2 in wei. For example, if you want to send `0.01` ETH you should pass `10000000000000000`
+* message: Leave this empty, just pass `0x00`
+* gasLimit: `1000000` should be fine
+
+Also remember to pass some value to your transaction. And add some extra ETH to pay for fees on L2, `0.001` should be more than enough. So if for example you sent `0.01` ETH on the bridge, send a transaction with `0.011` ETH to cover the fees.
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/zwkdvhyt23j4k9i2x8e4.png"
+    alt="staticcall example"
+    width="500"
+  />
+  _Send ETH from Sepolia to Scroll Devnet_
+</div>
+
+Click the transact button and your funds should be available in around 15 mins.
+
+</details>
+
+## 2. Deploy a contract on L1
+
+As mentioned earlier, `L1SLOAD` reads L1 contract state from L2. Let's deploy a simple L1 contract with a `number` variable and later access it from L2.
+
+<ContentCopy code={`// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.20;
+
+// Dummy contract we'll deploy on L1 and then read the state from L2
+contract L1Storage {
+
+    // This is the first variable declared on this contract so it will be stored at the slot 0
+    uint256 public number;
+
+    // Stores a variable
+    function store(uint256 num) public {
+        number = num;
+    }
+
+    // Returns the number stored, keep in mind we won't call this function from L2 since we'll read the slot directly
+    function retrieve() public view returns (uint256){
+        return number;
+    }
+}`} language="solidity"/>
+
+Now call the `store(uint256 num)` function and pass a new value. For example let's pass `42`.
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0oecx64a2vthd8mjsx5l.png"
+    alt="staticcall example"
+    width="500"
+  />
+  _Store a value on L1_
+</div>
+
+## 3. Retrieve a Slot from L2
+
+Now let's deploy the following contract on L2 by passing the L1 contract address we just deployed as constructor param. 
+
+<ContentCopy code={`// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.20;
+
+interface IL1Blocks {
+    function latestBlockNumber() external view returns (uint256);
+}
+
+contract L2Storage {
+    // This precompile returns the latest block accesible by L2, it is not mandatory to use this precompile but it can help to keep track of the L2 progress
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    // This is the L1SLOAD precompile address
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+    // The number varaiable is stored at the slot 0
+    uint256 constant NUMBER_SLOT = 0;
+    address immutable l1StorageAddr;
+
+    // The constructor recieves the contract we just deployed on L1
+    constructor(address _l1Storage) {
+        l1StorageAddr = _l1Storage;
+    }
+
+    // Again, this function is for reference only. It returns the latest L1 block number red by L2
+    function latestL1BlockNumber() public view returns (uint256) {
+        uint256 l1BlockNum = IL1Blocks(L1_BLOCKS_ADDRESS).latestBlockNumber();
+        return l1BlockNum;
+    }
+
+    // Returns the number red from L1
+    function retrieveFromL1() public view returns(uint) {
+        // The precompile expects the contract address number and an array of slots. In this case we only query one, the slot 0
+        bytes memory input = abi.encodePacked(l1StorageAddr, NUMBER_SLOT);
+        bool success;
+        bytes memory ret;
+        // We can access any piece of state of L1 through a staticcall, this makes it simple and cheap 
+        (success, ret) = L1_SLOAD_ADDRESS.staticcall(input);
+        if (!success) {
+            revert("L1SLOAD failed");
+        }
+        return abi.decode(ret, (uint256));
+    }
+}`} language="solidity"/>
+
+Notice this contract first calls `latestL1BlockNumber()` to get the latest L1 block that L2 has visibility on. And then calls `L1SLOAD` (opcode `0x101`) by passing the L1 contract address and the slot 0 where the `uint number` is stored.
+
+Now we can call `retrieveFromL1()` to get the value we previously stored.
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/p92y2kkjb9ecvtcv32re.png"
+    alt="staticcall example"
+    width="500"
+  />
+  _L2SLOAD L1 State red from L2_
+</div>
+
+## Example #2: Reading other variable types
+
+Luckily for us, Solidity stores the slots in the same order as they were declared. For example, in the following contract  `account` will be stored on slot #0, `number` slot #1 and `text` on slot #2.
+
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity >=0.7.0 <0.9.0;
+
+// This time we will query multiple slots with diverse data types
+contract AdvancedL1Storage {
+    address public account = msg.sender;
+    uint public number = 42;
+    string public str = "Hello world!";
+}`} language="solidity"/>
+
+So, you can notice on the following example how you can query the different slots and decode accordingly to uint256, address, etc... The only different native type that needs special decoding is the `string` type.
+
+<ContentCopy code={`// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.20;
+
+// This contract queries multiple slots in one call
+contract L2Storage {
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+    address immutable l1ContractAddress;
+
+    constructor(address _l1ContractAddress) {
+        l1ContractAddress = _l1ContractAddress;
+    }
+
+    // String will need to be decoded to be returned as a typical solidity string
+    function bytes32ToString(bytes32 _bytes32) public pure returns (string memory) {
+        bytes memory bytesArray = new bytes(32);
+        for (uint256 i; i < 32; i++) {
+            if(_bytes32[i] == 0x00)
+                break;
+            bytesArray[i] = _bytes32[i];
+        }
+        return string(bytesArray);
+    }
+
+    // In a single function, many slots can be retrieved
+    function retrieveAll() public view returns(address, uint, string memory) {
+        bool success;
+        bytes memory data;
+        // This time we will query slot 0 (account), slot 1 (number) and slot 2 (str)
+        uint[] memory l1Slots = new uint[](3);
+        l1Slots[0] = 0;
+        l1Slots[1] = 1;
+        l1Slots[2] = 2;
+        (success, data) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(l1ContractAddress, l1Slots));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+
+        // We will store them in typical solidity variables
+        address l1Account;
+        uint l1Number;
+        bytes32 l1Str;
+
+        // In order to read types with a size different than 32 bytes we will need a little bit of assembly
+        // But fear not! The code is not as difficult as it sounds
+        assembly {
+            let temp := 0x20
+            // Load the data into memory
+            let ptr := add(data, 32) // Start at the beginning of data skipping the length field
+
+            // Store the first slot from L1 into the account variable
+            mstore(temp, mload(ptr))
+            l1Account := mload(temp)
+            ptr := add(ptr, 32)
+
+            // Store the second slot from L1 into the number variable
+            mstore(temp, mload(ptr))
+            l1Number := mload(temp)
+            ptr := add(ptr, 32)
+
+            // Store the third slot from L1 into the str variable
+            mstore(temp, mload(ptr))
+            l1Str := mload(temp)
+        }
+        return (l1Account, l1Number, bytes32ToString(l1Str));
+    }
+}`} language="solidity"/>
+
+## Example #3: Reading ERC20 token balance from L1
+
+Let's start by deploying the following very simple ERC20 token.
+
+<ContentCopy code={`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+// In our final example, we'll read the balance of any ERC20 holder on L1
+// Please note that we will be using OpenZeppelin's implementation which puts the balance mapping on slot 0, is is not enforced by the ERC20 standard
+contract SimpleToken is ERC20 {
+    constructor() ERC20("Simple Token", "STKN") {
+        _mint(msg.sender, 21_000_000 ether);
+    }
+}`} language="solidity"/>
+
+Next, we can deploy the following contract on L2 by passing the L1 token address as parameter.
+
+<ContentCopy code={`// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.20;
+
+interface IL1Blocks {
+    function latestBlockNumber() external view returns (uint256);
+}
+
+// This contract reads the balance of any holder on L1
+contract L2Storage {
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+    address immutable l1TokenAddress;
+
+    constructor(address _l1TokenAddress) {
+        l1TokenAddress = _l1TokenAddress;
+    }
+
+    // For simplicity, I divided the retrieve function in two, this one just returns a specific slot just as we did it in previous examples
+    function retrieveSlotFromL1(address l1StorageAddress, uint slot) internal view returns (bytes memory) {
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(l1StorageAddress, slot));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+        return returnValue;
+    }
+
+    // We use Solidity's formula to calculate the position of the slot that holds the balance.
+    // The formula by which solidity will interpret our mapping is: balanceSlotPosition = keccak256(holderAddress, slotNumber)
+    function retrieveL1Balance(address account) public view returns(uint) {
+        uint slotNumber = 0;
+        return abi.decode(retrieveSlotFromL1(
+            l1TokenAddress,
+            uint(keccak256(
+                abi.encodePacked(uint(uint160(account)),slotNumber)
+                )
+            )
+            ), (uint));
+    }
+}`} language="solidity"/>
+
+OpenZeppelin contracts conveniently places [the balances mapping on Slot 0](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol#L30). So you can call `retrieveL1Balance()` by passing the account address as paramater and the token balance will be stored on the `l1Balance` variable. As you can see on the code, it works by converting the account to `uint160` and then hashing it with the mapping slot which is 0. This is because that's the way the Solidity implemented mappings.
+
+## Next steps
+
+The `l1sload` precompile is currently under public scrutiny before its testnet deployment. Consider sharing your thoughts on the [Ethereum Magicians Forum](https://ethereum-magicians.org/t/rip-7728-l1sload-precompile/20388) to help shape its development through community feedback.

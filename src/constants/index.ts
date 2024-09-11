@@ -31,6 +31,7 @@ export const CONTENT_CATEGORY_LIST = [
   "Smart Contract",
   "DeFi",
   "Attestation",
+  "Protocol",
 ];
 export const PODCAST_CATEGORY_LIST = [
   "All categories",
