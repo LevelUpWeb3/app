@@ -268,10 +268,10 @@ Next, we generate the verifier contract in Solidity.
 
 <ContentCopy code={`snarkjs zkey export solidityverifier proveVote_0001.zkey verifier.sol`} language="bash"/>
 
-Upon executing this command, a verifier contract will be generated in the file verifier.sol. Now deploy that contract on-chain. For example you can use foundry to deploy it on Scroll Sepolia.
+Upon executing this command, a verifier contract will be generated in the file verifier.sol. Now deploy that contract on-chain. On this example, we'll use Remix, however you can use foundry to deploy it on Scroll Sepolia as follows.
 
 ```
-forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
+forge create --rpc-url https://scroll-testnet-public.unifra.io --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
 ```
 
 Next, deploy the following contract on-chain, which contains the logic for voting and proof verification. Pass the address of the verifier contract we just deployed as a parameter in the constructor.
@@ -331,10 +331,10 @@ contract CircomVoter {
     }
 }`} language="solidity"/>
 
-Now deploy it on-chain. If you're using forge on Scroll Sepolia you can do it with the following command.
+Now deploy it on-chain. Again, if you're using forge on Scroll Sepolia you can do it with the following command.
 
 ```
-forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS> CircomVoter.sol:CircomVoter
+forge create CircomVoter.sol:CircomVoter --rpc-url https://scroll-testnet-public.unifra.io --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS>
 ```
 
 Now, create the first proposal for voting by calling the propose() function. For example, you can test by creating a vote with "Should we eat pizza?" as the description and with 1811799232 as the deadline, which expires in 2027.
