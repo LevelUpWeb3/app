@@ -97,7 +97,7 @@ const List = () => {
             {filteredData
               .sort((a, b) => b.index - a.index)
               .map((item, index) => (
-                <Card content={item} key={index} />
+                <Card type="content" content={item} key={index} />
               ))}
           </CardBox>
         </Box>
