@@ -49,11 +49,11 @@ const Label = styled(Typography)(() => ({
   overflowWrap: "break-word", // Added break-word to prevent overflow
 }));
 
-const Card = ({ content, key }) => {
+const Card = ({ content, key, type }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    sendGAEvent("event", "contentClicked", { value: `${content.name}` });
+    sendGAEvent("event", type + "Clicked", { value: `${content.name}` });
     if (content.url) {
       window.open(content.url);
     } else {
