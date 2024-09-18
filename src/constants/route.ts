@@ -39,6 +39,10 @@ const routes: PageMetadata[] = [
     path: "/hackathon",
   },
   {
+    name: "Hackathon",
+    path: "/hackathon/:Slug",
+  },
+  {
     name: "Content",
     path: "/content",
   },

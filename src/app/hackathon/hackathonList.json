@@ -3,12 +3,14 @@
     "name": "Level Up Mini-Hack by Scroll and Alchemy",
     "date": "Sep 24-30, 2024",
     "location": "Global Online Event",
-    "url": "https://taikai.network/ethargentina/hackathons/level-up-argentina-2024",
+    "url": "../hackathon/alchemy-mini-hack",
     "image": "/images/hackathon/alchemy-mini-hack.svg",
     "buttonText": "Join now",
     "buttonDisabled": "",
     "status": ["All time", "Upcoming"],
-    "region": ["All regions", "Virtual"]
+    "region": ["All regions", "Virtual"],
+    "registrationLink": "https://tally.so/r/mYYVo0",
+    "submissionLink": "https://tally.so/r/3NYdWQ"
   },
   {
     "name": "The Level Up Hackathon ETH Tokyo",
