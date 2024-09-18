@@ -59,7 +59,7 @@ const ContentFooter: React.FC<ContentFooterProps> = ({
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <CardBox>
           {filteredData.slice(0, 3).map((item, index) => (
-            <Card content={item} key={index} />
+            <Card type="content" content={item} key={index} />
           ))}
         </CardBox>
       </Box>
