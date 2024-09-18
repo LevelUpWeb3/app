@@ -12,13 +12,13 @@ labels: ["ZK", "DeFi"]
 
 import ContentCopy from "src/components/ContentCopy";
 
+Prefer to see the complete code? [Head to Github](https://github.com/Turupawn/Huracan) to find all the code mentioned in this guide.
+
 Learning about ZK today is not an easy task. It's a new technology with limited documentation. Huracan was born out of my own need to learn about ZK in a practical way, geared towards developers and engineers.
 
 Huracan is a fully functional project capable of performing private transactions on Ethereum and EVM blockchains. It's based on battle tested privacy projects but includes only the minimal code to simplify the learning process. We will cover how this technology can be adapted to new use cases and future regulations. Additionally, at the end of the article, I share what is needed to take this project from testnet to real production use.
 
 By the end of this guide, you'll be able to research other projects of the same nature and understand how they are built.
-
-Prefer to see the complete code? [Head to Github](https://github.com/Turupawn/Huracan) to find all the code mentioned in this guide.
 
 _How Huracán is Built:_
 
@@ -187,7 +187,7 @@ The contracts serve as a guarantee that everything was run correctly. They allow
 We will use three contracts. The first is the verifier contract that we just generated in the `verifier.sol` file, so go ahead and deploy it now. For example you can use foundry to deploy it on Scroll Sepolia.
 
 ```
-forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
+forge create --rpc-url https://scroll-testnet-public.unifra.io --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
 ```
 
 The second contract is the Poseidon contract. If you are on Scroll Sepolia, you can simply use the one I've already deployed at `0x52f28FEC91a076aCc395A8c730dCa6440B6D9519`. If you want to use another blockchain, expand and follow the steps:
@@ -299,7 +299,7 @@ contract Huracan {
 Now deploy it on-chain. If you're using forge on Scroll Sepolia you can do it with the following command.
 
 ```
-forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS> Huracan.sol:Huracan
+forge create Huracan.sol:Huracan --rpc-url https://scroll-testnet-public.unifra.io --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS>
 ```
 
 ## 4. The Frontend
