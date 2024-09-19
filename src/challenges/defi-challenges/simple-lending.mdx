@@ -21,7 +21,7 @@ In this challenge, you'll implement a contract that deposits into Aave pools on 
 ## Objective
 
 Your task is to:
-1. Develop your own contract with `deposit` and `withdraw` functionalities.
+1. Develop your own contract with `deposit` and `withdraw` functionalities based on the provided base contract.
 2. Deploy it to Scroll Sepolia Testnet.
 3. And finally verify it.
  
@@ -112,101 +112,110 @@ contract AaveLender {
     }
 }`} language="solidity"/>
 
-## Supply, withdraw, borrow and repay
+## Supply, Withdraw, Borrow, and Repay
 
-These are the 4 core functions in the Aave protocol.
+These are the four core functions in the Aave protocol:
 
 - **Supply:** Lend tokens by depositing them into the Aave Pool.
 - **Withdraw:** Retrieve your supplied tokens along with any earned rewards.
-- **Borrow:** Borrow the tokens you need.
-- **Repay:** Pay back the borrowed tokens along with the interest.
+- **Borrow:** Borrow tokens from the pool.
+- **Repay:** Pay back the borrowed tokens plus interest.
 
-During this challenge we will focus only on the `supply` and `withdraw` functions.
+In this challenge, we will focus on the `supply` and `withdraw` functions.
 
-## AToken the Aave ERC20 token standard
+## AToken: Aave's ERC20 Token Standard
 
-When you `supply` (lend) a token in Aave you get an AToken as a receipt. For example, if you deposit `10 DAI` into the Aave Pool, you will get `10 aDAI` back to your wallet. This token tracks how much you supplied and how much yield you earned so when you `withdraw` your tokens you get your fair share of rewards.
+When you `supply` tokens to Aave, you receive ATokens as a receipt. For example, if you deposit `10 DAI` into the Aave Pool, you will get `10 aDAI` in return. This token tracks how much you supplied and the yield you've earned, so when you `withdraw`, you receive your tokens along with any accrued rewards.
 
-For example, if you deposit `10 DAI` now you will recieve `10 aDAI` immediatly. Fast forward many blocks later, your `10 aDAI` will turn into `11 aDAI`, at this point you can give back your `11 aDAI` to get `11 DAI` to your wallet earning a `1 DAI` profit.
+For instance, if you deposit `10 DAI` today, you immediately receive `10 aDAI`. After several blocks, your `10 aDAI` might become `11 aDAI`. When you `withdraw`, you return your `11 aDAI` and receive `11 DAI`, earning a `1 DAI` profit.
 
-The ATokens use the Rebase functionalities, this makes them very easy to use and for us users very easy to keep track of our earnings.
+ATokens use rebase functionality, making it easy for users to track their earnings without manual interaction.
 
-## Rebase Token? How does it work?
+## What is a Rebase Token?
 
-Rebase have a special implementation of tokens, fully compatible with the ERC20 standard. The different part in a rebase token is that is has a variable cappable of affecting all holder balances. Let's take as an example the `balanceOf()` function part of the ERC20 standard, internally this is how it usually looks like:
+Rebase tokens, like ATokens, fully comply with the ERC20 standard but with a twist. They include a mechanism that adjusts all holders' balances proportionally based on a variable called `RATE`.
 
-```latex
+Typically, the `balanceOf()` function in ERC20 looks like this:
+
+```solidity
 balanceOf(x) = balances[x]
 ```
 
-Notice how the rebase token adds the `RATE` variable multiplication (or division in some cases but leading to the same results).
+In rebase tokens, the `RATE` variable modifies this:
 
-```latex
-balanceOf(x) = sharesOf(x) · RATE
+```solidity
+balanceOf(x) = sharesOf(x) * RATE
 ```
 
-Here;
+Here:
+- `sharesOf(x)` also called "fragments", represents the amount of tokens a holder has in proportion to the rest.
+- `RATE` is a variable that adjusts to distribute rewards evenly across all holders.
 
-- _sharesOf_ denotes the "fragments" 
-- _RATE_ a variable that is able to distribute rewards equally accross all the holders
+This allows the protocol to efficiently distribute rewards, and users can simply check their AToken balance to see how much they've earned without needing to interact further.
 
-This allows the protocol to distribute rewards very cheaply and users to know exactly how much rewards they have earned, they just need to check their AToken balances that will change automatically over time without them needing to do any kind of interaction.
+## The `supply()` Function
 
-## The `supply()` function
+In this challenge, the `deposit` function in your smart contract will call the `supply` function to deposit `DAI` into the Aave pool. In return, the user will receive an equivalent amount of `aDAI`.
 
-<ContentCopy
-  code={`function supply(
+```solidity
+function supply(
   address asset,
   uint256 amount,
   address onBehalfOf,
-  uint16 referralCode) external;`} language="solidity"
-/>
+  uint16 referralCode
+) external;
+```
 
-- **asset:** Assset being deposited into the Pool, in this challenge we will use DAI.
-- **amount:** Ammount of `asset` being deposited, in wei.
-- **onBehalfOf:** Address that will receive the ATokens.
-- **referalCode:** Used only for Aave thrid party integrations, on this challenge you can keep it as 0.
+- **asset:** The token being deposited into the pool (we’ll use DAI in this challenge).
+- **amount:** The amount of the `asset` being deposited, in wei.
+- **onBehalfOf:** The address that will receive the ATokens.
+- **referralCode:** A code for third-party integrations. For this challenge, set it to 0.
 
-## The `withdraw()` function
+## The `withdraw()` Function
 
-<ContentCopy
-  code={`function withdraw(
+The `withdraw` function will transfer the user's `aDAI` back to the Aave pool, allowing them to receive their `DAI` along with any earned interest.
+
+```solidity
+function withdraw(
   address asset,
   uint256 amount,
-  address to) external returns (uint256);`} language="solidity"
-/>
+  address to
+) external returns (uint256);
+```
 
-- **asset:** Underlying assset being withdrawn from the Pool. Is is not the AToken, in our case this is the DAI contract address. 
-- **amount:** Ammount of `asset` being withdrawn, in wei.
-- **to:** Account that will receive the tokens.
+- **asset:** The underlying asset being withdrawn from the pool (in this case, DAI, not the AToken).
+- **amount:** The amount of the `asset` being withdrawn, in wei.
+- **to:** The address that will receive the tokens.
 
-## Get the AToken address thorugh `getReserveData()`
+## Retrieving the AToken Address with `getReserveData()`
 
-<ContentCopy
-  code={`ISwapRouter.ExactInputSingleParamsIPool(AAVE_POOL_ADDRESS).getReserveData(STAKED_TOKEN_ADDRESS).aTokenAddress`} language="solidity"
-/>
+Each ERC20 token supported by Aave has a corresponding AToken. You can find the address of the AToken by calling the `getReserveData()` function, which returns the aTokenAddress along with other details about the token pool. You'll need this address to manage funds in the withdraw function.
 
-In order to complete this Challenge you will need to know the staked token address
+```solidity
+ISwapRouter.ExactInputSingleParamsIPool(AAVE_POOL_ADDRESS)
+  .getReserveData(STAKED_TOKEN_ADDRESS)
+  .aTokenAddress;
+```
 
-## Build the Contract
+This will provide the AToken address, which is required for interacting with the Aave Pool.
 
-1. Implement the deposit function
+## A Cool Tip
 
-    a. Transfer the DAI tokens to be deposited into this contract
+* Did you know that the [Official Aave Testnet UI](https://staging.aave.com/) supports Scroll Sepolia? After supplying tokens you will be able to see your position in the UI. Also, you can mint testnet DAI on [The aave faucet](https://staging.aave.com/faucet/) in order to test your code.
 
-    b. Allow (or approve) the Aave Pool contract so it can manage the deposited DAI tokens
+## Building the Contract
 
-    c. Call the supply function in the Aave Pool on behalf of the transaction sender
+1. **Implement the deposit function:**
+    - Transfer the DAI tokens to this contract.
+    - Approve the Aave Pool contract to manage the deposited DAI.
+    - Call the `supply()` function on behalf of the transaction sender.
 
-2. Implement the deposit function
-
-    a. Transfer the aDAI token (The AToken) to be withdrawn (notice you will need to get the aDAI token address beforehand)
-
-    b. Allow (or approve) the Aave Pool contract so it can manage the deposited aDAI tokens
-
-    c. Call the withdraw function so the the sender recieves the DAI back
+2. **Implement the withdraw function:**
+    - Transfer the aDAI tokens (the AToken) for withdrawal.
+    - Approve the Aave Pool contract to manage the aDAI.
+    - Call the `withdraw()` function to receive DAI back.
 
 ## Further Reading
 
-1. [AAve v3 official documentation](https://docs.aave.com/developers/getting-started/contracts-overview)
-2. [About the AToken](https://docs.aave.com/developers/tokens/atoken)
+1. [Aave v3 Official Documentation](https://docs.aave.com/developers/getting-started/contracts-overview)
+2. [About ATokens](https://docs.aave.com/developers/tokens/atoken)
