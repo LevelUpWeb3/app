@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { Skeleton } from "@mui/material";
 
+import TallyForm from "@/components/TallyForm";
 import Data from "../../hackathonList.json";
 
 const SubmissionPage = () => {
@@ -25,19 +25,10 @@ const SubmissionPage = () => {
   }
 
   return (
-    <div className="max-h-full">
-      <iframe
-        data-tally-src={hackathonData.submissionLink}
-        title="Submit your Alchemy mini hack!"
-        width="100%"
-        height="1411"
-      ></iframe>
-
-      <Script
-        src="https://tally.so/widgets/embed.js"
-        onLoad={() => window.Tally.loadEmbeds()}
-      />
-    </div>
+    <TallyForm
+      tallyUrl={hackathonData.submissionLink}
+      title="Submit your Alchemy mini hack!"
+    />
   );
 };
 
