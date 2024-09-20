@@ -1,6 +1,19 @@
 [
   {
-    "name": "Level Up Hackathon: ETH Tokyo",
+    "name": "Level Up Mini-Hack by Scroll and Alchemy",
+    "date": "Sep 24-30, 2024",
+    "location": "Global Online Event",
+    "url": "../hackathon/alchemy-mini-hack",
+    "image": "/images/hackathon/alchemy-mini-hack.svg",
+    "buttonText": "Join now",
+    "buttonDisabled": "",
+    "status": ["All time", "Upcoming"],
+    "region": ["All regions", "Virtual"],
+    "registrationLink": "https://tally.so/r/mYYVo0",
+    "submissionLink": "https://tally.so/r/3NYdWQ"
+  },
+  {
+    "name": "The Level Up Hackathon ETH Tokyo",
     "date": "Aug 23-26, 2024",
     "location": "Shibuya City, Tokyo",
     "url": "https://www.ethtokyo.com/",
@@ -11,7 +24,7 @@
     "region": ["All regions", "Asia Pacific"]
   },
   {
-    "name": "Level Up Hackathon by Ethereum Argentina",
+    "name": "The Level Up Hackathon by Ethereum Argentina",
     "date": "Aug 2-4, 2024",
     "location": "Buenos Aires, Argentina",
     "url": "https://taikai.network/ethargentina/hackathons/level-up-argentina-2024",
