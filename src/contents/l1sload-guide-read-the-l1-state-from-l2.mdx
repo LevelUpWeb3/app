@@ -10,9 +10,9 @@ readTime: 15 min read
 labels: ["Protocol"]
 ---
 
-Seamless cross-chain account abstraction features will be possible thanks to the [Keystore](https://notes.ethereum.org/@vbuterin/minimal_keystore_rollup). Were users will be able to control multiple smart contract accounts, on multiple chains, with a single key. This will bring rollups closer and provide the so long waited good UX for end users in a [rollup centric Ethereum](https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698).
+Seamless cross-chain account abstraction features will be possible thanks to the [Keystore](https://notes.ethereum.org/@vbuterin/minimal_keystore_rollup). Where users will be able to control multiple smart contract accounts, on multiple chains, with a single key. This will bring rollups closer and provide the so long waited good UX for end users in a [rollup centric Ethereum](https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698).
 
-In order to make this happen, we need to be able to read the L1 data from L2 rollups which is currently a very expensive process. That's why Scroll [introduced](https://scroll.io/blog/towards-the-wallet-endgame-with-keystore) the `L1SLOAD` precompile that is able to read the L1 State fast and cheap. Safe wallet is already creating [a proof of concept](https://github.com/5afe/safe-scroll-keystore) [introduced at Safecon Berlin 2024](https://www.youtube.com/watch?v=hHmOo7A3vNU) of this work and I think this is just the begining: DeFi, gamming, social and many more types of corss-chain applications are possible with this.
+In order to make this happen, we need to be able to read the L1 data from L2 rollups which is currently a very expensive process. That's why Scroll [introduced](https://scroll.io/blog/towards-the-wallet-endgame-with-keystore) the `L1SLOAD` precompile that is able to read the L1 State fast and cheap. Safe wallet is already creating [a proof of concept](https://github.com/5afe/safe-scroll-keystore) [introduced at Safecon Berlin 2024](https://www.youtube.com/watch?v=hHmOo7A3vNU) of this work and I think this is just the begining: DeFi, gaming, social and many more types of cross-chain applications are possible with this.
 
 Let's now learn, with examples, the basics of this new primitive that is set to open the door to a new way of interacting with Ethereum.
 
@@ -155,7 +155,7 @@ contract L2Storage {
     uint256 constant NUMBER_SLOT = 0;
     address immutable l1StorageAddr;
 
-    // The constructor recieves the contract we just deployed on L1
+    // The constructor receives the contract we just deployed on L1
     constructor(address _l1Storage) {
         l1StorageAddr = _l1Storage;
     }
@@ -166,7 +166,7 @@ contract L2Storage {
         return l1BlockNum;
     }
 
-    // Returns the number red from L1
+    // Returns the number read from L1
     function retrieveFromL1() public view returns(uint) {
         // The precompile expects the contract address number and an array of slots. In this case we only query one, the slot 0
         bytes memory input = abi.encodePacked(l1StorageAddr, NUMBER_SLOT);
