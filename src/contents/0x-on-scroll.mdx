@@ -1,0 +1,509 @@
+---
+name: "How to fetch live swap prices with 0x Swap API on Scroll"
+index: 7
+summary: Learn how to embed crypto trading into your app using 0x Swap API
+author: Jessica Lin
+authorIcon: https://avatars.githubusercontent.com/u/8042156?v=4
+authorLink: https://x.com/hey_its_jlin
+published: Sep 18, 2024
+readTime: 15 min read
+labels: ["DeFi"]
+---
+
+import ContentCopy from "src/components/ContentCopy";
+
+_Learn how to use the 0x Swap API to fetch live swap prices and seamlessly integrate crypto trading into your app._
+
+Ever wondered how your favorite token trading dapp finds the best price when you trade ETH for DAI? It’s likely using a [liquidity aggregator](https://0x.org/post/managed-liquidity), which sources prices from both offchain (e.g., Market Makers, RFQ) and onchain (e.g., DEXs, AMMs) sources to find the best deal.
+
+<div className="text-center">
+  <img src="/images/contents/matcha.png" alt="matcha screenshot" width="300" />
+  _Figure 1: Matcha.xyz trading app_
+</div>
+
+In this tutorial, we'll explore how the [0x Swap API](https://0x.org/docs/0x-swap-api/introduction) fetches live quotes using [smart order routing](https://0x.org/post/0x-smart-order-routing). This process routes transactions across decentralized exchanges, aiming for **the best price** and **minimal transaction costs**.
+
+<div className="text-center">
+  <img
+    src="/images/contents/order-route.png"
+    alt="order route screenshot"
+    width="650"
+  />
+  _Figure 1: 0x routes to find the best liquidity sources for a swap through both
+  onchain and offchain sources._
+</div>
+
+The 0x Swap API powers swaps in major wallets and exchanges like Coinbase Wallet, Robinhood Wallet, Matcha, Metamask, Zerion, Zapper, and more. With over 71 million transactions and $148B+ in volume from 8 million users, 0x APIs are trusted by many top trading apps.
+
+Best of all, no smart contract development is needed. The 0x API allows web developers to easily leverage the 0x Settler smart contracts, which handle all trade settlement logic, so you can focus on delivering the best user experience.
+
+## Why Use the 0x Swap API?
+
+- ⛓️ **Multi-chain liquidity**: Easily access liquidity across popular networks (see the full list of supported networks).
+- 🤑 **Monetize your app**: Earn revenue through seamless swap integration.
+- 🛡️ **User protection**: Our smart contracts eliminate allowance risk with innovations like Permit2, ensuring secure token approvals.
+- ↩ **Best execution**: Minimize transaction reverts for smoother swaps.
+- 💰 **Exclusive RFQ liquidity**: Competitive with AMMs, offering zero slippage and guaranteed MEV protection.
+- 🚀 **User-friendly**: Quick and easy to integrate!
+
+## Pre-requisites
+
+This tutorial assumes some familiarity with the following,
+
+- making API calls
+- JavaScript/TypeScript
+- [viem](https://viem.sh/)
+
+## How to Swap Tokens in 6 Steps
+
+0. Get a 0x API key
+1. Get an indicative price
+2. (If needed) Set token allowance
+3. Fetch a firm quote
+4. Sign the Permit2 EIP-712 message
+5. Append signature length and signature data to calldata
+6. Submit the transaction with Permit2 signature
+
+### Tip
+
+⚡️ See these steps in action in the [Swap headless example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example).
+
+## 0. Get a 0x API key
+
+To use the 0x Swap API, you'll need an API key for authentication. Follow these steps:
+
+1. [Sign up for a 0x account](https://dashboard.0x.org/).
+2. Once registered, generate your live API key from the dashboard.
+
+For detailed instructions, refer to the [Getting Started Guide](https://0x.org/docs/introduction/getting-started).
+
+## 1. Get an Indicative Price
+
+Let's find the best price to swap 100 WETH for wstETH on Scroll!
+
+To find the best price for a token swap, use the [`/swap/permit2/price`](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getPrice) endpoint. This gives you an indicative price for an asset pair without committing to a transaction. Think of it as "browsing" for prices.
+
+Unlike `/quote`, which we'll use later to create an actual order, `/price` is a read-only endpoint, perfect for getting a rough idea of the potential swap rate.
+
+### Example Request
+
+Here’s an example of a `/price` request to sell 100 WETH for DAI on Scroll. You can view the full code [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-headless-example/index.ts#L60-L77).
+
+```js
+const priceParams = new URLSearchParams({
+  chainId: "534352", // Scroll chainId. Refer to the 0x Cheat Sheet for supported endpoints: https://0x.org/docs/introduction/0x-cheat-sheet
+  sellToken: "0x5300000000000000000000000000000000000004", // WETH
+  buyToken: "0xf610A9dfB7C89644979b4A0f27063E9e7d7Cda32", // wstETH
+  sellAmount: "100000000000000000000", // WETH uses 18 decimals, so `sellAmount` is 100 * 10^18
+  taker: "$USER_TAKER_ADDRESS", // Address of the user making the trade
+});
+
+const headers = {
+  "0x-api-key": "[api-key]", // Get your live API key from the 0x Dashboard: https://dashboard.0x.org/apps
+  "0x-version": "v2",
+};
+
+const priceResponse = await fetch(
+  "https://api.0x.org/swap/permit2/price?" + priceParams.toString(),
+  { headers },
+);
+
+console.log(await priceResponse.json());
+```
+
+### Example response
+
+The response from the `/price` endpoint will look like the example below. Key parameters include:
+
+- `buyAmount`: The amount of `buyToken` (in `buyToken` units) that will be received from the swap.
+- `issues`: An object detailing any potential problems identified during 0x validation, which could prevent the swap from being successfully executed.
+- `route`: The path of liquidity sources used to execute the swap.
+
+For a complete list of response fields, see the [API references](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getPrice).
+
+<details>
+
+<summary>Expand to see the full response</summary>
+
+```json
+{
+  "blockNumber": "9382122",
+  "buyAmount": "84721170258179911287",
+  "buyToken": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+  "fees": {
+    "integratorFee": null,
+    "zeroExFee": {
+      "amount": "127272664383845646",
+      "token": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+      "type": "volume"
+    },
+    "gasFee": null
+  },
+  "gas": "401014",
+  "gasPrice": "85358949",
+  "issues": {
+    "allowance": {
+      "actual": "0",
+      "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3"
+    },
+    "balance": {
+      "token": "0x5300000000000000000000000000000000000004",
+      "actual": "0",
+      "expected": "100000000000000000000"
+    },
+    "simulationIncomplete": false,
+    "invalidSourcesPassed": []
+  },
+  "liquidityAvailable": true,
+  "minBuyAmount": "83873958555598110900",
+  "route": {
+    "fills": [
+      {
+        "from": "0x5300000000000000000000000000000000000004",
+        "to": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+        "source": "Nuri_CL",
+        "proportionBps": "10000"
+      }
+    ],
+    "tokens": [
+      {
+        "address": "0x5300000000000000000000000000000000000004",
+        "symbol": "WETH"
+      },
+      {
+        "address": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+        "symbol": "wstETH"
+      }
+    ]
+  },
+  "sellAmount": "100000000000000000000",
+  "sellToken": "0x5300000000000000000000000000000000000004",
+  "tokenMetadata": {
+    "buyToken": {
+      "buyTaxBps": "0",
+      "sellTaxBps": "0"
+    },
+    "sellToken": {
+      "buyTaxBps": "0",
+      "sellTaxBps": "0"
+    }
+  },
+  "totalNetworkFee": "35525885088398",
+  "zid": "0x55b4949012d122a44a30f4c0"
+}
+```
+
+</details>
+
+## 2. Set a Token Allowance
+
+Before proceeding with the swap, you'll need to set a token allowance. A [token allowance](https://tokenallowance.io/) authorizes a third party to move a specific amount of your tokens. In this case, you are permitting the [Permit2 contract](https://github.com/Uniswap/permit2) to trade your ERC20 tokens on your behalf. (Curious about Permit2? Read more about it [here](https://0x.org/docs/developer-resources/faqs-and-troubleshooting#parameter-questions).)
+
+To allow this, you must approve an allowance, specifying the amount of ERC20 tokens the contract can move. For more details on how to set token allowances, see [How to set your token allowances](/0x-swap-api/advanced-topics/how-to-set-your-token-allowances).
+
+### Tip
+
+Ensure the token allowance covers both the buy/sell amount and gas fees. Failing to do so may result in a 'Gas estimation failed' error.
+
+### Example Code
+
+Below is an example of checking and setting token approvals using viem's [`getContract`](https://viem.sh/docs/contract/getContract.html) function.
+
+```ts
+import { getContract } from 'viem';
+...
+// Initialize contracts. Note: abi and client setup not shown in this snippet.
+const Permit2 = getContract({
+    address: '0x000000000022D473030F116dDEE9F6B43aC78BA3', // Permit2 contract address
+    abi: exchangeProxyAbi,
+    client,
+});
+const usdc = getContract({
+    address: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913', // USDC token address
+    abi: erc20Abi,
+    client,
+});
+
+// Check if the allowance is sufficient for Permit2 to spend the sellToken.
+if (sellAmount > (await usdc.read.allowance([client.account.address, Permit2.address]))) {
+    try {
+        const { request } = await usdc.simulate.approve([Permit2.address, maxUint256]);
+        console.log('Approving Permit2 to spend USDC...', request);
+        // Write the approval if necessary.
+        const hash = await usdc.write.approve(request.args);
+        console.log('Approved Permit2 to spend USDC.', await client.waitForTransactionReceipt({ hash }));
+    } catch (error) {
+        console.log('Error approving Permit2:', error);
+    }
+} else {
+    console.log('USDC is already approved for Permit2');
+}
+```
+
+## 3. Fetch a Firm Quote
+
+Once you've found a good price and you're ready to execute a trade, use the [`/swap/permit2/quote`](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getQuote) endpoint to request a firm quote. Unlike the indicative `/price` endpoint, this represents a soft commitment to filling the suggested orders, with potential consequences for failing to fulfill.
+
+The `/swap/permit2/quote` response contains a full 0x order that can be submitted to an Ethereum node. The Market Maker will have reserved the necessary assets, which significantly reduces the chances of the order failing.
+
+### Caution
+
+Only use `/quote` when you're prepared to fill the order. Excessive unfilled requests may result in a ban, as Market Makers allocate assets based on these requests. If you're browsing for prices, use `/price` instead.
+
+### Example Request
+
+Here’s an example of fetching a firm quote to sell 100 WETH for DAI using the `/quote` endpoint (note its similarity to the `/price` request):
+
+```javascript
+const qs = require("qs");
+
+const params = {
+  chainId: "534352", // Scroll. Refer to the 0x Cheat Sheet for all supported endpoints: https://0x.org/docs/introduction/0x-cheat-sheet
+  sellToken: "0x5300000000000000000000000000000000000004", // WETH
+  buyToken: "0xf610A9dfB7C89644979b4A0f27063E9e7d7Cda32", // wstETH
+  sellAmount: "100000000000000000000", // WETH uses 18 decimal places, so the sell amount is `100 * 10^18`.
+  taker: "$USER_TAKER_ADDRESS", // The address that will execute the trade.
+};
+
+const headers = { "0x-api-key": "[api-key]", "0x-version": "v2" }; // Obtain your API key from the 0x Dashboard: https://dashboard.0x.org/apps
+
+const response = await fetch(
+  `https://api.0x.org/swap/permit2/quote?${qs.stringify(params)}`,
+  { headers },
+);
+
+console.log(await response.json());
+```
+
+### Example Response
+
+Many of the fields in the `/quote` response are similar to those in the `/price` response, but there are additional fields required to submit the quote to the blockchain. Key response parameters include:
+
+- `transaction` - Contains the details needed to submit the transaction to the blockchain.
+- `permit2` - An approval object with fields necessary for submitting approval for this transaction. It will be `null` if the sell token is native or if the transaction involves wrapping/unwrapping a native token.
+- `route` - The liquidity sources used to execute this swap.
+- `tokenMetadata` - Metadata for the buy and sell tokens in the swap, including any buy/sell tax that the tokens may incur.
+
+See a [full list of API responses](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getQuote).
+
+<details>
+
+<summary>Expand to see response</summary>
+
+```json
+{
+  "blockNumber": "9382392",
+  "buyAmount": "84721170406314741663",
+  "buyToken": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+  "fees": {
+    "integratorFee": null,
+    "zeroExFee": {
+      "amount": "127272664606381695",
+      "token": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+      "type": "volume"
+    },
+    "gasFee": null
+  },
+  "issues": {
+    "allowance": {
+      "actual": "0",
+      "spender": "0x000000000022d473030f116ddee9f6b43ac78ba3"
+    },
+    "balance": {
+      "token": "0x5300000000000000000000000000000000000004",
+      "actual": "0",
+      "expected": "100000000000000000000"
+    },
+    "simulationIncomplete": false,
+    "invalidSourcesPassed": []
+  },
+  "liquidityAvailable": true,
+  "minBuyAmount": "83873958702251592600",
+  "permit2": {
+    "type": "Permit2",
+    "hash": "0x65ee5b15bd345194a150d71b25f026d4c35552af2a1ab5a4941d1b6fe8a2ebe0",
+    "eip712": {
+      "types": {
+        "TokenPermissions": [
+          {
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "EIP712Domain": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "chainId",
+            "type": "uint256"
+          },
+          {
+            "name": "verifyingContract",
+            "type": "address"
+          }
+        ],
+        "PermitTransferFrom": [
+          {
+            "name": "permitted",
+            "type": "TokenPermissions"
+          },
+          {
+            "name": "spender",
+            "type": "address"
+          },
+          {
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "name": "deadline",
+            "type": "uint256"
+          }
+        ]
+      },
+      "domain": {
+        "name": "Permit2",
+        "chainId": 534352,
+        "verifyingContract": "0x000000000022d473030f116ddee9f6b43ac78ba3"
+      },
+      "message": {
+        "permitted": {
+          "token": "0x5300000000000000000000000000000000000004",
+          "amount": "100000000000000000000"
+        },
+        "spender": "0x6c403dba21f072e16b7de2b013f8adeae9c2e76e",
+        "nonce": "2241959297937691820908574931991560",
+        "deadline": "1726615654"
+      },
+      "primaryType": "PermitTransferFrom"
+    }
+  },
+  "route": {
+    "fills": [
+      {
+        "from": "0x5300000000000000000000000000000000000004",
+        "to": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+        "source": "Nuri_CL",
+        "proportionBps": "10000"
+      }
+    ],
+    "tokens": [
+      {
+        "address": "0x5300000000000000000000000000000000000004",
+        "symbol": "WETH"
+      },
+      {
+        "address": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+        "symbol": "wstETH"
+      }
+    ]
+  },
+  "sellAmount": "100000000000000000000",
+  "sellToken": "0x5300000000000000000000000000000000000004",
+  "tokenMetadata": {
+    "buyToken": {
+      "buyTaxBps": "0",
+      "sellTaxBps": "0"
+    },
+    "sellToken": {
+      "buyTaxBps": "0",
+      "sellTaxBps": "0"
+    }
+  },
+  "totalNetworkFee": "35867824219906",
+  "transaction": {
+    "to": "0x6c403dba21f072e16b7de2b013f8adeae9c2e76e",
+    "data": "0x1fff991f0000000000000000000000004d2a422db44144996e855ce15fb581a477dbb947000000000000000000000000f610a9dfb7c89644979b4a0f27063e9e7d7cda320000000000000000000000000000000000000000000000048bfc290e717d4b9800000000000000000000000000000000000000000000000000000000000000a0baa017bd677047464e1a54e4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000002a0000000000000000000000000000000000000000000000000000000000000020438c9c14700000000000000000000000053000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000002710000000000000000000000000aaae99091fbb28d400029052821653c1c752483b000000000000000000000000000000000000000000000000000000000000008400000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000124c04b8d59000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000006c403dba21f072e16b7de2b013f8adeae9c2e76e0000000000000000000000000000000000000000000000000000000066ea106600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002b53000000000000000000000000000000000000040000faf610a9dfb7c89644979b4a0f27063e9e7d7cda320000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012438c9c147000000000000000000000000f610a9dfb7c89644979b4a0f27063e9e7d7cda32000000000000000000000000000000000000000000000000000000000000000f000000000000000000000000f610a9dfb7c89644979b4a0f27063e9e7d7cda32000000000000000000000000000000000000000000000000000000000000002400000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000044a9059cbb000000000000000000000000ad01c20d5886137e056775af56915de824c8fce500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffc1fb425e0000000000000000000000006c403dba21f072e16b7de2b013f8adeae9c2e76e00000000000000000000000053000000000000000000000000000000000000040000000000000000000000000000000000000000000000056bc75e2d631000000000000000000000000000000000000000006e898131631616b1779bad70bc080000000000000000000000000000000000000000000000000000000066ea106600000000000000000000000000000000000000000000000000000000000000c0",
+    "gas": "401014",
+    "gasPrice": "86506305",
+    "value": "0"
+  },
+  "zid": "0xbaa017bd677047464e1a54e4"
+}
+```
+
+</details>
+
+## 4. Sign the Permit2 EIP-712 message
+
+Now that we have our quote, the next step is to sign and append the necessary data before submitting the order to the blockchain.
+
+First, sign the `permit2.eip712` object that we received from the quote response.
+
+```js
+// Sign permit2.eip712 returned from quote
+let signature: Hex;
+signature = await signTypedData(quote.permit2.eip712);
+```
+
+## 5. Append Signature Length and Data to `transaction.data`
+
+Next, append the signature length and signature data to `transaction.data`. The format should be `<sig len><sig data>`, where:
+
+- `<sig len>`: 32-byte unsigned big-endian integer representing the length of the signature
+- `<sig data>`: The actual signature data
+
+```js
+import { concat, numberToHex, size } from "viem";
+
+if (permit2?.eip712) {
+  const signature = await signTypedDataAsync(permit2.eip712);
+  const signatureLengthInHex = numberToHex(size(signature), {
+    signed: false,
+    size: 32,
+  });
+  transaction.data = concat([
+    transaction.data,
+    signatureLengthInHex,
+    signature,
+  ]);
+}
+```
+
+## 6. Submit the Transaction with the Permit2 Signature
+
+The final step is to submit the transaction with all required parameters using your preferred web3 library (e.g., `wagmi`, `viem`, `ethers.js`, `web3.js`). In this example, we use wagmi's [`useSendTransaction`](https://wagmi.sh/react/api/hooks/useSendTransaction).
+
+```js
+sendTransaction({
+    account: walletClient?.account.address,
+    gas: quote?.transaction.gas ? BigInt(quote.transaction.gas) : undefined,
+    to: quote?.transaction.to,
+    data: quote?.transaction.data.replace(
+        MAGIC_CALLDATA_STRING,
+        signature.slice(2)
+    ) as Hex,
+    chainId: chainId,
+});
+```
+
+You can also check your transaction on [Scrollscan](https://scrollscan.com/address/0x6c403dba21f072e16b7de2b013f8adeae9c2e76e) (trades are settled by the [0x Settler smart contract](https://0x.org/docs/introduction/0x-cheat-sheet#finding-addreses-for-0x-settler-contracts))!
+
+## Wrap-Up
+
+Congratulations! You've successfully requested a live swap quote and executed a swap on Scroll using the 0x Swap API.
+
+Check out these starter projects to dive deeper:
+
+- [(Code) Swap API Headless Example](https://github.com/0xProject/0x-examples/tree/main/swap-v2-headless-example)
+- [(Code) Next.js 0x Demo App](https://github.com/0xProject/0x-examples/tree/main/swap-v2-next-app)
+- [(Code) Examples Repo](https://github.com/0xProject/0x-examples)
+- [(Guide) Build a Next.js dApp with 0x Swap API](./build-token-swap-dapp-nextjs)
+
+## Additional Features to Explore
+
+The 0x Swap API is both powerful and user-friendly. Here are some features to explore:
+
+- [**Monetization**](https://0x.org/docs/0x-swap-api/guides/monetize-your-app-using-swap): Generate revenue by integrating crypto swaps into your app.
+- [**Buy/Sell Tax Support**](https://0x.org/docs/developer-resources/buy-sell-tax-support): Display transfer fees or buy/sell taxes in your UI effortlessly.
+- [**Error Handling**](https://0x.org/docs/introduction/api-issues): Leverage the API’s robust error handling to ensure a smooth user experience, as 0x simulates every transaction.
+
+## Social Links
+
+If you found this content helpful, please share it and tag [@0xproject](https://x.com/0xProject) and the author [@hey_its_jlin](https://x.com/hey_its_jlin) on X!

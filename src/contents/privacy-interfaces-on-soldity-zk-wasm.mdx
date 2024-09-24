@@ -12,6 +12,8 @@ labels: ["ZK"]
 
 import ContentCopy from "src/components/ContentCopy";
 
+Prefer to see the complete code? [Head to Github](https://github.com/Turupawn/zkwasm-demo) to find all the code mentioned in this guide.
+
 Blockchain users need privacy in their finances, identity, social networks, and more. But web3 is transparent and public. So, how can users protect their anonymity in such an environment?
 
 The key is to create computation proofs in a place where only the user has access, where the user's data is secure. That place is precisely the browser, before the user's data touches the internet. This is what we call client-side proving or browser proving.
@@ -73,15 +75,15 @@ snarkjs zkey export verificationkey myCircuit_0001.zkey verification_key.json`} 
 
 The following command will generate a verifier contract in the verifier.sol file. Deploy it on a blockchain of your choice. This contract contains the verifyProof() function, which takes a computation proof made with our circuit as a parameter and returns true if the proof is correct.
 
-For example you can deploy it on Scroll Sepolia by using Foundry.
-
-```
-forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
-```
-
 Note: This contract is compatible with L1 EVMs, optimistic L2s, but in terms of ZK L2s, it is currently only compatible with Scroll.
 
 <ContentCopy code={`snarkjs zkey export solidityverifier myCircuit_0001.zkey verifier.sol`} language="bash"/>
+
+For example you can deploy it on Scroll Sepolia by using Foundry.
+
+```
+forge create --rpc-url https://scroll-testnet-public.unifra.io --private-key <PRIVATE_KEY> verifier.sol:Groth16Verifier
+```
 
 Now deploy the following custom logic contract, passing the address of the verifier contract we deployed earlier as a constructor parameter. In this contract, you can add any desired logic in Solidity, such as vote counting in a voting system or the reception or sending of ERC20 tokens in an anonymous DeFi system. In this example, we will only store the result of the multiplication we did in our circuit.
 
@@ -114,7 +116,7 @@ contract CircomCustomLogic {
 Now deploy it on-chain. If you're using forge on Scroll Sepolia you can do it with the following command.
 
 ```
-forge create --rpc-url https://sepolia-rpc.scroll.io/ --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS> CircomCustomLogic.sol:CircomCustomLogic
+forge create CircomCustomLogic.sol:CircomCustomLogic --rpc-url https://scroll-testnet-public.unifra.io --private-key <PRIVATE_KEY> --constructor-args <VERIFIER_ADDRESS>
 ```
 
 ## 3. Build a frontend
