@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 
 import { MDXRemote } from "next-mdx-remote";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
-import ContentCopy from "@/components/ContentCopy";
 import * as React from "react";
 import Link from "next/link";
 import Button from "@/components/Button";
@@ -141,7 +140,7 @@ export default function ChallengeDetailsPage() {
             {data?.content && (
               <MDXRemote
                 {...data.content}
-                components={{ ...MDXCodeHighlighter, ContentCopy }}
+                components={{ ...MDXCodeHighlighter }}
               />
             )}
           </div>

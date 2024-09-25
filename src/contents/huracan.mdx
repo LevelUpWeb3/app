@@ -10,8 +10,6 @@ readTime: 15 min read
 labels: ["ZK", "DeFi"]
 ---
 
-import ContentCopy from "src/components/ContentCopy";
-
 Prefer to see the complete code? [Head to Github](https://github.com/Turupawn/Huracan) to find all the code mentioned in this guide.
 
 Learning about ZK today is not an easy task. It's a new technology with limited documentation. Huracan was born out of my own need to learn about ZK in a practical way, geared towards developers and engineers.
@@ -77,12 +75,15 @@ The circuit is responsible for proving that you are part of the Merkle tree, mea
 
 We start by installing the `circomlib` library, which contains the Poseidon circuits we will be using in this tutorial.
 
-<ContentCopy code={`git clone https://github.com/iden3/circomlib.git`} language="bash"/>
+```bash
+git clone https://github.com/iden3/circomlib.git
+```
 
 Now we create our `proveWithdrawal` circuit that proves we have deposited in the contract without revealing who we are.
 
 `proveWithdrawal.circom`
-<ContentCopy code={`pragma circom 2.0.0;
+```cpp
+pragma circom 2.0.0;
 
 include "circomlib/circuits/poseidon.circom";
 
@@ -148,7 +149,8 @@ template proveWithdrawal(levels) {
     root === computedPath[levels - 1];
 }
 
-component main {public [root, recipient]} = proveWithdrawal(2);`} language="cpp"/>
+component main {public [root, recipient]} = proveWithdrawal(2);
+```
 
 To compile the circuit, we need to have both Circom and snarkjs installed. If you don't have them installed, follow the Circom installation guide.
 
@@ -157,28 +159,34 @@ To compile the circuit, we need to have both Circom and snarkjs installed. If yo
 
 Run the following commands to install circom and snarkjs.
 
-<ContentCopy code={`curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+```bash
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 git clone https://github.com/iden3/circom.git
 cd circom
 cargo build --release
 cargo install --path circom
-npm install -g snarkjs`} language="bash"/>
+npm install -g snarkjs
+```
 
 </details>
 
 Generate the trusted setup and zk artifacts we will need later on on the frontend.
 
-<ContentCopy code={`circom proveWithdrawal.circom --r1cs --wasm --sym
+```bash
+circom proveWithdrawal.circom --r1cs --wasm --sym
 snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
 snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
 snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
 snarkjs groth16 setup proveWithdrawal.r1cs pot12_final.ptau proveWithdrawal_0000.zkey
 snarkjs zkey contribute proveWithdrawal_0000.zkey proveWithdrawal_0001.zkey --name="1st Contributor Name" -v
-snarkjs zkey export verificationkey proveWithdrawal_0001.zkey verification_key.json`} language="bash"/>
+snarkjs zkey export verificationkey proveWithdrawal_0001.zkey verification_key.json
+```
 
 We can now generate the `verifier.sol` contract.
 
-<ContentCopy code={`snarkjs zkey export solidityverifier proveWithdrawal_0001.zkey verifier.sol`} language="bash"/>
+```bash
+snarkjs zkey export solidityverifier proveWithdrawal_0001.zkey verifier.sol
+```
 
 ## 3. The Contracts
 
@@ -197,22 +205,27 @@ The second contract is the Poseidon contract. If you are on Scroll Sepolia, you 
 
 The version of Poseidon we use in our circuit and contract must be exactly compatible. Therefore, we use the version in `circomlibjs` as shown. Just make sure to insert your private key and RPC URL in place of `YOURPRIVATEKEY` and `YOURRPCURL`.
 
-<ContentCopy code={`git clone https://github.com/iden3/circomlibjs.git
+```bash
+git clone https://github.com/iden3/circomlibjs.git
 cd circomlibjs
 npm install
 cd ..
 node --input-type=module --eval "import { writeFileSync } from 'fs'; import('./circomlibjs/src/poseidon_gencontract.js').then(({ createCode }) => { const output = createCode(2); writeFileSync('poseidonBytecode', output); })"
-cast send --rpc-url TUURLRPC --private-key TULLAVEPRIVADA --create $(cat bytecode)`} language="bash"/>
+cast send --rpc-url TUURLRPC --private-key TULLAVEPRIVADA --create $(cat bytecode)
+```
 
 On Scroll, I added `--legacy --gas-price 5000000000`, probably when you see this video you won't need to add it. In any case you shouldn't need this in other chains. Regardless, this is the command just as I sent it.
 
-<ContentCopy code={`cast send --rpc-url TUURLRPC --legacy --gas-price 5000000000 --private-key TULLAVEPRIVADA --create $(cat bytecode)`} language="bash"/>
+```bash
+cast send --rpc-url TUURLRPC --legacy --gas-price 5000000000 --private-key TULLAVEPRIVADA --create $(cat bytecode)
+```
 
 </details>
 
 Now deploy the `Huracan` contract by passing the verifier and poseidon addresses as parameters.
 
-<ContentCopy code={`// SPDX-License-Identifier: MIT
+```cpp
+// SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0 <0.9.0;
 
@@ -294,7 +307,8 @@ contract Huracan {
         require(sent, "Failed to send Ether");
         data;
     }
-}`} language="cpp"/>
+}
+```
 
 Now deploy it on-chain. If you're using forge on Scroll Sepolia you can do it with the following command.
 
@@ -332,7 +346,8 @@ index.html
 The HTML file contains the interface necessary for users to interact with Hurac√°n.
 
 `index.html`
-<ContentCopy code={`<!DOCTYPE html>
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -373,12 +388,14 @@ The HTML file contains the interface necessary for users to interact with Hurac√
     withdrawRecipient = document.getElementById("withdrawRecipient").value
     withdraw(withdrawPrivateKey, withdrawNullifier, withdrawRecipient)
   }
-</script>`} language="html"/>
+</script>
+```
 
 Al logic related to web3 is placed in the following file. This includes browser and wallet connection, state read and contract function calls.
 
 `js/blockchain_stuff.js`
-<ContentCopy code={`const NETWORK_ID = 534351
+```js
+const NETWORK_ID = 534351
 
 const HURACAN_ADDRESS = "0x8BD32BDC921f5239c0f5d9eaf093B49A67C3b9d0"
 const HURACAN_ABI_PATH = "./json_abi/Huracan.json"
@@ -558,12 +575,14 @@ const sendProofToRelayer = async (pA, pB, pC, publicSignals) => {
   .then(out =>
     console.log(out))
   .catch();
-}`} language="js"/>
+}
+```
 
 Finally, the file that contains all ZK logic. Capable of generating ZK proofs.
 
 `js/zk_stuff.js`
-<ContentCopy code={`async function getMerklePath(leaves) {
+```cpp
+async function getMerklePath(leaves) {
   if (leaves.length === 0) {
     throw new Error('Leaves array is empty');
   }
@@ -653,7 +672,8 @@ async function getWithdrawalProof(index, privateKey, nullifier, recipient, root)
     pC: pC,
     publicSignals: publicSignals
   }
-}`} language="cpp"/>
+}
+```
 
 ### 5. The Relayer
 
@@ -662,7 +682,8 @@ Generating ZK anonymity proofs makes no sense if we end up posting the transacti
 Let's start by creating the backend file.
 
 `relayer.mjs`
-<ContentCopy code={`import fs from "fs"
+```js
+import fs from "fs"
 import cors from "cors"
 import express from "express"
 import { ethers } from 'ethers';
@@ -741,15 +762,20 @@ app.get('/relay', (req, res) => {
   })
 })
 
-initAPI()`} language="js"/>
+initAPI()
+```
 
 Install the `coors` library to run the relayer locally.
 
-<ContentCopy code={`npm install cors express ethers`} language="bash"/>
+```bash
+npm install cors express ethers
+```
 
 Now deploy the server by replacing `TUURLRPC`, `TUHURACANADDRESS`, `TULLAVEPRIVADA`, `TUADDRESS` in the following command.
 
-<ContentCopy code={`RPC_URL=TUURLRPC HURACAN_ADDRESS=TUHURACANADDRESS RELAYER_PRIVATE_KEY=TULLAVEPRIVADA RELAYER_ADDRESS=TUADDRESS node relayer.mjs`} language="bash"/>
+```bash
+RPC_URL=TUURLRPC HURACAN_ADDRESS=TUHURACANADDRESS RELAYER_PRIVATE_KEY=TULLAVEPRIVADA RELAYER_ADDRESS=TUADDRESS node relayer.mjs
+```
 
 You are ready to deposit and withdraw funds on Huracan from the web interface.
 

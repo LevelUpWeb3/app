@@ -8,8 +8,6 @@ heroImage: "/images/level-up-preview.png"
 labels: ["DeFi"]
 ---
 
-import ContentCopy from "src/components/ContentCopy";
-
 # Simple Token Swap
 
 If you haven't completed the ERC20 basic challenge yet, check it out [here](https://www.levelup.xyz/challenges/ERC20)! 
@@ -29,7 +27,8 @@ If you need help with using a smart contract framework for completing this chall
 
 If you get stuck, feel free to ask for help in [Level Up Telegram group](https://t.me/+PdNbk5milo1mMTAy).
 
-<ContentCopy code={`// SPDX-License-Identifier: MIT
+```solidity
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 // Implement Uniswap swap interface
@@ -56,7 +55,8 @@ contract SimpleTokenSwap {
 
         // Call the Uniswap router's exactInputSingle function to execute the swap
     }
-}`} language="solidity"/>
+}
+```
 
 ## Constant Product Formula
 
@@ -99,8 +99,8 @@ Let's say Alice wants to swap her 1 ETH to DAI.
 
 ## The Essence of the `exactInputSingle()`
 
-<ContentCopy
-  code={`ISwapRouter.ExactInputSingleParams memory params =
+```solidity
+ISwapRouter.ExactInputSingleParams memory params =
 ISwapRouter.ExactInputSingleParams({
     tokenIn: ABC,
     tokenOut: WETH
@@ -113,7 +113,8 @@ ISwapRouter.ExactInputSingleParams({
 });
 
 // The call to exactInputSingle executes the swap.
-amountOut = swapRouter.exactInputSingle(params);`} language="solidity"
+amountOut = swapRouter.exactInputSingle(params);
+```
 />
 
 Swaps an exact amount of input tokens for as many output tokens as possible. The first element of path is the input token (ABC), the last is the output token (WETH).
