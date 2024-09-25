@@ -8,6 +8,7 @@ import Head from "next/head";
 
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
+import MDXHeaders from "@/components/MDXHeaders";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 import AttributionComponent from "@/components/Attribution";
 import ContentFooter from "@/components/ContentFooter";
@@ -91,6 +92,7 @@ export default function ContentDetailsPage() {
                     {...data.content}
                     components={{
                       ...MDXCodeHighlighter,
+                      ...MDXHeaders,
                       Mermaid,
                       YoutubeEmbed,
                     }}
