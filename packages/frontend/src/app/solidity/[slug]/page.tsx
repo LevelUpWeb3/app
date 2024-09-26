@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import dynamic from "next/dynamic";
-// import { MDXRemote } from "next-mdx-remote";
+// import dynamic from "next/dynamic";
+import { MDXRemote } from 'next-mdx-remote';
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import * as React from "react";
@@ -16,12 +16,6 @@ import { SvgIcon, Box, Typography, Skeleton } from "@mui/material";
 
 import { styled } from "@mui/system";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
 
 const ChallengeInfo = styled(Box)({
   display: "grid",
