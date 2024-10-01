@@ -1,0 +1,176 @@
+---
+name: 0x Swap API Challenge
+index: 3
+level: 2
+website: "https://github.com/LevelUpWeb3/0xSwapAPI-Challenge"
+summary: Learn to use the 0x Swap API to display liquidity sources, monetize your app, and manage token taxes on Scroll.
+heroImage: "/images/level-up-preview.png"
+labels: ["DeFi"]
+---
+
+import ContentCopy from "src/components/ContentCopy";
+
+# 0x Swap API Challenge
+
+Before diving into this guide, make sure you’ve completed the [How to fetch live swap prices with 0x Swap API on Scroll](https://www.levelup.xyz/content/0x-on-scroll) guide. This will give you a solid understanding of fetching swap quotes and prepare you for the tasks ahead.
+
+In this challenge, you'll explore advanced features of the 0x Swap API, including displaying swap breakdowns, handling buy/sell token taxes, and monetizing your app. By the end, you’ll be able to use these features to enhance your trading experience.
+
+Let's get started! 💪
+
+## Objective
+
+You will:
+
+1. Display the percentage breakdown of liquidity sources
+2. Monetize your app with affiliate fees and surplus collection
+3. Display buy/sell taxes for tokens with taxes
+4. Find all sources of liquidity on Scroll
+
+---
+
+## Instructions
+
+### 0. Get Starter Code
+
+Fork this code repository: [https://github.com/LevelUpWeb3/0xSwapAPI-Challenge](https://github.com/LevelUpWeb3/0xSwapAPI-Challenge)
+
+You will need to build on top of this code to complete the following tasks.
+
+### 1. Display Percentage Breakdown of Liquidity Sources
+
+The 0x Swap API uses smart order routing to find the best price and execution path, often splitting trades across multiple sources and identifying intermediate tokens for deeper liquidity.
+
+Often the direct route for a swap isn't always the best price. 0x Swap API uses smart order routing to deliver the best price and optimal execution path by using **multiplexing** (splitting a trade across multiple sources) and **multihopping** (identifying intermediate token steps which open up deeper liquidity).
+
+<div className="text-center">
+  <img
+    src="/images/challenges/order-route.png"
+    alt="order route screenshot"
+    width="650"
+  />
+  _0x routes to find the best liquidity sources for a swap through both on-chain
+  and off-chain sources. You can use the API response data to display a Sankey diagram
+  that visualizes the routes like the one from Matcha.xyz for a swap of WETH to USDC._
+</div>
+
+#### Task 1
+
+Use the `route` response parameter returned by the [`/swap/permit2/quote`](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getQuote) endpoint to show users a percentage breakdwon of where their swap liquidity comes from.
+
+For example, if this is the `route` object returned, it shows that the swap is executed using 50% liquidity from Ambient and 50% from Nuri,
+
+```json
+ "route": {
+    "fills": [
+      {
+        from": "0x5300000000000000000000000000000000000004",
+        "to": "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
+        "source": "Ambient",
+        "proportionBps": "5000"
+      },
+      {
+       from": "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
+        "to": "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+        "source": "Nuri_CL",
+        "proportionBps": "5000"
+      },
+```
+
+Then for this quote, the app should print:
+
+```
+2 Sources
+Ambient: 50%
+Nuri_CL: 50%
+```
+
+### 2. Monetize Your App
+
+The 0x Swap API allows you to monetize your app through:
+
+- [Collecting an affiliate fee (aka trading fee or commission)](https://0x.org/docs/0x-swap-api/guides/monetize-your-app-using-swap#option-1-collect-affiliate-fees)
+- [Collecting trade surplus (aka positive slippage)](https://0x.org/docs/0x-swap-api/guides/monetize-your-app-using-swap#option-2-collect-trade-surplus)
+
+Read how to implement [these two monetization options](https://0x.org/docs/0x-swap-api/guides/monetize-your-app-using-swap).
+
+#### Task 2
+
+Add the required query parameters to your `/quote` request to enable affiliate fees and trade surplus collection.
+
+## 3. Display Buy/Sell Token Tax
+
+Some tokens have buy or sell taxes that affect the final swap amount. Fetch and display this information in your app to inform users about any potential taxes before completing a trade.
+
+Use the `tokenMetadata` object returned in the `/price` and `/quote` endpoints. This object contains the buy/sell tax information for the tokens involved in the swap.
+
+Read how to [implement buy/sell tax support](https://0x.org/docs/developer-resources/buy-sell-tax-support).
+
+#### Task 3
+
+Use the `tokenMetadata` response parameter returned by the [`/swap/permit2/quote`](https://0x.org/docs/api#tag/Swap/operation/swap::permit2::getQuote) endpoint to display the buy/sell tax information if the token has it.
+
+For example, if the `buyToken` has a 200bps buy tax,
+
+```json
+"tokenMetadata": {
+    "buyToken": {
+      "buyTaxBps": "200",
+      "sellTaxBps": "147"
+    },
+    "sellToken": {
+      "buyTaxBps": "0",
+      "sellTaxBps": "0"
+    }
+  },
+```
+
+The app should print:
+
+```
+Buy Token Buy Tax: 0.20%
+```
+
+## 4. Find All Sources of Liquidity on Scroll
+
+The 0x Swap API aggregates liquidity from multiple decentralized exchanges (DEXs) and other sources on the Scroll chain.
+
+The `/sources` endpoint can be used to get a list of supported supporces for a specific chain. Read more about how to [query the `/sources` endpoint](https://0x.org/docs/api#tag/Sources).
+
+#### Task 4
+
+Retrieve and display a list of all the available liquidity sources on the Scroll chain.
+
+The app should print:
+
+```
+Liquidity sources for Scroll chain:
+     Ambient,
+     DODO_V2,
+     IziSwap,
+     Maverick_V2,
+     Metavault_V2,
+     Metavault_V3,
+     Nuri_CL,
+     Skydrome,
+     SushiSwap_V3,
+     SyncSwap,
+     Tokan,
+     Zebra_V2
+```
+
+## Learn More
+
+Congratulations on exploring advanced features of the 0x Swap API on Scroll!
+
+Check out these starter projects to dive deeper:
+
+- Build a Next.js 0x Demo App: [Code](https://github.com/0xProject/0x-examples/tree/main/swap-v2-next-app) | [Guide](./build-token-swap-dapp-nextjs)
+- Explore more 0x examples in the [Examples Repo](https://github.com/0xProject/0x-examples)
+- Try out the [0x Gasless API](https://0x.org/docs/gasless-api/introduction) for gasless swaps!
+
+## Social Links
+
+If you found this content helpful, please share it and tag [@0xproject](https://x.com/0xProject) and the author [@hey_its_jlin](https://x.com/hey_its_jlin) on X!
+
+
