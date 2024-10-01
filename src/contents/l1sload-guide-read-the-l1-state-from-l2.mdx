@@ -317,29 +317,25 @@ contract L2Storage {
         l1TokenAddress = _l1TokenAddress;
     }
 
-    // For simplicity, I divided the retrieve function in two, this one just returns a specific slot just as we did it in previous examples
-    function retrieveSlotFromL1(address l1StorageAddress, uint slot) internal view returns (bytes memory) {
+    // Retrieves the token balance of a given Ethereum account.
+    function retrieveL1Balance(address account) public view returns(uint) {
+        // We assume that the balance mapping is stored at slot number 0
+        uint slotNumber = 0;
+        // The formula that Solidity uses to compute the slot in mappings is: balanceSlotPosition = keccak256(holderAddress, slotNumber)
+        uint accountBalanceSlot = uint(
+            keccak256(abi.encodePacked(uint(uint160(account)),
+            slotNumber)
+        ));
+        // Now, we perform a staticcall to the l1sload precompile to retrieve the account balance
         bool success;
         bytes memory returnValue;
-        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(l1StorageAddress, slot));
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(l1TokenAddress, accountBalanceSlot));
         if(!success)
         {
             revert("L1SLOAD failed");
         }
-        return returnValue;
-    }
-
-    // We use Solidity's formula to calculate the position of the slot that holds the balance.
-    // The formula by which solidity will interpret our mapping is: balanceSlotPosition = keccak256(holderAddress, slotNumber)
-    function retrieveL1Balance(address account) public view returns(uint) {
-        uint slotNumber = 0;
-        return abi.decode(retrieveSlotFromL1(
-            l1TokenAddress,
-            uint(keccak256(
-                abi.encodePacked(uint(uint160(account)),slotNumber)
-                )
-            )
-            ), (uint));
+        // The retrieved value is in bytes32 format, so we cast it to uint256 before returning it
+        return abi.decode(returnValue, (uint));
     }
 }`} language="solidity"/>
 
