@@ -7,6 +7,7 @@ import { Mermaid } from "mdx-mermaid/lib/Mermaid";
 import "./scripts/processChallengeMarkdown.js";
 import "./scripts/processSolidityMarkdown.js";
 import "./scripts/processContentMarkdown.js";
+import "./scripts/processHackathonMarkdown.js";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

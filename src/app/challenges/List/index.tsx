@@ -121,7 +121,7 @@ const Protocols = () => {
           ) : (
             <CardBox>
               {filteredData.map((item, index) => (
-                <Card content={item} key={index} />
+                <Card type="challenge" content={item} key={index} />
               ))}
             </CardBox>
           )}

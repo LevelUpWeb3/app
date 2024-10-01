@@ -12,6 +12,7 @@ export const HACKATHON_REGION_LIST = [
   "North America",
   "South America",
   "South East Asia",
+  "Virtual",
 ];
 export const CHALLENGE_LEVEL_LIST = [
   "All levels",

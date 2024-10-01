@@ -4,8 +4,6 @@ import React from "react";
 
 import SectionHeader from "@/components/SectionHeader";
 import Wrapper from "@/components/Wrapper";
-import DateSelect from "./List/DateSelect";
-import RegionSelect from "./List/RegionSelect";
 
 import List from "./List";
 
