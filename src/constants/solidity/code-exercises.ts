@@ -300,4 +300,16 @@ export const CODE_EXERCISES: CodeTemplatesType = {
     exercise5:
       "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\n// Step 1: Implement a contract named 'SendEtherChecked'\n// Step 2: Inside the 'SendEtherChecked' contract, declare a public mapping named 'balances' that maps addresses to uint256\n// Step 3: Still inside the 'SendEtherChecked' contract, implement a function named 'sendEther' that takes two parameters: an address payable 'recipient' and a uint256 'amount'\n// Step 4: The 'sendEther' function should be public and payable\n// Step 5: Inside the 'sendEther' function, add a require statement to check that the sender has enough Ether to send\n// Step 6: Still inside the 'sendEther' function, update the balances of the sender and the recipient\n// Step 7: Still inside the 'sendEther' function, use the 'call' method to send the specified amount of Ether to the specified address\n// Step 8: Add a require statement to check that the call was successful\n",
   },
+  "transient-storage": {
+    exercise1:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.26;\n\ncontract TransientStorageExercise1 {\n\n\t// Task 1: Declare a constant bytes32 variable\n\t// named 'TRANSIENT_SLOT'\n\t// and set it to 0 to be used as the transient storage slot.\n\n\t// Task 2: Create a function named\n\t// 'storeTransientData' that:\n\t// - Takes a uint256 argument named 'data'\n\t// - Uses inline assembly to store 'data' in transient storage using 'tstore' at 'TRANSIENT_SLOT'\n\n}",
+    exercise2:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.26;\n\ncontract TransientStorageExercise2 {\n\n\tbytes32 constant TRANSIENT_SLOT = 0;\n\n\t// Create a function named 'loadTransientData' that:\n\t// - Returns a uint256\n\t// - Uses inline assembly to load and\n\t//return the value stored in\n\t// transient storage at 'TRANSIENT_SLOT'\n\n}",
+    exercise3:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.26;\n\ncontract TemporaryCounter {\n\n\tbytes32 constant COUNTER_SLOT = 3;\n\n\t// write a save() function to save the uint 8888 into the COUNTER_SLOT slot. Then update it to 9999\n\n}",
+    exercise4:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.26;\n\ncontract TransientStorageExercise4 {\n\n\t// Task 1: Declare a constant bytes32 variable\n\t// named 'TRANSIENT_SLOT'\n\t// and set it to 6 to be used as the transient storage slot.\n\n\t// Task 2: Create a function named\n\t// 'storeTransientData' that:\n\t// - Takes a uint256 argument named 'data'\n\t// - Uses inline assembly to store 'data' in transient storage using 'tstore' at 'TRANSIENT_SLOT'\n\n}",
+    exercise5:
+      "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.26;\n\ncontract TemporaryCounter {\n\n\tbytes32 constant COUNTER_SLOT = 188;\n\n\t// write a save() function to save the uint 123456789 into the COUNTER_SLOT slot. Then update it to 987654321\n\n}",
+  }
 };

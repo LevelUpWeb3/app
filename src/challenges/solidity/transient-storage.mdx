@@ -1,0 +1,69 @@
+---
+name: Transient Storage
+index: 27
+lesson: 26
+summary: Introduction to Transient Storage in Solidity and its use in preventing reentrancy attacks
+labels: ["solidity"]
+---
+
+# Transient Storage
+
+Transient storage in Solidity is a new data storage location designed to be cleared out after each transaction. Unlike storage, which retains data across transactions, and memory, which is cleared after each function call, transient storage is cleared immediately after a transaction completes, providing a temporary storage option within the transaction scope.
+
+## Purpose of Transient Storage
+
+Transient storage was introduced to provide an efficient and cost-effective way to store data temporarily during a transaction. This storage location is particularly useful for implementing patterns such as reentrancy locks, where temporary state is needed only within the duration of a transaction.
+
+## Reentrancy Attacks
+
+Transient storage was initially added to the evm to protect contracts against what we call a **reentrancy attack**. It is a common vulnerability in Ethereum smart contracts that occurs when a contract calls an external contract and the external contract calls back into the original contract before the first call is completed. This can lead to unintended behavior, such as multiple withdrawals of funds. The attacker exploits the contract by recursively calling it in an attempt to drain funds before the original transaction is completed.
+
+## Example Code
+
+The transient storage location is accessed using the `tload` and `tstore` assembly functions, following the [EIP-1153](https://eips.ethereum.org/EIPS/eip-1153) standard.
+
+Here are some examples illustrating the use of transient storage in Solidity:
+
+```solidity
+pragma solidity ^0.8.26;
+
+// Make sure EVM version and VM is set to Cancun
+
+// Storage - data is stored on the blockchain
+// Memory - data is cleared out after a function call
+// Transient storage - data is cleared out after a transaction
+
+contract Generosity {
+    mapping(address => bool) sentGifts;
+
+    /**
+    * This modifier prevents a function from being called recursively
+    * by using transient storage to track the state of the function.
+    * the assembly scripts check if the function is already being called
+    * (ie: the value at storage slot 0 is 1) and reverts if it is.
+    * 
+    * After the function exits, it resets the value at storage slot 0 to 0.
+    */
+    modifier nonreentrant {
+        assembly {
+            if tload(0) { revert(0, 0) }
+            tstore(0, 1)
+        }
+        _;
+        // Unlocks the guard, making the pattern composable.
+        // After the function exits, it can be called again, even in the same transaction.
+        assembly {
+            tstore(0, 0)
+        }
+    }
+    function claimGift() nonreentrant public {
+        require(address(this).balance >= 1 ether);
+        require(!sentGifts[msg.sender]);
+        (bool success, ) = msg.sender.call{value: 1 ether}("");
+        require(success);
+
+        // In a reentrant function, doing this last would open up the vulnerability
+        sentGifts[msg.sender] = true;
+    }
+}
+```
