@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 import { styled } from "@mui/material";
 
@@ -17,7 +16,10 @@ const SectionHeader = (props) => {
         <h1 className="mt-[-2rem] text-[56px] font-semibold leading-[1.2] text-stone-950 max-md:mt-0 max-md:text-[3.2rem]">
           {title}
         </h1>
-       <img src={url} className={`object-contain max-h-full ${imgClass} max-md:max-h-[90%]`} />
+        <img
+          src={url}
+          className={`max-h-full object-contain ${imgClass} max-md:max-h-[90%]`}
+        />
       </div>
     </Header>
   );

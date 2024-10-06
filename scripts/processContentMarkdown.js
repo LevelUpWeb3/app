@@ -8,7 +8,7 @@ const outputDirectory = path.join(process.cwd(), "public/data/contents");
 const processContentMarkdownFiles = async () => {
   const fileNames = fs.readdirSync(markdownDirectory);
   const serialize = (await import("next-mdx-remote/serialize")).serialize;
-  const remarkGfm = (await import('remark-gfm')).default;
+  const remarkGfm = (await import("remark-gfm")).default;
 
   const allChallengesDataPromises = fileNames.map(async (fileName) => {
     const id = fileName.replace(/\.mdx$/, "");

@@ -12,6 +12,7 @@ export const HACKATHON_REGION_LIST = [
   "North America",
   "South America",
   "South East Asia",
+  "Virtual",
 ];
 export const CHALLENGE_LEVEL_LIST = [
   "All levels",
@@ -31,6 +32,7 @@ export const CONTENT_CATEGORY_LIST = [
   "Smart Contract",
   "DeFi",
   "Attestation",
+  "Protocol",
 ];
 export const PODCAST_CATEGORY_LIST = [
   "All categories",
