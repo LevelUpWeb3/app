@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 
-const markdownDirectory = path.join(process.cwd(), "src/hackathons");
-const outputDirectory = path.join(process.cwd(), "public/data/hackathons");
+const markdownDirectory = path.join(process.cwd(), "src/events");
+const outputDirectory = path.join(process.cwd(), "public/data/events");
 
 const collectMdxFiles = (dir, relativePath = "") => {
   let results = [];
@@ -22,12 +22,12 @@ const collectMdxFiles = (dir, relativePath = "") => {
   return results;
 };
 
-const processHackathonMarkdownFiles = async () => {
+const processEventsMarkdownFiles = async () => {
   const filePaths = collectMdxFiles(markdownDirectory);
   const serialize = (await import("next-mdx-remote/serialize")).serialize;
   const remarkGfm = (await import("remark-gfm")).default;
 
-  const allHackathonDataPromises = filePaths.map(
+  const allEventsDataPromises = filePaths.map(
     async ({ fullPath, relativePath }) => {
       const id = relativePath.replace(/\.mdx$/, "").replace(/\//g, "_");
 
@@ -46,7 +46,7 @@ const processHackathonMarkdownFiles = async () => {
         return null;
       }
 
-      const hackathonData = {
+      const eventsData = {
         id,
         ...data,
         content: mdxSource,
@@ -60,16 +60,16 @@ const processHackathonMarkdownFiles = async () => {
       }
       fs.writeFileSync(
         individualOutputPath,
-        JSON.stringify(hackathonData, null, 2),
+        JSON.stringify(eventsData, null, 2),
       ); // Pretty print JSON
 
-      return hackathonData;
+      return eventsData;
     },
   );
 
-  const allHackathonData = await Promise.all(allHackathonDataPromises);
+  const allEventsData = await Promise.all(allEventsDataPromises);
 
-  const markdownData = allHackathonData
+  const markdownData = allEventsData
     .filter((data) => data)
     .sort(({ index: a }, { index: b }) => {
       return a - b;
@@ -85,4 +85,4 @@ const processHackathonMarkdownFiles = async () => {
   ); // Pretty print JSON
 };
 
-processHackathonMarkdownFiles().catch(console.error);
+processEventsMarkdownFiles().catch(console.error);
