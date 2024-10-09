@@ -21,9 +21,9 @@ const navigations = [
     href: "/podcast",
   },
   {
-    label: "Hackathon",
-    key: "hackathon",
-    href: "/hackathon",
+    label: "Events",
+    key: "events",
+    href: "/events",
   },
   // TODO: Update route as needed if planning to embed inside Level Up
   {
