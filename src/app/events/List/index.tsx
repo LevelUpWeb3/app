@@ -5,7 +5,7 @@ import { useMemo, useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import { styled } from "@mui/system";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import HackathonCard from "./HackathonCard";
+import EventsCard from "./EventsCard";
 import AdaptableComponent from "./AdaptableSelect";
 import Data from "./../eventsList.json";
 import {
@@ -82,7 +82,7 @@ const List = () => {
         <CardBox>
           {filteredData.length > 0 ? (
             filteredData.map((item, index) => (
-              <HackathonCard content={item} key={index} />
+              <EventsCard content={item} key={index} />
             ))
           ) : (
             <Box sx={{ textAlign: "center", width: "100%" }}>

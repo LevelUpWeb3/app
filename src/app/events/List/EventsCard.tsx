@@ -58,7 +58,7 @@ const Label = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const HackathonCard = ({ content }) => {
+const EventsCard = ({ content }) => {
   const { isMobile } = useCheckViewport();
   return (
     <CardArticle>
@@ -93,7 +93,7 @@ const HackathonCard = ({ content }) => {
           <img
             src={content.image}
             style={{ width: "80%", height: "auto", objectFit: "contain" }}
-            alt="Hackathon"
+            alt="Events"
             className="mx-auto mb-[1.2rem] block"
           />
         )}
@@ -119,7 +119,7 @@ const HackathonCard = ({ content }) => {
               width: "auto",
               objectPosition: "bottom",
             }}
-            alt="Hackathon"
+            alt="Events"
           />
         </Box>
       )}
@@ -127,4 +127,4 @@ const HackathonCard = ({ content }) => {
   );
 };
 
-export default HackathonCard;
+export default EventsCard;
