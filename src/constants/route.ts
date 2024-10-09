@@ -62,10 +62,11 @@ const routes: PageMetadata[] = [
     name: "Podcast",
     path: "/podcast",
   },
-  {
-    name: "Grants",
-    path: "/grants",
-  },
+  // TODO: Revive grants as needed
+  // {
+  //   name: "Grants",
+  //   path: "/grants",
+  // },
   {
     name: "Learn More",
     path: "/learn-more",
