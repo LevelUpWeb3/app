@@ -66,12 +66,14 @@ const ContentFooter: React.FC<ContentFooterProps> = ({
               <Link
                 href={`/content/${item.id}`}
                 style={{ textDecoration: "none" }}
+                key={index}
               >
                 <Card type="content" content={item} key={index} />
               </Link>
             ) : (
               <a
                 href={item.url}
+                key={index}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: "none" }}
