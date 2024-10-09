@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import HackathonHeader from "@/components/HackathonHeader";
+import EventsHeader from "@/components/EventsHeader";
 
 import { usePathname } from "next/navigation";
 import Button from "@/components/Button";
@@ -19,8 +19,8 @@ const MDXRemote = dynamic(
   },
 );
 
-const HackathonDetailsPage = () => {
-  const [hackathonData, setHackathonData] = useState<any>([]);
+const EventsDetailsPage = () => {
+  const [eventsData, setEventsData] = useState<any>([]);
   const [sortedDetails, setSortedDetails] = useState<any>([]);
   const { isMobile } = useCheckViewport();
 
@@ -28,31 +28,31 @@ const HackathonDetailsPage = () => {
   const slug = pathname!.split("/").pop();
 
   useEffect(() => {
-    fetch(`/data/hackathons/markdownData.json`)
+    fetch(`/data/events/markdownData.json`)
       .then((res) => res.json())
       .then((data) => {
-        const searchHackathon = Data.find((hackathon) =>
-          hackathon.url.includes(pathname),
+        const searchEvents = Data.find((events) =>
+          events.url.includes(pathname),
         );
         const filteredDetails = data.filter((item) => item.id.startsWith(slug));
         const sortedDetails = filteredDetails.sort((a, b) => a.index - b.index);
-        setHackathonData(searchHackathon);
+        setEventsData(searchEvents);
         setSortedDetails(sortedDetails);
       });
   }, [pathname, slug]);
 
-  if (!hackathonData || sortedDetails.length === 0) {
+  if (!eventsData || sortedDetails.length === 0) {
     return <Skeleton className="h-screen max-w-full p-10"></Skeleton>;
   }
 
   return (
     <div className="mt-[-6.5rem] flex flex-col pb-2.5">
-      <HackathonHeader
-        title={hackathonData.name}
-        registrationLink={`../../hackathon/${slug}/register`}
+      <EventsHeader
+        title={eventsData.name}
+        registrationLink={`../../events/${slug}/register`}
         url={`/images/events/${slug}.svg`}
-        hackathonDate={hackathonData.date}
-        location={hackathonData.location}
+        eventsDate={eventsData.date}
+        location={eventsData.location}
       />
       <div className="mx-auto mb-32 mt-20 w-full max-w-[153.6rem] px-[10.4rem] max-md:px-[1.6rem]">
         {sortedDetails.map((details, index) => (
@@ -64,10 +64,10 @@ const HackathonDetailsPage = () => {
                 <div className="mt-10">
                   <Button
                     color="primary"
-                    href={`../../hackathon/${slug}/register`}
+                    href={`../../events/${slug}/register`}
                     width={isMobile ? "100%" : "25rem"}
                     onClick={() =>
-                      sendGAEvent("event", "hackathonClicked", {
+                      sendGAEvent("event", "eventsClicked", {
                         value: { slug },
                       })
                     }
@@ -85,7 +85,7 @@ const HackathonDetailsPage = () => {
         <div className="mt-10">
           <Button
             color="primary"
-            href={`../../hackathon/${slug}/submit`}
+            href={`../../events/${slug}/submit`}
             width={isMobile ? "100%" : "25rem"}
             onClick={() =>
               sendGAEvent("event", "hackathonClicked", {
@@ -101,4 +101,4 @@ const HackathonDetailsPage = () => {
   );
 };
 
-export default HackathonDetailsPage;
+export default EventsDetailsPage;

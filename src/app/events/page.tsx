@@ -7,10 +7,10 @@ import Wrapper from "@/components/Wrapper";
 
 import List from "./List";
 
-const HackathonPage = () => {
+const EventsPage = () => {
   return (
     <div className="mt-[-6.5rem] flex flex-col pb-2.5">
-      <SectionHeader title="Hackathon" url={"/images/hackathon.svg"} />
+      <SectionHeader title="Events" url={"/images/events.svg"} />
       <Wrapper>
         <List />
       </Wrapper>
@@ -18,4 +18,4 @@ const HackathonPage = () => {
   );
 };
 
-export default HackathonPage;
+export default EventsPage;

@@ -11,9 +11,9 @@ import { sendGAEvent } from "@next/third-parties/google";
 import useCheckViewport from "@/hooks/useCheckViewport";
 import BackSvg from "@/assets/svgs/common/back.svg";
 
-const HackathonHeader = (props) => {
+const EventsHeader = (props) => {
   const { isMobile } = useCheckViewport();
-  const { title, url, registrationLink, hackathonDate, location, imgClass } =
+  const { title, url, registrationLink, eventsDate, location, imgClass } =
     useMemo(() => props, [props]);
 
   console.log("Props: ", props);
@@ -40,14 +40,14 @@ const HackathonHeader = (props) => {
           <div className="w-1/2">
             <div className="mt-20 flex gap-3 self-start whitespace-nowrap text-lg font-semibold leading-8 text-stone-950">
               <Link
-                href="/hackathon"
+                href="/events"
                 className="mt-[-8rem] self-start whitespace-nowrap text-lg font-semibold leading-8 text-stone-950 max-lg:text-[2.4rem] max-md:mt-[-4rem] max-md:text-[1.6rem]"
               >
                 <SvgIcon component={BackSvg} className="mr-[1.2rem]" /> Back
               </Link>
             </div>
             <p className="whitespace-nowrap pb-10 text-[16px] max-md:pb-0 max-md:text-[1.2rem]">
-              {hackathonDate} · {location}
+              {eventsDate} · {location}
             </p>
             <h1 className="mb-[15px] mt-[-2rem] text-[48px] leading-[1.2] text-stone-950 max-lg:text-[3.0rem] max-md:mt-0 max-md:text-[2.0rem]">
               {title}
@@ -75,4 +75,4 @@ const HackathonHeader = (props) => {
   );
 };
 
-export default HackathonHeader;
+export default EventsHeader;

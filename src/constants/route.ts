@@ -25,7 +25,6 @@ const routes: PageMetadata[] = [
     name: "Solidity Challenges",
     path: "/solidity/:Slug",
   },
-  // TODO: Revive this route when we have challenges
   {
     name: "Challenges",
     path: "/challenges",

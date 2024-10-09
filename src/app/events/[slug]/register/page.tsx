@@ -8,25 +8,23 @@ import TallyForm from "@/components/TallyForm";
 import Data from "../../eventsList.json";
 
 const RegistrationPage = () => {
-  const [hackathonData, setHackathonData] = useState<any>(null);
+  const [eventsData, setEventsData] = useState<any>(null);
   const pathname = usePathname();
 
   useEffect(() => {
     const slug = pathname.split("/").slice(-2, -1)[0];
 
-    const searchHackathon = Data.find((hackathon) =>
-      hackathon.url.includes(slug),
-    );
-    setHackathonData(searchHackathon);
+    const searchEvents = Data.find((events) => events.url.includes(slug));
+    setEventsData(searchEvents);
   }, [pathname]);
 
-  if (!hackathonData) {
+  if (!eventsData) {
     return <Skeleton className="h-screen max-w-full p-10"></Skeleton>;
   }
 
   return (
     <TallyForm
-      tallyUrl={hackathonData.registrationLink}
+      tallyUrl={eventsData.registrationLink}
       title="Register for Alchemy mini hack!"
     />
   );
