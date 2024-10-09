@@ -5,12 +5,14 @@ import React, { useEffect, useState } from "react";
 import Card from "@/components/Card";
 import { Box } from "@mui/material";
 import { styled } from "@mui/system";
-
+import Link from "next/link";
 import Data from "../../app/content/content.json";
 
 interface DataItem {
   labels: string[];
   index: number;
+  id: string;
+  url: string;
 }
 
 interface ContentFooterProps {
@@ -21,6 +23,7 @@ const CardBox = styled(Box)(() => ({
   display: "flex",
   marginBottom: "4.8rem",
   flexDirection: "row",
+  alignItems: "stretch",
   "& > *": {
     flexBasis: "calc(33.33% - 1.6rem)",
   },
@@ -58,9 +61,25 @@ const ContentFooter: React.FC<ContentFooterProps> = ({
       <h3>More Content:</h3>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <CardBox>
-          {filteredData.slice(0, 3).map((item, index) => (
-            <Card type="content" content={item} key={index} />
-          ))}
+          {filteredData.slice(0, 3).map((item, index) =>
+            item.id ? (
+              <Link
+                href={`/content/${item.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Card type="content" content={item} key={index} />
+              </Link>
+            ) : (
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "none" }}
+              >
+                <Card type="content" content={item} key={index} />
+              </a>
+            ),
+          )}
         </CardBox>
       </Box>
     </div>
