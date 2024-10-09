@@ -32,7 +32,7 @@ const RegionSelect = (props) => {
       renderValue={(selected) => (
         <Box display="flex" alignItems="center">
           <Image
-            src="/images/hackathon/icon/location.svg"
+            src="/images/events/icon/location.svg"
             width="24"
             height="24"
             className="mr-2"

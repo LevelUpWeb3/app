@@ -66,7 +66,7 @@ const HackathonCard = ({ content }) => {
         <LabelContainer>
           <Label>
             <Image
-              src="/images/hackathon/icon/calendar.svg"
+              src="/images/events/icon/calendar.svg"
               width="24"
               height="24"
               className="mr-2"
@@ -77,7 +77,7 @@ const HackathonCard = ({ content }) => {
           <Label>
             {" "}
             <Image
-              src="/images/hackathon/icon/location.svg"
+              src="/images/events/icon/location.svg"
               width="24"
               height="24"
               className="mr-2"

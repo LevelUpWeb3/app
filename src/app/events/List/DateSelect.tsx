@@ -31,7 +31,7 @@ const DateSelect = (props) => {
       renderValue={(selected) => (
         <Box display="flex" alignItems="center">
           <Image
-            src="/images/hackathon/icon/calendar.svg"
+            src="/images/events/icon/calendar.svg"
             width="24"
             height="24"
             className="mr-2"
