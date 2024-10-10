@@ -49,7 +49,7 @@ const Label = styled(Typography)(() => ({
   overflowWrap: "break-word", // Added break-word to prevent overflow
 }));
 
-const Card = ({ content, key, type }) => {
+const Card = ({ content, type }) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -62,7 +62,7 @@ const Card = ({ content, key, type }) => {
   };
 
   return (
-    <CardArticle key={key} onClick={handleClick}>
+    <CardArticle onClick={handleClick}>
       <Box>
         <Title> {content.name} </Title>
         <Summary> {content.summary} </Summary>
