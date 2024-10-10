@@ -1,7 +1,7 @@
 import { default as NavLink } from "next/link";
 import React, { useEffect, useState } from "react";
 
-import { Box, List, ListItemButton, Stack } from "@mui/material";
+import { Box, List, ListItemButton, Stack, SvgIcon } from "@mui/material";
 import { styled } from "@mui/system";
 
 import WalletToolkit from "@/components/WalletToolkit";
@@ -11,6 +11,11 @@ import Logo from "../ScrollLogo";
 import { navigations } from "./constants";
 import useCheckCustomNavBarBg from "./useCheckCustomNavBarBg";
 import useCheckTheme from "./useCheckTheme";
+
+import XLogoIcon from "@/assets/svgs/socials/x.svg";
+import YoutubeIcon from "@/assets/svgs/socials/youtube.svg";
+import TelegramIcon from "@/assets/svgs/socials/telegram.svg";
+import RightArrow from "@/assets/svgs/common/arrow-right.svg";
 
 const NavStack = styled(Stack)(() => ({
   height: "3rem",
@@ -56,9 +61,8 @@ const ListItem = styled<any>(ListItemButton, {
   shouldForwardProp: (prop) => prop !== "dark",
 })(({ theme, dark }) => ({
   fontWeight: 600,
-  fontSize: "2rem",
-  height: "5.5rem",
-  lineHeight: "5.5rem",
+  height: "9rem",
+  lineHeight: "9rem",
   color: dark
     ? (theme as any).vars.palette.primary.contrastText
     : (theme as any).vars.palette.text.primary,
@@ -66,22 +70,24 @@ const ListItem = styled<any>(ListItemButton, {
   display: "flex",
   justifyContent: "space-between",
   padding: "0 !important",
+  borderTop: `1px solid ${dark ? (theme as any).vars.palette.primary.contrastText : (theme as any).vars.palette.text.primary}`,
   "&.active": {},
   "&:hover": {
     background: "transparent",
   },
-  "&:not(:first-of-type)": {
-    borderTop: `1px solid ${dark ? (theme as any).vars.palette.primary.contrastText : (theme as any).vars.palette.text.primary}`,
+
+  "&:last-of-type": {
+    borderBottom: `1px solid ${dark ? (theme as any).vars.palette.primary.contrastText : (theme as any).vars.palette.text.primary}`,
   },
 }));
 
 const MenuLinkStyledButton = styled<any>(NavLink, {
   shouldForwardProp: (prop) => prop !== "dark",
 })(({ theme, dark }) => ({
-  fontWeight: 600,
-  fontSize: "2rem",
-  height: "5.5rem",
-  lineHeight: "5.5rem",
+  fontWeight: 400,
+  fontSize: "3.2rem",
+  height: "9rem",
+  lineHeight: "9rem",
   color: dark
     ? (theme as any).vars.palette.primary.contrastText
     : (theme as any).vars.palette.text.primary,
@@ -91,11 +97,12 @@ const MenuLinkStyledButton = styled<any>(NavLink, {
       ? (theme as any).vars.palette.primary.contrastText
       : (theme as any).vars.palette.text.primary,
   },
+  display: "flex",
+  justifyContent: "space-between",
 }));
 
 const App = ({ currentMenu }) => {
   const navbarBg = useCheckCustomNavBarBg();
-  const showWalletConnector = useShowWalletConnector();
 
   const dark = useCheckTheme();
   const [open, setOpen] = useState(false);
@@ -133,6 +140,11 @@ const App = ({ currentMenu }) => {
           >
             <MenuLinkStyledButton href={item.href} dark={dark}>
               {item.label}
+              <SvgIcon
+                sx={{ fontSize: "20px", height: "auto" }}
+                component={RightArrow}
+                inheritViewBox
+              />
             </MenuLinkStyledButton>
           </ListItem>
         </React.Fragment>
@@ -149,17 +161,17 @@ const App = ({ currentMenu }) => {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
+        gap="25px"
       >
         <NavLink href="/" className="flex">
           <Box onClick={() => toggleDrawer(false)}>
             <Logo light={dark} />
           </Box>
         </NavLink>
-        <Stack direction="row" spacing="1.6rem" alignItems="center">
+        <Stack direction="row" spacing="1.6rem" alignItems="center" flex="1">
           {/* TODO: Box created to temporarily create placeholder space. Needs to be removed */}
-          <Box sx={{ padding: "3.0rem" }}></Box>
+          {/* <Box sx={{ padding: "3.0rem" }}></Box> */}
           {/* Temporarily disasbled for MVP */}
-          {/* {showWalletConnector && <WalletToolkit dark={dark}></WalletToolkit>} */}
           <Menu
             onClick={() => toggleDrawer(!open)}
             className={open ? "active" : ""}
@@ -169,6 +181,7 @@ const App = ({ currentMenu }) => {
             <Bar dark={dark}></Bar>
           </Menu>
         </Stack>
+        <WalletToolkit dark={dark}></WalletToolkit>
       </NavStack>
       {open && (
         <Box
@@ -177,7 +190,6 @@ const App = ({ currentMenu }) => {
               dark
                 ? (theme as any).vars.palette.themeBackground.dark
                 : (theme as any).vars.palette.themeBackground.light,
-            paddingTop: "5rem",
             height: "calc(100vh - 6.2rem)",
             overflowY: "auto",
           }}
@@ -188,6 +200,41 @@ const App = ({ currentMenu }) => {
             onKeyDown={() => toggleDrawer(false)}
           >
             {renderList()}
+            <Stack
+              gap={["35px"]}
+              direction="row"
+              justifyContent="flex-end"
+              className="mb-[20px]"
+              mt="3rem"
+            >
+              <SvgIcon
+                sx={{
+                  fontSize: "20px",
+                  height: "auto",
+                  verticalAlign: "middle",
+                }}
+                inheritViewBox
+                component={XLogoIcon}
+              />
+              <SvgIcon
+                sx={{
+                  fontSize: "20px",
+                  height: "auto",
+                  verticalAlign: "middle",
+                }}
+                inheritViewBox
+                component={YoutubeIcon}
+              />
+              <SvgIcon
+                sx={{
+                  fontSize: "20px",
+                  height: "auto",
+                  verticalAlign: "middle",
+                }}
+                inheritViewBox
+                component={TelegramIcon}
+              />
+            </Stack>
           </MenuContent>
         </Box>
       )}

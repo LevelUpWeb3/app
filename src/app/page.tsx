@@ -1,69 +1,93 @@
 "use client";
-import { Box } from "@mui/material";
-import { styled } from "@mui/system";
+import { Box, Container, Stack } from "@mui/material";
 
 import Button from "@/components/Button";
-import useCheckViewport from "@/hooks/useCheckViewport";
 
-const Container = styled(Box)({
-  height: "calc(100vh - 65px)",
-  minHeight: "64rem",
-  position: "relative",
-});
-
-const StyledBox = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  flexDirection: "column",
-  ["@media (max-width: 768px)"]: {
-    padding: "0 2rem",
-  },
-});
+// background: 'url("/images/landing/bg.png")  center center / 155px no-repeat',
 
 const LandingPage = () => {
-  const { isMobile } = useCheckViewport();
-
   return (
-    <Container>
-      <StyledBox
-        sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
+    <Box>
+      <Box
+        sx={{
+          background: [
+            'url("/images/landing/bg-mobile.png")  right 20px bottom 30px / 155px no-repeat',
+            'url("/images/landing/bg.png")  right bottom / 500px no-repeat',
+          ],
+        }}
       >
-        <div className="pt-32 text-center text-[7.2rem] font-semibold leading-[88px] text-stone-950 max-md:w-[30rem] max-md:max-w-full max-md:pt-[6rem] max-md:text-[3.6rem] max-md:leading-[48px]">
-          Level Up your Web3 Skills
-        </div>
+        <Container>
+          <Stack gap={["14px"]} pt={["60px", "100px"]} pb={["210px", "450px"]}>
+            <Box
+              sx={{
+                fontSize: ["32px", "64px"],
+              }}
+            >
+              Learn, Build, Innovate
+            </Box>
+            <Box
+              sx={{
+                fontSize: ["16px", "24px"],
+                maxWidth: ["686px"],
+              }}
+            >
+              Level Up is your platform to learn solidity, build real projects,
+              and find opportunities to build the future of Ethereum.
+            </Box>
+            <Button href="/learn-more" width="25rem">
+              Learn Solidity
+            </Button>
+          </Stack>
+        </Container>
+      </Box>
 
-        <div className="mt-4 w-[771px] text-center text-[2.6rem] tracking-wide text-stone-950 max-md:max-w-full max-md:text-[1.6rem] max-md:leading-[24px]">
-          Level Up is your platform to learn Solidity, build real projects, and
-          apply for grants to build the future of Ethereum.
-        </div>
-
-        {/* TODO: Consider reviving this section when challenges are revisited */}
-        {/* <div className="mt-7 flex justify-center">
-          <div className="flex h-[11.6rem] w-[24rem] flex-col items-center justify-center rounded-2xl bg-orange-100 font-semibold text-stone-950 max-md:h-[6.8rem] max-md:w-[12.4rem]">
-            <div className="text-center text-[1.8rem] leading-[2.8rem] tracking-normal max-md:text-[1.4rem] max-md:leading-[2rem]">
-              Total challenges
-            </div>
-            <div className="text-center font-develop text-[4rem] leading-[56px] tracking-wide max-md:text-[2rem] max-md:leading-[2.8rem]">
-              20
-            </div>
-          </div>
-        </div> */}
-
-        <div className="mb-[2.6rem] mt-[3.6rem] flex w-full justify-center gap-[3rem] max-md:flex-col max-md:items-center max-md:gap-[2rem]">
-          <Button href="/solidity" color="primary" width="25rem">
-            Learn Solidity
-          </Button>
-          <Button href="/learn-more" width="25rem">
-            Learn More
-          </Button>
-        </div>
-      </StyledBox>
-      <img
-        loading="lazy"
-        className="mt-[6.8rem] w-full max-md:absolute max-md:bottom-0"
-        src="/images/landing.png"
-      />
-    </Container>
+      <Box className="bg-[#edfbfd]">
+        <Container>
+          <Stack
+            gap={["14px"]}
+            direction={["column", "row"]}
+            justifyContent="space-between"
+            py={["30px", "100px"]}
+          >
+            <Box
+              sx={{
+                fontSize: ["32px", "36px"],
+              }}
+            >
+              What is Level Up?
+            </Box>
+            <Box
+              sx={{
+                fontSize: ["16px"],
+                maxWidth: ["686px"],
+              }}
+            >
+              Level Up is your one-stop shop for finding the building blocks you
+              need to explore and thrive in your Web3 journey.
+              <br />
+              <br />
+              From learning Solidity basics to developer challenges and grants,
+              Level Up aims to be the foundation for every builder — from
+              hobbyists to founders and everything in between.
+              <br />
+              <br />
+              Level Up is community-first and slowly being built in public! If
+              there’s anything you’d like to see or want to contribute, create
+              an issue or make a PR in our Github and join our study group.
+              <br />
+              <Stack direction="row" mt="16px" gap={["16px"]}>
+                <Button href="/learn-more" width="25rem">
+                  Find Our Github
+                </Button>
+                <Button href="/learn-more" width="25rem">
+                  Join The Study Group
+                </Button>
+              </Stack>
+            </Box>
+          </Stack>
+        </Container>
+      </Box>
+    </Box>
   );
 };
 
