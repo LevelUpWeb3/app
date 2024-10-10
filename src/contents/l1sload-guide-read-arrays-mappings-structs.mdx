@@ -1,0 +1,354 @@
+---
+name: "L1SLOAD guide: Advanced Data Structures"
+index: 7
+summary: This precompile unlocks the Keystore and more, learn how to use it with examples.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Sep 04, 2024
+readTime: 15 min read
+labels: ["Protocol"]
+---
+
+This article is a continuation of our previous discussion on `l1sload`, where we introduced its basic usage. Now, we will explore how to use `l1sload` to read more complex storage structures, such as mappings, structs, and both static and dynamic arrays.
+
+Solidity abstracts state storage from developers to offer a better experience, but in order to use `l1sload`, it’s crucial to understand how Solidity manages storage at a lower level. This guide covers various cases, complete with examples.
+
+## Static Arrays
+
+Static arrays are those with a fixed length declared at compile time. For example:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract L1ArrayDemo {
+    uint[5] myArray;
+
+	constructor() {
+		myArray[0] = 10;
+		myArray[1] = 20;
+		myArray[2] = 30;
+		myArray[3] = 40;
+		myArray[4] = 50;
+	}
+}
+```
+
+On-chain, the first element of the array is stored in the variable’s storage slot, the second in `slot + 1`, the third in `slot + 2`, and so on.
+
+To retrieve an element, you can simply add the array index to the array's slot. The formula looks like this:
+
+```
+VALUE_SLOT = ARRAY_SLOT + VALUE_INDEX
+```
+
+Keep in mind, the length of a static array is not stored on-chain. It's only visible at compile time.
+
+Another important note: this approach works for types larger than 16 bytes (e.g., `uint256`, `address`, `uint200`). For smaller types like `bool` or `uint8`, Solidity applies data optimizations, which we’ll cover later in this guide.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract L2ArrayDemo {
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+
+    function getNum(address contractAddress, uint arraySlot, uint arrayIndex) public view returns(uint) {
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, arraySlot + arrayIndex));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+        return abi.decode(returnValue, (uint));
+    }
+}
+```
+
+## Dynamic Arrays
+
+Unlike static arrays, dynamic arrays can grow or shrink after deployment. Because of this, Solidity stores them differently on-chain.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract L1DynamicArrayDemo {
+    uint[] public myArray;
+
+	constructor() {
+		myArray.push(10);
+		myArray.push(20);
+		myArray.push(30);
+	}
+}
+```
+
+The storage slot for a dynamic array holds its length. The actual data is stored starting at `KECCAK256(ARRAY_SLOT)`, with elements stored sequentially just like in static arrays.
+
+To query a specific element or the array length, we use the following formula:
+
+```
+VALUE_SLOT = KECCAK256(ARRAY_SLOT) + VALUE_INDEX
+```
+
+Here’s an example contract that queries both the length and specific elements of a dynamic array:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract L2DynamicArrayDemo {
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+
+    function retrieveArrayElement(address contractAddress, uint arraySlot, uint arrayIndex) public view returns(uint) {
+        require(arrayIndex < getArrayLength(contractAddress, arraySlot), "Out of bounds index");
+        uint accountBalanceSlot = uint(
+            keccak256(
+                abi.encodePacked(arraySlot)
+            )
+        ) + arrayIndex;
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, accountBalanceSlot));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+        return abi.decode(returnValue, (uint));
+    }
+
+    function getArrayLength(address contractAddress, uint arraySlot) public view returns(uint) {
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, arraySlot));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+        return abi.decode(returnValue, (uint));
+    }
+}
+```
+
+## Special Case: Storing Values 16 Bytes or Smaller
+
+Consider a dynamic array of `uint104` values. Since two `uint104` values can fit into a single 32-byte storage slot (with 48 bits, or 6 bytes, remaining unused), Solidity packs these values efficiently into one slot.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract L1Contract {
+    uint104[] public myArray;
+
+	constructor() {
+		myArray.push(10);
+		myArray.push(20);
+		myArray.push(30);
+		myArray.push(40);
+		myArray.push(50);
+	}
+}
+```
+
+To query such values using `l1sload`, we first locate the appropriate slot, then use bitwise operations to extract the desired value. The following formula helps in calculating the slot:
+
+```
+VALUE_SLOT = KECCAK256(ARRAY_SLOT) + VALUE_INDEX / (SLOT_SIZE / VALUE_SIZE)
+```
+
+However, retrieving the value also requires shifting the bits appropriately, which can be done using the right-shift operator.
+
+```
+VALUE = SLOT_VALUE >> ((VALUE_INDEX % (SLOT_SIZE / VALUE_SIZE)) * VALUE_SIZE))
+```
+
+This method can also work for larger types like uint256 or address, but for simplicity and efficiency, I recommend sticking to the methods mentioned earlier for those types.
+
+Here’s an example contract that queries data stored in a uint104 array:
+
+```
+https://latexeditor.lagrida.com/#google_vignette
+
+\text{ARRAY_VALUE} = \text{SLOT_VALUE} >> (\text{VALUE_INDEX } \% \frac{\text{SLOT_SIZE}} {\text{VALUE_SIZE}}) * \text{VALUE_SIZE }
+```
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract L2Storage {
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+
+    function retrieveArrayElement(address contractAddress, uint arraySlot, uint arrayIndex) public view returns(uint104) {
+        require(arrayIndex < getArrayLength(contractAddress, arraySlot), "Out of bounds index");
+        
+		uint accountBalanceSlot = uint(
+            keccak256(
+                abi.encodePacked(arraySlot)
+            )
+        ) + arrayIndex / (uint(245)/104);
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, accountBalanceSlot));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+		uint104 returnValueUint = uint104(abi.decode(returnValue, (uint)) >> ((arrayIndex % (uint(245)/104)) * 104));
+        return returnValueUint;
+    }
+
+    function getArrayLength(address contractAddress, uint arraySlot) public view returns(uint) {
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, arraySlot));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+        return abi.decode(returnValue, (uint));
+    }
+}
+```
+
+## Structs
+
+Structs store their data contiguously, similar to arrays. If multiple elements can fit into a single 32-byte slot, Solidity will pack them together to optimize storage.
+
+```solidity
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.20;
+
+struct MyStruct {
+    uint a;// 32 bytes (256 bits)
+    address b; // 20 bytes (160 bits)
+    bool c; // 1 byte (8 bits)
+    uint d; // 32 bytes (256 bits) 
+}
+
+contract L1StructDemo {
+    MyStruct myStruct;
+	constructor() {
+		myStruct = MyStruct(10,address(this),true,20);
+	}
+}
+```
+
+In the following example, the struct fields `a`, `b`, and `c` are packed across multiple slots. The variable `d` doesn’t fit into the second slot, so it is stored in the next available slot.
+
+Reading structs requires accounting for the byte offsets of each field, using bitwise operations as necessary.
+
+``` solidity
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.20;
+
+struct MyStruct {
+    uint a;// 32 bytes (256 bits)
+    address b; // 20 bytes (160 bits)
+    bool c; // 1 byte (8 bits)
+    uint d; // 32 bytes (256 bits) 
+}
+
+// This contract reads the balance of any holder on L1
+contract L2StructDemo {
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+
+    function getArrayLength(address contractAddress, uint structSlot) public view returns(MyStruct memory) {
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, structSlot, structSlot+1, structSlot+2));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+        (uint256 slot0, uint256 slot1, uint slot2) = abi.decode(returnValue, (uint, uint, uint));
+        address b = address(uint160(slot1));
+        bool c = (slot1 >> 160) == 1;
+        return MyStruct(slot0, b, c, slot2);
+    }
+}
+```
+
+## Nesting Structures
+
+Nested structures, such as mappings of arrays or structs containing arrays, follow the same rules as their underlying structures.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract L1NestingDemo {
+    mapping(uint => uint[] myArray) arrayMapping;
+	constructor() {
+		arrayMapping[0].push(10);
+		arrayMapping[0].push(20);
+		arrayMapping[0].push(30);
+		arrayMapping[1].push(100);
+		arrayMapping[1].push(200);
+		arrayMapping[1].push(300);
+	}
+}
+```
+
+For example, reading from a mapping of arrays requires combining the formulas for mappings and dynamic arrays. The formula for mappings from the previous article, and the dynamic array formula from this article, can be combined like this:
+
+```
+KECCAK256(MAPPING_KEY, SLOT)
+```
+
+Data is stored in a pattern as illustrated below:
+
+```
+KECCAK256(SLOT) + ARRAY_INDEX
+
+```
+
+We combine them and we get this one.
+
+```
+VALUE_SLOT = KECCAK256(KECCAK256(MAPPING_KEY, MAPPING_SLOT)) + ARRAY_INDEX
+```
+
+Check out this example that demonstrates reading a mapping of arrays:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract L2NestingDemo {
+    address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
+    address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
+
+    function getArrayLength(address contractAddress, uint mappingSlot, uint mappingKey, uint arrayIndex) public view returns(uint) {
+        uint accountBalanceSlot = uint(
+            keccak256(
+                abi.encodePacked(
+                    keccak256(abi.encodePacked(mappingKey,
+                    mappingSlot)
+                )
+            )
+        )) + arrayIndex;
+        
+        bool success;
+        bytes memory returnValue;
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, accountBalanceSlot));
+        if(!success)
+        {
+            revert("L1SLOAD failed");
+        }
+        return abi.decode(returnValue, (uint));
+    }
+}
+```
+
+You can extend these principles to more complex data structures, such as an array of mappings, structs with arrays, or even mappings of mappings. The same logic applies in all cases.
