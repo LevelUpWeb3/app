@@ -31,36 +31,19 @@ const StyledBox = styled<any>(Stack, {
   width: "100%",
   zIndex: 10,
   backgroundColor: "transparent",
-  // backgroundColor: bgColor
-  //   ? (theme as any).vars.palette.themeBackground[bgColor]
-  //   : dark
-  //     ? (theme as any).vars.palette.themeBackground.dark
-  //     : (theme as any).vars.palette.themeBackground.light,
-}));
-
-const StyledPopper = styled<any>(Popper, {
-  shouldForwardProp: (prop) => prop !== "dark" && prop !== "bgColor",
-})(({ theme, bgColor, dark }) => ({
-  backgroundColor: bgColor
-    ? (theme as any).vars.palette.themeBackground[bgColor]
-    : dark
-      ? (theme as any).vars.palette.themeBackground.dark
-      : (theme as any).vars.palette.themeBackground.light,
-  padding: "0 2rem 1rem",
-  marginLeft: "-2rem !important",
-  zIndex: theme.zIndex.appBar,
 }));
 
 const HeaderContainer = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  gap: "60px",
 }));
 
 const MenuLinkButton = styled<any>(Link, {
   shouldForwardProp: (prop) => prop !== "dark",
 })(({ theme, dark }) => ({
-  fontSize: "1.8rem",
+  fontSize: "1.6rem",
   fontWeight: 400,
   paddingLeft: "25px",
   paddingRight: "25px",
@@ -76,28 +59,10 @@ const MenuLinkButton = styled<any>(Link, {
   },
 }));
 
-const ExternalLink = styled<any>("p", {
-  shouldForwardProp: (prop) => prop !== "dark",
-})(({ theme, dark }) => ({
-  fontWeight: 400,
-  fontSize: "1.8rem",
-  height: "2.1rem",
-  lineHeight: "2.1rem",
-  color: dark
-    ? (theme as any).vars.palette.primary.contrastText
-    : (theme as any).vars.palette.text.primary,
-  display: "flex",
-  alignItems: "center",
-  width: "100%",
-  "&:hover": {
-    fontWeight: 500,
-  },
-}));
-
 const LinkStyledButton = styled<any>(NavLink, {
   shouldForwardProp: (prop) => prop !== "dark",
 })(({ theme, dark }) => ({
-  fontSize: "1.8rem",
+  fontSize: "1.6rem",
   fontWeight: 400,
   marginLeft: "0.5rem",
   marginRight: "0.5rem",
@@ -115,224 +80,13 @@ const LinkStyledButton = styled<any>(NavLink, {
   },
 }));
 
-const SubMenuButton = styled<any>(Stack, {
-  shouldForwardProp: (prop) => prop !== "dark",
-})(({ theme, dark }) => ({
-  fontSize: "1.8rem",
-  fontWeight: 400,
-  marginLeft: "0.5rem",
-  marginRight: "0.5rem",
-  lineHeight: "65px",
-  position: "relative",
-  cursor: "pointer",
-  color: dark
-    ? (theme as any).vars.palette.primary.contrastText
-    : (theme as any).vars.palette.text.primary,
-  "&.active": {
-    fontWeight: 600,
-  },
-  "& .expand-more": {
-    willChange: "transform",
-    transition: "transform .3s ease-in-out",
-  },
-  "& .expand-more-reverse": {
-    fontWeight: 500,
-    transform: "rotate(180deg)",
-  },
-}));
-
-const SubMenuList = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "column",
-  overflow: "hidden",
-}));
-
-const SectionList = styled<any>(Box, {
-  shouldForwardProp: (prop) => prop !== "dark",
-})(({ theme, dark }) => ({
-  display: "flex",
-  flexDirection: "column",
-  width: "100%",
-  padding: "1.8rem 0",
-  "&:nth-of-type(1)": {
-    paddingTop: 0,
-  },
-  "&:nth-of-type(n+2)": {
-    borderTop: `1px solid ${dark ? (theme as any).vars.palette.primary.contrastText : (theme as any).vars.palette.text.primary}`,
-  },
-  "&:nth-last-of-type(1)": {
-    paddingBottom: "0.8rem",
-  },
-}));
-
-const LinkButton = styled<any>(Link, {
-  shouldForwardProp: (prop) => prop !== "dark",
-})(({ theme, dark }) => ({
-  "& p": {
-    lineHeight: "2.9rem",
-    height: "2.9rem",
-    fontSize: "1.8rem",
-    color: dark
-      ? (theme as any).vars.palette.primary.contrastText
-      : (theme as any).vars.palette.text.primary,
-    fontWeight: 400,
-    cursor: "pointer",
-    "&:hover": {
-      color: dark
-        ? (theme as any).vars.palette.primary.contrastText
-        : (theme as any).vars.palette.text.primary,
-    },
-  },
-}));
-
-const LinkStyledSubButton = styled<any>(NavLink, {
-  shouldForwardProp: (prop) => prop !== "dark",
-})(({ theme, dark }) => ({
-  lineHeight: "2.9rem",
-  height: "2.9rem",
-  fontSize: "1.8rem",
-  fontWeight: 400,
-  cursor: "pointer",
-  color: dark
-    ? (theme as any).vars.palette.primary.contrastText
-    : (theme as any).vars.palette.text.primary,
-  "&:hover": {
-    fontWeight: 500,
-  },
-  "&.active": {
-    fontWeight: 600,
-  },
-}));
-
 const App = ({ currentMenu }) => {
-  const { cx } = useStyles();
   const navbarBg = useCheckCustomNavBarBg();
   const { isDesktop } = useCheckViewport();
   const dark = useCheckTheme();
 
-  const [checked, setChecked] = useState("");
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const handleMouseEnter = (e, key) => {
-    setChecked(key);
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleMouseLeave = () => {
-    setChecked("");
-    setAnchorEl(null);
-  };
-
-  const renderSubMenuList = (children) => {
-    return children.map((section, idx) => (
-      <SectionList
-        key={idx}
-        dark={dark}
-      >
-        <Typography
-          sx={{
-            fontSize: "1.4rem",
-            fontWeight: "bold",
-            lineHeight: "3rem",
-            color: dark ? "primary.contrastText" : "text.primary",
-          }}
-        >
-          {section.label}
-        </Typography>
-        {section.children
-          // only show sub menu item when the href is set
-          ?.filter((subItem) => subItem.href)
-          .map((subItem) =>
-            subItem.isExternal ? (
-              <LinkButton
-                target="_blank"
-                underline="none"
-                dark={dark}
-                key={subItem.label}
-                href={subItem.href}
-              >
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={1}
-                  sx={{ width: "100%" }}
-                >
-                  <ExternalLink dark={dark}>
-                    {subItem.label}
-                    <svg
-                      style={{ marginLeft: "0.5rem" }}
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                    >
-                      <path
-                        d="M9 1V7.86538L7.83812 6.7035V2.96385C5.46463 5.26924 3.29542 7.77999 0.853849 10L0 9.16344C2.42536 6.94344 4.5762 4.46728 6.93347 2.1781H3.31272L2.13462 1H9Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </ExternalLink>
-                </Stack>
-              </LinkButton>
-            ) : (
-              <LinkStyledSubButton
-                key={subItem.label}
-                href={subItem.href}
-                dark={dark}
-              >
-                {subItem.label}
-              </LinkStyledSubButton>
-            )
-          )}
-      </SectionList>
-    ));
-  };
-
   const renderNavigationItem = (item) => {
-    if (item.children) {
-      return (
-        <SubMenuButton
-          direction="row"
-          alignItems="center"
-          spacing="6px"
-          dark={dark}
-          className={currentMenu === item.key ? "active" : ""}
-          onMouseEnter={(e) => handleMouseEnter(e, item.key)}
-          onMouseLeave={handleMouseLeave}
-        >
-          <span>{item.label}</span>
-          <SvgIcon
-            className={cx(
-              "expand-more",
-              item.key === checked && "expand-more-reverse"
-            )}
-            sx={{ fontSize: "0.9rem" }}
-            component={TriangleDownSvg}
-            inheritViewBox
-          ></SvgIcon>
-          {item.key === checked && (
-            <StyledPopper
-              open={true}
-              placement="bottom-start"
-              anchorEl={anchorEl}
-              transition
-              bgColor={navbarBg}
-              dark={dark}
-            >
-              {({ TransitionProps }) => (
-                <Fade {...TransitionProps}>
-                  <SubMenuList onClick={handleMouseLeave}>
-                    {renderSubMenuList(item.children)}
-                  </SubMenuList>
-                </Fade>
-              )}
-            </StyledPopper>
-          )}
-        </SubMenuButton>
-      );
-    } else if (item.isExternal) {
+    if (item.isExternal) {
       return (
         <MenuLinkButton
           underline="none"
@@ -376,30 +130,25 @@ const App = ({ currentMenu }) => {
   };
 
   return (
-    <StyledBox
-      bgColor={navbarBg}
-      dark={dark}
-    >
+    <StyledBox bgColor={navbarBg} dark={dark}>
       <Container>
         <HeaderContainer>
           {/* Fixed NavLink to redirect to home page */}
-          <NavLink
-            href="/"
-            className="flex"
-          >
+          <NavLink href="/" className="flex">
             <Logo light={dark} />
           </NavLink>
           <Stack
             direction="row"
             spacing={isDesktop ? "4.4rem" : "2rem"}
             alignItems="center"
+            flex="1"
           >
             <Box>{renderNavigationList()}</Box>
           </Stack>
           {/* TODO: Box created to temporarily create placeholder space. Needs to be removed */}
-          <Box sx={{ padding: "3.0rem" }}></Box>
+          {/* <Box sx={{ padding: "3.0rem" }}></Box> */}
           {/* Temporarily disabled in MVP */}
-          {/* <WalletToolkit dark={dark}></WalletToolkit> */}
+          <WalletToolkit dark={dark}></WalletToolkit>
         </HeaderContainer>
       </Container>
     </StyledBox>
