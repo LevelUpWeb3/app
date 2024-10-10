@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 import Header from "@/components/Header";
 import SiteTab from "@/components/SiteTab";
+import Footer from "@/components/Footer";
 
 import "./global";
 
@@ -23,6 +24,7 @@ export default function RootLayout({
       {isLandingPagePath && <SiteTab />} */}
       <Header></Header>
       {children}
+      <Footer></Footer>
     </>
   );
 }
