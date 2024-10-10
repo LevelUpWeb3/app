@@ -25,7 +25,6 @@ const routes: PageMetadata[] = [
     name: "Solidity Challenges",
     path: "/solidity/:Slug",
   },
-  // TODO: Revive this route when we have challenges
   {
     name: "Challenges",
     path: "/challenges",
@@ -35,20 +34,20 @@ const routes: PageMetadata[] = [
     path: "/challenges/:Id",
   },
   {
-    name: "Hackathon",
-    path: "/hackathon",
+    name: "Events",
+    path: "/events",
   },
   {
-    name: "Hackathon",
-    path: "/hackathon/:Slug",
+    name: "Events",
+    path: "/events/:Slug",
   },
   {
-    name: "Hackathon Registration",
-    path: "/hackathon/:Slug/register",
+    name: "Event Registration",
+    path: "/events/:Slug/register",
   },
   {
-    name: "Hackathon Submission",
-    path: "/hackathon/:Slug/submit",
+    name: "Event Submission",
+    path: "/events/:Slug/submit",
   },
   {
     name: "Content",
@@ -62,10 +61,11 @@ const routes: PageMetadata[] = [
     name: "Podcast",
     path: "/podcast",
   },
-  {
-    name: "Grants",
-    path: "/grants",
-  },
+  // TODO: Revive grants as needed
+  // {
+  //   name: "Grants",
+  //   path: "/grants",
+  // },
   {
     name: "Learn More",
     path: "/learn-more",

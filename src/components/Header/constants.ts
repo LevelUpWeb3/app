@@ -9,7 +9,6 @@ const navigations = [
     key: "content",
     href: "/content",
   },
-  // TODO: Revive challenges when we have challenges
   {
     label: "Challenges",
     key: "challenges",
@@ -21,16 +20,16 @@ const navigations = [
     href: "/podcast",
   },
   {
-    label: "Hackathon",
-    key: "hackathon",
-    href: "/hackathon",
+    label: "Events",
+    key: "events",
+    href: "/events",
   },
-  // TODO: Update route as needed if planning to embed inside Level Up
-  {
-    label: "Grants",
-    key: "grants",
-    href: "https://tally.so/r/mYdQP5",
-  },
+  // TODO: Update route as needed if planning to embed inside Level Up and to revive Grants
+  // {
+  //   label: "Grants",
+  //   key: "grants",
+  //   href: "https://tally.so/r/mYdQP5",
+  // },
 ];
 
 export { navigations };

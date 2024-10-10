@@ -36,7 +36,7 @@ export default function ContentDetailsPage() {
         setData(data);
       });
     setLoading(false);
-  }, []);
+  }, [pathname]);
 
   return (
     <>
