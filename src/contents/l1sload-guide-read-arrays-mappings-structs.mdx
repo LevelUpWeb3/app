@@ -1,7 +1,7 @@
 ---
-name: "L1SLOAD guide: Advanced Data Structures"
+name: "L1SLOAD guide: Reading Data Structures"
 index: 7
-summary: This precompile unlocks the Keystore and more, learn how to use it with examples.
+summary: Reading Arrays, Structs and Nested Mappings from L1.
 author: FilosofiaCodigo
 authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
 authorLink: https://x.com/FilosofiaCodigo
@@ -10,9 +10,9 @@ readTime: 15 min read
 labels: ["Protocol"]
 ---
 
-This article is a continuation of our previous discussion on `l1sload`, where we introduced its basic usage. Now, we will explore how to use `l1sload` to read more complex storage structures, such as mappings, structs, and both static and dynamic arrays.
+This article is a continuation of the [L1SLOAD guide](https://www.levelup.xyz/content/l1sload-guide-read-the-l1-state-from-l2) where we introduced its basic usage. Now, we will explore how to use `l1sload` to read more complex storage structures, such as mappings, structs, and both static and dynamic arrays.
 
-Solidity abstracts state storage from developers to offer a better experience, but in order to use `l1sload`, it’s crucial to understand how Solidity manages storage at a lower level. This guide covers various cases, complete with examples.
+Solidity abstracts state storage from developers to offer a better experience, but in order to use `l1sload`, it’s important to understand how Solidity manages storage at a lower level. This guide covers various cases by using examples, starting with static arrays.
 
 ## Static Arrays
 
@@ -37,15 +37,28 @@ contract L1ArrayDemo {
 
 On-chain, the first element of the array is stored in the variable’s storage slot, the second in `slot + 1`, the third in `slot + 2`, and so on.
 
-To retrieve an element, you can simply add the array index to the array's slot. The formula looks like this:
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/a9mmz7ektadl34ycqw18.png"
+    alt="Static Array Storage Demo"
+    width="950"
+  />
+  _L1ArrayDemo storage layout_
+</div>
 
-```
-VALUE_SLOT = ARRAY_SLOT + VALUE_INDEX
-```
+To retrieve an element, you can simply add the array's slot to the array index of the value you're looking for. The formula looks like this:
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/y12goetnr5k2d0y1rhf0.png"
+    alt="Formula Static Arrays"/>
+</div>
+
+
 
 Keep in mind, the length of a static array is not stored on-chain. It's only visible at compile time.
 
-Another important note: this approach works for types larger than 16 bytes (e.g., `uint256`, `address`, `uint200`). For smaller types like `bool` or `uint8`, Solidity applies data optimizations, which we’ll cover later in this guide.
+Another important note is that this approach works for types larger than 16 bytes (e.g., `uint256`, `address`, `uint200`). For smaller types like `bool` or `uint8`, Solidity applies data optimizations, which we’ll cover later in this guide.
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -70,7 +83,7 @@ contract L2ArrayDemo {
 
 ## Dynamic Arrays
 
-Unlike static arrays, dynamic arrays can grow or shrink after deployment. Because of this, Solidity stores them differently on-chain.
+Unlike static arrays, dynamic arrays can grow after deployment. Because of this, Solidity stores them differently on-chain.
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -87,13 +100,24 @@ contract L1DynamicArrayDemo {
 }
 ```
 
-The storage slot for a dynamic array holds its length. The actual data is stored starting at `KECCAK256(ARRAY_SLOT)`, with elements stored sequentially just like in static arrays.
+The storage slot for a dynamic array holds its length. The actual data is stored starting at `KECCAK256(ARRAY_SLOT)`, with elements stored sequentially after that position, just like static arrays.
 
-To query a specific element or the array length, we use the following formula:
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vxfzyy6oi6esddx0j2hy.png"
+    alt="Dynamic Array Storage Demo"
+    width="950"
+  />
+  _L1DynamicArrayDemo storage layout_
+</div>
 
-```
-VALUE_SLOT = KECCAK256(ARRAY_SLOT) + VALUE_INDEX
-```
+To query a specific element, we use the following formula:
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/qq21vlj3ql20skoo60zi.png"
+    alt="Formula Dynamic Arrays"/>
+</div>
 
 Here’s an example contract that queries both the length and specific elements of a dynamic array:
 
@@ -107,14 +131,14 @@ contract L2DynamicArrayDemo {
 
     function retrieveArrayElement(address contractAddress, uint arraySlot, uint arrayIndex) public view returns(uint) {
         require(arrayIndex < getArrayLength(contractAddress, arraySlot), "Out of bounds index");
-        uint accountBalanceSlot = uint(
+        uint arrayElementSlot = uint(
             keccak256(
                 abi.encodePacked(arraySlot)
             )
         ) + arrayIndex;
         bool success;
         bytes memory returnValue;
-        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, accountBalanceSlot));
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, arrayElementSlot));
         if(!success)
         {
             revert("L1SLOAD failed");
@@ -137,13 +161,13 @@ contract L2DynamicArrayDemo {
 
 ## Special Case: Storing Values 16 Bytes or Smaller
 
-Consider a dynamic array of `uint104` values. Since two `uint104` values can fit into a single 32-byte storage slot (with 48 bits, or 6 bytes, remaining unused), Solidity packs these values efficiently into one slot.
+Consider a dynamic array of `uint104` values. Since two `uint104` values can fit into a single 32-byte storage slot (with 48 bits, or 6 bytes, remaining unused), Solidity packs them together.
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract L1Contract {
+contract L1Uint104Array {
     uint104[] public myArray;
 
 	constructor() {
@@ -156,47 +180,55 @@ contract L1Contract {
 }
 ```
 
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/n80x3swtgbvrdpvpxzwk.png"
+    alt="Uint104 Array Storage Demo"
+    width="950"
+  />
+  _L1Uint104Array storage layout_
+</div>
+
 To query such values using `l1sload`, we first locate the appropriate slot, then use bitwise operations to extract the desired value. The following formula helps in calculating the slot:
 
-```
-VALUE_SLOT = KECCAK256(ARRAY_SLOT) + VALUE_INDEX / (SLOT_SIZE / VALUE_SIZE)
-```
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ylfzimoadebv1ihcgh0l.png"
+    alt="Formula Dynamic Arrays with other sizes getting the slot"/>
+</div>
 
 However, retrieving the value also requires shifting the bits appropriately, which can be done using the right-shift operator.
 
-```
-VALUE = SLOT_VALUE >> ((VALUE_INDEX % (SLOT_SIZE / VALUE_SIZE)) * VALUE_SIZE))
-```
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ox8ggvx31yxgxx9bmrpp.png"
+    alt="Shifting bytes to get value once we have the slot"/>
+</div>
 
 This method can also work for larger types like uint256 or address, but for simplicity and efficiency, I recommend sticking to the methods mentioned earlier for those types.
 
 Here’s an example contract that queries data stored in a uint104 array:
 
-```
-https://latexeditor.lagrida.com/#google_vignette
-
-\text{ARRAY_VALUE} = \text{SLOT_VALUE} >> (\text{VALUE_INDEX } \% \frac{\text{SLOT_SIZE}} {\text{VALUE_SIZE}}) * \text{VALUE_SIZE }
-```
-
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract L2Storage {
+contract L1Uint104ArrayDemo {
     address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
     address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
 
     function retrieveArrayElement(address contractAddress, uint arraySlot, uint arrayIndex) public view returns(uint104) {
         require(arrayIndex < getArrayLength(contractAddress, arraySlot), "Out of bounds index");
         
-		uint accountBalanceSlot = uint(
+		uint arrayElementSlot = uint(
             keccak256(
                 abi.encodePacked(arraySlot)
             )
         ) + arrayIndex / (uint(245)/104);
         bool success;
         bytes memory returnValue;
-        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, accountBalanceSlot));
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, arrayElementSlot));
         if(!success)
         {
             revert("L1SLOAD failed");
@@ -243,6 +275,15 @@ contract L1StructDemo {
 ```
 
 In the following example, the struct fields `a`, `b`, and `c` are packed across multiple slots. The variable `d` doesn’t fit into the second slot, so it is stored in the next available slot.
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/rqxaqf11xll46dunf9fk.png"
+    alt="Struct Storage Demo"
+    width="950"
+  />
+  _L1StructDemo storage layout_
+</div>
 
 Reading structs requires accounting for the byte offsets of each field, using bitwise operations as necessary.
 
@@ -300,24 +341,41 @@ contract L1NestingDemo {
 }
 ```
 
-For example, reading from a mapping of arrays requires combining the formulas for mappings and dynamic arrays. The formula for mappings from the previous article, and the dynamic array formula from this article, can be combined like this:
+For example, reading from a mapping of arrays requires combining the formulas for mappings and dynamic arrays. The formula for mappings from the previous article works like this:
 
-```
-KECCAK256(MAPPING_KEY, SLOT)
-```
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/7jkvc6nbnbdec32cjwzh.png"
+    alt="Mapping forumula"/>
+</div>
 
-Data is stored in a pattern as illustrated below:
+The dynamic array formula from this article is the following:
 
-```
-KECCAK256(SLOT) + ARRAY_INDEX
-
-```
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/18k78fai380a5jtl1fga.png"
+    alt="Dynamic Array formula"/>
+</div>
 
 We combine them and we get this one.
 
-```
-VALUE_SLOT = KECCAK256(KECCAK256(MAPPING_KEY, MAPPING_SLOT)) + ARRAY_INDEX
-```
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/7oxp65deqv4o0gefe85u.png"
+    alt="Array Mapping formula"/>
+</div>
+
+Data is stored in a pattern as illustrated below:
+
+<div className="text-center">
+  <img
+    src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jzrpwpy6beta8m9ptjrp.png"
+    alt="Nesting Storage Demo"
+    width="950"
+  />
+  _L1NestingDemo storage layout_
+</div>
+
 
 Check out this example that demonstrates reading a mapping of arrays:
 
@@ -330,7 +388,7 @@ contract L2NestingDemo {
     address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
 
     function getArrayLength(address contractAddress, uint mappingSlot, uint mappingKey, uint arrayIndex) public view returns(uint) {
-        uint accountBalanceSlot = uint(
+        uint mappingArraySlot = uint(
             keccak256(
                 abi.encodePacked(
                     keccak256(abi.encodePacked(mappingKey,
@@ -341,7 +399,7 @@ contract L2NestingDemo {
         
         bool success;
         bytes memory returnValue;
-        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, accountBalanceSlot));
+        (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, mappingArraySlot));
         if(!success)
         {
             revert("L1SLOAD failed");
@@ -352,3 +410,9 @@ contract L2NestingDemo {
 ```
 
 You can extend these principles to more complex data structures, such as an array of mappings, structs with arrays, or even mappings of mappings. The same logic applies in all cases.
+
+## Next steps
+
+To improve your understanding of Solidity storage layout, check out the official documentation on the [Layout of State](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html) section. Additionally, share your thoughts on the Ethereum Magicians Forum regarding the [L1SLOAD RIP](https://ethereum-magicians.org/t/rip-7728-l1sload-precompile/20388). With `l1sload` currently in development, your input is very important at this stage.
+
+Thanks for reading!
