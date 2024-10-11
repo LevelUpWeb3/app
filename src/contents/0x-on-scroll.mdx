@@ -10,11 +10,9 @@ readTime: 15 min read
 labels: ["DeFi"]
 ---
 
-import ContentCopy from "src/components/ContentCopy";
-
 _Learn how to use the 0x Swap API to fetch live swap prices and seamlessly integrate crypto trading into your app._
 
-Ever wondered how your favorite token trading dapp finds the best price when you trade ETH for DAI? It’s likely using a [liquidity aggregator](https://0x.org/post/managed-liquidity), which sources prices from both offchain (e.g., Market Makers, RFQ) and onchain (e.g., DEXs, AMMs) sources to find the best deal.
+Ever wondered how your favorite token trading dapp finds the best price when you make a swap? It’s likely using a [liquidity aggregator](https://0x.org/post/managed-liquidity), which sources prices from both offchain (e.g., Market Makers, RFQ) and onchain (e.g., DEXs, AMMs) sources to find the best deal.
 
 <div className="text-center">
   <img src="/images/contents/matcha.png" alt="matcha screenshot" width="300" />
@@ -87,7 +85,7 @@ Unlike `/quote`, which we'll use later to create an actual order, `/price` is a 
 
 ### Example Request
 
-Here’s an example of a `/price` request to sell 100 WETH for DAI on Scroll. You can view the full code [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-headless-example/index.ts#L60-L77).
+Here’s an example of a `/price` request to sell 100 WETH for wstETH on Scroll. You can view the full code [here](https://github.com/0xProject/0x-examples/blob/main/swap-v2-headless-example/index.ts#L60-L77).
 
 ```js
 const priceParams = new URLSearchParams({
@@ -252,7 +250,7 @@ Only use `/quote` when you're prepared to fill the order. Excessive unfilled req
 
 ### Example Request
 
-Here’s an example of fetching a firm quote to sell 100 WETH for DAI using the `/quote` endpoint (note its similarity to the `/price` request):
+Here’s an example of fetching a firm quote to sell 100 WETH for wstETH using the `/quote` endpoint (note its similarity to the `/price` request):
 
 ```javascript
 const qs = require("qs");
