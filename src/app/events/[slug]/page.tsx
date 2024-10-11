@@ -5,10 +5,11 @@ import EventsHeader from "@/components/EventsHeader";
 
 import { usePathname } from "next/navigation";
 import Button from "@/components/Button";
+import ComingSoon from "@/components/ComingSoon";
 import dynamic from "next/dynamic";
 import { sendGAEvent } from "@next/third-parties/google";
 
-import { Skeleton } from "@mui/material";
+import { Box } from "@mui/material";
 import useCheckViewport from "@/hooks/useCheckViewport";
 import Data from "../eventsList.json";
 
@@ -42,7 +43,11 @@ const EventsDetailsPage = () => {
   }, [pathname, slug]);
 
   if (!eventsData || sortedDetails.length === 0) {
-    return <Skeleton className="h-screen max-w-full p-10"></Skeleton>;
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <ComingSoon />
+      </Box>
+    );
   }
 
   return (
