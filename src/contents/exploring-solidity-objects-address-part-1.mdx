@@ -10,8 +10,6 @@ readTime: 3 min read
 labels: ["Smart Contract"]
 ---
 
-import ContentCopy from "src/components/ContentCopy";
-
 If you have been tinkering with Solidity, you might have used or came across the `address` object in Solidity. Common use cases of this object includes reading `address` balance, and sending tokens.
 
 In this article, we will explore the different members of `address` while referencing Solidity's [docs](https://docs.soliditylang.org/en/latest/cheatsheet.html#members-of-address).
@@ -20,7 +18,8 @@ In this article, we will explore the different members of `address` while refere
 
 The balance member provides access to read balance of address in Wei (1 Ether = 10^18 Wei).
 
-<ContentCopy code={`function retrieveBalance() public view returns (uint256) {
+```solidity
+function retrieveBalance() public view returns (uint256) {
     //returns ETH balance of deployed contract in Wei
     return address(this).balance;
 }
@@ -28,7 +27,8 @@ The balance member provides access to read balance of address in Wei (1 Ether = 
 function retrieveUserBalance(address user) public view returns (uint256) {
     //returns ETH balance of user's address in Wei
     return address(user).balance;
-}`} language="solidity"/>
+}
+```
 
 `retrieveBalance()` function is an example of a gotcha that catches new Solidity devs off-guard. It is not unusual to assume that `address(this).balance` would return the balance of our address. In reality, it is the balance of the smart contract itself that is read.
 
@@ -36,7 +36,8 @@ function retrieveUserBalance(address user) public view returns (uint256) {
 
 The `code` member allows us to query the deployed contract’s bytecode information.
 
-<ContentCopy code={`function retrieveCode() public view returns (bytes memory) {
+```solidity
+function retrieveCode() public view returns (bytes memory) {
     //returns EVM bytecode
     return address(this).code;
 }
@@ -44,7 +45,8 @@ The `code` member allows us to query the deployed contract’s bytecode informat
 function retrieveCodehash() public view returns (bytes32) {
     //returns Keccak-256 hash of the EVM bytecode
     return address(this).codehash;
-}`} language="solidity"/>
+}
+```
 
 `retrieveCode()` queries the EVM bytecode and in this example, the output looks something like this “0x60806040…4300081a0033”.
 
@@ -58,7 +60,8 @@ This is useful for contract verification purposes. [Here](https://etherscan.io/t
 
 Typically invoked for sending Ether. Level Up has also put together a [guide](<(https://www.levelupweb3.xyz/solidity/transacting-ether)>) covering these members. The section below covers the output/responses when using these members.
 
-<ContentCopy code={`function transferKeyword(uint256 ethAmount) public {
+```solidity
+function transferKeyword(uint256 ethAmount) public {
     // NOT recommended for sending Ether
     // Reverts with error if txn fails
     payable(address(this)).transfer(ethAmount);
@@ -68,7 +71,8 @@ function sendKeyword(uint256 ethAmount) public returns (bool) {
     // NOT recommended for sending Ether
     // Reverts with bool: "false" if txn fails
     return payable(address(this)).send(ethAmount);
-}`} language="solidity"/>
+}
+```
 
 `transfer` and `send` members are _not_ recommended for sending Ether. Take note on the expected responses if you plan to use them.
 
@@ -78,15 +82,14 @@ In situations of failed transactions, `transfer` reverts with an error while `se
 
 ### • Call
 
-<ContentCopy
-  code={`function callKeyword(uint256 ethAmount) public {
+```solidity
+function callKeyword(uint256 ethAmount) public {
     // RECOMMENDED method to send Ether
     // Passing blanks ("") because the example below shows empty calldata
     (bool sent, ) = address(this).call{value: ethAmount}("");
     require(sent, "Failed to send Ether");
-}`}
-  language="solidity"
-/>
+}
+```
 
 `call` is recommended due to its [flexibility for sending Ether](https://forum.openzeppelin.com/t/should-we-never-use-the-transfer-function/38445). It also allows you to pass arguments if interacting with custom functions that require any parameters.
 
