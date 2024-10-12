@@ -40,7 +40,7 @@ const MDXCodeHighlighter = {
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
             <div style={{ position: "absolute", top: "1px", right: "10px" }}>
-              <CopyButton text={"c"} />
+              <CopyButton text={children} />
             </div>
           </div>
         )}
