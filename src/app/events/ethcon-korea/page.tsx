@@ -142,35 +142,35 @@ export default function EthconMainPage() {
 
   return (
     <Suspense fallback={<LoadingMsg />}>
-      {/* <BlockUntilStart> */}
-      <EthconPageLayout>
-        <div className="flex justify-between gap-14 px-10 py-20">
-          <div className="flex w-1/5 flex-col text-4xl font-semibold">
-            {CHALLENGE_LEVEL_LIST.map((level, index) =>
-              level === selectedCateogry ? (
-                <p
-                  className="rounded-lg bg-black px-10 py-2 text-white hover:cursor-pointer"
-                  key={index}
-                >
-                  {level}
-                </p>
-              ) : (
-                <p
-                  className="rounded-lg px-10 py-2 hover:cursor-pointer"
-                  key={index}
-                  onClick={() => setSelectedCategory(level)}
-                >
-                  {level}
-                </p>
-              ),
-            )}
+      <BlockUntilStart>
+        <EthconPageLayout>
+          <div className="flex justify-between gap-14 px-10 py-20">
+            <div className="flex w-1/5 flex-col text-4xl font-semibold">
+              {CHALLENGE_LEVEL_LIST.map((level, index) =>
+                level === selectedCateogry ? (
+                  <p
+                    className="rounded-lg bg-black px-10 py-2 text-white hover:cursor-pointer"
+                    key={index}
+                  >
+                    {level}
+                  </p>
+                ) : (
+                  <p
+                    className="rounded-lg px-10 py-2 hover:cursor-pointer"
+                    key={index}
+                    onClick={() => setSelectedCategory(level)}
+                  >
+                    {level}
+                  </p>
+                ),
+              )}
+            </div>
+            <div className="grid w-4/5 grid-cols-4 gap-10">
+              <ChallengeList category={selectedCateogry} />
+            </div>
           </div>
-          <div className="grid w-4/5 grid-cols-4 gap-10">
-            <ChallengeList category={selectedCateogry} />
-          </div>
-        </div>
-      </EthconPageLayout>
-      {/* </BlockUntilStart> */}
+        </EthconPageLayout>
+      </BlockUntilStart>
     </Suspense>
   );
 }
