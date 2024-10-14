@@ -12,7 +12,9 @@ labels: ["Protocol"]
 
 This article is a continuation of the [L1SLOAD guide](https://www.levelup.xyz/content/l1sload-guide-read-the-l1-state-from-l2) where we introduced its basic usage. Now, we will explore how to use `l1sload` to read more complex storage structures, such as mappings, structs, and both static and dynamic arrays.
 
-Solidity abstracts state storage from developers to offer a better experience, but in order to use `l1sload`, it’s important to understand how Solidity manages storage at a lower level. This guide covers various cases by using examples, starting with static arrays.
+The EVM handles the state by using 32-byte storage slots. In Solidity, this is abstracted to provide a better developer experience. However, to be read complex data structures with `l1sload`, it's essential to understand how Solidity manages storage at a lower level.
+
+So let's start by understanding how static arrays are managed by the EVM.
 
 ## Static Arrays
 
@@ -59,6 +61,8 @@ To retrieve an element, you can simply add the array's slot to the array index o
 Keep in mind, the length of a static array is not stored on-chain. It's only visible at compile time.
 
 Another important note is that this approach works for types larger than 16 bytes (e.g., `uint256`, `address`, `uint200`). For smaller types like `bool` or `uint8`, Solidity applies data optimizations, which we’ll cover later in this guide.
+
+The following contract demonstrates how to read an array from the `L1ArrayDemo` contract.
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -341,7 +345,7 @@ contract L1NestingDemo {
 }
 ```
 
-For example, reading from a mapping of arrays requires combining the formulas for mappings and dynamic arrays. The formula for mappings from the previous article works like this:
+For example, reading from a mapping of arrays requires combining the formulas for mappings and dynamic arrays. The formula for mappings from the previous article, where [introduced Mappings](https://www.levelup.xyz/content/l1sload-guide-read-the-l1-state-from-l2), works like this:
 
 <div className="text-center">
   <img
@@ -349,7 +353,7 @@ For example, reading from a mapping of arrays requires combining the formulas fo
     alt="Mapping forumula"/>
 </div>
 
-The dynamic array formula from this article is the following:
+The dynamic array formula we introduced in this article is the following:
 
 <div className="text-center">
   <img
@@ -377,7 +381,7 @@ Data is stored in a pattern as illustrated below:
 </div>
 
 
-Check out this example that demonstrates reading a mapping of arrays:
+Take a look at this example that demonstrates reading a mapping of arrays:
 
 ```solidity
 // SPDX-License-Identifier: MIT
