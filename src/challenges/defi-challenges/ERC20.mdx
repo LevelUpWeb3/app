@@ -8,8 +8,6 @@ heroImage: "/images/level-up-preview.png"
 labels: ["DeFi"]
 ---
 
-import ContentCopy from "src/components/ContentCopy";
-
 # ERC20 Basics
 
 If you haven't completed the Simple Token Swap challenge yet, check it out [here](https://www.levelup.xyz/challenges/simple-token-swap)! 
@@ -29,7 +27,8 @@ If you need help with using a smart contract framework for completing this chall
 
 If you get stuck, feel free to ask for help in [Level Up Telegram group](https://t.me/+PdNbk5milo1mMTAy).
 
-<ContentCopy code={`// SPDX-License-Identifier: MIT
+```solidity
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -71,7 +70,8 @@ contract MyToken is ERC20 {
     function getBalanceOf(address account) public view returns (uint256) {
         // Implement the getBalanceOf function
     }
-}`} language="solidity"/>
+}
+```
 
 ## Instructions
 
