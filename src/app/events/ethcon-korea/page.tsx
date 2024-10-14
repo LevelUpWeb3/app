@@ -119,7 +119,7 @@ const BlockUntilStart = ({ children }) => {
       return (
         <div className="flex h-screen flex-col items-center justify-center gap-4">
           <p className="text-6xl font-bold">Coming Soon ...</p>
-          <p className="text-6xl font-bold">{`${Math.floor(remain / 3600)} hrs ${Math.floor((remain % 3600) / 60)} min ${Math.floor(remain % 60)} secs letf...`}</p>
+          <p className="text-6xl font-bold">{`${Math.floor(remain / 3600)} hrs ${Math.floor((remain % 3600) / 60)} min ${Math.floor(remain % 60)} secs left...`}</p>
         </div>
       );
     } else {
@@ -142,35 +142,35 @@ export default function EthconMainPage() {
 
   return (
     <Suspense fallback={<LoadingMsg />}>
-      <BlockUntilStart>
-        <EthconPageLayout>
-          <div className="flex justify-between gap-14 px-10 py-20">
-            <div className="flex w-1/5 flex-col text-4xl font-semibold">
-              {CHALLENGE_LEVEL_LIST.map((level, index) =>
-                level === selectedCateogry ? (
-                  <p
-                    className="rounded-lg bg-black px-10 py-2 text-white hover:cursor-pointer"
-                    key={index}
-                  >
-                    {level}
-                  </p>
-                ) : (
-                  <p
-                    className="rounded-lg px-10 py-2 hover:cursor-pointer"
-                    key={index}
-                    onClick={() => setSelectedCategory(level)}
-                  >
-                    {level}
-                  </p>
-                ),
-              )}
-            </div>
-            <div className="grid w-4/5 grid-cols-4 gap-10">
-              <ChallengeList category={selectedCateogry} />
-            </div>
+      {/* <BlockUntilStart> */}
+      <EthconPageLayout>
+        <div className="flex justify-between gap-14 px-10 py-20">
+          <div className="flex w-1/5 flex-col text-4xl font-semibold">
+            {CHALLENGE_LEVEL_LIST.map((level, index) =>
+              level === selectedCateogry ? (
+                <p
+                  className="rounded-lg bg-black px-10 py-2 text-white hover:cursor-pointer"
+                  key={index}
+                >
+                  {level}
+                </p>
+              ) : (
+                <p
+                  className="rounded-lg px-10 py-2 hover:cursor-pointer"
+                  key={index}
+                  onClick={() => setSelectedCategory(level)}
+                >
+                  {level}
+                </p>
+              ),
+            )}
           </div>
-        </EthconPageLayout>
-      </BlockUntilStart>
+          <div className="grid w-4/5 grid-cols-4 gap-10">
+            <ChallengeList category={selectedCateogry} />
+          </div>
+        </div>
+      </EthconPageLayout>
+      {/* </BlockUntilStart> */}
     </Suspense>
   );
 }
