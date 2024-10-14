@@ -1,8 +1,8 @@
 export * from "./common";
 export * from "./networks";
 
-export const HACKATHON_DATE_LIST = ["All time", "Upcoming", "Ended"];
-export const HACKATHON_REGION_LIST = [
+export const EVENTS_DATE_LIST = ["All time", "Upcoming", "Ended"];
+export const EVENTS_REGION_LIST = [
   "All regions",
   "Africa",
   "Asia Pacific",

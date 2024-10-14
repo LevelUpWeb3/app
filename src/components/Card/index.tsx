@@ -7,6 +7,7 @@ const CardArticle = styled("article")(() => ({
   background: "#FFF0DD",
   borderRadius: "2rem",
   display: "flex",
+  height: "100%",
   flexDirection: "column",
   justifyContent: "space-between",
   cursor: "pointer",
