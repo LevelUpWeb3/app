@@ -42,6 +42,10 @@ const routes: PageMetadata[] = [
     path: "/events/:Slug",
   },
   {
+    name: "Ethcon",
+    path: "/events/ethcon-korea/:Slug",
+  },
+  {
     name: "Event Registration",
     path: "/events/:Slug/register",
   },

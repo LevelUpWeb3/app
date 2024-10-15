@@ -1,0 +1,69 @@
+import { JoinButton } from "@/app/events/ethcon-korea/components";
+import Button from "@/components/Button";
+import { useRainbowContext } from "@/contexts/RainbowProvider";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { scrollSepolia } from "viem/chains";
+import { useSwitchNetwork } from "wagmi";
+
+export default function EthconSectionHeader() {
+  const pathname = usePathname();
+  const { walletCurrentAddress, chainId } = useRainbowContext();
+  const { switchNetwork } = useSwitchNetwork();
+
+  useEffect(() => {
+    if (!walletCurrentAddress) return;
+
+    if (switchNetwork && chainId !== scrollSepolia.id)
+      switchNetwork(scrollSepolia.id);
+  }, [switchNetwork, chainId]);
+
+  return (
+    <div className="flex h-[32rem] items-stretch justify-center bg-[#FFF0DD]">
+      <div className="mx-auto flex max-w-[1536px] flex-auto items-center justify-between px-[10.4rem] pt-[6.5rem] max-md:px-[1.6rem]">
+        <div className="flex h-full flex-col justify-between">
+          <Link href="/events" className="flex items-center text-md">
+            <ArrowBackIosIcon
+              className="text-sm"
+              sx={{
+                fontSize: "medium",
+              }}
+            />
+            <p className="text-3xl">Back to Event</p>
+          </Link>
+
+          <div className="mt-10 h-full flex-col items-center justify-center">
+            <p className="text-[56px] font-semibold">Ethcon Challenges</p>
+            <div className="flex items-stretch gap-2">
+              <JoinButton />
+
+              {pathname === "/events/ethcon-korea/scoreboard" ? (
+                <Button
+                  whiteButton={true}
+                  width="50%"
+                  href="/events/ethcon-korea"
+                >
+                  Challenges
+                </Button>
+              ) : (
+                <Button
+                  whiteButton={true}
+                  width="50%"
+                  href="/events/ethcon-korea/scoreboard"
+                >
+                  Scoreboard
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+        <img
+          src="/images/events/ethcon.svg"
+          className={`max-h-full object-contain max-md:max-h-[90%]`}
+        />
+      </div>
+    </div>
+  );
+}
