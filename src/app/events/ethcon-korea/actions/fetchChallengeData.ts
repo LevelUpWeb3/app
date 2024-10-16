@@ -89,7 +89,15 @@ export async function getChallengeDetail(
 
   let tmp = result.data.view.split("\n").slice(28, -20);
   tmp = [...tmp.slice(0, 1), ...tmp.slice(5)];
-  const view = [...tmp.slice(0, -48), "\t\t</div>"].join("\n");
+  let view = [...tmp.slice(0, -48), "\t\t</div>"].join("\n");
+  for (let filename of result.data.files) {
+    view = view.replace(filename, `https://test.onchain.kr${filename}`);
+  }
+
+  view = view.replace(
+    "btn ",
+    "btn border-2 border-black rounded-lg py-2 font-bold ",
+  );
 
   return {
     ...result.data,
