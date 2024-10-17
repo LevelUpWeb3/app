@@ -11,9 +11,8 @@ const ScrollLogo = (props) => {
   return (
     <SvgIcon
       sx={{
-        fontSize: ["2.5rem", "12rem"],
+        fontSize: ["26px", "102px"],
         height: "auto",
-        verticalAlign: "middle",
       }}
       component={isMobile ? ScrollLogoMobileIcon : ScrollLogoIcon}
       inheritViewBox

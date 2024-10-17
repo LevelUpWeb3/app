@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { NoSsr } from "@mui/base/NoSsr";
 
 import { AppBar, Slide } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
@@ -11,19 +10,9 @@ import { styled } from "@mui/system";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 import { navigations } from "./constants";
-import DesktopNav from "./desktop_header";
-import MobileNav from "./mobile_header";
-
-const AppBarStyled = styled(AppBar)(({ theme }) => ({
-  boxShadow: "none",
-  position: "sticky",
-  backgroundColor: "transparent",
-  paddingRight: "0 !important",
-  minHeight: "65px",
-  [theme.breakpoints.up("md")]: {
-    minHeight: "62px",
-  },
-}));
+import DesktopNav from "./DesktopHeader";
+import MobileNav from "./MobileHeader";
+import useMainBgColor from "@/hooks/useMainBgColor";
 
 interface Props {
   window?: () => Window;
@@ -41,8 +30,9 @@ function HideOnScroll(props: Props) {
 }
 
 export default function Header() {
-  const { isLandscape } = useCheckViewport();
+  const { isPortrait } = useCheckViewport();
   const pathname = usePathname();
+  useMainBgColor();
 
   const [currentMenu, setCurrentMenu] = useState("");
 
@@ -65,23 +55,18 @@ export default function Header() {
     return null;
   };
 
-  if (isLandscape) {
-    return (
-      <HideOnScroll>
-        <AppBarStyled>
+  return (
+    <HideOnScroll>
+      <AppBar
+        position="sticky"
+        sx={{ boxShadow: "none", backgroundColor: "transparent" }}
+      >
+        {isPortrait ? (
+          <MobileNav currentMenu={currentMenu} />
+        ) : (
           <DesktopNav currentMenu={currentMenu} />
-        </AppBarStyled>
-      </HideOnScroll>
-    );
-  } else {
-    return (
-      <HideOnScroll>
-        <AppBarStyled>
-          <NoSsr>
-            <MobileNav currentMenu={currentMenu} />
-          </NoSsr>
-        </AppBarStyled>
-      </HideOnScroll>
-    );
-  }
+        )}
+      </AppBar>
+    </HideOnScroll>
+  );
 }

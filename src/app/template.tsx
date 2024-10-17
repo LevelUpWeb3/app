@@ -1,8 +1,8 @@
-"use client";
+// "use client";
 
 import React from "react";
 
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 
 import Header from "@/components/Header";
 import SiteTab from "@/components/SiteTab";
@@ -10,13 +10,13 @@ import Footer from "@/components/Footer";
 
 import "./global";
 
-export default function RootLayout({
+export default function RootTemplate({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const routeName = usePathname();
-  const isLandingPagePath = routeName === "/";
+  // const routeName = usePathname();
+  // const isLandingPagePath = routeName === "/";
 
   return (
     <>
