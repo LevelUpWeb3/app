@@ -1,90 +1,64 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useMemo } from "react";
 import { makeStyles } from "tss-react/mui";
-
 import { ButtonBase, ButtonProps, CircularProgress } from "@mui/material";
-
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 interface ScrollButtonProps extends ButtonProps {
   width?: string | number;
-  gloomy?: boolean;
   loading?: boolean;
   disabled?: boolean;
-  whiteButton?: boolean;
   download?: boolean;
   variant?: "contained" | "outlined";
-  // compatibility
-  target?: string;
-  rel?: string;
-  isExternal?: boolean;
 }
 
-const useStyles = makeStyles<any>()(
-  (theme, { width, variant, whiteButton }) => ({
-    button: {
-      height: "44px",
-      fontSize: "16px",
-      fontWeight: 600,
-      width: "fit-content",
-      paddingLeft: "20px",
-      paddingRight: "20px",
-      borderWidth: 1,
-      borderStyle: "solid",
-      backgroundColor: variant === "contained" ? "#101010" : "#ffffff",
-      color: variant === "contained" ? "#ffffff" : "#101010",
-      [theme.breakpoints.down("sm")]: {
-        fontSize: "14px",
-        paddingLeft: "15px",
-        paddingRight: "15px",
-      },
+const useStyles = makeStyles<any>()((theme, { size }) => ({
+  button: {
+    height: size === "large" ? "82px" : "44px",
+    fontSize: "16px",
+    fontWeight: 500,
+    width: "fit-content",
+    padding: "0 20px",
+    border: `1.5px solid ${theme.vars.palette.text.primary}`,
+    backgroundColor: theme.vars.palette.background.default,
+    color: theme.vars.palette.text.primary,
+    "&:hover": {
+      backgroundColor: "#F4F4F4",
     },
-  }),
-);
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "14px",
+      padding: "0 15px",
+    },
+  },
+}));
 
 const Button = (props: ScrollButtonProps) => {
   const {
     width,
-    variant,
+    size = "default",
+    isExternal,
     loading,
     disabled,
-    gloomy,
     children,
-    whiteButton,
-    isExternal,
-    onClick,
+    ...restProps
   } = props;
-  const { classes, cx } = useStyles({
-    variant,
+  const { classes } = useStyles({
+    size,
     width,
     disabled,
     loading,
-    whiteButton,
   });
-  const router = useRouter();
 
   const { isMobile } = useCheckViewport();
-
-  const handleClick = (e) => {
-    if (onClick) {
-      onClick(e);
-    }
-    if (isExternal) {
-      window.open(props.href, "_blank");
-    } else {
-      router.push(props.href as string);
-    }
-  };
 
   return (
     <ButtonBase
       classes={{
-        root: cx(classes.button),
+        root: classes.button,
       }}
-      disabled={gloomy || loading}
-      onClick={handleClick}
+      disabled={loading}
+      {...restProps}
+      target={isExternal ? "_blank" : "_self"}
     >
       {children}
       {loading && (

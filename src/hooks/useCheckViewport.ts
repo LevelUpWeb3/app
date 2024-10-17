@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -13,7 +13,7 @@ const useCheckViewport = () => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
   const isTabletLandscape = useMediaQuery(
-    theme.breakpoints.between("md", "lg")
+    theme.breakpoints.between("md", "lg"),
   );
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -22,7 +22,7 @@ const useCheckViewport = () => {
   const isPortrait = useMediaQuery(theme.breakpoints.down("md"));
   // desktop(orientation: landscape)
   const isLandscape = useMediaQuery(theme.breakpoints.up("md"));
-  
+
   return {
     isDesktop,
     isTabletLandscape,

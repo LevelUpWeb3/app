@@ -28,7 +28,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-variant-ligatures: no-contextual;
-  background-color: #fff8f3;
+  /* background-color: #fff8f3; */
+  background-color: var(--main-bg-color);
 }
 
 body.mobile-top-nav-open {
@@ -185,7 +186,7 @@ div.markdown-body img {
 }
 
 .wrapper {
-  @apply max-w-7xl p-6 mx-auto w-full overflow-hidden;
+  @apply mx-auto w-full max-w-7xl overflow-hidden p-6;
   padding-top: 3rem;
 }
 
