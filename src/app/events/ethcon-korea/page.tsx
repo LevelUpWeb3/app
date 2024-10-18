@@ -88,7 +88,7 @@ const BlockUntilStart = ({ children }) => {
   const searchParams = useSearchParams();
   const isDebug = searchParams.get("debug");
   const start = useMemo(() => {
-    return new Date(1729328400000);
+    return new Date(1729296000000);
   }, []);
 
   useEffect(() => {
