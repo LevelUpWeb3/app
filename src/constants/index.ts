@@ -68,5 +68,6 @@ export const SOLIDITY_CHALLENGE_LIST = [
   "Fallback",
   "Transacting Ether",
 ];
+export const CHALLENGES_DATE_LIST = ["All time", "Live", "Ended"];
 
 export const NORMAL_HEADER_HEIGHT = "6.5rem";

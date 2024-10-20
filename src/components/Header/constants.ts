@@ -24,6 +24,11 @@ const navigations = [
     key: "events",
     href: "/events",
   },
+  {
+    label: "Writers competitions",
+    key: "writers-competitions",
+    href: "/writers-competitions",
+  },
   // TODO: Update route as needed if planning to embed inside Level Up and to revive Grants
   // {
   //   label: "Grants",

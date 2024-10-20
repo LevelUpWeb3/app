@@ -8,6 +8,7 @@ import "./scripts/processChallengeMarkdown.js";
 import "./scripts/processSolidityMarkdown.js";
 import "./scripts/processContentMarkdown.js";
 import "./scripts/processEventsMarkdown.js";
+import "./scripts/processWritersCompetition.js";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

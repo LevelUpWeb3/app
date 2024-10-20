@@ -74,6 +74,10 @@ const routes: PageMetadata[] = [
     name: "Learn More",
     path: "/learn-more",
   },
+  {
+    name: "Writers Competition",
+    path: "/writers-competitions/:Slug",
+  },
 ];
 
 export default routes;
