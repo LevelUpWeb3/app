@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
+import { Typography } from "@mui/material";
 
 interface CodeEditorProps {
   codeTemplate: string;
@@ -61,32 +62,32 @@ const CodeEditor = ({
   }, [initialCode, initialCodeSolution]);
 
   useEffect(() => {
-    setEditorHeight(`${window.innerHeight * 0.85}px`);
+    // setEditorHeight(`${window.innerHeight * 0.85}px`);
   }, []);
 
   return (
-    <div className="rounded-xl resize-y overflow-hidden">
-      <Editor
-        key={key}
-        height={editorHeight}
-        theme="vs-dark"
-        language="sol"
-        defaultValue={codeTemplate}
-        onMount={onMount}
-        value={codeTemplate}
-        onChange={(code) => onChange(code || "")}
-        options={{
-          wordWrap: "on",
-          minimap: { enabled: false },
-          cursorStyle: "underline",
-          fontSize: 14,
-          folding: false,
-          lineNumbersMinChars: 2,
-          scrollBeyondLastLine: false,
-          automaticLayout: true,
-        }}
-      />
-    </div>
+    <Editor
+      key={key}
+      className="solidity-editor bg-[#1e1e1e]"
+      height="760px"
+      theme="vs-dark"
+      language="sol"
+      defaultValue={codeTemplate}
+      onMount={onMount}
+      value={codeTemplate}
+      onChange={(code) => onChange(code || "")}
+      loading={<Typography>Loading</Typography>}
+      options={{
+        wordWrap: "on",
+        minimap: { enabled: false },
+        cursorStyle: "underline",
+        fontSize: 16,
+        folding: false,
+        lineNumbersMinChars: 2,
+        scrollBeyondLastLine: false,
+        automaticLayout: true,
+      }}
+    />
   );
 };
 

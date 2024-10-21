@@ -12,18 +12,27 @@ interface ScrollButtonProps extends ButtonProps {
   variant?: "contained" | "outlined";
 }
 
-const useStyles = makeStyles<any>()((theme, { size }) => ({
+const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
   button: {
     height: size === "large" ? "82px" : "44px",
-    fontSize: "16px",
+    fontSize: size === "large" ? "24px" : "16px",
     fontWeight: 500,
-    width: "fit-content",
     padding: "0 20px",
-    border: `1.5px solid ${theme.vars.palette.text.primary}`,
-    backgroundColor: theme.vars.palette.background.default,
-    color: theme.vars.palette.text.primary,
+    border:
+      variant === "outlined"
+        ? `1.5px solid ${theme.vars.palette.text.primary}`
+        : "none",
+    backgroundColor:
+      variant === "outlined"
+        ? theme.vars.palette.background.default
+        : theme.vars.palette.text.primary,
+    color:
+      variant === "outlined"
+        ? theme.vars.palette.text.primary
+        : theme.vars.palette.primary.contrastText,
     "&:hover": {
-      backgroundColor: "#F4F4F4",
+      backgroundColor:
+        variant === "outlined" ? "#F4F4F4" : theme.vars.palette.text.primary,
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: "14px",
@@ -36,6 +45,7 @@ const Button = (props: ScrollButtonProps) => {
   const {
     width,
     size = "default",
+    variant = "outlined",
     isExternal,
     loading,
     disabled,
@@ -47,6 +57,7 @@ const Button = (props: ScrollButtonProps) => {
     width,
     disabled,
     loading,
+    variant,
   });
 
   const { isMobile } = useCheckViewport();

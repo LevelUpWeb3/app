@@ -1,70 +1,79 @@
 "use client";
+import BackLink from "@/components/Back";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import LeftToRightButton from "./LeftToRight";
-import RightToLeftButton from "./RightToLeft";
+import { useParams, usePathname } from "next/navigation";
+import Link from "next/link";
+import { Button, Stack, SvgIcon, Typography } from "@mui/material";
+import RighArrowSvg from "@/assets/svgs/solidity/right-arrow.svg";
+import TriangleLeftSvg from "@/assets/svgs/common/triangle-left.svg";
 
-const PageButton = () => {
-  const [pages, setPages] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState<any>(null);
-  const pathname = usePathname();
+const PageButton = (props) => {
+  const { slug: lessonId } = useParams();
+
+  const [pagination, setPagination] = useState({
+    prevLesson: null,
+    nextLesson: null,
+  });
 
   useEffect(() => {
-    const slug = pathname!.split("/").pop();
-    fetch(`/data/solidity/${slug}.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCurrentPage(data);
-      });
-
     fetch(`/data/solidity/markdownData.json`)
       .then((res) => res.json())
       .then((data) => {
-        setPages(data);
+        const currentLessonIndex =
+          data.find((lesson) => lesson.id === lessonId).index - 1;
+        let prevLesson = null;
+        let nextLesson = null;
+        if (currentLessonIndex > 0) {
+          prevLesson = data[currentLessonIndex - 1];
+        }
+        if (currentLessonIndex < data.length - 1) {
+          nextLesson = data[currentLessonIndex + 1];
+        }
+        setPagination({ prevLesson, nextLesson });
       });
-  }, []);
-
-  const nextPage =
-    currentPage && pages.find((page) => page.index === currentPage.index + 1);
-  const prevPage =
-    currentPage && pages.find((page) => page.index === currentPage.index - 1);
-
-  let nextTitle, nextSlug, prevTitle, prevSlug;
-  if (nextPage) {
-    nextTitle = nextPage.name;
-    nextSlug = nextPage.name.replace(/\s|\//g, "-");
-  }
-  if (prevPage) {
-    prevTitle = prevPage.name;
-    prevSlug = prevPage.name.replace(/\s|\//g, "-");
-  }
+  }, [lessonId]);
 
   return (
-    <div className="flex flex-col">
-      <div className="mb-6 mt-2 flex flex-row justify-between gap-6">
-        {prevPage && (
-          <RightToLeftButton
-            variant="outlined"
-            className="group"
-            href={`/solidity/${prevSlug.toLowerCase()}`}
-          >
-            {prevTitle}
-          </RightToLeftButton>
-        )}
-        {nextPage ? (
-          <LeftToRightButton
-            variant="outlined"
-            className="group ml-auto"
-            href={`/solidity/${nextSlug.toLowerCase()}`}
-          >
-            {nextTitle}
-          </LeftToRightButton>
-        ) : (
-          <p className="mt-2 text-4xl italic">End of Challenges</p>
-        )}
-      </div>
-    </div>
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+      width="100%"
+      px="50px"
+      {...props}
+    >
+      {pagination.prevLesson ? (
+        <Link
+          className="flex items-center gap-[20px] text-[32px]"
+          href={`/solidity/${pagination.prevLesson.id}`}
+        >
+          <SvgIcon
+            sx={{ fontSize: "32px", color: "transparent" }}
+            component={TriangleLeftSvg}
+            inheritViewBox
+          ></SvgIcon>
+          <span>{pagination.prevLesson.name}</span>
+        </Link>
+      ) : (
+        <BackLink></BackLink>
+      )}
+      {pagination.nextLesson ? (
+        <Link
+          className="flex items-center gap-[20px] text-[32px]"
+          href={`/solidity/${pagination.nextLesson.id}`}
+        >
+          <span>Next lesson: {pagination.nextLesson.name}</span>
+          <SvgIcon
+            sx={{ fontSize: "32px", color: "transparent" }}
+            component={RighArrowSvg}
+            inheritViewBox
+          ></SvgIcon>
+        </Link>
+      ) : (
+        <p className="text-[32px]">End of Challenges</p>
+      )}
+    </Stack>
   );
 };
 

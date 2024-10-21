@@ -9,11 +9,9 @@ import useCheckViewport from "@/hooks/useCheckViewport";
 import { useStyles } from "tss-react/mui";
 
 import { navigations } from "./constants";
-import useCheckCustomNavBarBg from "./useCheckCustomNavBarBg";
 import useCheckTheme from "./useCheckTheme";
 
-const App = ({ currentMenu }) => {
-  const navbarBg = useCheckCustomNavBarBg();
+const DesktopHeader = ({ currentMenu }) => {
   const { isDesktop } = useCheckViewport();
   const dark = useCheckTheme();
 
@@ -35,7 +33,7 @@ const App = ({ currentMenu }) => {
               dark
                 ? "text-[var(--mui-palette-primary-contrastText)]"
                 : "text-[var(--mui-palette-text-primary)]",
-              currentMenu === item.key && "font-semibold",
+              currentMenu === item.key && "font-medium",
             )}
             href={item.href}
           >
@@ -72,4 +70,4 @@ const App = ({ currentMenu }) => {
   );
 };
 
-export default App;
+export default DesktopHeader;

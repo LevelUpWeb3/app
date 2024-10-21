@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import CodeEditor from "./CodeEditor";
 import DiffEditorComponent from "./DiffEditor";
@@ -9,9 +9,12 @@ import Modal from "./Modal";
 import { CODE_SOLUTIONS } from "@/constants/solidity/code-solutions";
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 
-import { Box, Button, Tooltip } from "@mui/material";
+import { Box, Stack, Tooltip } from "@mui/material";
 
-const IdeComponent = ({ exercise, setCompletedExercise }) => {
+import Button from "@/components/Button";
+import EditorTooltip from "@/components/EditorTooltip";
+
+const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
   const [code, setCode] = useState("");
   const [tries, setTries] = useState<number>(0);
   const [solutionViewer, setSolutionViewer] = useState<boolean>(false);
@@ -20,33 +23,27 @@ const IdeComponent = ({ exercise, setCompletedExercise }) => {
     useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { slug } = useParams();
-  const slugParam = slug as string;
+  const { slug: lessonKey } = useParams();
 
-  let codeSolution, codeTemplate;
-  if (
-    CODE_SOLUTIONS[slugParam.toLowerCase()] &&
-    CODE_EXERCISES[slugParam.toLowerCase()]
-  ) {
-    codeSolution = CODE_SOLUTIONS[slugParam.toLowerCase()][exercise];
-    codeTemplate = CODE_EXERCISES[slugParam.toLowerCase()][exercise];
-  }
+  const { codeSolution, codeTemplate } = useMemo(() => {
+    if (CODE_SOLUTIONS[lessonKey] && CODE_EXERCISES[lessonKey]) {
+      return {
+        codeSolution: CODE_SOLUTIONS[lessonKey][exercise],
+        codeTemplate: CODE_EXERCISES[lessonKey][exercise],
+      };
+    }
+    return { codeSolution: "", codeTemplate: "" };
+  }, [lessonKey, exercise]);
 
   const submissionHandler = (isCorrect: boolean) => {
     console.log("isCorrect", isCorrect);
     if (isCorrect) {
-      setCompletedExercise((prevCompletedExercise) => {
-        const currentExerciseNumber = parseInt(
-          exercise.replace("exercise", "")
-        );
-        console.log("current exercise:", currentExerciseNumber);
-        if (currentExerciseNumber > prevCompletedExercise) {
-          setCompletedExerciseNumber(currentExerciseNumber);
-          return currentExerciseNumber;
-        }
-        console.log("previous exercise:", prevCompletedExercise);
-        return prevCompletedExercise;
-      });
+      const currentExerciseNumber = parseInt(exercise.replace("exercise", ""));
+      if (currentExerciseNumber > completedExerciseNumber) {
+        onComplete(currentExerciseNumber);
+        setCompletedExerciseNumber(currentExerciseNumber);
+      }
+
       setSolutionViewer(false);
       setTries(0);
     } else {
@@ -81,15 +78,8 @@ const IdeComponent = ({ exercise, setCompletedExercise }) => {
       />
       {showSolutionButton ? (
         <Box position="relative">
-          <DiffEditorComponent
-            code={code}
-            codeSolution={codeSolution}
-          />
-          <Box
-            position="absolute"
-            left={4}
-            bottom={4}
-          >
+          <DiffEditorComponent code={code} codeSolution={codeSolution} />
+          <Box position="absolute" left={4} bottom={4}>
             <Tooltip title="Back to code">
               <Button
                 onClick={() => handleSolutionButtonClick(false)}
@@ -116,40 +106,48 @@ const IdeComponent = ({ exercise, setCompletedExercise }) => {
               submissionHandler(isCorrect);
             }}
           />
-          <Box
-            position="absolute"
-            left={4}
-            bottom={4}
+          <Stack
+            direction="row"
+            spacing="15px"
+            sx={{
+              position: "absolute",
+              bottom: "50px",
+              width: "100%",
+              px: "60px",
+            }}
           >
-            {solutionViewer && (
-              <Tooltip title="Tip: You can only view this solution once">
+            <EditorTooltip
+              title="You can only view this solution once"
+              placement="top"
+            >
+              <Box sx={{ width: "50%" }}>
                 <Button
-                  onClick={() => handleSolutionButtonClick(true)}
                   variant="contained"
+                  disabled={!solutionViewer}
+                  size="large"
                   sx={{
-                    backgroundColor: "transparent",
-                    color: "white",
-                    opacity: "0.3",
+                    visibility: solutionViewer ? "visible" : "hidden",
+                    width: "100%",
+                    opacity: 0.2,
+                    "&:hover": {
+                      opacity: 1,
+                    },
                   }}
+                  onClick={() => handleSolutionButtonClick(true)}
                 >
-                  Solution
+                  Answers
                 </Button>
-              </Tooltip>
-            )}
-          </Box>
-          <Box
-            position="absolute"
-            right={4}
-            bottom={4}
-          >
+              </Box>
+            </EditorTooltip>
             <SubmitButton
+              sx={{ width: "50%" }}
               code={code}
               codeSolution={codeSolution}
               onSubmission={(isCorrect) => {
                 submissionHandler(isCorrect);
               }}
             />
-          </Box>
+          </Stack>
         </Box>
       )}
     </Box>

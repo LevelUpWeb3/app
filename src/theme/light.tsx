@@ -217,6 +217,7 @@ const lightTheme = {
           cursor: "default",
           transition: defaultTransition,
           color: paletteOptions.text.primary,
+          lineHeight: "normal",
         },
         gutterBottom: {
           marginBottom: "0.7rem",

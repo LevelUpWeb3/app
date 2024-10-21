@@ -89,7 +89,7 @@ export const paletteOptions = {
 
 export const typographyOptions = {
   fontFamily: [
-    "TransSansPremium",
+    "NeueHelvetica",
     "system-ui",
     "BlinkMacSystemFont",
     "Roboto",
@@ -170,11 +170,22 @@ export const typographyOptions = {
   //   fontSize: "1.4rem",
   //   lineHeight: "2.6rem",
   // },
-  // button: {
-  //   fontSize: "1.8rem",
-  //   fontWeight: 700,
-  //   textTransform: "capitalize",
-  // },
+  button: {
+    fontFamily: [
+      "NeueHelvetica",
+      "system-ui",
+      "BlinkMacSystemFont",
+      "Roboto",
+      "Helvetica Neue",
+      "Segoe UI",
+      "Arial",
+      "sans-serif",
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji",
+    ].join(","),
+  },
 
   H1: {
     fontSize: "7.8rem",

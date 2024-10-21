@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { Button, Snackbar, Alert, AlertColor } from "@mui/material";
+import React, { useRef, useState } from "react";
+import { AlertColor } from "@mui/material";
+import Button from "@/components/Button";
+import EditorTooltip from "@/components/EditorTooltip";
 
 interface SubmitButtonProps {
   code: string;
@@ -11,19 +13,20 @@ const SubmitButton = ({
   code,
   codeSolution,
   onSubmission,
+  ...restProps
 }: SubmitButtonProps) => {
-  const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [severity, setSeverity] = useState<AlertColor>("success");
+  const [severity, setSeverity] = useState<AlertColor>("");
+  const closeTimeoutRef = useRef<any>();
 
   const cleanedCode = code.replace(/\s/g, "");
   const cleanedCodeSolution = codeSolution.replace(/\s/g, "");
 
-  const handleClose = (event?: any, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
+  const handleCloseTip = (reason) => {
+    if (reason === "manually") {
+      setSeverity("");
+      clearTimeout(closeTimeoutRef.current);
     }
-    setOpen(false);
   };
 
   const submitCode = () => {
@@ -36,40 +39,24 @@ const SubmitButton = ({
       setSeverity("error");
       onSubmission(false);
     }
-    setOpen(true);
+    closeTimeoutRef.current = setTimeout(() => {
+      setSeverity("");
+      clearTimeout(closeTimeoutRef.current);
+    }, 6e3);
   };
 
   return (
-    <>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "transparent",
-          color: "white",
-          "&:hover": {
-            backgroundColor: "white",
-            color: "orange",
-          },
-        }}
-        onClick={submitCode}
-      >
-        🌟 Submit
+    <EditorTooltip
+      type={severity}
+      title={message}
+      open={!!severity}
+      onClose={handleCloseTip}
+      placement="top"
+    >
+      <Button size="large" onClick={submitCode} {...restProps}>
+        Submit Challenge
       </Button>
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={severity}
-          sx={{ width: "100%" }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
-    </>
+    </EditorTooltip>
   );
 };
 
