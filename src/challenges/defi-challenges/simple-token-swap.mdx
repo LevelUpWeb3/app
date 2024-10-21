@@ -1,0 +1,177 @@
+---
+name: Simple Token Swap
+index: 2
+level: 2
+website: "https://github.com/LevelUpWeb3/SimpleTokenSwap-Challenge"
+summary: Introduction to implementing a simple token swap contract by understanding Uniswap swap function.
+heroImage: "/images/level-up-preview.png"
+labels: ["DeFi"]
+---
+
+# Simple Token Swap
+
+If you haven't completed the ERC20 basic challenge yet, check it out [here](https://www.levelup.xyz/challenges/ERC20)! 
+
+You have now grasped the functionality of ERC20 tokens. Ever wondered how you can use these tokens to swap to another token for decentralized finance use cases (i.e WETH to USDC)?
+
+In this challenge, you will implement a simple Uniswap token swap contract.
+
+## Objective
+
+Your task is to:
+1. Develop your own contract with Swap functionality.
+2. Deploy it to Scroll Sepolia Testnet.
+3. And finally verify it.
+ 
+If you need help with using a smart contract framework for completing this challenge, the [Level Up: Build with Foundry](https://www.levelup.xyz/content/level-up-foundry) guide might be a helpful start!
+
+If you get stuck, feel free to ask for help in [Level Up Telegram group](https://t.me/+PdNbk5milo1mMTAy).
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+// Standard ERC20 interface that you can use for internal token transfer
+interface IERC20 {
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+}
+
+// Uniswap V3 02 router interface with the function that you will need to use for this challenge
+interface ISwapRouter02 {
+    struct ExactInputSingleParams {
+        address tokenIn;
+        address tokenOut;
+        uint24 fee;
+        address recipient;
+        uint256 amountIn;
+        uint256 amountOutMinimum;
+        uint160 sqrtPriceLimitX96;
+    }
+    function exactInputSingle(ExactInputSingleParams calldata params) external payable returns (uint256 amountOut);
+}
+
+contract UniV3Swap {
+    // Uniswap Router address deployed at Scroll Sepolia Testnet
+    address SCROLL_SEPOLIA_UNIV3_ROUTER_V2 = 0x17AFD0263D6909Ba1F9a8EAC697f76532365Fb95;
+
+    // Trade two tokens in the Uniswap V3 contract deployed at Scroll Sepolia Testnet. You can try it yourself by passing the following params:
+    // tokenIn: Contract address of the token you want to sell, for example WETH 0x5300000000000000000000000000000000000004
+    // tokenOut: Contract address of the token you want to buy, for example Aave's GHO Stablecoin 0xD9692f1748aFEe00FACE2da35242417dd05a8615
+    // fee: Fee that goes to the LP holders, try with 3000 which represents 0.30%
+    // amountIn: Amount of tokens you wan't to sell
+    // amountOutMinimum: Minimum amount of GHO you want in return
+    // sqrtPriceLimitX96: Price limit, used by advanced traders, you can set this to 0 for testing purposes
+    function swap(address tokenIn, address tokenOut, uint24 fee, uint256 amountIn, uint256 amountOutMinimum, uint160 sqrtPriceLimitX96)
+        external
+    {
+        // 1. Transfer the tokens the user is Selling, tokenIn
+        // 2. Allow or Approve the uniswap router from the tokenIn contract
+        // 3. Prepare the ExactInputSingleParams struct bu filling all the parameters
+        // 4. Execute the exactInputSingle function
+    }
+}
+```
+
+## What You'll Need to Know
+
+### How Uniswap V3 Works
+
+Uniswap liquidity is held in pools composed of token pairs, and in Uniswap V2, prices are determined using the `x * y = k`, where `x` and `y` are the amounts of two tokens in the pool and `k` is a constant, ensures that the product of the token quantities remains stable. As trades occur, the ratio between the tokens shifts, causing the price to adjust automatically based on supply and demand. This mechanism helps stabilize prices and minimize volatility by making it harder for individual trades to cause significant price swings, especially in pools with greater liquidity.
+
+<div className="text-center">
+  <img
+    src="https://docs.uniswap.org/assets/images/anatomy-d22fb7ab46013a1195f086ee672468c7.jpg"
+    alt="order route screenshot"
+    width="650"
+  />
+  _In Uniswap V2, [liquidity is held in token pairs](https://docs.uniswap.org/contracts/v2/concepts/core-concepts/pools)._
+</div>
+
+While Uniswap V3 still uses the `x * y = k` formula, it introduces the possibility of concentrating the liquidity, allowing liquidity providers to decide the ranges at which they want teir liquidity to be used in trades. At the contract level, the ranges are expressed as "ticks", which are used to calculate specific price ranges. A more detailed explanation can be found in [this blog post](https://blog.uniswap.org/uniswap-v3-math-primer).
+
+<div className="text-center">
+  <img
+    src="https://images.ctfassets.net/oc3ca6rftwdu/3ym1i9ficLAGAQMghk5evu/d50a5d5b354dc79e1f2c80518cf64102/NFT1.gif"
+    alt="order route screenshot"
+    width="650"
+  />
+  _Each liquidity position is represented by an NFT that specifies the chosen tick ranges._
+</div>
+
+Additionally, Ethereum has a 12-second block time, and there are other decentralized and centralized exchanges (DEXes and CEXes). This creates multiple ways to determine a fair price for a swap. While price calculations are beyond the scope of this challenge, it's important to understand that Uniswap is designed to allow users to leverage on-chain data, Web2 APIs (such as for CEX data), and other tools like aggregators to find fair prices.
+
+### A Quick Important Note on Uniswap Versioning
+
+Did you know that Uniswap V3 has two versions? In this guide, we will be using the version referred to as _Uniswap V3 02_, which should not be confused with the "vanilla" Uniswap V3 deployed on Ethereum. Uniswap is opinionated about contract upgradability, instead of using proxy contracts, they release new contract versions to provide stronger security guarantees and decentralization for users. As a result, Uniswap V3 cannot be upgraded, and the initial deployment is slightly different from later versions. Most official documentation refers to the first deployment on Ethereum mainnet, but for this challenge, we will be using the latest version. You can find additional details about both versions in the "Further Reading" section.
+
+## Understanding `exactInputSingle`
+
+The `exactInputSingle` function performs a "single hop" swap where the input token amount is specified, and the contract will calculate the exact amount of the output token (the token the user is buying) based on the current market rate at the time of execution. A "single hop" means that the swap occurs within a single liquidity pool pair.
+
+<div className="text-center">
+  <img
+    src="https://images.ctfassets.net/oc3ca6rftwdu/6yT4eFYGhei5outTqLW16N/40c44fdb839d41fcd30a1be1b325c12f/demo.gif"
+    alt="order route screenshot"
+    width="650"
+  />
+  _Uniswap can perform ["multi hop" trades](https://blog.uniswap.org/auto-router) to offer users better prices, but for this challenge, we will limit it to single-hop trades._
+</div>
+
+For this challenge, we will focus on the `exactInputSingle` function. Other available functions include `exactOutputSingle`, which allows specifying the exact output token amount, and their multi-hop counterparts, `exactInput` and `exactOutput`, which can route trades through multiple liquidity pools to optimize for arbitrage opportunities.
+
+### `ExactInputSingleParams` Explained
+
+The `exactInputSingle` function accepts a single argument, `ExactInputSingleParams`, which contains all the necessary information to perform a swap. Here's a breakdown of its parameters:
+
+- **tokenIn**: The address of the token being sold.
+- **tokenOut**: The address of the token being bought.
+- **fee**: The fee tier (expressed in basis points) that goes to liquidity providers. Uniswap V3 allows for different fee tiers, such as 0.01%, 0.05%, 0.30%, and 1%, depending on the liquidity pool.
+- **recipient**: The address that will receive the purchased tokens. This is usually the `msg.sender`, but it can be any valid address.
+- **amountIn**: The exact amount of tokens the user wants to sell (input token).
+- **amountOutMinimum**: The minimum amount of tokens the user is willing to accept for the trade. In the Uniswap UI, this is commonly referred to as slippage tolerance, typically expressed as a percentage (e.g., 0.5%).
+- **sqrtPriceLimitX96**: The square root of the price limit (scaled by 2^96) for the trade. This parameter allows advanced traders to stop the trade if, at any point, it becomes unfavorable due to a significant price difference between ticks. If no price limit is required, this can be set to 0.
+
+## A Cool Tip
+
+* Did you know that a [testnet frontend interacting with UniV3 contracts](https://uniswap-showcase.sepolia.scroll.xyz/#/swap) is available for Scroll Sepolia? You can Swap ETH and GHO or create a pool with any ERC20 token on Scroll Sepolia.
+
+## Step by step: How to complete this challenge
+
+Implement the swap function with the following steps.
+
+1. Transfer the tokens the user is Selling, tokenIn
+2. Allow or `Approve` the uniswap router from the tokenIn contract
+3. Prepare the `ExactInputSingleParams` struct bu filling all the parameters
+4. Execute the `exactInputSingle` function
+
+## Test it yourself
+
+To ensure your implementation works, follow these steps:
+
+1. Clone the repo and navigate to the directory:
+
+```bash
+git clone https://github.com/LevelUpWeb3/SimpleTokenSwap-Challenge
+cd SimpleTokenSwap-Challenge
+```
+
+2. Complete the functions in `src/UniV3Swap.sol`
+
+3. Run the tests on Scroll Sepolia:
+
+```bash
+forge test --fork-url https://scroll-testnet-public.unifra.io
+```
+
+## Further Reading
+
+1. [Uniswap v3 Official Swaps Documentation](https://docs.uniswap.org/contracts/v3/guides/swaps/single-swaps) Outdated
+2. [Uniswap V3 Version 01 Periphery Repo](https://github.com/Uniswap/v3-periphery/tree/main) (Outdated: Original Uniswap V3 deployment on Mainnet)
+3. [Uniswap V3 Version 02 Periphery Repo](https://github.com/Uniswap/swap-router-contracts/tree/main) (Latest Uniswap V3 version: this is deployed on Scroll)
+4. [Uniswap V3 Core Repo](https://github.com/Uniswap/v3-core) (internal functions)
+5. [Introduction to Uniswap V3 Math](https://blog.uniswap.org/uniswap-v3-math-primer)
