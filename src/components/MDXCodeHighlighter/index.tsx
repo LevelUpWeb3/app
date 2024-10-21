@@ -1,6 +1,7 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyButton from "./CopyButton";
+import clsx from "clsx";
 
 const MDXCodeHighlighter = {
   pre({ className, children, ...props }) {
@@ -17,16 +18,18 @@ const MDXCodeHighlighter = {
       <>
         {multiline && match && (
           <div
+            className="example-code-panel"
             style={{
               position: "relative",
-              backgroundColor: "#15150F",
-              borderRadius: 10,
+              // backgroundColor: "#15150F",
+              backgroundColor: "#fff",
               fontSize: "14px",
             }}
           >
             <SyntaxHighlighter
               style={{
                 ...solarizedlight,
+
                 'pre[class*="language-"]': {
                   ...solarizedlight['pre[class*="language-"]'],
                   backgroundColor: "transparent",
@@ -50,7 +53,7 @@ const MDXCodeHighlighter = {
           </pre>
         )}
         {!multiline && (
-          <code className={className} {...props}>
+          <code className={clsx(className)} {...props}>
             {children}
           </code>
         )}

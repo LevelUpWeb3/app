@@ -1,6 +1,3 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
 import { DiffEditor } from "@monaco-editor/react";
 
 interface DiffEditorProps {
@@ -9,15 +6,10 @@ interface DiffEditorProps {
 }
 
 const DiffEditorComponent = ({ code, codeSolution }: DiffEditorProps) => {
-  const [editorHeight, setEditorHeight] = useState("0px");
-  useEffect(() => {
-    // Set the height to 90% of the viewport height
-    setEditorHeight(`${window.innerHeight * 0.85}px`);
-  }, []);
   return (
     <div>
       <DiffEditor
-        height={editorHeight}
+        height="760px"
         theme="hc-black"
         language="solidity"
         original={codeSolution}
@@ -27,7 +19,7 @@ const DiffEditorComponent = ({ code, codeSolution }: DiffEditorProps) => {
           readOnly: true,
           minimap: { enabled: false },
           renderSideBySide: false,
-          fontSize: 14,
+          fontSize: 16,
           folding: false,
           onlyShowAccessibleDiffViewer: true,
           lineNumbersMinChars: 2,

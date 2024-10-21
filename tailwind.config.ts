@@ -123,8 +123,8 @@ const config: Config = {
       },
     },
     fontFamily: {
-      sans: ['"TransSansPremium"', ...defaultTheme.fontFamily.sans],
-      display: ['"TransSansPremium"', ...defaultTheme.fontFamily.sans],
+      sans: ['"NeueHelvetica"', ...defaultTheme.fontFamily.sans],
+      display: ['"NeueHelvetica"', ...defaultTheme.fontFamily.sans],
       develop: ['"Roboto Flex"', ...defaultTheme.fontFamily.sans],
     },
     screens: {

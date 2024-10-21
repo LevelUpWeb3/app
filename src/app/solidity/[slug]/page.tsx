@@ -1,21 +1,26 @@
 "use client";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState, useMemo } from "react";
+import { usePathname, useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 // import { MDXRemote } from "next-mdx-remote";
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
 import * as React from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import PageButton from "./PageButton";
-import IdePage from "./Ide";
-import BackSvg from "@/assets/svgs/common/back.svg";
+import IdeEditor from "./Ide";
+// import BackSvg from "@/assets/svgs/common/back.svg";
 import Head from "next/head";
 
-import { SvgIcon, Box, Typography, Skeleton } from "@mui/material";
+import BackLink from "@/components/Back";
+
+import Button from "@/components/Button";
+
+import { Box, Typography, Skeleton, Stack, Container } from "@mui/material";
 
 import { styled } from "@mui/system";
+import Link from "next/link";
 
 const MDXRemote = dynamic(
   () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
@@ -46,42 +51,13 @@ const Label = styled(Typography)(() => ({
   textAlign: "center",
 }));
 
-const ChallengeDetails = ({ challengeData }) => (
-  <ChallengeInfo>
-    <div className="my-[4rem] flex flex-col self-stretch font-medium max-md:mt-10 max-md:max-w-full">
-      <h1 className="text-[4rem] leading-[56px] tracking-wide text-stone-950 max-md:max-w-full">
-        Lesson {challengeData.lesson}: {challengeData.name}
-      </h1>
-      <h4 className="text-[2rem] leading-[28px] tracking-wide text-[#5b5b5b] max-md:max-w-full">
-        {challengeData.summary}
-      </h4>
-      <div className="mt-6 flex gap-2 self-start text-center text-base leading-6 tracking-normal text-yellow-800">
-        {challengeData.labels?.map((label) => (
-          <Label key={label}>{label}</Label>
-        ))}
-      </div>
-    </div>
-  </ChallengeInfo>
-);
-
-export default function ChallengeDetailsPage() {
+export default function SolidityDetailPage() {
   const [data, setData] = useState<any>([]);
   const [isLoading, setLoading] = useState(true);
-  const pathname = usePathname();
-
-  // useEffect(() => {
-  //   const loader = setTimeout(() => {
-  //     setLoading(false);
-  //   }, 3000);
-
-  //   return () => {
-  //     clearTimeout(loader);
-  //   };
-  // });
+  const { slug: lessonId } = useParams();
 
   useEffect(() => {
-    const slug = pathname!.split("/").pop();
-    fetch(`/data/solidity/${slug}.json`)
+    fetch(`/data/solidity/${lessonId}.json`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -105,53 +81,56 @@ export default function ChallengeDetailsPage() {
         />
       </Head>
 
-      <div className="mx-auto flex max-w-[140rem] gap-5 px-[6rem] pb-16 pt-3 max-md:flex-wrap max-md:px-[2rem]">
-        <div className="flex w-fit shrink-0 grow basis-0 flex-col max-md:max-w-full">
-          <div className="mt-20 flex gap-3 self-start whitespace-nowrap text-lg font-semibold leading-8 text-stone-950 max-md:mt-10">
-            <Link href="/solidity" className="flex items-center">
-              <SvgIcon component={BackSvg} className="mr-[1.2rem]" /> Back
-            </Link>
-          </div>
-          <div className="mt-12 max-md:mt-10 max-md:max-w-full">
-            <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-              {/* <ChallengeCard challenge={challenge} /> */}
-              {data?.content && <ChallengeDetails challengeData={data} />}
-            </div>
-          </div>
-          <div className="z-10 mt-5 h-1 shrink-0 max-md:max-w-full" />
-          <div className="mb-[4.8rem] h-px shrink-0 border border-solid border-stone-950 bg-stone-950 max-md:max-w-full" />
-        </div>
-      </div>
-      <div className="mx-auto grid h-screen w-full max-w-[140rem] grid-cols-2 gap-5 px-[6rem]">
-        {isLoading ? (
-          <>
-            <Skeleton variant="rounded" className="min-h-screen w-full" />
-            <Skeleton variant="rounded" className="min-h-screen w-full" />
-          </>
-        ) : (
-          <>
-            <div className="markdown-body">
-              {" "}
-              {data?.content ? (
-                <>
-                  <MDXRemote
-                    {...data.content}
-                    components={{
-                      ...MDXCodeHighlighter,
-                      ...MDXHeaders,
-                      Mermaid,
-                    }}
-                  />
-                  <PageButton />
-                </>
-              ) : null}
-            </div>
-            <div>
-              <IdePage />
-            </div>
-          </>
-        )}
-      </div>
+      <Container
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 50%)",
+          mt: "80px",
+        }}
+      >
+        <BackLink></BackLink>
+        <Stack direction="column" spacing="14px" sx={{ mb: "80px" }}>
+          <Typography sx={{ fontSize: "48px" }}>
+            Lesson {data.lesson}: {data.name}
+          </Typography>
+          <Typography sx={{ fontSize: "24px" }}>{data.summary}</Typography>
+        </Stack>
+        <Box
+          sx={{
+            backgroundColor: "rgba(186, 240, 247, 0.2)",
+            height: "820px",
+            p: "20px 10px",
+            overflowY: "auto",
+          }}
+        >
+          <Box className="markdown-body" sx={{ p: "35px 50px" }}>
+            {!isLoading && data?.content && (
+              <MDXRemote
+                {...data.content}
+                components={{
+                  ...MDXCodeHighlighter,
+                  ...MDXHeaders,
+                  ul: (props) => (
+                    <ul {...props} className="!mb-[20px] !pl-[1.2em]" />
+                  ),
+                  li: (props) => (
+                    <li {...props} className="!mt-0 !leading-[30px]" />
+                  ),
+                  Mermaid,
+                }}
+              />
+            )}
+          </Box>
+        </Box>
+        <IdeEditor />
+        <PageButton
+          sx={{
+            gridColumn: "span 2",
+            backgroundColor: "#FFEEDA80",
+            py: "56px",
+          }}
+        />
+      </Container>
     </>
   );
 }

@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 function generateSafeDomId(title) {
   if (typeof title !== "string") return;
   const textParts = title.trim().split(" ");
@@ -14,7 +16,14 @@ const MDXHeaders = {
   h1({ node, inline, className, children, ...props }) {
     const id = generateSafeDomId(children);
     return (
-      <h1 className={className} id={id} {...props}>
+      <h1
+        className={clsx(
+          className,
+          "!mb-[20px] !pb-0 !text-[36px] !font-normal",
+        )}
+        id={id}
+        {...props}
+      >
         {children}
       </h1>
     );
@@ -22,7 +31,14 @@ const MDXHeaders = {
   h2({ node, inline, className, children, ...props }) {
     const id = generateSafeDomId(children);
     return (
-      <h2 className={className} id={id} {...props}>
+      <h2
+        className={clsx(
+          className,
+          "!mb-[20px] !pb-0 !text-[28px] !font-normal",
+        )}
+        id={id}
+        {...props}
+      >
         {children}
       </h2>
     );

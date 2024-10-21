@@ -74,7 +74,6 @@ const useStyles = makeStyles<any>()((theme, { dark }) => ({
 
   listItemText: {
     fontSize: "1.6rem",
-    fontFamily: "var(--developer-page-font-family)",
     cursor: "pointer",
     color: dark ? (theme as any).vars.palette.primary.contrastText : "#473835",
   },
@@ -92,14 +91,14 @@ const NetworkSelect = (props) => {
 
   const isThirdPartyNetwork = useMemo(
     () => !NETWORKS.find((item) => item.chainId === chainId),
-    [chainId]
+    [chainId],
   );
 
   const currentNetworkIcon = useMemo(
     () =>
       NETWORKS.find((item) => item.chainId === chainId)?.icon ??
       WrongNetworkSvg,
-    [chainId]
+    [chainId],
   );
 
   const handleClick = (e) => {
