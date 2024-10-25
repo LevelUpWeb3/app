@@ -1,5 +1,5 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { solarizedlight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyButton from "./CopyButton";
 import clsx from "clsx";
 
@@ -18,23 +18,31 @@ const MDXCodeHighlighter = {
       <>
         {multiline && match && (
           <div
-            className="example-code-panel"
+            className="markdown-code-block"
             style={{
               position: "relative",
-              // backgroundColor: "#15150F",
-              backgroundColor: "#fff",
               fontSize: "14px",
+
+              // custom
+              backgroundColor: "#252525",
+              borderRadius: "15px",
             }}
           >
             <SyntaxHighlighter
               style={{
-                ...solarizedlight,
+                ...materialDark,
 
                 'pre[class*="language-"]': {
-                  ...solarizedlight['pre[class*="language-"]'],
+                  ...materialDark['pre[class*="language-"]'],
                   backgroundColor: "transparent",
                   whiteSpace: "wrap",
                 },
+              }}
+              customStyle={{
+                padding: "20px",
+                margin: "0 0 20px",
+                overflow: "auto",
+                backgroundColor: "transparent",
               }}
               language={match[1]}
               PreTag="div"
@@ -42,9 +50,10 @@ const MDXCodeHighlighter = {
             >
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
-            <div style={{ position: "absolute", top: "1px", right: "10px" }}>
-              <CopyButton text={children} />
-            </div>
+            <CopyButton
+              text={children}
+              sx={{ position: "absolute", top: "10px", right: "12px" }}
+            />
           </div>
         )}
         {multiline && !match && (

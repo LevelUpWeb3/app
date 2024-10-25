@@ -9,7 +9,7 @@ import Modal from "./Modal";
 import { CODE_SOLUTIONS } from "@/constants/solidity/code-solutions";
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 
-import { Box, Stack, Tooltip } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
@@ -70,52 +70,56 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
   }, [completedExerciseNumber]);
 
   return (
-    <Box>
+    <Box sx={{ position: "relative" }}>
       <Modal
         isOpen={isModalOpen}
         isClose={() => setIsModalOpen(false)}
         code={code}
       />
       {showSolutionButton ? (
-        <Box position="relative">
-          <DiffEditorComponent code={code} codeSolution={codeSolution} />
-          <Box position="absolute" left={4} bottom={4}>
-            <Tooltip title="Back to code">
+        <DiffEditorComponent code={code} codeSolution={codeSolution} />
+      ) : (
+        <CodeEditor
+          codeTemplate={codeTemplate}
+          code={code}
+          codeSolution={codeSolution}
+          onChange={(code) => setCode(code || "")}
+          onSubmission={(isCorrect) => {
+            submissionHandler(isCorrect);
+          }}
+        />
+      )}
+      <Stack
+        direction="row"
+        spacing="15px"
+        sx={{
+          position: "absolute",
+          bottom: "50px",
+          width: "100%",
+          px: "60px",
+        }}
+      >
+        {showSolutionButton ? (
+          <EditorTooltip title="Back to code" placement="top">
+            <Box sx={{ width: "50%" }}>
               <Button
-                onClick={() => handleSolutionButtonClick(false)}
                 variant="contained"
+                size="large"
+                onClick={() => handleSolutionButtonClick(false)}
                 sx={{
-                  backgroundColor: "transparent",
-                  color: "white",
-                  opacity: "0.3",
+                  width: "100% !important",
+                  opacity: 0.2,
+                  "&:hover": {
+                    opacity: 1,
+                  },
                 }}
               >
                 Code
               </Button>
-            </Tooltip>
-          </Box>
-        </Box>
-      ) : (
-        <Box position="relative">
-          <CodeEditor
-            codeTemplate={codeTemplate}
-            code={code}
-            codeSolution={codeSolution}
-            onChange={(code) => setCode(code || "")}
-            onSubmission={(isCorrect) => {
-              submissionHandler(isCorrect);
-            }}
-          />
-          <Stack
-            direction="row"
-            spacing="15px"
-            sx={{
-              position: "absolute",
-              bottom: "50px",
-              width: "100%",
-              px: "60px",
-            }}
-          >
+            </Box>
+          </EditorTooltip>
+        ) : (
+          <>
             <EditorTooltip
               title="You can only view this solution once"
               placement="top"
@@ -127,7 +131,7 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
                   size="large"
                   sx={{
                     visibility: solutionViewer ? "visible" : "hidden",
-                    width: "100%",
+                    width: "100% !important",
                     opacity: 0.2,
                     "&:hover": {
                       opacity: 1,
@@ -140,16 +144,16 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
               </Box>
             </EditorTooltip>
             <SubmitButton
-              sx={{ width: "50%" }}
+              sx={{ width: "50% !important" }}
               code={code}
               codeSolution={codeSolution}
               onSubmission={(isCorrect) => {
                 submissionHandler(isCorrect);
               }}
             />
-          </Stack>
-        </Box>
-      )}
+          </>
+        )}
+      </Stack>
     </Box>
   );
 };

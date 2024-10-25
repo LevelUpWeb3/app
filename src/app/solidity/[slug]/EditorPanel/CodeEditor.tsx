@@ -19,7 +19,6 @@ const CodeEditor = ({
   onChange,
   onSubmission,
 }: CodeEditorProps) => {
-  const [editorHeight, setEditorHeight] = useState("0px");
   const [key, setKey] = useState(Math.random());
   const codeRef = useRef(initialCode);
   const codeSolutionRef = useRef(initialCodeSolution);
@@ -60,10 +59,6 @@ const CodeEditor = ({
     codeRef.current = initialCode;
     codeSolutionRef.current = initialCodeSolution;
   }, [initialCode, initialCodeSolution]);
-
-  useEffect(() => {
-    // setEditorHeight(`${window.innerHeight * 0.85}px`);
-  }, []);
 
   return (
     <Editor
