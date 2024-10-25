@@ -5,9 +5,9 @@
     "location": "Seoul, South Korea",
     "url": "../events/ethcon-korea",
     "image": "/images/events/ethcon.svg",
-    "buttonText": "Join now",
-    "buttonDisabled": "",
-    "status": ["All time", "Upcoming"],
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
     "region": ["All regions", "Asia Pacific"]
   },
   {
