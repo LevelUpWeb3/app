@@ -1,19 +1,28 @@
-"use client";
-
-import React from "react";
-import SectionHeader from "@/components/SectionHeader";
-import Wrapper from "@/components/Wrapper";
-
+import { Container, Stack, Typography } from "@mui/material";
 import List from "./List";
 
-const ContentPage = () => {
+import Data from "./content.json";
+
+const ContentPage = async () => {
+  const markdownData = await fetch(
+    "http://localhost:3001/data/contents/markdownData.json",
+  ).then((res) => res.json());
+  const data = [...markdownData, ...Data];
+
   return (
-    <div className="mt-[-6.5rem] flex flex-col pb-2.5">
-      <SectionHeader title="Content" url={"/images/content-banner.svg"} />
-      <Wrapper>
-        <List />
-      </Wrapper>
-    </div>
+    <Container sx={{ py: ["8.4rem"] }}>
+      <Stack direction={["column", "row"]} gap={["20px", "100px"]}>
+        <Typography
+          sx={{
+            fontSize: ["3.6rem", "4.8rem"],
+            width: "min-content",
+          }}
+        >
+          Content
+        </Typography>
+        <List data={data} />
+      </Stack>
+    </Container>
   );
 };
 

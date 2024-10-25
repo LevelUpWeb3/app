@@ -1,7 +1,11 @@
 import LessonList from "./LessonList";
 import { Container, Stack, Typography } from "@mui/material";
 
-const SolidityPage = () => {
+const SolidityPage = async () => {
+  const data = await fetch(
+    "http://localhost:3001/data/solidity/markdownData.json",
+  ).then((res) => res.json());
+
   return (
     <Container sx={{ py: ["8.4rem"] }}>
       <Stack direction={["column", "row"]} gap={["20px", "100px"]}>
@@ -13,7 +17,7 @@ const SolidityPage = () => {
         >
           Solidity Challenges
         </Typography>
-        <LessonList />
+        <LessonList data={data} />
       </Stack>
     </Container>
   );

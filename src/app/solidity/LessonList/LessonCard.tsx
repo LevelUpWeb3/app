@@ -1,11 +1,10 @@
+"use client";
+
 import { Box, Typography } from "@mui/material";
-import { usePathname } from "next/navigation";
 import { sendGAEvent } from "@next/third-parties/google";
 import Link from "next/link";
 
 const SolidityCardList = ({ content }) => {
-  const pathname = usePathname();
-
   const handleClick = () => {
     sendGAEvent("event", "challengeClicked", {
       value: `Lesson ${content.lesson}: ${content.name}`,
@@ -13,7 +12,7 @@ const SolidityCardList = ({ content }) => {
   };
 
   return (
-    <Link href={`${pathname}/${content.id}`}>
+    <Link href={`/solidity/${content.id}`}>
       <Box
         sx={{
           borderRadius: "2rem",

@@ -1,81 +1,134 @@
-import { Box, Typography, styled } from "@mui/material";
-import { useRouter } from "next/navigation";
+"use client";
+import {
+  Box,
+  Typography,
+  Card,
+  CardHeader,
+  CardContent,
+  Stack,
+  SvgIcon,
+  cardHeaderClasses,
+} from "@mui/material";
 import { sendGAEvent } from "@next/third-parties/google";
+import LinkSvg from "@/assets/svgs/content/link.svg";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const CardArticle = styled("article")(() => ({
-  padding: "2.4rem",
-  background: "#FFF0DD",
-  borderRadius: "2rem",
-  display: "flex",
-  height: "100%",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  cursor: "pointer",
-  ["& *"]: {
-    cursor: "pointer !important",
+// enum CARD_COLOR {
+//   PURPLE = "purple",
+//   WHITE = "white",
+// }
+
+const CARD_COLOR_MAP = {
+  purple: {
+    bgColor: "rgba(164, 148, 255, 0.20)",
+    hoverBgColor: "rgba(164, 148, 255, 0.30)",
   },
-}));
+  white: {
+    bgColor: "#fff",
+    hoverBgColor: "#F4F4F4",
+  },
+};
 
-const Title = styled(Typography)(() => ({
-  fontSize: "2rem",
-  lineHeight: "2.8rem",
-  marginBottom: "1.2rem",
-  fontWeight: 600,
-}));
-
-const Summary = styled(Typography)(() => ({
-  fontSize: "1.6rem",
-  lineHeight: "2.4rem",
-  marginBottom: "1.2rem",
-  color: " #5B5B5B",
-}));
-
-const LabelContainer = styled("div")(() => ({
-  display: "flex",
-  gap: "1rem",
-  marginTop: "1.6rem",
-}));
-
-const Label = styled(Typography)(() => ({
-  fontSize: "1.6rem",
-  background: "#FFDEB5",
-  borderRadius: "0.4rem",
-  color: "#84623A",
-  height: "auto",
-  padding: "0.4rem 1.6rem",
-  lineHeight: "normal",
-  fontWeight: "500",
-  textAlign: "center",
-  whiteSpace: "normal",
-  overflowWrap: "break-word", // Added break-word to prevent overflow
-}));
-
-const Card = ({ content, key, type }) => {
-  const router = useRouter();
+const ContentCard = (props) => {
+  const { color = "white", content, key, type, sx, className } = props;
+  const pathname = usePathname();
 
   const handleClick = () => {
     sendGAEvent("event", type + "Clicked", { value: `${content.name}` });
-    if (content.url) {
-      window.open(content.url);
-    } else {
-      router.push(`${location.pathname}/${content.id}`);
-    }
   };
 
   return (
-    <CardArticle key={key} onClick={handleClick}>
-      <Box>
-        <Title> {content.name} </Title>
-        <Summary> {content.summary} </Summary>
-      </Box>
-      <LabelContainer>
-        {content.labels?.map((label, index) => (
-          <Label key={index}>{label}</Label>
-        ))}
-        {content.level ? <Label>Level {content.level}</Label> : null}
-      </LabelContainer>
-    </CardArticle>
+    <Link
+      href={content.url ? content.url : `${pathname}/${content.id}`}
+      target={content.url ? "_blank" : "_self"}
+      className={className}
+    >
+      <Card
+        variant="outlined"
+        sx={{
+          border: "1.5px solid #101010",
+          borderRadius: "25px",
+          p: "30px",
+          backgroundColor: CARD_COLOR_MAP[color].bgColor,
+          height: ["auto", "248px"],
+          display: "flex",
+          flexDirection: "column",
+
+          "&:hover": {
+            backgroundColor: CARD_COLOR_MAP[color].hoverBgColor,
+          },
+          ...sx,
+        }}
+        key={key}
+        onClick={handleClick}
+      >
+        <CardHeader
+          sx={{
+            p: 0,
+            [`.${cardHeaderClasses.title}`]: {
+              cursor: "inherit",
+              fontSize: "20px",
+              fontWeight: 500,
+            },
+          }}
+          title={content.name}
+        ></CardHeader>
+        <CardContent
+          sx={{
+            p: "0 !important",
+            mt: "10px",
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "16px",
+              lineHeight: "22px",
+              flex: 1,
+              cursor: "inherit",
+            }}
+          >
+            {content.summary}
+          </Typography>
+          <Stack
+            direction="row"
+            spacing="8px"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ mt: ["10px", 0] }}
+          >
+            <Stack direction="row" spacing="8px">
+              {content.labels?.map((label, index) => (
+                <Box
+                  component="span"
+                  key={index}
+                  sx={{
+                    backgroundColor: "rgba(16, 16, 16, 0.10)",
+                    borderRadius: "7px",
+                    p: "5px 10px",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {label}
+                </Box>
+              ))}
+            </Stack>
+            {content.url && (
+              <SvgIcon
+                sx={{ fontSize: "16px", color: "transparent" }}
+                component={LinkSvg}
+                inheritViewBox
+              ></SvgIcon>
+            )}
+          </Stack>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 
-export default Card;
+export default ContentCard;

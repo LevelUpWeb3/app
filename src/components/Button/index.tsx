@@ -18,6 +18,7 @@ const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
     fontSize: size === "large" ? "24px" : "16px",
     fontWeight: 500,
     padding: "0 20px",
+    width: "fit-content",
     border:
       variant === "outlined"
         ? `1.5px solid ${theme.vars.palette.text.primary}`
@@ -43,7 +44,7 @@ const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
 
 const Button = (props: ScrollButtonProps) => {
   const {
-    width,
+    // width,
     size = "default",
     variant = "outlined",
     isExternal,
@@ -54,7 +55,7 @@ const Button = (props: ScrollButtonProps) => {
   } = props;
   const { classes } = useStyles({
     size,
-    width,
+    // width,
     disabled,
     loading,
     variant,
