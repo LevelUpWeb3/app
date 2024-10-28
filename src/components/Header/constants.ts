@@ -22,7 +22,7 @@ const navigations = [
   {
     label: "Hackathon",
     key: "hackathon",
-    href: "/hackathon",
+    href: "/events",
   },
   // TODO: Update route as needed if planning to embed inside Level Up and to revive Grants
   // {

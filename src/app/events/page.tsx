@@ -7,8 +7,13 @@ const EventsPage = () => {
   return (
     <Container
       sx={{
-        py: ["8.4rem"],
-        minHeight: `calc(100vh - ${LAYOUT_HEADER_HEIGHT} - ${LAYOUT_FOOTER_HEIGHT})`,
+        py: ["6rem", "8.4rem"],
+        minHeight: [
+          [
+            "auto",
+            `calc(100vh - ${LAYOUT_HEADER_HEIGHT} - ${LAYOUT_FOOTER_HEIGHT})`,
+          ],
+        ],
       }}
     >
       <Stack direction={["column", "row"]} gap={["20px", "100px"]}>

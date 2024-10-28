@@ -1,17 +1,19 @@
+import Link from "next/link";
+import { headers } from "next/headers";
+import { Button, Stack, Typography } from "@mui/material";
+
 import BackLink from "@/components/Back";
 
-import Link from "next/link";
-import { Button, Stack, Typography } from "@mui/material";
 import RighArrowSvg from "@/assets/svgs/solidity/right-arrow.svg";
 import TriangleLeftSvg from "@/assets/svgs/common/triangle-left.svg";
 
 const LessonNavigation = async (props) => {
   const { lessonId } = props;
-
+  const { origin } = new URL(headers().get("x-url")!);
   let pagination = { prevLesson: null, nextLesson: null };
-  const data = await fetch(
-    `http://localhost:3001/data/solidity/markdownData.json`,
-  ).then((res) => res.json());
+  const data = await fetch(`${origin}/data/solidity/markdownData.json`).then(
+    (res) => res.json(),
+  );
   const currentLessonIndex =
     data.find((lesson) => lesson.id === lessonId).index - 1;
   let prevLesson = null;

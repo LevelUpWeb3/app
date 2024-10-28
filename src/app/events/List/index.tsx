@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Box, Stack } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import PlainSelect from "@/components/PlainSelect";
+import NoData from "@/components/NoData";
 
 import {
   EVENTS_DATE_LIST,
@@ -15,15 +16,12 @@ import HackathonItem from "./HackathonItem";
 
 const List = (props) => {
   const { data } = props;
-  console.log(data, "data");
   const trigger = useScrollTrigger();
 
   const [searchParams, setSearchParams] = useState({
     time: EVENTS_DATE_LIST[0],
     region: EVENTS_REGION_LIST[0],
   });
-
-  console.log(searchParams, "searchParams");
 
   const filteredData = useMemo(() => {
     return data.filter((item) => {
@@ -41,10 +39,10 @@ const List = (props) => {
     [trigger],
   );
 
-  const handleChangeSearchParams = (e, key) => {
+  const handleChangeSearchParams = (value, key) => {
     setSearchParams((pre) => ({
       ...pre,
-      [key]: e.target.value,
+      [key]: value,
     }));
   };
 
@@ -56,13 +54,13 @@ const List = (props) => {
         spacing="0.8rem"
       >
         <PlainSelect
-          // sx={{ width: "178px" }}
+          sx={{ width: "150px" }}
           data={EVENTS_DATE_LIST}
           value={searchParams.time}
           onChange={(e) => handleChangeSearchParams(e.target.value, "time")}
         ></PlainSelect>
         <PlainSelect
-          // sx={{ width: "178px" }}
+          sx={{ width: "190px" }}
           data={EVENTS_REGION_LIST}
           value={searchParams.region}
           onChange={(e) => handleChangeSearchParams(e.target.value, "region")}
@@ -74,15 +72,17 @@ const List = (props) => {
         sx={{
           mt: ["20px", "46px"],
           width: "100%",
-
-          // display: "grid",
-          // gridTemplateColumns: ["1fr", "repeat(auto-fill, minmax(300px, 1fr))"],
-          // gap: ["15px", "20px"],
         }}
       >
         {filteredData?.map((item) => (
           <HackathonItem content={item} key={item.name}></HackathonItem>
         ))}
+        {!filteredData.length && (
+          <NoData
+            title="No results match the selected criteria"
+            description="Please try selecting or adjusting your filters."
+          ></NoData>
+        )}
       </Stack>
     </Box>
   );
