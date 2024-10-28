@@ -29,11 +29,12 @@ const DesktopHeader = ({ currentMenu }) => {
           <Link
             key={item.key}
             className={cx(
-              "relative whitespace-nowrap text-[16px] leading-[75px] hover:font-medium",
+              "relative whitespace-nowrap text-[16px] leading-[75px]",
               dark
                 ? "text-[var(--mui-palette-primary-contrastText)]"
                 : "text-[var(--mui-palette-text-primary)]",
-              currentMenu === item.key && "font-medium",
+              currentMenu === item.key && "text-stroke",
+              currentMenu !== item.key && "text-stroke-with-hover",
             )}
             href={item.href}
           >

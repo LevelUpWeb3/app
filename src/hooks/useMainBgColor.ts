@@ -6,7 +6,7 @@ const CUSTOM_BG_PAGE_MAP = {
   "/solidity": "#BAF0F733",
   // "/content": "#fff",
   "/challenges": "#FFEEDA33",
-  "/podcast": "#BAF0F733",
+  "/podcast": "#FFEEDA4D",
   "/hackathons": "#E8F62833",
 };
 

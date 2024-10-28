@@ -1,6 +1,6 @@
 import { Chip, chipClasses, Stack, useScrollTrigger } from "@mui/material";
 
-import { CONTENT_CATEGORY_LIST, NORMAL_HEADER_HEIGHT } from "@/constants";
+import { CONTENT_CATEGORY_LIST, LAYOUT_HEADER_HEIGHT } from "@/constants";
 
 const CategorySelect = (props) => {
   const { value, onChange } = props;
@@ -17,7 +17,7 @@ const CategorySelect = (props) => {
         flexWrap: "wrap",
 
         position: ["static", "sticky"],
-        top: trigger ? "20px" : NORMAL_HEADER_HEIGHT,
+        top: trigger ? "20px" : LAYOUT_HEADER_HEIGHT,
       }}
     >
       {CONTENT_CATEGORY_LIST.map((item) => (

@@ -9,7 +9,7 @@ import { styled } from "@mui/system";
 
 // import Card from "@/components/Card"
 import ComingSoon from "@/components/ComingSoon";
-import { NORMAL_HEADER_HEIGHT, PODCAST_CATEGORY_LIST } from "@/constants";
+import { LAYOUT_HEADER_HEIGHT, PODCAST_CATEGORY_LIST } from "@/constants";
 
 // import Data from "../content.json"
 import Category from "./Category";
@@ -51,8 +51,8 @@ const List = () => {
     category: PODCAST_CATEGORY_LIST[0],
   });
   const stickyTop = useMemo(
-    () => (trigger ? "2rem" : NORMAL_HEADER_HEIGHT),
-    [trigger]
+    () => (trigger ? "2rem" : LAYOUT_HEADER_HEIGHT),
+    [trigger],
   );
 
   const handleChangeCategory = (value) => {

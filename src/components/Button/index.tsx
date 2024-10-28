@@ -21,19 +21,21 @@ const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
     width: "fit-content",
     border:
       variant === "outlined"
-        ? `1.5px solid ${theme.vars.palette.text.primary}`
+        ? `1.5px solid ${(theme as any).vars.palette.text.primary}`
         : "none",
     backgroundColor:
       variant === "outlined"
-        ? theme.vars.palette.background.default
-        : theme.vars.palette.text.primary,
+        ? (theme as any).vars.palette.background.default
+        : (theme as any).vars.palette.text.primary,
     color:
       variant === "outlined"
-        ? theme.vars.palette.text.primary
-        : theme.vars.palette.primary.contrastText,
+        ? (theme as any).vars.palette.text.primary
+        : (theme as any).vars.palette.primary.contrastText,
     "&:hover": {
       backgroundColor:
-        variant === "outlined" ? "#F4F4F4" : theme.vars.palette.text.primary,
+        variant === "outlined"
+          ? "#F4F4F4"
+          : (theme as any).vars.palette.text.primary,
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: "14px",

@@ -1,3 +1,4 @@
+"use client";
 import { Stack, SvgIcon, Tooltip } from "@mui/material";
 
 import { tooltipClasses } from "@mui/material/Tooltip";

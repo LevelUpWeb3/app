@@ -413,7 +413,7 @@
 .markdown-level-up h1 {
   padding-bottom: 0.3em;
   font-size: 2em;
-  border-bottom: 1px solid #eaecef;
+  /* border-bottom: 1px solid #eaecef; */
 }
 .markdown-level-up h2 {
   margin: 0 !important;
@@ -593,7 +593,7 @@
 /*# sourceMappingURL=github-markdown.min.css.map */
 
 /* custom styles */
-.markdown-level-up > *:not(code, img, h2, ul, ol) {
+.markdown-level-up > *:not(code, img, h1, h2, ul, ol) {
   /* width: 50%; */
   padding-left: 50%;
 }
@@ -677,4 +677,16 @@
   .markdown-level-up ol {
     padding-left: 2rem;
   }
+}
+
+.markdown-level-up.challenge h1 {
+  display: none;
+}
+
+.markdown-level-up.challenge h1 + p {
+  padding-top: 60px;
+}
+
+.markdown-level-up h1 ~ p:nth-of-type(-n + 3) {
+  /* background-color: rgba(186, 240, 247, 0.3); */
 }
