@@ -1,7 +1,6 @@
 import LessonNavigation from "./LessonNavigation";
 import EditorPanel from "./EditorPanel";
-import Head from "next/head";
-
+import { headers } from "next/headers";
 import BackLink from "@/components/Back";
 
 import { Typography, Stack, Container } from "@mui/material";
@@ -13,9 +12,10 @@ export default async function SolidityDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const data = await fetch(
-    `http://localhost:3001/data/solidity/${params.slug}.json`,
-  ).then((res) => res.json());
+  const { origin } = new URL(headers().get("x-url")!);
+  const data = await fetch(`${origin}/data/solidity/${params.slug}.json`).then(
+    (res) => res.json(),
+  );
 
   return (
     <Container

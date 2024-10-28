@@ -1,11 +1,14 @@
+import { headers } from "next/headers";
+
 import { Container, Stack, Typography } from "@mui/material";
 import List from "./List";
 
 import Data from "./content.json";
 
 const ContentPage = async () => {
+  const { origin } = new URL(headers().get("x-url")!);
   const markdownData = await fetch(
-    "http://localhost:3001/data/contents/markdownData.json",
+    `${origin}/data/contents/markdownData.json`,
   ).then((res) => res.json());
   const data = [...markdownData, ...Data];
 

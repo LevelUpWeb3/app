@@ -1,10 +1,13 @@
-import LessonList from "./LessonList";
+import { headers } from "next/headers";
 import { Container, Stack, Typography } from "@mui/material";
 
+import LessonList from "./LessonList";
+
 const SolidityPage = async () => {
-  const data = await fetch(
-    "http://localhost:3001/data/solidity/markdownData.json",
-  ).then((res) => res.json());
+  const { origin } = new URL(headers().get("x-url")!);
+  const data = await fetch(`${origin}/data/solidity/markdownData.json`).then(
+    (res) => res.json(),
+  );
 
   return (
     <Container sx={{ py: ["8.4rem"] }}>

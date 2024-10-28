@@ -1,16 +1,19 @@
-import BackLink from "@/components/Back";
+import { headers } from "next/headers";
 
 import Link from "next/link";
 import { Stack } from "@mui/material";
+import BackLink from "@/components/Back";
+
 import RighArrowSvg from "@/assets/svgs/solidity/right-arrow.svg";
 
 const ChallengeNavigation = async (props) => {
   const { challengeId, ...restProps } = props;
 
+  const { origin } = new URL(headers().get("x-url")!);
   let pagination = { prevLesson: null, nextLesson: null };
-  const data = await fetch(
-    `http://localhost:3001/data/challenges/markdownData.json`,
-  ).then((res) => res.json());
+  const data = await fetch(`${origin}/data/challenges/markdownData.json`).then(
+    (res) => res.json(),
+  );
   const currentLessonIndex =
     data.find((lesson) => lesson.id === challengeId).index - 1;
   let prevLesson = null;

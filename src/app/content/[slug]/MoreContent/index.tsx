@@ -1,8 +1,10 @@
+import { headers } from "next/headers";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import SlideSvg from "@/assets/svgs/content/slide.svg";
 import Card from "@/components/Card";
 import { Box, Stack, SvgIcon, Typography } from "@mui/material";
-import Link from "next/link";
+
 import Data from "../../content.json";
 
 interface DataItem {
@@ -26,9 +28,10 @@ const shuffleArray = (array: any[]) => {
 const ContentFooter: React.FC<ContentFooterProps> = async ({
   currentContentIndex,
 }) => {
-  const data = await fetch(
-    `http://localhost:3001/data/contents/markdownData.json`,
-  ).then((res) => res.json());
+  const { origin } = new URL(headers().get("x-url")!);
+  const data = await fetch(`${origin}/data/contents/markdownData.json`).then(
+    (res) => res.json(),
+  );
 
   const filteredData = shuffleArray(
     [...Data, ...data].filter(

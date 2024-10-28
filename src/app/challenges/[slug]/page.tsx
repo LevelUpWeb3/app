@@ -1,4 +1,5 @@
 import { Box, Container, Stack } from "@mui/material";
+import { headers } from "next/headers";
 
 import BackLink from "@/components/Back";
 
@@ -22,11 +23,10 @@ export default async function ChallengeDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const data = await fetch(
-    `http://localhost:3001/data/challenges/${slug}.json`,
-  ).then((res) => res.json());
-
-  // console.log(data, "data");
+  const { origin } = new URL(headers().get("x-url")!);
+  const data = await fetch(`${origin}/data/challenges/${slug}.json`).then(
+    (res) => res.json(),
+  );
 
   return (
     <>

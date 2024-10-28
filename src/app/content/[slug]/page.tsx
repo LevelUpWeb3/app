@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+
 import Attribution from "./Attribution";
 import MoreContent from "./MoreContent";
 
@@ -10,10 +12,11 @@ export default async function ContentDetailsPage({
 }: {
   params: { slug: string };
 }) {
+  const { origin } = new URL(headers().get("x-url")!);
   let isLoading = true;
-  const data = await fetch(
-    `http://localhost:3001/data/contents/${params.slug}.json`,
-  ).then((res) => res.json());
+  const data = await fetch(`${origin}/data/contents/${params.slug}.json`).then(
+    (res) => res.json(),
+  );
   isLoading = false;
 
   return (
