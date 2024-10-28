@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import XSvg from "@/assets/svgs/socials/x.svg";
 import TelegramSvg from "@/assets/svgs/socials/telegram.svg";
+import { generateShareTwitterURL } from "@/utils";
 
 const ChallengeDetail = (props) => {
   const { challengeData, ...restProps } = props;
@@ -51,7 +52,11 @@ const ChallengeDetail = (props) => {
         <Stack direction="row" spacing="30px" alignItems="flex-end">
           <Link
             className="inline-flex items-center gap-[10px] text-[16px]"
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`}
+            href={generateShareTwitterURL(
+              text,
+              `https://www.levelup.xyz/challenges/${challengeData.id}`,
+            )}
+            target="_blank"
           >
             <XSvg className="w-[16px]"></XSvg>
             <span>Share your thoughts</span>

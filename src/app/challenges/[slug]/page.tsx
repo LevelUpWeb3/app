@@ -3,20 +3,10 @@ import { headers } from "next/headers";
 
 import BackLink from "@/components/Back";
 
-import ChallengeDetail from "./ChallengeDetail";
+import ChallengeHeader from "./ChallengeHeader";
 import SubmitAction from "./SubmitAction";
 import MarkdownViewer from "./MarkdownViewer";
 import ChallengeNavigation from "./ChallengeNavigation";
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const fullUrl = context.resolvedUrl;
-// console.log(fullUrl,'fullUrl')
-//   return {
-//     props: {
-//       fullUrl,
-//     },
-//   };
-// };
 
 export default async function ChallengeDetailPage({
   params: { slug },
@@ -41,7 +31,7 @@ export default async function ChallengeDetailPage({
         <Container>
           <Stack>
             <BackLink></BackLink>
-            <ChallengeDetail sx={{ mt: "60px" }} challengeData={data} />
+            <ChallengeHeader sx={{ mt: "60px" }} challengeData={data} />
           </Stack>
         </Container>
       </Box>

@@ -32,7 +32,7 @@ export const isValidEmail = (email: string): boolean => {
 
 export const convertDateToTimestamp = (
   dateString: string,
-  isMilliseconds: boolean = true
+  isMilliseconds: boolean = true,
 ): number => {
   let date = new Date(dateString);
   let timestamp = date.getTime();
@@ -61,4 +61,8 @@ export function isValidTransactionHash(txHash: string): boolean {
   // A valid transaction hash is a hex string of length 66 characters (including the '0x' prefix)
   const isValidLength = txHash.length === 66;
   return isValidLength && isHexString(txHash);
+}
+
+export function generateShareTwitterURL(text, referer, via = "levelupweb3") {
+  return `https://twitter.com/intent/tweet?original_referer=${encodeURIComponent(referer)}&text=${encodeURIComponent(text)}`;
 }
