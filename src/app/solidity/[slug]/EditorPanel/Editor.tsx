@@ -23,20 +23,21 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
     useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { slug: lessonKey } = useParams();
+  const { slug } = useParams();
+
+  const lessonId = slug as string;
 
   const { codeSolution, codeTemplate } = useMemo(() => {
-    if (CODE_SOLUTIONS[lessonKey] && CODE_EXERCISES[lessonKey]) {
+    if (CODE_SOLUTIONS[lessonId] && CODE_EXERCISES[lessonId]) {
       return {
-        codeSolution: CODE_SOLUTIONS[lessonKey][exercise],
-        codeTemplate: CODE_EXERCISES[lessonKey][exercise],
+        codeSolution: CODE_SOLUTIONS[lessonId][exercise],
+        codeTemplate: CODE_EXERCISES[lessonId][exercise],
       };
     }
     return { codeSolution: "", codeTemplate: "" };
-  }, [lessonKey, exercise]);
+  }, [lessonId, exercise]);
 
   const submissionHandler = (isCorrect: boolean) => {
-    console.log("isCorrect", isCorrect);
     if (isCorrect) {
       const currentExerciseNumber = parseInt(exercise.replace("exercise", ""));
       if (currentExerciseNumber > completedExerciseNumber) {

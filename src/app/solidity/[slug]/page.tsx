@@ -32,7 +32,8 @@ export default async function SolidityDetailPage({
         </Typography>
         <Typography sx={{ fontSize: "24px" }}>{data.summary}</Typography>
       </Stack>
-      <Teaching data={data}></Teaching>
+      {data && <Teaching data={data}></Teaching>}
+
       <EditorPanel />
       <LessonNavigation
         sx={{

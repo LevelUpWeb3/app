@@ -1,4 +1,4 @@
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import Button from "@/components/Button";
 import Tooltip from "@/components/EditorTooltip";
@@ -30,9 +30,9 @@ const HackathonHeader = (props) => {
           lineHeight: "24px",
         }}
       >
-        <p sx={{ fontSize: "48px" }}>{date}</p>
+        <p>{date}</p>
         <StarSvg className="!mt-[-4px]"></StarSvg>
-        <p sx={{ fontSize: "24px" }}>{location}</p>
+        <p>{location}</p>
       </Stack>
       <Typography sx={{ fontSize: "48px", mt: "10px", width: "50%" }}>
         {name}

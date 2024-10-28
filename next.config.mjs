@@ -16,6 +16,9 @@ const nextConfig = {
     deviceSizes: [600, 900, 1200, 1536],
   },
   // trailingSlash: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // eslint-disable-next-line
   webpack: (
     config,

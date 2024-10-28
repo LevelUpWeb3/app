@@ -11,7 +11,7 @@ const MDXRemote = dynamic(
   },
 );
 const MarkdownViewer = (props) => {
-  const { isLoading, data } = props;
+  const { data } = props;
   return (
     <Container className="markdown-level-up challenge">
       {data?.content && (

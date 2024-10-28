@@ -1,4 +1,4 @@
-import { Stack, SvgIcon, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import TriangleLeftSvg from "@/assets/svgs/common/triangle-left.svg";
 
 import Link from "next/link";

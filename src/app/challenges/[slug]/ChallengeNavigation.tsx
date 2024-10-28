@@ -45,9 +45,9 @@ const ChallengeNavigation = async (props) => {
       {pagination.nextLesson ? (
         <Link
           className="flex items-center gap-[20px] text-[32px] text-[#101010] hover:text-[#2C2C2C]"
-          href={`/solidity/${pagination.nextLesson.id}`}
+          href={`/solidity/${(pagination.nextLesson as any).id}`}
         >
-          <span>Next challenge: {pagination.nextLesson.name}</span>
+          <span>Next challenge: {(pagination.nextLesson as any).name}</span>
           <RighArrowSvg></RighArrowSvg>
         </Link>
       ) : (

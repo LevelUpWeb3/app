@@ -5,11 +5,18 @@ import { ButtonBase, ButtonProps, CircularProgress } from "@mui/material";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 interface ScrollButtonProps extends ButtonProps {
+  // size?:  "large";
   width?: string | number;
   loading?: boolean;
   disabled?: boolean;
   download?: boolean;
-  variant?: "contained" | "outlined";
+  // variant?: "contained" | "outlined";
+  isExternal?: boolean;
+
+  // compatibility
+  target?: string;
+  rel?: string;
+  href?: string;
 }
 
 const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
@@ -47,10 +54,10 @@ const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
   },
 }));
 
-const Button = (props: ScrollButtonProps) => {
+const Button = (props) => {
   const {
     // width,
-    size = "default",
+    size = "medium",
     variant = "outlined",
     isExternal,
     loading,

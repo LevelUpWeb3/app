@@ -5,10 +5,7 @@ import { JoinButton } from "@/app/events/ethcon-korea/components";
 import { SessionContext } from "@/app/events/ethcon-korea/config";
 import { useContext, useEffect, useCallback, useRef, useState } from "react";
 import { useAccount } from "wagmi";
-import {
-  ErrorToastMsg,
-  LoadingMsg,
-} from "@/app/events/ethcon-korea/components";
+import { ErrorToastMsg } from "@/app/events/ethcon-korea/components";
 
 const AuthWrapper = ({ children }) => {
   const { sessions, setSessions } = useContext(SessionContext);

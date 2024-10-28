@@ -1,8 +1,6 @@
 export * from "./common";
 export * from "./networks";
 
-export * from "./solidity";
-
 export const EVENTS_DATE_LIST = ["All time", "Upcoming", "Ended"];
 export const EVENTS_REGION_LIST = [
   "All regions",

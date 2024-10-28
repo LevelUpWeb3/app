@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 
 import { AppBar, Slide } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { styled } from "@mui/system";
 
 import useCheckViewport from "@/hooks/useCheckViewport";
 
@@ -61,11 +60,7 @@ export default function Header() {
         position="sticky"
         sx={{ boxShadow: "none", backgroundColor: "transparent" }}
       >
-        {isPortrait ? (
-          <MobileNav currentMenu={currentMenu} />
-        ) : (
-          <DesktopNav currentMenu={currentMenu} />
-        )}
+        {isPortrait ? <MobileNav /> : <DesktopNav currentMenu={currentMenu} />}
       </AppBar>
     </HideOnScroll>
   );

@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
-import { AlertColor } from "@mui/material";
+import { ButtonProps } from "@mui/material";
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
 
-interface SubmitButtonProps {
+interface SubmitButtonProps extends ButtonProps {
   code: string;
   codeSolution: string;
   onSubmission: (isCorrect: boolean) => void;
@@ -16,7 +16,7 @@ const SubmitButton = ({
   ...restProps
 }: SubmitButtonProps) => {
   const [message, setMessage] = useState("");
-  const [severity, setSeverity] = useState<AlertColor>("");
+  const [severity, setSeverity] = useState("");
   const closeTimeoutRef = useRef<any>();
 
   const cleanedCode = code.replace(/\s/g, "");

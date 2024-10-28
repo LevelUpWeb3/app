@@ -5,7 +5,7 @@ import React from "react";
 // import { usePathname } from "next/navigation";
 
 import Header from "@/components/Header";
-import SiteTab from "@/components/SiteTab";
+// import SiteTab from "@/components/SiteTab";
 import Footer from "@/components/Footer";
 
 import "./global";

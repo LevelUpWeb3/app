@@ -1,7 +1,9 @@
+"use client";
 import Button from "@/components/Button";
 import useCheckViewport from "@/hooks/useCheckViewport";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import { sendGAEvent } from "@next/third-parties/google";
 
 const HackathonItem = (props) => {
   const { isMobile } = useCheckViewport();

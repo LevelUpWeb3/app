@@ -9,14 +9,15 @@ import { useParams } from "next/navigation";
 const ExerciseTabs = (props) => {
   const { value, onChange, completedExercise } = props;
 
-  const { slug: lessonKey } = useParams();
+  const { slug } = useParams();
+  const lessonId = slug as string;
 
   const EXERCISE_LIST = useMemo(() => {
-    return Object.keys(CODE_EXERCISES[lessonKey]).map((item) => ({
+    return Object.keys(CODE_EXERCISES[lessonId]).map((item) => ({
       key: item,
       label: `${item.slice(0, 8)} ${item.slice(8)}`,
     }));
-  }, [lessonKey]);
+  }, [lessonId]);
 
   const disabledTab = (index) => completedExercise < index;
 

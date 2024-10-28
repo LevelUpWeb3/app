@@ -36,7 +36,7 @@ export const saveState = (key: string = "state", state: any) => {
 export function putState(
   key: string = "state",
   subKey: string = "substate",
-  moreState: any
+  moreState: any,
 ) {
   const state = loadState(key);
 

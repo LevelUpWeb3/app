@@ -4,7 +4,6 @@ import BackLink from "@/components/Back";
 import { headers } from "next/headers";
 
 import { Box, Container, Stack } from "@mui/material";
-import useCheckViewport from "@/hooks/useCheckViewport";
 import Data from "../eventsList.json";
 import HackathonOverview from "./HackathonOverview";
 import HackathonSection from "./HackathonSection";
@@ -51,7 +50,7 @@ const HackathonDetailPage = async ({
         hackathonId={params.slug}
       ></HackathonOverview>
       <Container>
-        {sortedDetails.slice(1).map((detail, index) => {
+        {sortedDetails.slice(1).map((detail) => {
           return (
             <HackathonSection
               key={detail.id}

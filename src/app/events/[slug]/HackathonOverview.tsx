@@ -1,18 +1,10 @@
 "use client";
 
-import { Box, Chip, Container, Stack, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 import Button from "@/components/Button";
-import Tooltip from "@/components/EditorTooltip";
 import dynamic from "next/dynamic";
 import { sendGAEvent } from "@next/third-parties/google";
-
-import Link from "next/link";
-
-import XSvg from "@/assets/svgs/socials/x.svg";
-import TelegramSvg from "@/assets/svgs/socials/telegram.svg";
-import StarSvg from "@/assets/svgs/hackathon/star.svg";
-import clsx from "clsx";
 
 const MDXRemote = dynamic(
   () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
@@ -22,7 +14,7 @@ const MDXRemote = dynamic(
 );
 
 const HackathonOverview = (props) => {
-  const { details, hackathonId, ...restProps } = props;
+  const { details, hackathonId } = props;
 
   const imageURL = `/images/events/${hackathonId}.svg`;
 
@@ -45,7 +37,7 @@ const HackathonOverview = (props) => {
             href={`../../hackathon/${hackathonId}/submit`}
             onClick={() =>
               sendGAEvent("event", "eventsClicked", {
-                value: { slug },
+                value: { slug: hackathonId },
               })
             }
           >
