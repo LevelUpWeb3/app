@@ -37,6 +37,9 @@ const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
           ? "#F4F4F4"
           : (theme as any).vars.palette.text.primary,
     },
+    "&.Mui-disabled": {
+      backgroundColor: "transparent",
+    },
     [theme.breakpoints.down("sm")]: {
       fontSize: "14px",
       padding: "0 15px",
@@ -58,7 +61,7 @@ const Button = (props: ScrollButtonProps) => {
   const { classes } = useStyles({
     size,
     // width,
-    disabled,
+    // disabled,
     loading,
     variant,
   });
@@ -70,7 +73,7 @@ const Button = (props: ScrollButtonProps) => {
       classes={{
         root: classes.button,
       }}
-      disabled={loading}
+      disabled={loading || disabled}
       {...restProps}
       target={isExternal ? "_blank" : "_self"}
     >

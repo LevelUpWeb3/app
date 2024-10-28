@@ -20,9 +20,9 @@ const navigations = [
     href: "/podcast",
   },
   {
-    label: "Events",
-    key: "events",
-    href: "/events",
+    label: "Hackathon",
+    key: "hackathon",
+    href: "/hackathon",
   },
   // TODO: Update route as needed if planning to embed inside Level Up and to revive Grants
   // {
