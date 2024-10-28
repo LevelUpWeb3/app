@@ -30,8 +30,8 @@ const CARD_COLOR_MAP = {
   },
 };
 
-const ContentCard = (props) => {
-  const { color = "white", content, key, type, sx, className } = props;
+const PreviewCard = (props) => {
+  const { color = "white", content, type, sx, className } = props;
   const pathname = usePathname();
 
   const handleClick = () => {
@@ -60,7 +60,6 @@ const ContentCard = (props) => {
           },
           ...sx,
         }}
-        key={key}
         onClick={handleClick}
       >
         <CardHeader
@@ -101,10 +100,10 @@ const ContentCard = (props) => {
             sx={{ mt: ["10px", 0] }}
           >
             <Stack direction="row" spacing="8px">
-              {content.labels?.map((label, index) => (
+              {content.labels?.map((label) => (
                 <Box
                   component="span"
-                  key={index}
+                  key={label}
                   sx={{
                     backgroundColor: "rgba(16, 16, 16, 0.10)",
                     borderRadius: "7px",
@@ -131,4 +130,4 @@ const ContentCard = (props) => {
   );
 };
 
-export default ContentCard;
+export default PreviewCard;

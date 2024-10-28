@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "../assets/css/markdown-level-up.css";
+@import "../assets/css/custom.css";
 
 img,
 svg,

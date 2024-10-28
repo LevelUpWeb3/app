@@ -71,4 +71,6 @@ export const SOLIDITY_CHALLENGE_LIST = [
   "Transacting Ether",
 ];
 
-export const NORMAL_HEADER_HEIGHT = "75px";
+export const LAYOUT_HEADER_HEIGHT = "75px";
+
+export const LAYOUT_FOOTER_HEIGHT = "143px";

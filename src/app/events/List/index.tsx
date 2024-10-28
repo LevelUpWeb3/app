@@ -11,7 +11,7 @@ import Data from "./../eventsList.json";
 import {
   EVENTS_DATE_LIST,
   EVENTS_REGION_LIST,
-  NORMAL_HEADER_HEIGHT,
+  LAYOUT_HEADER_HEIGHT,
 } from "@/constants";
 
 const Container = styled(Box)(({ theme }) => ({
@@ -38,7 +38,7 @@ const List = () => {
   });
   const [isSticky] = useState(true);
   const stickyTop = useMemo(
-    () => (trigger ? "2rem" : NORMAL_HEADER_HEIGHT),
+    () => (trigger ? "2rem" : LAYOUT_HEADER_HEIGHT),
     [trigger],
   );
 

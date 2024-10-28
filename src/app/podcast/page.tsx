@@ -1,20 +1,15 @@
-"use client";
-
-import React from "react";
-
-import SectionHeader from "@/components/SectionHeader";
-import Wrapper from "@/components/Wrapper";
-
-import List from "./List";
-
+import { LAYOUT_HEADER_HEIGHT, LAYOUT_FOOTER_HEIGHT } from "@/constants";
+import { Container } from "@mui/material";
 const PodcastPage = () => {
   return (
-    <div className="mt-[-6.5rem] flex flex-col pb-2.5">
-      <SectionHeader title="Podcast" url={"/images/podcast-banner.svg"} />
-      <Wrapper>
-        <List />
-      </Wrapper>
-    </div>
+    <Container
+      sx={{
+        py: ["8.4rem"],
+        minHeight: `calc(100vh - ${LAYOUT_HEADER_HEIGHT} - ${LAYOUT_FOOTER_HEIGHT})`,
+      }}
+    >
+      comming soon
+    </Container>
   );
 };
 
