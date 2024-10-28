@@ -21,7 +21,7 @@ const useCheckCustomNavBarBg = () => {
   const pathname = usePathname();
   const isNoBgPage = useMemo(
     () => TRANSPARENT_BG_PAGE_LIST.includes(pathname!),
-    [pathname]
+    [pathname],
   );
 
   const navbarBg = useMemo(() => {

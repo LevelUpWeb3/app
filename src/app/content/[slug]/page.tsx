@@ -1,21 +1,9 @@
-import Link from "next/link";
-import dynamic from "next/dynamic";
 import { headers } from "next/headers";
 
 import Attribution from "./Attribution";
-// import ContentFooter from "@/components/ContentFooter";
 import MoreContent from "./MoreContent";
-import BackSvg from "@/assets/svgs/common/back.svg";
 
-import {
-  SvgIcon,
-  Skeleton,
-  Stack,
-  Typography,
-  Avatar,
-  Container,
-  Box,
-} from "@mui/material";
+import { Stack, Container, Box } from "@mui/material";
 import BackLink from "@/components/Back";
 import MarkdownViewer from "./MarkdownViewer";
 

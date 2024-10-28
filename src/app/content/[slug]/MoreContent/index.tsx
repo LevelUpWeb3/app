@@ -1,9 +1,7 @@
 import { headers } from "next/headers";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import SlideSvg from "@/assets/svgs/content/slide.svg";
 import Card from "@/components/Card";
-import { Box, Stack, SvgIcon, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 import Data from "../../content.json";
 

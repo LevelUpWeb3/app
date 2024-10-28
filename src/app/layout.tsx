@@ -67,10 +67,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700;8..144,800&display=swap"
-          rel="stylesheet"
-        />
         {/* TODO: only on blog detail page */}
         <link
           rel="stylesheet"

@@ -1,4 +1,4 @@
-import { Box, Typography, Avatar, Stack } from "@mui/material";
+import { Box, Typography, Avatar } from "@mui/material";
 import Link from "next/link";
 
 const Attribution = (props) => {

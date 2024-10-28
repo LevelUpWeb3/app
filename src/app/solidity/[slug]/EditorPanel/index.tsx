@@ -9,16 +9,16 @@ import ExerciseTabs from "./ExerciseTabs";
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 
 const IdeEditor = () => {
-  const { slug: lessonKey } = useParams();
+  const { slug: lessonId } = useParams();
 
   const [exercise, setExercise] = useState<string>(
-    Object.keys(CODE_EXERCISES[lessonKey])[0],
+    Object.keys(CODE_EXERCISES[lessonId as string])[0],
   );
 
   const [completedExercise, setCompletedExercise] = useState<number>(0);
 
   const handleChangeExercise = () => {
-    setExercise();
+    setExercise("");
   };
 
   const handleCompleteExercise = (value: number) => {

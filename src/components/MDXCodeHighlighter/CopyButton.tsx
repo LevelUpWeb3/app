@@ -1,11 +1,12 @@
 import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { IconButton, SvgIcon } from "@mui/material";
+import { IconButton } from "@mui/material";
 import CopySvg from "@/assets/svgs/content/copy.svg";
 
 import EditorTooltip from "../EditorTooltip";
 interface CopyButtonProps {
   text: string;
+  sx: object;
 }
 
 const CopyButton: React.FC<CopyButtonProps> = ({ sx, text }) => {

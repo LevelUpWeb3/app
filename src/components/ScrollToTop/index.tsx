@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 
 import { ArrowUpward } from "@mui/icons-material";
 import { Box, Fab } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
 const ScrollToTop: React.FC = () => {
   const [visible, setVisible] = useState<boolean>(false);

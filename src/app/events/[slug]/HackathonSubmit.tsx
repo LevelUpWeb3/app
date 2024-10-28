@@ -15,7 +15,7 @@ const HackathonSubmit = (props) => {
         sx={{ width: ["100% !important", "auto !important"] }}
         onClick={() =>
           sendGAEvent("event", "hackathonClicked", {
-            value: { slug: "hackathonId" },
+            value: { slug: hackathonId },
           })
         }
       >

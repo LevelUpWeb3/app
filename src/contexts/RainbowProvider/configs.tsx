@@ -13,7 +13,6 @@ import {
   safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { parseUnits } from "ethers";
 import { configureChains, mainnet, sepolia } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
@@ -32,7 +31,7 @@ const createWalletConfig = (
   name: string,
   walletFunction: () => Wallet,
   condition: boolean,
-  fixedWallet?: boolean
+  fixedWallet?: boolean,
 ): WalletConfig => {
   return {
     name,
@@ -79,7 +78,7 @@ const { chains, publicClient } = configureChains(
     jsonRpcProvider({
       rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }),
     }),
-  ]
+  ],
 );
 
 const walletConfigs: WalletConfig[] = [
@@ -87,49 +86,49 @@ const walletConfigs: WalletConfig[] = [
     "MetaMask",
     () => metaMaskWallet({ chains, projectId }),
     globalThis.ethereum?.isMetaMask === true,
-    true
+    true,
   ),
   createWalletConfig(
     "Coinbase",
     () => coinbaseWallet({ appName: "Scroll", chains }),
     globalThis.ethereum?.isCoinbaseWallet === true,
-    true
+    true,
   ),
   createWalletConfig(
     "Brave",
     () => braveWallet({ chains }),
-    globalThis.ethereum?.isBraveWallet === true
+    globalThis.ethereum?.isBraveWallet === true,
   ),
   createWalletConfig(
     "Rainbow",
     () => rainbowWallet({ chains, projectId }),
-    globalThis.ethereum?.isRainbow === true
+    globalThis.ethereum?.isRainbow === true,
   ),
   createWalletConfig(
     "Safe",
     () => safeWallet({ chains }),
-    globalThis.ethereum?.isSafeWallet === true
+    globalThis.ethereum?.isSafeWallet === true,
   ),
   createWalletConfig(
     "Frame",
     () => frameWallet({ chains }),
-    globalThis.ethereum?.isFrame === true
+    globalThis.ethereum?.isFrame === true,
   ),
   createWalletConfig(
     "imToken",
     () => imTokenWallet({ chains, projectId }),
-    globalThis.ethereum?.isImToken === true
+    globalThis.ethereum?.isImToken === true,
   ),
   createWalletConfig(
     "Okx Wallet",
     () => okxWallet({ chains, projectId }),
     globalThis.okxwallet?.isOKExWallet ||
-      globalThis.okxwallet?.isOkxWallet === true
+      globalThis.okxwallet?.isOkxWallet === true,
   ),
   createWalletConfig(
     "Rabby",
     () => rabbyWallet({ chains }),
-    globalThis.ethereum?.isRabby && !globalThis.ethereum?.isMetaMask === true
+    globalThis.ethereum?.isRabby && !globalThis.ethereum?.isMetaMask === true,
   ),
   // Add any additional wallets here
 ];

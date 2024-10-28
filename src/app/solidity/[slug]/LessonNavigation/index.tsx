@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { headers } from "next/headers";
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 
 import BackLink from "@/components/Back";
 
@@ -35,7 +35,7 @@ const LessonNavigation = async (props) => {
       px="50px"
       {...props}
     >
-      {pagination.prevLesson ? (
+      {/* {pagination.prevLesson ? (
         <Link
           className="flex items-center gap-[20px] text-[32px] text-[#101010] hover:text-[#2C2C2C]"
           href={`/solidity/${pagination.prevLesson.id}`}
@@ -44,14 +44,15 @@ const LessonNavigation = async (props) => {
           <span>Prev lesson: {pagination.prevLesson.name}</span>
         </Link>
       ) : (
-        <BackLink></BackLink>
-      )}
+       
+      )} */}
+      <BackLink></BackLink>
       {pagination.nextLesson ? (
         <Link
           className="flex items-center gap-[20px] text-[32px] text-[#101010] hover:text-[#2C2C2C]"
-          href={`/solidity/${pagination.nextLesson.id}`}
+          href={`/solidity/${(pagination.nextLesson as any).id}`}
         >
-          <span>Next lesson: {pagination.nextLesson.name}</span>
+          <span>Next lesson: {(pagination.nextLesson as any).name}</span>
           <RighArrowSvg></RighArrowSvg>
         </Link>
       ) : (
