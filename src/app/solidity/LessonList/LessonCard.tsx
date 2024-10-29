@@ -22,8 +22,12 @@ const SolidityCardList = ({ content }) => {
           cursor: "pointer",
           border: "1.5px solid #101010",
           overflow: "hidden",
+          backgroundColor: "background.default",
           ["& *"]: {
             cursor: "pointer !important",
+          },
+          "&:hover": {
+            backgroundColor: "#F4F4F4",
           },
         }}
         onClick={handleClick}
@@ -43,9 +47,8 @@ const SolidityCardList = ({ content }) => {
           sx={{
             fontSize: "20px",
             fontWeight: 500,
-            lineHeight: "84px",
+            lineHeight: "81px",
             textAlign: "center",
-            backgroundColor: "background.default",
           }}
         >
           {content.name}

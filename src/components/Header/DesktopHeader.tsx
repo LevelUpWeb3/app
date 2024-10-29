@@ -3,7 +3,7 @@ import React from "react";
 import { Box, Container, Stack } from "@mui/material";
 
 import Logo from "@/components/ScrollLogo";
-import WalletToolkit from "@/components/WalletToolkit";
+// import WalletToolkit from "@/components/WalletToolkit";
 import useCheckViewport from "@/hooks/useCheckViewport";
 
 import { useStyles } from "tss-react/mui";
@@ -66,7 +66,7 @@ const DesktopHeader = ({ currentMenu }) => {
         <Box>{renderNavigationList()}</Box>
       </Stack>
       {/* Temporarily disabled in MVP */}
-      <WalletToolkit dark={dark}></WalletToolkit>
+      {/* <WalletToolkit dark={dark}></WalletToolkit> */}
     </Container>
   );
 };

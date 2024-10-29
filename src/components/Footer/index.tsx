@@ -10,8 +10,7 @@ export default function Footer() {
   return (
     <Box
       sx={{
-        pb: ["84px", "60px"],
-        pt: ["30px", "60px"],
+        py: ["30px", "60px"],
       }}
     >
       <Container>
@@ -57,8 +56,18 @@ export default function Footer() {
             >
               © 2024 Scroll Foundation | All rights reserved
             </Typography>
-            <Link href="https://scroll.io/terms-of-service">Terms of Use</Link>
-            <Link href="https://scroll.io/privacy-policy">Privacy Policy</Link>
+            <Link
+              href="https://scroll.io/terms-of-service"
+              className="leading-tight"
+            >
+              Terms of Use
+            </Link>
+            <Link
+              href="https://scroll.io/privacy-policy"
+              className="leading-tight"
+            >
+              Privacy Policy
+            </Link>
           </Box>
         </Stack>
       </Container>

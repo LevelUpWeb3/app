@@ -1,8 +1,6 @@
-import useCheckViewport from "@/hooks/useCheckViewport";
 import { Stack, Typography } from "@mui/material";
 
 const NoData = (props) => {
-  const { isMobile } = useCheckViewport();
   const { title, description, ...restProps } = props;
 
   return (
@@ -10,7 +8,7 @@ const NoData = (props) => {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      spacing={isMobile ? "0.4rem" : "0.8rem"}
+      spacing={["0.4rem", "0.8rem"]}
       sx={{ py: ["6rem", "12rem"] }}
       {...restProps}
     >

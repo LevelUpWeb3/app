@@ -3,8 +3,11 @@
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-import { AppBar, Slide } from "@mui/material";
+import { AppBar, Slide, Stack, Box } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
+
+import AnnouncementBar from "@/components/AnnouncementBar";
+import StarSvg from "@/assets/svgs/hackathon/star.svg";
 
 import useCheckViewport from "@/hooks/useCheckViewport";
 
@@ -35,6 +38,8 @@ export default function Header() {
 
   const [currentMenu, setCurrentMenu] = useState("");
 
+  const isHome = pathname === "/";
+
   useEffect(() => {
     const rootMenu = findRootMenu(pathname, navigations);
     setCurrentMenu(rootMenu ?? "");
@@ -55,13 +60,36 @@ export default function Header() {
   };
 
   return (
-    <HideOnScroll>
-      <AppBar
-        position="sticky"
-        sx={{ boxShadow: "none", backgroundColor: "transparent" }}
-      >
-        {isPortrait ? <MobileNav /> : <DesktopNav currentMenu={currentMenu} />}
-      </AppBar>
-    </HideOnScroll>
+    <>
+      <HideOnScroll>
+        <AppBar
+          position="sticky"
+          sx={{ boxShadow: "none", backgroundColor: "transparent" }}
+        >
+          {isHome && (
+            <AnnouncementBar autoFill pauseOnHover>
+              <Stack
+                direction="row"
+                spacing="20px"
+                mr="20px"
+                alignItems="center"
+              >
+                <p>Aug 2-4th</p>
+                <StarSvg className="!mt-[-4px]"></StarSvg>
+                <p className="font-medium">
+                  Join the Level Up Hackathon by Ethereum Argentina
+                </p>
+              </Stack>
+            </AnnouncementBar>
+          )}
+
+          {isPortrait ? (
+            <MobileNav />
+          ) : (
+            <DesktopNav currentMenu={currentMenu} />
+          )}
+        </AppBar>
+      </HideOnScroll>
+    </>
   );
 }

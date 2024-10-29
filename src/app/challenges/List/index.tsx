@@ -14,6 +14,7 @@ import {
 import Card from "@/components/Card";
 
 import PlainSelect from "@/components/PlainSelect";
+import NoData from "@/components/NoData";
 
 const Container = styled(Box)({
   maxWidth: "140rem",
@@ -28,7 +29,7 @@ const ChallengeList = (props) => {
   const { data } = props;
   const trigger = useScrollTrigger();
   const [searchParams, setSearchParams] = useState({
-    category: "All categories",
+    category: CHALLENGE_CATEGORY_LIST[0],
     level: CHALLENGE_LEVEL_LIST[0],
   });
 
@@ -40,10 +41,10 @@ const ChallengeList = (props) => {
   const filteredData = useMemo(() => {
     return data?.filter((item) => {
       const categoryMatch =
-        searchParams.category === "All categories" ||
+        searchParams.category === CHALLENGE_CATEGORY_LIST[0] ||
         item.labels.includes(searchParams.category);
       const levelMatch =
-        searchParams.level === "All levels" ||
+        searchParams.level === CHALLENGE_LEVEL_LIST[0] ||
         `Level ${item.level}` === searchParams.level;
       return categoryMatch && levelMatch;
     });
@@ -77,25 +78,32 @@ const ChallengeList = (props) => {
           onChange={handleChangeCategory}
         ></PlainSelect>
         <PlainSelect
+          sx={{ width: "146px" }}
           data={CHALLENGE_LEVEL_LIST}
           value={searchParams.level}
           onChange={handleChangeLevel}
         ></PlainSelect>
       </Stack>
-
-      <Box
-        sx={{
-          mt: ["20px", "46px"],
-          width: "100%",
-          display: "grid",
-          gridTemplateColumns: ["1fr", "repeat(auto-fill, minmax(300px, 1fr))"],
-          gap: ["15px", "20px"],
-        }}
-      >
-        {filteredData?.map((item) => (
-          <Card content={item} key={item.name}></Card>
-        ))}
-      </Box>
+      {filteredData?.length ? (
+        <Box
+          sx={{
+            mt: ["20px", "46px"],
+            width: "100%",
+            display: "grid",
+            gridTemplateColumns: [
+              "1fr",
+              "repeat(auto-fill, minmax(300px, 1fr))",
+            ],
+            gap: ["15px", "20px"],
+          }}
+        >
+          {filteredData.map((item) => (
+            <Card content={item} key={item.name}></Card>
+          ))}
+        </Box>
+      ) : (
+        <NoData title="No results" description="reselect"></NoData>
+      )}
     </Container>
   );
 };

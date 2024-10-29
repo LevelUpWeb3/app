@@ -66,24 +66,25 @@ const List = (props) => {
           onChange={(e) => handleChangeSearchParams(e.target.value, "region")}
         ></PlainSelect>
       </Stack>
-      <Stack
-        direction="column"
-        spacing="20px"
-        sx={{
-          mt: ["20px", "46px"],
-          width: "100%",
-        }}
-      >
-        {filteredData?.map((item) => (
-          <HackathonItem content={item} key={item.name}></HackathonItem>
-        ))}
-        {!filteredData.length && (
-          <NoData
-            title="No results match the selected criteria"
-            description="Please try selecting or adjusting your filters."
-          ></NoData>
-        )}
-      </Stack>
+      {filteredData.length ? (
+        <Stack
+          direction="column"
+          spacing="20px"
+          sx={{
+            mt: ["20px", "46px"],
+            width: "100%",
+          }}
+        >
+          {filteredData.map((item) => (
+            <HackathonItem content={item} key={item.name}></HackathonItem>
+          ))}
+        </Stack>
+      ) : (
+        <NoData
+          title="No results match the selected criteria"
+          description="Please try selecting or adjusting your filters."
+        ></NoData>
+      )}
     </Box>
   );
 };

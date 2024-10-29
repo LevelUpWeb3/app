@@ -64,10 +64,12 @@ const HackathonItem = (props) => {
         justifyContent="center"
         sx={{
           position: "relative",
-          alignSelf: ["flex-end", "flex-start"],
+          alignSelf: "flex-end",
           justifySelf: ["flex-end", "unset"],
           gridColumn: ["2/3", "unset"],
           gridRow: ["2/4", "unset"],
+
+          top: [0, "30px"],
         }}
       >
         <Image
@@ -79,6 +81,7 @@ const HackathonItem = (props) => {
             position: isMobile ? "relative" : "absolute",
             width: isMobile ? "auto" : "118px",
             height: isMobile ? "94px" : "auto",
+            bottom: isMobile ? "unset" : 0,
           }}
         ></Image>
       </Stack>

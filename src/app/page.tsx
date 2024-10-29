@@ -1,22 +1,30 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 import Button from "@/components/Button";
 
+import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+
 const Home = () => {
   return (
     <>
-      <Container
+      <PageHeaderWrapper
+        bgColor="themeBackground.brand"
         sx={{
           background: [
-            'url("/images/landing/bg-mobile.png")  right 20px bottom 30px / 155px no-repeat',
-            'url("/images/landing/bg.png")  right bottom / 506px no-repeat',
+            'url("/images/landing/hero-mobile.svg") right bottom 30px / auto 158px no-repeat',
+            'url("/images/landing/hero-mobile.svg") right bottom 30px / 85% auto no-repeat',
+            'url("/images/landing/hero.svg") right 60px bottom 38px / 75% auto no-repeat',
+            'url("/images/landing/hero.svg") right 60px bottom 38px / auto 313px no-repeat',
           ],
+          pt: ["60px", "100px"],
+          pb: ["250px", "450px"],
         }}
       >
-        <Stack gap={["14px"]} pt={["60px", "100px"]} pb={["210px", "450px"]}>
+        <Stack gap={["14px"]}>
           <Typography
             sx={{
               fontSize: ["36px", "64px"],
               lineHeight: "normal",
+              width: ["214px", "auto"],
             }}
           >
             Learn, Build, Innovate
@@ -35,7 +43,28 @@ const Home = () => {
 
           <Button href="/solidity">Learn Solidity</Button>
         </Stack>
-      </Container>
+      </PageHeaderWrapper>
+      {/* <Box
+        sx={{
+          pt: ["124px", "159px"],
+          pb: ["30px", "60px"],
+          mt: ["-64px", "-75px"],
+          backgroundColor: "themeBackground.brand",
+        }}
+      >
+        <Container
+          sx={{
+            background: [
+              'url("/images/landing/hero-mobile.svg") right bottom 30px / auto 158px no-repeat',
+              'url("/images/landing/hero-mobile.svg") right bottom 30px / 85% auto no-repeat',
+              'url("/images/landing/hero.svg") right bottom 38px / 75% auto no-repeat',
+              'url("/images/landing/hero.svg") right bottom 38px / auto 313px no-repeat',
+            ],
+          }}
+        >
+          
+        </Container>
+      </Box> */}
 
       <Box className="bg-[#edfbfd]">
         <Container>

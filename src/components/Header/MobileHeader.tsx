@@ -15,11 +15,14 @@ import YoutubeIcon from "@/assets/svgs/socials/youtube.svg";
 import TelegramIcon from "@/assets/svgs/socials/telegram.svg";
 import RightArrow from "@/assets/svgs/header/arrow.svg";
 import MenuTrigger from "./MenuTrigger";
+import { MOBILE_LAYOUT_HEADER_HEIGHT } from "@/constants";
 
 const MobileHeader = () => {
   const pathname = usePathname();
   const dark = useCheckTheme();
   const [open, setOpen] = useState(false);
+
+  const isHome = pathname === "/";
 
   const toggleDrawer = (isOpen) => {
     setOpen(isOpen);
@@ -35,7 +38,7 @@ const MobileHeader = () => {
       sx={{
         padding: 0,
         fontSize: "16px",
-        height: "calc(100vh - 64px - 92px)",
+        height: `calc(100vh - ${MOBILE_LAYOUT_HEADER_HEIGHT} - ${isHome ? "61px" : "0px"} - 92px)`,
         overflowY: "auto",
       }}
       component="nav"
@@ -107,34 +110,16 @@ const MobileHeader = () => {
                 sx={{ pr: "20px", height: "92px" }}
               >
                 <Link href="https://x.com/levelupweb3" target="_blank">
-                  <SvgIcon
-                    sx={{
-                      fontSize: "22px",
-                    }}
-                    inheritViewBox
-                    component={XLogoIcon}
-                  />
+                  <XLogoIcon className="h-auto w-[20px]"></XLogoIcon>
                 </Link>
                 <Link
                   href="https://www.youtube.com/@levelupinweb3"
                   target="_blank"
                 >
-                  <SvgIcon
-                    sx={{
-                      fontSize: "22px",
-                    }}
-                    inheritViewBox
-                    component={YoutubeIcon}
-                  />
+                  <YoutubeIcon className="h-auto w-[21px]"></YoutubeIcon>
                 </Link>
                 <Link href="https://t.me/+PdNbk5milo1mMTAy" target="_blank">
-                  <SvgIcon
-                    sx={{
-                      fontSize: "22px",
-                    }}
-                    inheritViewBox
-                    component={TelegramIcon}
-                  />
+                  <TelegramIcon className="h-auto w-[24px]"></TelegramIcon>
                 </Link>
               </Stack>
             </Box>

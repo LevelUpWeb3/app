@@ -602,8 +602,8 @@
   padding-top: 60px;
 }
 
-.markdown-level-up ul,
-.markdown-level-up ol {
+.markdown-level-up > ul,
+.markdown-level-up > ol {
   padding-left: calc(50% + 2em);
 }
 

@@ -6,6 +6,7 @@ import MoreContent from "./MoreContent";
 import { Stack, Container, Box } from "@mui/material";
 import BackLink from "@/components/Back";
 import MarkdownViewer from "./MarkdownViewer";
+import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 
 export default async function ContentDetailsPage({
   params,
@@ -21,25 +22,19 @@ export default async function ContentDetailsPage({
 
   return (
     <>
-      <Box
-        sx={{
-          pt: ["124px", "159px"],
-          pb: ["30px", "60px"],
-          mt: ["-64px", "-75px"],
-          backgroundColor: "rgba(164, 148, 255, 0.20)",
-        }}
+      <PageHeaderWrapper
+        bgColor="rgba(164, 148, 255, 0.20)"
+        sx={{ pt: ["60px", "84px"], pb: ["30px", "60px"] }}
       >
-        <Container>
-          <Stack
-            direction={["column", "row"]}
-            gap="40px"
-            justifyContent={["flex-start", "space-between"]}
-          >
-            <BackLink></BackLink>
-            <Attribution {...data}></Attribution>
-          </Stack>
-        </Container>
-      </Box>
+        <Stack
+          direction={["column", "row"]}
+          gap="40px"
+          justifyContent={["flex-start", "space-between"]}
+        >
+          <BackLink></BackLink>
+          <Attribution {...data}></Attribution>
+        </Stack>
+      </PageHeaderWrapper>
       <Container>
         <MarkdownViewer isLoading={isLoading} data={data}></MarkdownViewer>
       </Container>

@@ -1,14 +1,11 @@
-import { LAYOUT_HEADER_HEIGHT, LAYOUT_FOOTER_HEIGHT } from "@/constants";
+import NoData from "@/components/NoData";
 import { Container } from "@mui/material";
+import { FULL_SCREEN_HEIGHT } from "@/constants";
+
 const PodcastPage = () => {
   return (
-    <Container
-      sx={{
-        py: ["8.4rem"],
-        minHeight: `calc(100vh - ${LAYOUT_HEADER_HEIGHT} - ${LAYOUT_FOOTER_HEIGHT})`,
-      }}
-    >
-      comming soon
+    <Container sx={{ minHeight: FULL_SCREEN_HEIGHT }}>
+      <NoData title="No result" description="reselect"></NoData>;
     </Container>
   );
 };

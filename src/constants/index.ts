@@ -1,5 +1,6 @@
 export * from "./common";
 export * from "./networks";
+export * from "./layout";
 
 export const EVENTS_DATE_LIST = ["All time", "Upcoming", "Ended"];
 export const EVENTS_REGION_LIST = [
@@ -68,7 +69,3 @@ export const SOLIDITY_CHALLENGE_LIST = [
   "Fallback",
   "Transacting Ether",
 ];
-
-export const LAYOUT_HEADER_HEIGHT = "75px";
-
-export const LAYOUT_FOOTER_HEIGHT = "143px";
