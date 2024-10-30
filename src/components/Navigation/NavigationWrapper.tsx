@@ -1,6 +1,7 @@
 import { Box, Container, Stack } from "@mui/material";
 
-const NavigationWrapper = ({ children, sx }) => {
+const NavigationWrapper = (props) => {
+  const { children, sx } = props;
   return (
     <Box
       sx={{

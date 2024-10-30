@@ -6,7 +6,7 @@ import {
 import CopyButton from "./CopyButton";
 import clsx from "clsx";
 
-const MDXCodeHighlighter = (theme) => {
+const MDXCodeHighlighter = (theme = "dark") => {
   const isLight = theme === "light";
   const defaultStyle = isLight ? materialLight : materialDark;
   return {

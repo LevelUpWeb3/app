@@ -10,6 +10,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children?: ReactNode;
+  name: string;
 }
 
 const Modal = ({ isOpen, onClose, name }: ModalProps) => {
