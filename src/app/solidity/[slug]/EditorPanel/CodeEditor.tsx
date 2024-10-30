@@ -77,6 +77,8 @@ const CodeEditor = ({
         minimap: { enabled: false },
         cursorStyle: "underline",
         fontSize: 16,
+        fontFamily: "'Fira Code', monospace",
+
         folding: false,
         lineNumbersMinChars: 2,
         scrollBeyondLastLine: false,

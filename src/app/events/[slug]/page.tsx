@@ -1,14 +1,14 @@
-import HackathonHeader from "./HackathonHeader";
-
-import BackLink from "@/components/Back";
 import { headers } from "next/headers";
 
 import { Box, Container, Stack } from "@mui/material";
+import BackLink from "@/components/Back";
 import Data from "../eventsList.json";
-import HackathonOverview from "./HackathonOverview";
-import HackathonSection from "./HackathonSection";
-import HackathonSubmit from "./HackathonSubmit";
-import Navigation from "./Navigation";
+
+import EventHeader from "./EventHeader";
+import EventOverview from "./EventOverview";
+import EventSection from "./EventSection";
+import EventSubmit from "./EventSubmit";
+import EventNavigation from "./EventNavigation";
 
 const HackathonDetailPage = async ({
   params,
@@ -38,29 +38,24 @@ const HackathonDetailPage = async ({
         <Container>
           <Stack spacing={["40px", "60px"]}>
             <BackLink></BackLink>
-            <HackathonHeader
+            <EventHeader
               {...hackathonData}
               hackathonId={params.slug}
-            ></HackathonHeader>
+            ></EventHeader>
           </Stack>
         </Container>
       </Box>
-      <HackathonOverview
+      <EventOverview
         details={sortedDetails[0] ?? {}}
         hackathonId={params.slug}
-      ></HackathonOverview>
+      ></EventOverview>
       <Container>
         {sortedDetails.slice(1).map((detail) => {
-          return (
-            <HackathonSection
-              key={detail.id}
-              details={detail}
-            ></HackathonSection>
-          );
+          return <EventSection key={detail.id} details={detail}></EventSection>;
         })}
-        <HackathonSubmit hackathonId={params.slug}></HackathonSubmit>
+        <EventSubmit hackathonId={params.slug}></EventSubmit>
       </Container>
-      <Navigation></Navigation>
+      <EventNavigation></EventNavigation>
     </>
   );
 };

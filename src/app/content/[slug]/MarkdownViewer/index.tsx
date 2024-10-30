@@ -20,7 +20,7 @@ const MarkdownViewer = (props) => {
         <MDXRemote
           {...data.content}
           components={{
-            ...MDXCodeHighlighter,
+            ...MDXCodeHighlighter(),
             ...MDXHeaders,
             Mermaid,
             YoutubeEmbed,

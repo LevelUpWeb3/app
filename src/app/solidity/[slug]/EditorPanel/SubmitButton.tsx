@@ -20,7 +20,7 @@ const SubmitButton = ({
   const closeTimeoutRef = useRef<any>();
 
   const cleanedCode = code.replace(/\s/g, "");
-  const cleanedCodeSolution = codeSolution.replace(/\s/g, "");
+  const cleanedCodeSolution = codeSolution?.replace(/\s/g, "");
 
   const handleCloseTip = (reason) => {
     if (reason === "manually") {

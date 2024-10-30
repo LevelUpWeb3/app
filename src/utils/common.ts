@@ -66,3 +66,11 @@ export function isValidTransactionHash(txHash: string): boolean {
 export function generateShareTwitterURL(text, referer, via = "levelupweb3") {
   return `https://twitter.com/intent/tweet?original_referer=${encodeURIComponent(referer)}&text=${encodeURIComponent(text)}`;
 }
+
+export const shuffleArray = (array: any[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};

@@ -11,7 +11,7 @@ const DiffEditorComponent = ({ code, codeSolution }: DiffEditorProps) => {
       <DiffEditor
         height="760px"
         theme="hc-black"
-        language="solidity"
+        language="sol"
         original={codeSolution}
         modified={code}
         options={{
@@ -20,6 +20,7 @@ const DiffEditorComponent = ({ code, codeSolution }: DiffEditorProps) => {
           minimap: { enabled: false },
           renderSideBySide: false,
           fontSize: 16,
+          fontFamily: "'Fira Code', monospace",
           folding: false,
           onlyShowAccessibleDiffViewer: true,
           lineNumbersMinChars: 2,

@@ -38,17 +38,7 @@ export default async function ContentDetailsPage({
       <Container>
         <MarkdownViewer isLoading={isLoading} data={data}></MarkdownViewer>
       </Container>
-      <Box
-        sx={{
-          backgroundColor: "#1010101A",
-          p: ["30px 0", "60px"],
-          mt: "60px",
-        }}
-      >
-        <Container>
-          <MoreContent currentContentIndex={data.index} />
-        </Container>
-      </Box>
+      <MoreContent index={data.index} />
     </>
   );
 }

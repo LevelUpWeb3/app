@@ -1,41 +1,22 @@
 "use client";
 
-import React, { ReactNode, useRef, useState, useEffect } from "react";
+// TODO: style
+import React, { ReactNode } from "react";
 import { Box, IconButton } from "@mui/material";
-import { useParams } from "next/navigation";
 import { X, Close } from "@mui/icons-material";
 import Image from "next/image";
 
 interface ModalProps {
   isOpen: boolean;
-  isClose: () => void;
+  onClose: () => void;
   children?: ReactNode;
-  code?: string;
 }
 
-const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
-  const [data, setData] = useState<any>([]);
-  const [name, setName] = useState<string>("");
-  const modalRef = useRef(null);
-  const { slug } = useParams();
-  const slugParam = slug as string;
-
-  useEffect(() => {
-    fetch("/data/solidity/markdownData.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        console.log("data: ", data);
-        const object = data.find((item) => item.id === slugParam);
-        setName(object ? object.name : null);
-        console.log("name: ", name);
-      });
-  }, []);
-
+const Modal = ({ isOpen, onClose, name }: ModalProps) => {
   if (!isOpen) return null;
 
   const handleClose = (e: any) => {
-    if (e.target.id === "background") isClose();
+    if (e.target.id === "background") onClose();
   };
 
   const handleWarpcastShare = () => {
@@ -57,14 +38,10 @@ const Modal = ({ isOpen, isClose, children, code }: ModalProps) => {
       onClick={handleClose}
     >
       <Box className="flex w-[600px] flex-col rounded-xl border-2 bg-orange-50">
-        <Box
-          className="rounded-xl p-8"
-          ref={modalRef}
-          sx={{ position: "relative" }}
-        >
+        <Box className="rounded-xl p-8" sx={{ position: "relative" }}>
           <IconButton
             aria-label="Close"
-            onClick={isClose}
+            onClick={onClose}
             sx={{
               position: "absolute",
               top: "0",

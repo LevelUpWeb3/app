@@ -14,18 +14,23 @@ import { Box, Stack } from "@mui/material";
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
 
-const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
+const Editor = ({
+  data,
+  exercise = "exercise1",
+  completedExerciseNumber,
+  onComplete,
+}) => {
   const [code, setCode] = useState("");
   const [tries, setTries] = useState<number>(0);
-  const [solutionViewer, setSolutionViewer] = useState<boolean>(false);
-  const [showSolutionButton, setShowSolutionButton] = useState<boolean>(false);
-  const [completedExerciseNumber, setCompletedExerciseNumber] =
-    useState<number>(0);
+  const [editorType, setEditorType] = useState<"code" | "solution">("code");
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { slug } = useParams();
 
   const lessonId = slug as string;
+
+  const allowViewSolution = useMemo(() => tries > 2, [tries]);
 
   const { codeSolution, codeTemplate } = useMemo(() => {
     if (CODE_SOLUTIONS[lessonId] && CODE_EXERCISES[lessonId]) {
@@ -37,30 +42,23 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
     return { codeSolution: "", codeTemplate: "" };
   }, [lessonId, exercise]);
 
-  const submissionHandler = (isCorrect: boolean) => {
+  const handleSubmitCode = (isCorrect: boolean) => {
     if (isCorrect) {
       const currentExerciseNumber = parseInt(exercise.replace("exercise", ""));
       if (currentExerciseNumber > completedExerciseNumber) {
         onComplete(currentExerciseNumber);
-        setCompletedExerciseNumber(currentExerciseNumber);
+      } else {
+        onComplete(currentExerciseNumber, false);
       }
 
-      setSolutionViewer(false);
       setTries(0);
     } else {
-      setTries(() => {
-        const newTries = tries + 1;
-        if (newTries > 2) {
-          setSolutionViewer(true);
-        }
-        return newTries;
-      });
+      setTries(tries + 1);
     }
   };
 
-  const handleSolutionButtonClick = (reveal: boolean) => {
-    setShowSolutionButton((prevShowed) => !prevShowed);
-    setSolutionViewer(reveal);
+  const handleToggleEditorType = (editorType) => {
+    setEditorType(editorType);
     setTries(0);
   };
 
@@ -71,13 +69,13 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
   }, [completedExerciseNumber]);
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative", backgroundColor: "#232323" }}>
       <Modal
         isOpen={isModalOpen}
-        isClose={() => setIsModalOpen(false)}
-        code={code}
+        onClose={() => setIsModalOpen(false)}
+        name={data.name}
       />
-      {showSolutionButton ? (
+      {editorType === "solution" ? (
         <DiffEditorComponent code={code} codeSolution={codeSolution} />
       ) : (
         <CodeEditor
@@ -85,9 +83,7 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
           code={code}
           codeSolution={codeSolution}
           onChange={(code) => setCode(code || "")}
-          onSubmission={(isCorrect) => {
-            submissionHandler(isCorrect);
-          }}
+          onSubmission={handleSubmitCode}
         />
       )}
       <Stack
@@ -100,13 +96,13 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
           px: "60px",
         }}
       >
-        {showSolutionButton ? (
+        {editorType === "solution" ? (
           <EditorTooltip title="Back to code" placement="top">
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: "50%" }} key="code">
               <Button
                 variant="contained"
                 size="large"
-                onClick={() => handleSolutionButtonClick(false)}
+                onClick={() => handleToggleEditorType("code")}
                 sx={{
                   width: "100% !important",
                   opacity: 0.2,
@@ -122,23 +118,30 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
         ) : (
           <>
             <EditorTooltip
+              key="answer"
               title="You can only view this solution once"
               placement="top"
             >
-              <Box sx={{ width: "50%" }}>
+              <Box
+                key="answer"
+                sx={{
+                  width: "50%",
+                  pointerEvents: allowViewSolution ? "all" : "none",
+                }}
+              >
                 <Button
                   variant="contained"
-                  disabled={!solutionViewer}
+                  disabled={!allowViewSolution}
                   size="large"
                   sx={{
-                    visibility: solutionViewer ? "visible" : "hidden",
+                    visibility: allowViewSolution ? "visible" : "hidden",
                     width: "100% !important",
                     opacity: 0.2,
                     "&:hover": {
                       opacity: 1,
                     },
                   }}
-                  onClick={() => handleSolutionButtonClick(true)}
+                  onClick={() => handleToggleEditorType("solution")}
                 >
                   Answers
                 </Button>
@@ -148,9 +151,7 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
               sx={{ width: "50% !important" }}
               code={code}
               codeSolution={codeSolution}
-              onSubmission={(isCorrect) => {
-                submissionHandler(isCorrect);
-              }}
+              onSubmission={handleSubmitCode}
             />
           </>
         )}
@@ -159,4 +160,4 @@ const IdeComponent = ({ exercise = "exercise1", onComplete }) => {
   );
 };
 
-export default IdeComponent;
+export default Editor;

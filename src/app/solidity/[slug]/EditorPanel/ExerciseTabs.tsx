@@ -6,8 +6,12 @@ import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 import clsx from "clsx";
 import { useParams } from "next/navigation";
 
+const getExerciseNumber = (exerciseKey) => {
+  return parseInt(exerciseKey.replace("exercise", ""));
+};
+
 const ExerciseTabs = (props) => {
-  const { value, onChange, completedExercise } = props;
+  const { value, onChange, completedExerciseNumber } = props;
 
   const { slug } = useParams();
   const lessonId = slug as string;
@@ -19,12 +23,16 @@ const ExerciseTabs = (props) => {
     }));
   }, [lessonId]);
 
-  const disabledTab = (index) => completedExercise < index;
+  const disabledTab = (exerciseKey) => {
+    return getExerciseNumber(exerciseKey) > completedExerciseNumber + 1;
+  };
+
+  const completedTab = (exerciseKey) => {
+    return getExerciseNumber(exerciseKey) <= completedExerciseNumber;
+  };
 
   const handleTabChange = (event: SyntheticEvent, newValue: string) => {
-    const wantNextTabIndex = parseInt(newValue.replace("exercise", "")) - 1;
-    console.log(wantNextTabIndex, "wantNextTabIndex");
-    if (disabledTab(wantNextTabIndex)) {
+    if (disabledTab(newValue)) {
       return;
     }
     onChange(newValue);
@@ -64,9 +72,7 @@ const ExerciseTabs = (props) => {
                 type="disabled"
                 offset="24px"
                 title={
-                  disabledTab(index)
-                    ? `Complete Exercise ${index} to unlock`
-                    : ""
+                  disabledTab(key) ? `Complete Exercise ${index} to unlock` : ""
                 }
                 placement="top"
               >
@@ -74,6 +80,8 @@ const ExerciseTabs = (props) => {
                   sx={{
                     width: "120px",
                     height: "37px",
+                    pointerEvents:
+                      key === value || completedTab(key) ? "none" : "all",
                   }}
                 >
                   <Typography
@@ -90,8 +98,8 @@ const ExerciseTabs = (props) => {
               </EditorTooltip>
             }
             className={clsx(
-              index < completedExercise && "completed",
-              disabledTab(index) && "disabled",
+              completedTab(key) && "completed",
+              disabledTab(key) && "disabled",
             )}
             sx={{
               p: 0,

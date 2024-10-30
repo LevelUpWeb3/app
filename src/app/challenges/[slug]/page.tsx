@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { headers } from "next/headers";
 
 import BackLink from "@/components/Back";
@@ -8,6 +8,7 @@ import SubmitAction from "./SubmitAction";
 import MarkdownViewer from "./MarkdownViewer";
 import ChallengeNavigation from "./ChallengeNavigation";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+import MoreContent from "./MoreContent";
 
 export default async function ChallengeDetailPage({
   params: { slug },
@@ -33,6 +34,7 @@ export default async function ChallengeDetailPage({
 
       <MarkdownViewer data={data}></MarkdownViewer>
       <SubmitAction sx={{ mt: "60px" }}></SubmitAction>
+      <MoreContent />
       <ChallengeNavigation challengeId={slug}></ChallengeNavigation>
     </>
   );

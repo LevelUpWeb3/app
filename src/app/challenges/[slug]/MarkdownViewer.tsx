@@ -17,7 +17,7 @@ const MarkdownViewer = (props) => {
       {data?.content && (
         <MDXRemote
           {...data.content}
-          components={{ ...MDXCodeHighlighter, ...MDXHeaders }}
+          components={{ ...MDXCodeHighlighter(), ...MDXHeaders }}
         />
       )}
     </Container>

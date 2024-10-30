@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 
 import { Box, Stack } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { styled } from "@mui/system";
 import {
   CHALLENGE_CATEGORY_LIST,
   CHALLENGE_LEVEL_LIST,
@@ -15,15 +14,6 @@ import Card from "@/components/Card";
 
 import PlainSelect from "@/components/PlainSelect";
 import NoData from "@/components/NoData";
-
-const Container = styled(Box)({
-  maxWidth: "140rem",
-  margin: "0 auto",
-  width: "100%",
-  ["@media (max-width: 1400px)"]: {
-    padding: "0 1.6rem",
-  },
-});
 
 const ChallengeList = (props) => {
   const { data } = props;
@@ -39,15 +29,20 @@ const ChallengeList = (props) => {
   );
 
   const filteredData = useMemo(() => {
-    return data?.filter((item) => {
-      const categoryMatch =
-        searchParams.category === CHALLENGE_CATEGORY_LIST[0] ||
-        item.labels.includes(searchParams.category);
-      const levelMatch =
-        searchParams.level === CHALLENGE_LEVEL_LIST[0] ||
-        `Level ${item.level}` === searchParams.level;
-      return categoryMatch && levelMatch;
-    });
+    return data
+      ?.filter((item) => {
+        const categoryMatch =
+          searchParams.category === CHALLENGE_CATEGORY_LIST[0] ||
+          item.labels.includes(searchParams.category);
+        const levelMatch =
+          searchParams.level === CHALLENGE_LEVEL_LIST[0] ||
+          `Level ${item.level}` === searchParams.level;
+        return categoryMatch && levelMatch;
+      })
+      .map((item) => ({
+        ...item,
+        labels: [...item.labels, `Level ${item.level}`],
+      }));
   }, [searchParams, data]);
 
   const handleChangeCategory = (e) => {
@@ -65,7 +60,7 @@ const ChallengeList = (props) => {
   };
 
   return (
-    <Container>
+    <Box>
       <Stack
         direction="row"
         sx={{ position: ["static", "sticky"], top: stickyTop }}
@@ -92,7 +87,7 @@ const ChallengeList = (props) => {
             display: "grid",
             gridTemplateColumns: [
               "1fr",
-              "repeat(auto-fill, minmax(300px, 1fr))",
+              "repeat(auto-fill, minmax(282px, 1fr))",
             ],
             gap: ["15px", "20px"],
           }}
@@ -104,7 +99,7 @@ const ChallengeList = (props) => {
       ) : (
         <NoData title="No results" description="reselect"></NoData>
       )}
-    </Container>
+    </Box>
   );
 };
 export default ChallengeList;

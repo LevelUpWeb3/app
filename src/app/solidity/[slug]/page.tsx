@@ -18,31 +18,26 @@ export default async function SolidityDetailPage({
   );
 
   return (
-    <Container
-      sx={{
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 50%)",
-        mt: "80px",
-      }}
-    >
-      <BackLink></BackLink>
-      <Stack direction="column" spacing="14px" sx={{ mb: "80px" }}>
-        <Typography sx={{ fontSize: "48px" }}>
-          Lesson {data.lesson}: {data.name}
-        </Typography>
-        <Typography sx={{ fontSize: "24px" }}>{data.summary}</Typography>
-      </Stack>
-      {data && <Teaching data={data}></Teaching>}
-
-      <EditorPanel />
-      <LessonNavigation
+    <>
+      <Container
         sx={{
-          gridColumn: "span 2",
-          backgroundColor: "#FFEEDA80",
-          py: "56px",
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 50%)",
+          mt: "80px",
         }}
-        lessonId={params.slug}
-      />
-    </Container>
+      >
+        <BackLink></BackLink>
+        <Stack direction="column" spacing="14px" sx={{ mb: "80px" }}>
+          <Typography sx={{ fontSize: "48px" }}>
+            Lesson {data.lesson}: {data.name}
+          </Typography>
+          <Typography sx={{ fontSize: "24px" }}>{data.summary}</Typography>
+        </Stack>
+        {data && <Teaching data={data}></Teaching>}
+
+        <EditorPanel data={data} />
+      </Container>
+      <LessonNavigation lessonId={params.slug} />
+    </>
   );
 }

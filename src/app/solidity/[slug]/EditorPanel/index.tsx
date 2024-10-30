@@ -8,21 +8,28 @@ import ExerciseTabs from "./ExerciseTabs";
 
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 
-const IdeEditor = () => {
+const EditorPanel = (props) => {
+  const { data } = props;
   const { slug: lessonId } = useParams();
 
   const [exercise, setExercise] = useState<string>(
     Object.keys(CODE_EXERCISES[lessonId as string])[0],
   );
 
-  const [completedExercise, setCompletedExercise] = useState<number>(0);
+  const [completedExerciseNumber, setCompletedExerciseNumber] =
+    useState<number>(0);
 
-  const handleChangeExercise = () => {
-    setExercise("");
+  const handleChangeExercise = (value) => {
+    setExercise(value);
   };
 
-  const handleCompleteExercise = (value: number) => {
-    setCompletedExercise(value);
+  const handleCompleteExercise = (
+    value: number,
+    resetCompletedNumber: boolean = true,
+  ) => {
+    if (resetCompletedNumber) {
+      setCompletedExerciseNumber(value);
+    }
     setExercise(`exercise${value + 1}`);
   };
 
@@ -31,11 +38,16 @@ const IdeEditor = () => {
       <ExerciseTabs
         value={exercise}
         onChange={handleChangeExercise}
-        completedExercise={completedExercise}
+        completedExerciseNumber={completedExerciseNumber}
       ></ExerciseTabs>
-      <Editor exercise={exercise} onComplete={handleCompleteExercise} />
+      <Editor
+        exercise={exercise}
+        completedExerciseNumber={completedExerciseNumber}
+        onComplete={handleCompleteExercise}
+        data={data}
+      />
     </Box>
   );
 };
 
-export default IdeEditor;
+export default EditorPanel;
