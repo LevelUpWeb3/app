@@ -1,0 +1,363 @@
+---
+name: "How to build contracts with tamper-proof unpredictability"
+index: 9
+summary: Learn how to build chance-based contracts using verifiable randomness provided by Anyrand (powered by drand)
+author: Anyrand
+authorIcon: https://pbs.twimg.com/profile_images/1839241810473865216/dP3Tfkou_400x400.jpg
+authorLink: https://x.com/anyrandVRF
+published: Oct 26, 2024
+readTime: 20 min read
+labels: ["Smart Contract"]
+---
+
+Throughout history, it was virtually impossible to verify that a number that was drawn based on chance was truly random – until today. One of the most important features of the blockchain is verifiability. If we can verify that the randomness of an output is truly… random, then we can leverage it to build truly fair and transparent games, lotteries, raffles, token distributions, and so much more!
+
+In this guide, we'll explore how you can use verifiable randomness for your Scroll dApp or protocol using 2 methods: one a bit more dev-heavy, and the other using the Anyrand VRF service as an out-of-the-box solution.
+
+But first, let’s do a refresher about VRF and learn how [drand](https://drand.love) works.
+
+## What is a VRF?
+
+A verifiable random function (VRF) is a cryptographic tool that generates a public random output that is mathematically verifiable and cannot be tampered with. It ensures both unpredictability and verifiability, making it essential for applications that require fair and unbiased random numbers. Use cases include onchain games, decentralised lotteries, sortition-based governance, and any dApp needing a secure randomness source.
+
+It's important to distinguish between public and private randomness. Private randomness is crucial for generating such things as secret keys for crypto wallets and must remain confidential, accessible only to the wallet owner, who needs assurance of its entropy quality. On the other hand, public randomness is necessary for producing unpredictable outcomes where multiple parties need to be assured of the entropy's quality and fairness.
+
+## What’s drand?
+
+drand is an open-source project that provides decentralised, verifiable randomness through threshold cryptography. Instead of relying on a single third party, multiple third parties work together to generate a random number. It exploits the fact that a hash of a [**BLS**](https://en.wikipedia.org/wiki/BLS_digital_signature) signature is uniformly distributed and conveniently comes with proof that the signature was produced over a specific input message. Due to the way drand [**distributes keys**](https://evervault.com/blog/shamir-secret-sharing), no party ever has the whole secret key, and as such, no single party can predict the signature before it is time for the specific round to be produced by the network. This is why we are able to use the signatures as high-quality entropy to produce randomness.
+
+Learn more about VRF and drand here: https://drand.love/blog/drand-explainer-for-beginners
+
+## What’s Anyrand?
+
+The process of leveraging drand’s randomness for a dApp can be a hassle. Anyrand is a service that packages this randomness into a VRF that is easy to integrate into any dApp. It does so by automatically computing an appropriate time in the future of when the randomness will be produced by the drand network. Developers can use the Anyrand service for a small gas premium, or alternatively go the manual route and integrate the BLS library into their contract to verify drand beacons onchain, without paying the premium or relying on the Anyrand service at all.
+
+Now let’s get into both methods, starting with the manual route of integrating the BLS library into your contract.
+
+Both methods are explained on [Anyrand docs](https://docs.anyrand.com/), and we’re available to answer any questions on our [Anyrand VRF Dev Chat](http://t.me/anyrandVRF).
+
+## How to fetch randomness from drand
+
+The [drand relays](https://docs.anyrand.com/relays) provide a simple REST API for fetching the BLS group signatures for each drand round produced by the nodes of the [League of Entropy](https://leagueofentropy.com). In this section, we'll learn how to fetch these signatures and other important information from the relays using the v2 API.
+
+### Step 1: Fetching the beacon info
+
+First, we'll need to know important details about the `evmnet` beacon. Using the v2 API, we make the following request in our terminal:
+
+```bash
+curl https://api.drand.sh/v2/beacons/evmnet/info
+```
+
+which returns the following response:
+
+```json
+{
+  "public_key": "07e1d1d335df83fa98462005690372c643340060d205306a9aa8106b6bd0b3820557ec32c2ad488e4d4f6008f89a346f18492092ccc0d594610de2732c8b808f0095685ae3a85ba243747b1b2f426049010f6b73a0cf1d389351d5aaaa1047f6297d3a4f9749b33eb2d904c9d9ebf17224150ddd7abd7567a9bec6c74480ee0b",
+  "period": 3,
+  "genesis_time": 1727521075,
+  "genesis_seed": "cd7ad2f0e0cce5d8c288f2dd016ffe7bc8dc88dbb229b3da2b6ad736490dfed6",
+  "chain_hash": "04f1e9062b8a81f848fded9c12306733282b2727ecced50032187751166ec8c3",
+  "scheme": "bls-bn254-unchained-on-g1",
+  "beacon_id": "evmnet"
+}
+```
+
+From this response, we now know the public key, the period, and the genesis time, which we'll need for computing rounds and verifying signatures.
+
+### Step 2: Fetching the round signature
+
+Next, we'll fetch a signature for a specific round. We'll need to know the round number for the signature we want to fetch. We can compute this using the `period`, `genesis_time` and the current `block.timestamp`. In most cases, we want to fetch a future round's signature. If we set a `deadline` timestamp in the future of when we want the randomness to be revealed, we can compute the nearest round number that is after this timestamp like so:
+
+```solidity
+uint256 delta = deadline - genesis_time;
+uint64 round = uint64((delta / period) + ((delta % period) > 0 ? 1 : 0));
+```
+
+Of course now, we must wait! But after the deadline has passed, we should be able to fetch the signature for this round from the relay. Using the v2 API, we make the following request in our terminal:
+
+```bash
+# Replace ${round} with the round number we computed above
+curl https://api.drand.sh/v2/beacons/evmnet/rounds/${round}
+```
+
+The response will look something like this:
+
+```json
+{
+  "round": 450761,
+  "signature": "2a02d63da4c4c56aa035c386cec12b24112890b74049a23953e76f85d9c5a28b184ef1e2e5b2fee9dee5c1e22366338689dc91752fe36f90216fd19169a89147"
+}
+```
+
+Your round number and signature will be different, depending on which round you queried!
+
+### Now let’s get it onchain!
+
+Now that we have the round number and the signature, we can verify the signature using the beacon's public key. The signature is simply a BLS signature (a G1 point on the BN254 curve), which we can verify using the [bls-bn254](https://github.com/kevincharm/bls-bn254) library.
+
+### Step 3: Installing the BLS library
+
+To install the BLS library to help us verify signatures:
+
+```bash
+npm install --save @kevincharm/bls-bn254
+```
+
+You'll also probably need the noble-curves libraries:
+
+```bash
+npm install --save @noble/curves @kevincharm/noble-bn254-drand
+```
+
+Once we have that installed, we can then import it into our Solidity contract:
+
+```solidity
+import {BLS} from "@kevincharm/bls-bn254/contracts/BLS.sol";
+```
+
+### Step 4: Setting up the drand beacon parameters
+
+It is necessary to decompose the public key from its hexadecimal representation into 4 256-bit unsigned integers that represent its G2 point coordinates. We can do this using the noble-curves library we installed previously.
+
+```tsx
+import { bn254 } from "@kevincharm/noble-bn254-drand";
+
+// evmnet beacon parameters, fetched from a previous step
+const evmnet = {
+  public_key:
+    "07e1d1d335df83fa98462005690372c643340060d205306a9aa8106b6bd0b3820557ec32c2ad488e4d4f6008f89a346f18492092ccc0d594610de2732c8b808f0095685ae3a85ba243747b1b2f426049010f6b73a0cf1d389351d5aaaa1047f6297d3a4f9749b33eb2d904c9d9ebf17224150ddd7abd7567a9bec6c74480ee0b",
+  period: 3,
+  genesis_time: 1727521075,
+  genesis_seed:
+    "cd7ad2f0e0cce5d8c288f2dd016ffe7bc8dc88dbb229b3da2b6ad736490dfed6",
+  chain_hash:
+    "04f1e9062b8a81f848fded9c12306733282b2727ecced50032187751166ec8c3",
+  scheme: "bls-bn254-unchained-on-g1",
+  beacon_id: "evmnet",
+};
+
+// Deserialise the public key from hex to a normalised G2 point
+const pkAffine = bn254.G2.ProjectivePoint.fromHex(public_key).toAffine();
+
+// Now format as input for the contract constructor
+const publicKey = [pkAffine.x.c0, pkAffine.x.c1, pkAffine.y.c0, pkAffine.y.c1];
+const genesisTimestamp = evmnet.genesis_time;
+const period = evmnet.period;
+```
+
+Once we have the formatted public key, genesis timestamp and period, we can feed these into the constructor of our contract:
+
+```solidity
+uint256[4] public publicKey;
+uint256 public genesisTimestamp;
+uint256 public period;
+
+constructor(
+    uint256[4] memory publicKey_,
+    uint256 genesisTimestamp_,
+    uint256 period_
+) {
+    if (!BLS.isValidPublicKey(publicKey_)) {
+        revert InvalidPublicKey(publicKey_);
+    }
+    publicKey = publicKey_;
+    genesisTimestamp = genesisTimestamp_;
+    period = period_;
+}
+```
+
+Oh, and don't forget the domain separation tag, we'll need it for hashing the round later.
+
+```solidity
+/// @notice Domain separation tag
+bytes public constant DST = bytes("BLS_SIG_BN254G1_XMD:KECCAK-256_SVDW_RO_NUL_");
+```
+
+### Step 5: Hashing the round
+
+The round number is interpreted as a 64-bit unsigned integer. First we need to hash it (only the 8 bytes!) using `keccak256` to get a 256-bit number, then we can feed the digest into `BLS#hashToPoint` to get the uniform G1 point; the message that the round's BLS signature was computed over.
+
+```solidity
+// Encode round for hash-to-point
+bytes memory hashedRoundBytes = new bytes(32);
+assembly {
+    mstore(0x00, round)
+    let hashedRound := keccak256(0x18, 0x08)// hash the last 8 bytes (uint64) of `round`
+    mstore(add(0x20, hashedRoundBytes), hashedRound)
+}
+uint256[2] memory message = BLS.hashToPoint(DST, hashedRoundBytes);
+```
+
+### Step 6: Verifying the signature
+
+Now we check whether the signature is indeed a valid signature for the message we computed in the previous step, using the public key that was deserialised from the relay.
+
+```solidity
+// NB: Always check that the signature is a valid signature (a valid G1 point on the curve)!
+bool isValidSignature = BLS.isValidSignature(signature);
+if (!isValidSignature) {
+    revert InvalidSignature(pubKey, message, signature);
+}
+
+// Verify the signature over the message using the public key
+(bool pairingSuccess, bool callSuccess) = BLS.verifySingle(
+    signature,
+    pubKey,
+    message
+);
+if (!pairingSuccess) {
+    revert InvalidSignature(pubKey, message, signature);
+}
+```
+
+### Step 7: Producing verifiable randomness
+
+Now the part you've been waiting for! While a signature gives us some entropy, we need to feed that into something that approximates a random oracle to output uniform randomness. So finally, we feed the signature as inputs into `keccak256`.
+
+```solidity
+bytes32 randomness = keccak256(abi.encode(signature));
+```
+
+The digest is then the randomness. You can optionally mix in some salts such as the requester's address, your contract address and chain ID to make your randomness unique to other contracts requesting from the same round. Congratulations, you've just produced verifiable randomness!
+
+## How to do this in WAY fewer steps using Anyrand VRF
+
+Whew! That was a lot of work. You can achieve all the above in way fewer steps by using the Anyrand service. You simply request randomness from your contract, and the Anyrand service will deliver you verifiable randomness. Let's get to it!
+
+### Step 1: Setting up your contract to receive randomness
+
+Implement the following interface in your contract that will receive the randomness. The anyrand network will deliver randomness through the function `receiveRandomness`.
+
+```solidity file=IRandomiserCallbackV3.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8;
+
+interface IRandomiserCallbackV3 {
+    /// @notice Receive random words from a randomiser.
+    /// @dev Ensure that proper access control is enforced on this function;
+    ///     only the designated randomiser may call this function and the
+    ///     requestId should be as expected from the randomness request.
+    /// @param requestId The identifier for the original randomness request
+    /// @param randomWord Uniform random number in the range [0, 2**256)
+    function receiveRandomness(uint256 requestId, uint256 randomWord) external;
+}
+```
+
+**Important:** Ensure that only the `Anyrand` contract that you make requests to is allowed to call this function.
+
+### Step 2: Requesting randomness from your contract
+
+Once we have implemented the `IRandomiserCallback` interface, we're ready to request randomness from the `Anyrand` contract. The `Anyrand` contract implements the `IAnyrand` interface, a part of which is provided below.
+
+```solidity file=IAnyrand.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8;
+
+interface IAnyrand {
+    /// @notice State of a request
+    enum RequestState {
+        /// @notice The request does not exist
+        Nonexistent,
+        /// @notice A request has been made, waiting for fulfilment
+        Pending,
+        /// @notice The request has been fulfilled successfully
+        Fulfilled,
+        /// @notice The request was fulfilled, but the callback failed
+        Failed
+    }
+
+    /// @notice Compute the total request price
+    /// @param callbackGasLimit The callback gas limit that will be used for
+    ///     the randomness request
+    function getRequestPrice(
+        uint256 callbackGasLimit
+    ) external view returns (uint256 totalPrice, uint256 effectiveFeePerGas);
+
+    /// @notice Request randomness
+    /// @param deadline Timestamp of when the randomness should be fulfilled. A
+    ///     beacon round closest to this timestamp (rounding up to the nearest
+    ///     future round) will be used as the round from which to derive
+    ///     randomness.
+    /// @param callbackGasLimit Gas limit for callback
+    function requestRandomness(
+        uint256 deadline,
+        uint256 callbackGasLimit
+    ) external payable returns (uint256);
+
+    /// @notice Get the state of a request
+    /// @param requestId The request identifier
+    function getRequestState(
+        uint256 requestId
+    ) external view returns (RequestState);
+}
+```
+
+It is necessary to first get a request price using the `getRequestPrice` function, which will return the price you must pay (in the native currency of the network) when invoking `requestRandomness`. Any excess payment will be refunded to the caller, so don't worry about overpaying!
+
+### A request and fulfilment example
+
+The full request and fulfilment cycle is shown below in an example basic consumer contract. You should be able to use this as a starting point.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.28;
+
+import {IAnyrand} from "../interfaces/IAnyrand.sol";
+import {IRandomiserCallbackV3} from "../interfaces/IRandomiserCallbackV3.sol";
+
+/// @title AnyrandConsumer
+contract AnyrandConsumer is IRandomiserCallbackV3 {
+    /// @notice Anyrand instance
+    address public immutable anyrand;
+    /// @notice Recorded randomness. A special value of 1 means the request is
+    ///     inflight
+    mapping(uint256 requestId => uint256) public randomness;
+
+    event RandomnessReceived(uint256 randomness);
+
+    constructor(address anyrand_) {
+        anyrand = anyrand_;
+    }
+
+    /// @notice Request a random number, calling back to this contract
+    function getRandom(
+        uint256 deadline,
+        uint256 callbackGasLimit
+    ) external payable {
+        require(deadline > block.timestamp, "Deadline is in the past");
+        (uint256 requestPrice, ) = IAnyrand(anyrand).getRequestPrice(
+            callbackGasLimit
+        );
+        require(msg.value >= requestPrice, "Insufficient payment");
+        if (msg.value > requestPrice) {
+            (bool success, ) = msg.sender.call{value: msg.value - requestPrice}(
+                ""
+            );
+            require(success, "Refund failed");
+        }
+        uint256 requestId = IAnyrand(anyrand).requestRandomness{
+            value: requestPrice
+        }(deadline, callbackGasLimit);
+        randomness[requestId] = 1;
+    }
+
+    /// @notice See {IRandomiserCallbackV3-receiveRandomness}
+    function receiveRandomness(uint256 requestId, uint256 randomWord) external {
+        require(msg.sender == anyrand, "Only callable by Anyrand");
+        require(randomness[requestId] == 1, "Unknown requestId");
+        randomness[requestId] = randomWord;
+        emit RandomnessReceived(randomWord);
+    }
+}
+```
+
+## That’s it 🫡
+
+Congratulations! You’ve successfully generated verifiable randomness for your dApp or protocol. Show us what you built, or **give any feedback or ask any questions** in our [Anyrand VRF Dev Chat](http://t.me/anyrandVRF)!
+
+Listed below are some more resources in case you want to dive into any of the topics here:
+
+- Beginner intro to drand: https://drand.love/blog/drand-explainer-for-beginners
+- How to use drand: https://drand.love/blog/a-guide-on-how-to-use-drand
+- Check out some security considerations at the end of this post: https://drand.love/blog/quicknet-is-live-on-the-league-of-entropy-mainnet
+- Anyrand Docs: [docs.anyrand.com](https://docs.anyrand.com/)

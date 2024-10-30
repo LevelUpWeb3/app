@@ -63,7 +63,7 @@ export default function ContentDetailsPage() {
           </div>
         </div>
       </div>
-      <div className="mx-auto grid h-screen w-full max-w-[140rem] px-[6rem]">
+      <div className="mx-auto grid h-screen w-full max-w-[140rem] grid-cols-[100%] px-[6rem]">
         {isLoading ? (
           <>
             <Skeleton variant="rounded" className="min-h-screen w-full" />
