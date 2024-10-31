@@ -14,9 +14,9 @@ const useStyles = makeStyles()((theme) => ({
   },
   // TODO: why first insert
   select: {
-    padding: "11.5px 44px 11.5px 30px !important",
+    padding: "11px 44px 11px 30px !important",
     [theme.breakpoints.down("sm")]: {
-      padding: "12px 44px 12px 30px !important",
+      padding: "10px 44px 10px 30px !important",
     },
     backgroundColor: `${(theme as any).vars.palette.background.default} !important`,
     "&[aria-expanded='true']": {
