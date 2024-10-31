@@ -45,6 +45,7 @@
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
+    "react-fast-marquee": "^1.6.5",
     "react-syntax-highlighter": "^15.5.0",
     "react-use": "^17.5.0",
     "react-virtualized": "^9.22.5",
@@ -81,6 +82,7 @@
     "tailwindcss": "^3.3.0",
     "typescript": "^5.1.6"
   },
+  "packageManager": "yarn@1.22.19",
   "engines": {
     "node": ">=20.0.0"
   }
