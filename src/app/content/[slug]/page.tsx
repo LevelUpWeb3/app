@@ -3,9 +3,8 @@ import { headers } from "next/headers";
 import Attribution from "./Attribution";
 import MoreContent from "./MoreContent";
 
-import { Stack, Container, Box, Typography } from "@mui/material";
+import { Stack, Container } from "@mui/material";
 import BackLink from "@/components/Back";
-import MarkdownViewer from "./ContentViewer";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import ContentViewer from "./ContentViewer";
 
@@ -15,11 +14,9 @@ export default async function ContentDetailsPage({
   params: { slug: string };
 }) {
   const { origin } = new URL(headers().get("x-url")!);
-  let isLoading = true;
   const data = await fetch(`${origin}/data/contents/${params.slug}.json`).then(
     (res) => res.json(),
   );
-  isLoading = false;
 
   return (
     <>

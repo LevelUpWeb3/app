@@ -1,27 +1,22 @@
 "use client";
+
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
-import dynamic from "next/dynamic";
 import { Container } from "@mui/material";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
-const MarkdownViewer = (props) => {
+import MarkdownViewer from "@/components/MarkdownViewer";
+
+const ChallengeViewer = (props) => {
   const { data } = props;
+
   return (
     <Container className="markdown-level-up challenge py-[30px] sm:py-[60px]">
-      {data?.content && (
-        <MDXRemote
-          {...data.content}
-          components={{ ...MDXCodeHighlighter(), ...MDXHeaders }}
-        />
-      )}
+      <MarkdownViewer
+        data={data}
+        components={{ ...MDXCodeHighlighter(), ...MDXHeaders }}
+      ></MarkdownViewer>
     </Container>
   );
 };
 
-export default MarkdownViewer;
+export default ChallengeViewer;

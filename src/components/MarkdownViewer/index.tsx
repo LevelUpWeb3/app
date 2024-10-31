@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import MarkdownLoading from "./MarkdownLoading";
