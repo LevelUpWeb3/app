@@ -13,6 +13,7 @@ import { Box, Stack } from "@mui/material";
 
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
+import useCheckViewport from "@/hooks/useCheckViewport";
 
 const Editor = ({
   data,
@@ -20,6 +21,7 @@ const Editor = ({
   completedExerciseNumber,
   onComplete,
 }) => {
+  const { isMobile } = useCheckViewport();
   const [code, setCode] = useState("");
   const [tries, setTries] = useState<number>(0);
   const [editorType, setEditorType] = useState<"code" | "solution">("code");
@@ -91,21 +93,21 @@ const Editor = ({
         spacing="15px"
         sx={{
           position: "absolute",
-          bottom: "50px",
+          bottom: ["30px", "50px"],
           width: "100%",
           px: "60px",
         }}
       >
         {editorType === "solution" ? (
           <EditorTooltip title="Back to code" placement="top">
-            <Box sx={{ width: "50%" }} key="code">
+            <Box sx={{ width: ["109px", "50%"] }} key="code">
               <Button
                 variant="contained"
                 size="large"
                 onClick={() => handleToggleEditorType("code")}
                 sx={{
                   width: "100% !important",
-                  opacity: 0.2,
+                  opacity: [1, 1, 0.2],
                   "&:hover": {
                     opacity: 1,
                   },
@@ -125,18 +127,18 @@ const Editor = ({
               <Box
                 key="answer"
                 sx={{
-                  width: "50%",
+                  width: ["109px", "50%"],
                   pointerEvents: allowViewSolution ? "all" : "none",
                 }}
               >
                 <Button
                   variant="contained"
                   disabled={!allowViewSolution}
-                  size="large"
+                  size={isMobile ? "medium" : "large"}
                   sx={{
                     visibility: allowViewSolution ? "visible" : "hidden",
                     width: "100% !important",
-                    opacity: 0.2,
+                    opacity: [1, 1, 0.2],
                     "&:hover": {
                       opacity: 1,
                     },
@@ -148,7 +150,10 @@ const Editor = ({
               </Box>
             </EditorTooltip>
             <SubmitButton
-              sx={{ width: "50% !important" }}
+              sx={{
+                whiteSpace: "nowrap",
+                width: ["187px !important", "50% !important"],
+              }}
               code={code}
               codeSolution={codeSolution}
               onSubmission={handleSubmitCode}

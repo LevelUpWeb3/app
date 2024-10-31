@@ -3,7 +3,8 @@ import TriangleLeftSvg from "@/assets/svgs/common/triangle-left.svg";
 
 import Link from "next/link";
 
-const BackLink = () => {
+const BackLink = (props) => {
+  const { sx } = props;
   return (
     <Link href="./">
       <Stack
@@ -11,6 +12,7 @@ const BackLink = () => {
         spacing="15px"
         alignItems="center"
         className="text-[#101010] hover:text-[#2C2C2C]"
+        sx={sx}
       >
         <TriangleLeftSvg className="text-inherit"></TriangleLeftSvg>
         <Typography

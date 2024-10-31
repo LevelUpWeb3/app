@@ -3,7 +3,7 @@ import EditorPanel from "./EditorPanel";
 import { headers } from "next/headers";
 import BackLink from "@/components/Back";
 
-import { Typography, Stack, Container } from "@mui/material";
+import { Typography, Stack, Container, CircularProgress } from "@mui/material";
 
 import Teaching from "./Teaching";
 
@@ -22,18 +22,27 @@ export default async function SolidityDetailPage({
       <Container
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(2, 50%)",
-          mt: "80px",
+          gridTemplateColumns: ["1fr", "1fr", "repeat(2, 50%)"],
+          mt: ["60px", "80px"],
+          px: [0, 0, "60px"],
         }}
       >
-        <BackLink></BackLink>
-        <Stack direction="column" spacing="14px" sx={{ mb: "80px" }}>
+        <BackLink sx={{ pl: ["20px", "20px", 0] }}></BackLink>
+        <Stack
+          direction="column"
+          spacing="14px"
+          sx={{
+            mt: ["20px", "20px", 0],
+            mb: ["30px", "30px", "80px"],
+            px: ["20px", "20px", 0],
+          }}
+        >
           <Typography sx={{ fontSize: "48px" }}>
-            Lesson {data.lesson}: {data.name}
+            Lesson {data.lesson}:<br className="sm:hidden"></br> {data.name}
           </Typography>
           <Typography sx={{ fontSize: "24px" }}>{data.summary}</Typography>
         </Stack>
-        {data && <Teaching data={data}></Teaching>}
+        <Teaching data={data}></Teaching>
 
         <EditorPanel data={data} />
       </Container>

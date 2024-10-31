@@ -6,14 +6,14 @@ import Link from "next/link";
 
 import XSvg from "@/assets/svgs/socials/x.svg";
 import TelegramSvg from "@/assets/svgs/socials/telegram.svg";
-import StarSvg from "@/assets/svgs/hackathon/star.svg";
+import StarSvg from "@/assets/svgs/events/star.svg";
 
 import { generateShareTwitterURL } from "@/utils";
 
 const HackathonHeader = (props) => {
   const { name, hackathonId, date, location } = props;
 
-  const registrationLink = `/hackathon/${hackathonId}/register`;
+  const registrationLink = `/events/${hackathonId}/register`;
 
   const text = `Exciting news! \n 🚀 ${name} event is happening now! Join the event from levelup.xyz/events, and let's level up together! 🔥`;
 

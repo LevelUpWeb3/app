@@ -454,7 +454,7 @@
   padding-right: 20px;
 }
 .markdown-level-up-light code {
-  padding: 4px;
+  padding: 1px 0px;
   margin: 0;
   font-size: inherit;
   background-color: #1010101a;

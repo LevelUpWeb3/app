@@ -3,10 +3,11 @@ import { headers } from "next/headers";
 import Attribution from "./Attribution";
 import MoreContent from "./MoreContent";
 
-import { Stack, Container, Box } from "@mui/material";
+import { Stack, Container, Box, Typography } from "@mui/material";
 import BackLink from "@/components/Back";
-import MarkdownViewer from "./MarkdownViewer";
+import MarkdownViewer from "./ContentViewer";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+import ContentViewer from "./ContentViewer";
 
 export default async function ContentDetailsPage({
   params,
@@ -36,7 +37,7 @@ export default async function ContentDetailsPage({
         </Stack>
       </PageHeaderWrapper>
       <Container>
-        <MarkdownViewer isLoading={isLoading} data={data}></MarkdownViewer>
+        <ContentViewer data={data}></ContentViewer>
       </Container>
       <MoreContent index={data.index} />
     </>

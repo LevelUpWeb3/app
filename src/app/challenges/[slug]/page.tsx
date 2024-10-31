@@ -5,7 +5,7 @@ import BackLink from "@/components/Back";
 
 import ChallengeHeader from "./ChallengeHeader";
 import SubmitAction from "./SubmitAction";
-import MarkdownViewer from "./MarkdownViewer";
+import ChallengeViewer from "./ChallengeViewer";
 import ChallengeNavigation from "./ChallengeNavigation";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import MoreContent from "./MoreContent";
@@ -32,8 +32,8 @@ export default async function ChallengeDetailPage({
         </Stack>
       </PageHeaderWrapper>
 
-      <MarkdownViewer data={data}></MarkdownViewer>
-      <SubmitAction sx={{ mt: "60px" }}></SubmitAction>
+      <ChallengeViewer data={data}></ChallengeViewer>
+      <SubmitAction></SubmitAction>
       <MoreContent />
       <ChallengeNavigation challengeId={slug}></ChallengeNavigation>
     </>

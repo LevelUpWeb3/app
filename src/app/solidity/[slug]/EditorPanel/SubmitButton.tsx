@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { ButtonProps } from "@mui/material";
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
+import useCheckViewport from "@/hooks/useCheckViewport";
 
 interface SubmitButtonProps extends ButtonProps {
   code: string;
@@ -15,6 +16,8 @@ const SubmitButton = ({
   onSubmission,
   ...restProps
 }: SubmitButtonProps) => {
+  const { isMobile } = useCheckViewport();
+
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("");
   const closeTimeoutRef = useRef<any>();
@@ -53,7 +56,11 @@ const SubmitButton = ({
       onClose={handleCloseTip}
       placement="top"
     >
-      <Button size="large" onClick={submitCode} {...restProps}>
+      <Button
+        size={isMobile ? "medium" : "large"}
+        onClick={submitCode}
+        {...restProps}
+      >
         Submit Challenge
       </Button>
     </EditorTooltip>

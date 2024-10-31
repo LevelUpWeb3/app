@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
-import { Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 interface CodeEditorProps {
   codeTemplate: string;
@@ -11,7 +11,7 @@ interface CodeEditorProps {
   onChange: (code: string) => void;
   onSubmission: (isCorrect: boolean) => void;
 }
-
+// TODO: fix Command + Shift + Enter to submit code
 const CodeEditor = ({
   codeTemplate,
   code: initialCode,
@@ -63,7 +63,7 @@ const CodeEditor = ({
   return (
     <Editor
       key={key}
-      className="solidity-editor bg-[#1e1e1e]"
+      className="solidity-editor"
       height="760px"
       theme="vs-dark"
       language="sol"
@@ -71,7 +71,7 @@ const CodeEditor = ({
       onMount={onMount}
       value={codeTemplate}
       onChange={(code) => onChange(code || "")}
-      loading={<Typography>Loading</Typography>}
+      loading={<CircularProgress sx={{ color: "#fff" }} />}
       options={{
         wordWrap: "on",
         minimap: { enabled: false },

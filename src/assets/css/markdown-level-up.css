@@ -11,7 +11,7 @@
   color: #101010;
   font-family: var(--default-font-family);
   font-size: 16px;
-  line-height: 1.375;
+  line-height: 1.4;
   word-wrap: break-word;
 }
 .markdown-level-up .pl-c {
@@ -243,7 +243,6 @@
 }
 .markdown-level-up p {
   margin-top: 0;
-  margin-bottom: 10px;
 }
 .markdown-level-up blockquote {
   margin: 0;
@@ -344,6 +343,12 @@
   margin-top: 0;
   margin-bottom: 20px;
 }
+
+.markdown-level-up ul > li,
+.markdown-level-up ol > li {
+  margin-bottom: 10px;
+}
+
 .markdown-level-up hr {
   height: 0.25em;
   padding: 0;
@@ -442,9 +447,7 @@
   margin-top: 0;
   margin-bottom: 0;
 }
-.markdown-level-up li > p {
-  margin-top: 16px;
-}
+
 .markdown-level-up li + li {
   margin-top: 0.25em;
 }
@@ -600,10 +603,6 @@
   padding-left: 50%;
 }
 
-.markdown-level-up > *:first-child {
-  padding-top: 60px;
-}
-
 .markdown-level-up > ul,
 .markdown-level-up > ol {
   padding-left: calc(50% + 2em);
@@ -682,10 +681,6 @@
   }
 }
 
-.markdown-level-up.challenge h1 {
+.markdown-level-up.challenge :first-child:is(h1) {
   display: none;
-}
-
-.markdown-level-up.challenge h1 + p {
-  padding-top: 60px;
 }

@@ -2,18 +2,12 @@
 
 import { Box } from "@mui/material";
 import { Mermaid } from "mdx-mermaid/Mermaid";
-import dynamic from "next/dynamic";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
 
+import MarkdownViewer from "@/components/MarkdownViewer";
 import "@/assets/css/markdown-level-up-light.css";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
 const Teaching = (props) => {
   const { data } = props;
 
@@ -22,7 +16,7 @@ const Teaching = (props) => {
       sx={{
         backgroundColor: "rgba(186, 240, 247, 0.2)",
         height: "820px",
-        p: "50px 50px",
+        p: ["30px 20px", "50px 50px"],
         overflowY: "auto",
         "&::-webkit-scrollbar-thumb": {
           backgroundColor: "#1010101A",
@@ -37,16 +31,14 @@ const Teaching = (props) => {
       }}
     >
       <Box className="markdown-level-up-light">
-        {data?.content && (
-          <MDXRemote
-            {...data.content}
-            components={{
-              ...MDXCodeHighlighter("light"),
-              ...MDXHeaders,
-              Mermaid,
-            }}
-          />
-        )}
+        <MarkdownViewer
+          data={data}
+          components={{
+            ...MDXCodeHighlighter("light"),
+            ...MDXHeaders,
+            Mermaid,
+          }}
+        ></MarkdownViewer>
       </Box>
     </Box>
   );

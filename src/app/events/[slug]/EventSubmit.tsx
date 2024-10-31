@@ -11,7 +11,7 @@ const HackathonSubmit = (props) => {
     <Box sx={{ pl: "50%", mt: "30px", mb: "60px" }}>
       <Button
         color="primary"
-        href={`/hackathon/${hackathonId}/submit`}
+        href={`/events/${hackathonId}/submit`}
         sx={{ width: ["100% !important", "auto !important"] }}
         onClick={() =>
           sendGAEvent("event", "hackathonClicked", {

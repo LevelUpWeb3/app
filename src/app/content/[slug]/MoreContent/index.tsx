@@ -14,7 +14,6 @@ const MoreContent: React.FC<MoreContentProps> = ({ index }) => {
         sx={{
           backgroundColor: "#FAFAFA",
           p: ["30px 0", "60px"],
-          mt: "60px",
         }}
       >
         <Container>

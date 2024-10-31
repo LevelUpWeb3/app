@@ -23,7 +23,7 @@ const HackathonDetailPage = async ({
     .filter((item) => item.id.startsWith(params.slug))
     .sort((a, b) => a.index - b.index);
 
-  const hackathonData = Data.find((item) => item.url.includes(params.slug));
+  const eventData = Data.find((item) => item.url.includes(params.slug));
 
   return (
     <>
@@ -38,10 +38,7 @@ const HackathonDetailPage = async ({
         <Container>
           <Stack spacing={["40px", "60px"]}>
             <BackLink></BackLink>
-            <EventHeader
-              {...hackathonData}
-              hackathonId={params.slug}
-            ></EventHeader>
+            <EventHeader {...eventData} hackathonId={params.slug}></EventHeader>
           </Stack>
         </Container>
       </Box>

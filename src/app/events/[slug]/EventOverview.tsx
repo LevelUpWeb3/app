@@ -3,17 +3,10 @@
 import { Box, Container } from "@mui/material";
 
 import Button from "@/components/Button";
-import dynamic from "next/dynamic";
 import { sendGAEvent } from "@next/third-parties/google";
+import MarkdownViewer from "@/components/MarkdownViewer";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
-
-const HackathonOverview = (props) => {
+const EventOverview = (props) => {
   const { details, hackathonId } = props;
 
   const imageURL = `/images/events/${hackathonId}.svg`;
@@ -30,11 +23,11 @@ const HackathonOverview = (props) => {
       >
         <Box className="markdown-level-up text-white">
           <h1 className="!pt-0 pl-[50%]">{details.title}</h1>
-          {details?.content && <MDXRemote {...details.content} />}
+          <MarkdownViewer data={details} theme="dark" />
         </Box>
         <Box sx={{ pl: "50%", mt: "30px" }}>
           <Button
-            href={`../../hackathon/${hackathonId}/submit`}
+            href={`/events/${hackathonId}/submit`}
             onClick={() =>
               sendGAEvent("event", "eventsClicked", {
                 value: { slug: hackathonId },
@@ -49,4 +42,4 @@ const HackathonOverview = (props) => {
   );
 };
 
-export default HackathonOverview;
+export default EventOverview;

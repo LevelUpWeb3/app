@@ -13,7 +13,7 @@ const MDXRemote = dynamic(
 const MarkdownViewer = (props) => {
   const { data } = props;
   return (
-    <Container className="markdown-level-up challenge">
+    <Container className="markdown-level-up challenge py-[30px] sm:py-[60px]">
       {data?.content && (
         <MDXRemote
           {...data.content}

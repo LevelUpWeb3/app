@@ -34,7 +34,7 @@ const EditorPanel = (props) => {
   };
 
   return (
-    <Box>
+    <Box sx={{ width: ["100vw", "100vw", "auto"] }}>
       <ExerciseTabs
         value={exercise}
         onChange={handleChangeExercise}

@@ -7,7 +7,7 @@ import { AppBar, Slide, Stack, Box } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 
 import AnnouncementBar from "@/components/AnnouncementBar";
-import StarSvg from "@/assets/svgs/hackathon/star.svg";
+import StarSvg from "@/assets/svgs/events/star.svg";
 
 import useCheckViewport from "@/hooks/useCheckViewport";
 

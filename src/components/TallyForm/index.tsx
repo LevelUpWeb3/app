@@ -10,6 +10,7 @@ const TallyForm = ({ tallyUrl, title }) => {
         title={title}
         width="100%"
         height="1411"
+        style={{ height: "100vh" }}
       ></iframe>
 
       <Script
