@@ -13,7 +13,7 @@ const MoreContent: React.FC<MoreContentProps> = ({ index }) => {
       <Box
         sx={{
           backgroundColor: "#FAFAFA",
-          p: ["30px 0", "60px"],
+          py: ["30p", "60px"],
         }}
       >
         <Container>

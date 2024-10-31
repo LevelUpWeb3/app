@@ -69,6 +69,11 @@ const PreviewCard = (props) => {
               cursor: "inherit",
               fontSize: "20px",
               fontWeight: 500,
+
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: "2",
+              overflow: "hidden",
             },
           }}
           title={content.name}
@@ -80,6 +85,7 @@ const PreviewCard = (props) => {
             flex: 1,
             display: "flex",
             flexDirection: "column",
+            justifyContent: "space-between",
           }}
         >
           <Typography
@@ -88,6 +94,12 @@ const PreviewCard = (props) => {
               lineHeight: "22px",
               flex: 1,
               cursor: "inherit",
+              maxHeight: "88px",
+
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: "4",
+              overflow: "hidden",
             }}
           >
             {content.summary}
