@@ -95,7 +95,7 @@ export const CODE_EXERCISES: CodeTemplatesType = {
     exercise2:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'set', set the value at a given address in 'myMap' to 100\n}",
     exercise3:
-      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'get', return the value at a given address in 'myMap'\n}",
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'get', return the uint256 value at a given address in 'myMap'\n}",
     exercise4:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'remove', reset the value at a given address in 'myMap' to its default value\n}",
     exercise5:
