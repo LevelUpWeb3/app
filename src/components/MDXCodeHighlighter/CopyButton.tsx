@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { IconButton } from "@mui/material";

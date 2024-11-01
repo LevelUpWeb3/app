@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import Attribution from "./Attribution";
 import MoreContent from "./MoreContent";
 
-import { Stack, Container } from "@mui/material";
+import { Stack } from "@mui/material";
 import BackLink from "@/components/Back";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import ContentViewer from "./ContentViewer";
@@ -33,9 +33,9 @@ export default async function ContentDetailsPage({
           <Attribution {...data}></Attribution>
         </Stack>
       </PageHeaderWrapper>
-      <Container>
-        <ContentViewer data={data}></ContentViewer>
-      </Container>
+
+      <ContentViewer data={data}></ContentViewer>
+
       <MoreContent index={data.index} />
     </>
   );
