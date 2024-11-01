@@ -13,7 +13,7 @@ const ContentPage = async () => {
   const data = [...markdownData, ...Data];
 
   return (
-    <Container sx={{ py: ["8.4rem"] }}>
+    <Container sx={{ py: ["6rem", "8.4rem"] }}>
       <Stack direction={["column", "row"]} gap={["20px", "100px"]}>
         <Typography
           sx={{

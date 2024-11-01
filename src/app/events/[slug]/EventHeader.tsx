@@ -24,8 +24,8 @@ const HackathonHeader = (props) => {
         alignItems="center"
         spacing="8px"
         sx={{
-          width: "50%",
-          fontSize: "16px",
+          width: ["100%", "100%", "50%"],
+          fontSize: ["14px", "16px"],
           fontWeight: 500,
           lineHeight: "24px",
         }}
@@ -34,11 +34,22 @@ const HackathonHeader = (props) => {
         <StarSvg className="!mt-[-4px]"></StarSvg>
         <p>{location}</p>
       </Stack>
-      <Typography sx={{ fontSize: "48px", mt: "10px", width: "50%" }}>
+      <Typography
+        sx={{
+          fontSize: ["36px", "48px"],
+          mt: "10px",
+          width: ["100%", "100%", "50%"],
+        }}
+      >
         {name}
       </Typography>
 
-      <Stack direction="row" sx={{ mt: "30px" }} justifyContent="space-between">
+      <Stack
+        direction={["column", "row"]}
+        sx={{ mt: "30px" }}
+        gap={["40px", 0]}
+        justifyContent="space-between"
+      >
         <Button href={registrationLink}>Register Now</Button>
         <Stack direction="row" spacing="30px" alignItems="flex-end">
           <Link

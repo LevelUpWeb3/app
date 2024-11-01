@@ -56,11 +56,7 @@ const SubmitButton = ({
       onClose={handleCloseTip}
       placement="top"
     >
-      <Button
-        size={isMobile ? "medium" : "large"}
-        onClick={submitCode}
-        {...restProps}
-      >
+      <Button size="large" onClick={submitCode} {...restProps}>
         Submit Challenge
       </Button>
     </EditorTooltip>

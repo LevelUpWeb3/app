@@ -11,7 +11,10 @@ const EventsPage = () => {
         minHeight: [["auto", FULL_SCREEN_HEIGHT]],
       }}
     >
-      <Stack direction={["column", "row"]} gap={["20px", "100px"]}>
+      <Stack
+        direction={["column", "column", "column", "row"]}
+        gap={["20px", "100px"]}
+      >
         <Typography
           sx={{
             fontSize: ["3.6rem", "4.8rem"],

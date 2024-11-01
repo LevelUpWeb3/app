@@ -6,7 +6,7 @@ import Image from "next/image";
 import { sendGAEvent } from "@next/third-parties/google";
 
 const HackathonItem = (props) => {
-  const { isMobile } = useCheckViewport();
+  const { isPortrait } = useCheckViewport();
   const { content } = props;
   return (
     <Box
@@ -15,13 +15,14 @@ const HackathonItem = (props) => {
         display: "grid",
         gridTemplateColumns: [
           "max-content 1fr",
+          "max-content 1fr",
           "280px min-content 240px 1fr max-content",
         ],
-        alignContent: ["space-between", "center"],
-        alignItems: ["space-between", "center"],
+        alignContent: ["space-between", "space-between", "center"],
+        alignItems: ["space-between", "space-between", "center"],
         p: ["30px 28px", "30px 38px"],
-        height: ["278px", "118px"],
-        columnGap: [0, "30px"],
+        height: ["278px", "278px", "118px"],
+        columnGap: [0, "10px", "30px"],
         backgroundColor: "rgba(232, 246, 40, 0.50)",
         borderRadius: "25px",
         overflow: "hidden",
@@ -31,9 +32,9 @@ const HackathonItem = (props) => {
         sx={{
           fontSize: "24px",
           fontWeight: 500,
-          gridRow: ["1/2", "unset"],
-          gridColumn: ["1/3", "unset"],
-          height: ["58px", "auto"],
+          gridRow: ["1/2", "1/2", "unset"],
+          gridColumn: ["1/3", "1/3", "unset"],
+          height: ["58px", "58px", "auto"],
         }}
       >
         {content.name}
@@ -43,8 +44,8 @@ const HackathonItem = (props) => {
         sx={{
           height: ["48px", "56px"],
           borderRightWidth: "2px",
-          gridRow: ["2/3", "unset"],
-          justifySelf: ["flex-start", "unset"],
+          gridRow: ["2/3", "2/3", "unset"],
+          justifySelf: ["flex-start", "flex-start", , "unset"],
         }}
       />
       <Stack
@@ -65,11 +66,11 @@ const HackathonItem = (props) => {
         sx={{
           position: "relative",
           alignSelf: "flex-end",
-          justifySelf: ["flex-end", "unset"],
-          gridColumn: ["2/3", "unset"],
-          gridRow: ["2/4", "unset"],
+          justifySelf: ["flex-end", "flex-end", "unset"],
+          gridColumn: ["2/3", "2/3", "unset"],
+          gridRow: ["2/4", "2/4", "unset"],
 
-          top: [0, "30px"],
+          top: [0, 0, "30px"],
         }}
       >
         <Image
@@ -78,10 +79,10 @@ const HackathonItem = (props) => {
           height={118}
           alt={content.name}
           style={{
-            position: isMobile ? "relative" : "absolute",
-            width: isMobile ? "auto" : "118px",
-            height: isMobile ? "94px" : "auto",
-            bottom: isMobile ? "unset" : 0,
+            position: isPortrait ? "relative" : "absolute",
+            width: isPortrait ? "auto" : "118px",
+            height: isPortrait ? "94px" : "auto",
+            bottom: isPortrait ? "unset" : 0,
           }}
         ></Image>
       </Stack>

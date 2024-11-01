@@ -48,7 +48,9 @@ const HackathonDetailPage = async ({
       ></EventOverview>
       <Container>
         {sortedDetails.slice(1).map((detail) => {
-          return <EventSection key={detail.id} details={detail}></EventSection>;
+          return (
+            <EventSection key={detail.id} details={detail ?? {}}></EventSection>
+          );
         })}
         <EventSubmit hackathonId={params.slug}></EventSubmit>
       </Container>

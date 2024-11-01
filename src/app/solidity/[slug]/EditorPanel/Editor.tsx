@@ -134,7 +134,7 @@ const Editor = ({
                 <Button
                   variant="contained"
                   disabled={!allowViewSolution}
-                  size={isMobile ? "medium" : "large"}
+                  size="large"
                   sx={{
                     visibility: allowViewSolution ? "visible" : "hidden",
                     width: "100% !important",

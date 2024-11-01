@@ -8,7 +8,7 @@ const MoreContent = () => {
     <Box
       sx={{
         backgroundColor: "#FAFAFA",
-        py: ["30p", "60px"],
+        py: ["30px", "60px"],
       }}
     >
       <Container>

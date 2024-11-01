@@ -28,7 +28,7 @@ export default async function ChallengeDetailPage({
       >
         <Stack>
           <BackLink></BackLink>
-          <ChallengeHeader sx={{ mt: "60px" }} challengeData={data} />
+          <ChallengeHeader sx={{ mt: ["40px", "60px"] }} challengeData={data} />
         </Stack>
       </PageHeaderWrapper>
 

@@ -5,7 +5,7 @@ import MarkdownViewer from "@/components/MarkdownViewer";
 
 const EventSection = ({ details }) => {
   return (
-    <Box className="markdown-level-up" sx={{ mt: "60px" }}>
+    <Box className="markdown-level-up" sx={{ mt: ["30px", "60px"] }}>
       <MarkdownViewer data={details}></MarkdownViewer>
     </Box>
   );

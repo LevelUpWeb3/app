@@ -3,7 +3,7 @@ import EditorPanel from "./EditorPanel";
 import { headers } from "next/headers";
 import BackLink from "@/components/Back";
 
-import { Typography, Stack, Container, CircularProgress } from "@mui/material";
+import { Typography, Stack, Container } from "@mui/material";
 
 import Teaching from "./Teaching";
 

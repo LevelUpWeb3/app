@@ -55,6 +55,8 @@ const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
 }));
 
 const Button = (props) => {
+  const { isMobile } = useCheckViewport();
+
   const {
     // width,
     size = "medium",
@@ -66,14 +68,12 @@ const Button = (props) => {
     ...restProps
   } = props;
   const { classes } = useStyles({
-    size,
+    size: isMobile ? "medium" : size,
     // width,
     // disabled,
     loading,
     variant,
   });
-
-  const { isMobile } = useCheckViewport();
 
   return (
     <ButtonBase

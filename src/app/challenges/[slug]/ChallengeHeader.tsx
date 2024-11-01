@@ -20,7 +20,11 @@ const ChallengeDetail = (props) => {
 
   return (
     <Box {...restProps}>
-      <Stack direction="column" spacing="10px" sx={{ width: "50%" }}>
+      <Stack
+        direction="column"
+        spacing="10px"
+        sx={{ width: ["100%", "100%", "50%"] }}
+      >
         <Stack direction="row" spacing="8px">
           {combinedLabels.map((label) => (
             <Chip
@@ -40,14 +44,19 @@ const ChallengeDetail = (props) => {
             ></Chip>
           ))}
         </Stack>
-        <Typography sx={{ fontSize: "48px", pt: "0.3em" }}>
+        <Typography sx={{ fontSize: ["36px", "48px"], pt: "0.3em" }}>
           {challengeData.name}
         </Typography>
-        <Typography sx={{ fontSize: "24px" }}>
+        <Typography sx={{ fontSize: ["16px", "24px"] }}>
           {challengeData.summary}
         </Typography>
       </Stack>
-      <Stack direction="row" sx={{ mt: "30px" }} justifyContent="space-between">
+      <Stack
+        direction={["column", "row"]}
+        sx={{ mt: "30px" }}
+        gap={["40px", 0]}
+        justifyContent="space-between"
+      >
         <Button href={challengeData.website}>Go to Github</Button>
         <Stack direction="row" spacing="30px" alignItems="flex-end">
           <Link

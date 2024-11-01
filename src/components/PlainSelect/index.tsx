@@ -22,7 +22,7 @@ const PlainSelect = (props) => {
         >
           <Typography
             sx={{
-              fontSize: ["1.6rem", "1.6rem"],
+              fontSize: ["1.4rem", "1.6rem"],
               fontWeight: 500,
               cursor: "inherit",
             }}

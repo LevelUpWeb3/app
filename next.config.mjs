@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-import remarkGfm from "remark-gfm";
-import createMDX from "@next/mdx";
-import mdxMermaid from "mdx-mermaid";
-import { Mermaid } from "mdx-mermaid/lib/Mermaid";
+// import remarkGfm from "remark-gfm";
+// import createMDX from "@next/mdx";
+// import mdxMermaid from "mdx-mermaid";
+// import { Mermaid } from "mdx-mermaid/lib/Mermaid";
 import "./scripts/processChallengeMarkdown.js";
 import "./scripts/processSolidityMarkdown.js";
 import "./scripts/processContentMarkdown.js";
@@ -91,13 +91,14 @@ const nextConfig = {
   },
 };
 
-const withMDX = createMDX({
-  extension: /\.mdx?$/,
-  options: {
-    remarkPlugins: [remarkGfm, [mdxMermaid.default, { output: "svg" }]],
-    rehypePlugins: [],
-    components: { mermaid: Mermaid, Mermaid },
-  },
-});
+// TODO: client rendering now, no need this
+// const withMDX = createMDX({
+//   extension: /\.mdx?$/,
+//   options: {
+//     remarkPlugins: [remarkGfm, [mdxMermaid.default, { output: "svg" }]],
+//     rehypePlugins: [],
+//     components: { mermaid: Mermaid, Mermaid },
+//   },
+// });
 
-export default withMDX(nextConfig);
+export default nextConfig;
