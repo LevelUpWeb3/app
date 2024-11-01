@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 // import { MDXRemote } from "next-mdx-remote";
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
+import MDXHeaders from "@/components/MDXHeaders";
 import * as React from "react";
 import Link from "next/link";
 import PageButton from "./PageButton";
@@ -135,7 +136,11 @@ export default function ChallengeDetailsPage() {
                 <>
                   <MDXRemote
                     {...data.content}
-                    components={{ ...MDXCodeHighlighter, Mermaid }}
+                    components={{
+                      ...MDXCodeHighlighter,
+                      ...MDXHeaders,
+                      Mermaid,
+                    }}
                   />
                   <PageButton />
                 </>

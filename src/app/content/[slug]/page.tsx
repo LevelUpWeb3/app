@@ -8,7 +8,7 @@ import Head from "next/head";
 
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
-import ContentCopy from "@/components/ContentCopy";
+import MDXHeaders from "@/components/MDXHeaders";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 import AttributionComponent from "@/components/Attribution";
 import ContentFooter from "@/components/ContentFooter";
@@ -36,7 +36,7 @@ export default function ContentDetailsPage() {
         setData(data);
       });
     setLoading(false);
-  }, []);
+  }, [pathname]);
 
   return (
     <>
@@ -63,7 +63,7 @@ export default function ContentDetailsPage() {
           </div>
         </div>
       </div>
-      <div className="mx-auto grid h-screen w-full max-w-[140rem] px-[6rem]">
+      <div className="mx-auto grid h-screen w-full max-w-[140rem] grid-cols-[100%] px-[6rem]">
         {isLoading ? (
           <>
             <Skeleton variant="rounded" className="min-h-screen w-full" />
@@ -92,9 +92,9 @@ export default function ContentDetailsPage() {
                     {...data.content}
                     components={{
                       ...MDXCodeHighlighter,
+                      ...MDXHeaders,
                       Mermaid,
                       YoutubeEmbed,
-                      ContentCopy,
                     }}
                   />
                   <ContentFooter currentContentIndex={data.index} />

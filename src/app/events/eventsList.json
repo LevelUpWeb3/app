@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Ethcon Korea 2024 ",
+    "date": "Oct 18-20, 2024",
+    "location": "Seoul, South Korea",
+    "url": "../events/ethcon-korea",
+    "image": "/images/events/ethcon.svg",
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
+    "region": ["All regions", "Asia Pacific"]
+  },
+  {
+    "name": "The Level Up Hackathon ETH KL",
+    "date": "Oct 04-06, 2024",
+    "location": "Kuala Lumpur, Malaysia",
+    "url": "https://www.2024.ethkl.org/",
+    "image": "/images/events/eth-kl.svg",
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
+    "region": ["All regions", "South East Asia"]
+  },
+  {
+    "name": "Level Up Mini-Hack by Scroll and Alchemy",
+    "date": "Sep 24-30, 2024",
+    "location": "Global Online Event",
+    "url": "../events/alchemy-mini-hack",
+    "image": "/images/events/alchemy-mini-hack.svg",
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
+    "region": ["All regions", "Virtual"],
+    "registrationLink": "https://tally.so/r/mYYVo0",
+    "submissionLink": "https://tally.so/r/3NYdWQ"
+  },
+  {
+    "name": "The Level Up Hackathon ETH Tokyo",
+    "date": "Aug 23-26, 2024",
+    "location": "Shibuya City, Tokyo",
+    "url": "https://www.ethtokyo.com/",
+    "image": "/images/events/eth-tokyo.svg",
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
+    "region": ["All regions", "Asia Pacific"]
+  },
+  {
+    "name": "The Level Up Hackathon by Ethereum Argentina",
+    "date": "Aug 2-4, 2024",
+    "location": "Buenos Aires, Argentina",
+    "url": "https://taikai.network/ethargentina/hackathons/level-up-argentina-2024",
+    "image": "/images/events/eth-argentina.svg",
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
+    "region": ["All regions", "South America"]
+  }
+]

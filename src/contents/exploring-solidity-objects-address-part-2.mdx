@@ -10,7 +10,6 @@ readTime: 6 min read
 labels: ["Smart Contract"]
 ---
 
-import ContentCopy from "src/components/ContentCopy";
 import YoutubeEmbed from "src/components/YoutubeEmbed";
 
 In [Part 1](https://rhbdl.substack.com/p/exploring-solidity-objects-address?r=1v972g), we explored different `address` members and their use cases. While the previous article explored scenarios involving sending Ether, it is helpful to know that the functionalities extend beyond that.
@@ -29,7 +28,8 @@ At this point, you might be wondering about the terminology “delegatecall”. 
 
 Let's utilise the code below to answer these questions!
 
-<ContentCopy code={`pragma solidity ^0.8.24;
+```solidity
+pragma solidity ^0.8.24;
 
 contract Caller {
 uint256 public value;
@@ -51,7 +51,8 @@ uint256 public value;
         if (!success) revert("Failed");
     }
 
-}`} language="solidity"/>
+}
+```
 
 When `setVars()` is called in DelegateCaller contract, the `delegatecall` invokes the `setVars()` function in the Caller contract but in the DelegateCaller execution environment.
 
