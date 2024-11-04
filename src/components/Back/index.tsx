@@ -16,7 +16,12 @@ const BackLink = (props) => {
       >
         <TriangleLeftSvg className="text-inherit"></TriangleLeftSvg>
         <Typography
-          sx={{ fontSize: "16px", cursor: "pointer", color: "inherit" }}
+          sx={{
+            fontSize: "16px",
+            cursor: "pointer",
+            color: "inherit",
+            transform: "translateY(1px)",
+          }}
         >
           Back
         </Typography>

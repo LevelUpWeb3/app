@@ -68,7 +68,7 @@ const ChallengeDetail = (props) => {
             target="_blank"
           >
             <XSvg className="w-[16px]"></XSvg>
-            <span>Share your thoughts</span>
+            <span className="translate-y-0.5">Share your thoughts</span>
           </Link>
 
           <Tooltip title="Join the study group for help!" placement="top">
@@ -78,7 +78,7 @@ const ChallengeDetail = (props) => {
               target="_blank"
             >
               <TelegramSvg className="w-[16px]" />
-              <span>Get Help</span>
+              <span className="translate-y-0.5">Get Help</span>
             </Link>
           </Tooltip>
         </Stack>

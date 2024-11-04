@@ -19,7 +19,7 @@ export default function Footer() {
           justifyContent="space-between"
         >
           <Stack
-            gap="35px"
+            gap={["35px", "60px"]}
             direction="row"
             alignItems="center"
             className="mb-[20px] sm:mb-0"
