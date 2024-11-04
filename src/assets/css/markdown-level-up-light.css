@@ -590,3 +590,15 @@
   line-height: 30px;
   list-style-type: disc;
 }
+
+@media screen and (max-width: 600px) {
+  .markdown-level-up-light {
+    font-size: 14px;
+  }
+  .markdown-level-up-light h1 {
+    font-size: 32px;
+  }
+  .markdown-level-up-light h2 {
+    font-size: 24px;
+  }
+}

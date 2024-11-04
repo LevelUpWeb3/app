@@ -659,8 +659,11 @@
 }
 
 @media screen and (max-width: 600px) {
+  .markdown-level-up {
+    font-size: 14px;
+  }
+
   .markdown-level-up h2 {
-    line-height: 40px;
     border-top: 1.5px solid #101010;
     padding-top: 30px;
     padding-bottom: 20px;

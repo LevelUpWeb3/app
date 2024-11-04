@@ -1,6 +1,6 @@
 import { Container, Stack, Typography } from "@mui/material";
 import { headers } from "next/headers";
-import { FULL_SCREEN_HEIGHT } from "@/constants";
+import { PAGE_MIN_HEIGHT } from "@/constants";
 
 import List from "./List";
 
@@ -15,8 +15,8 @@ const ChallengesPage = async () => {
   return (
     <Container
       sx={{
-        py: ["8.4rem"],
-        minHeight: FULL_SCREEN_HEIGHT,
+        py: ["6rem", "8.4rem"],
+        minHeight: PAGE_MIN_HEIGHT,
       }}
     >
       <Stack direction={["column", "row"]} gap={["20px", "100px"]}>

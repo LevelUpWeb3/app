@@ -16,14 +16,7 @@ const MDXHeaders = {
   h1({ node, inline, className, children, ...props }) {
     const id = generateSafeDomId(children);
     return (
-      <h1
-        className={clsx(
-          className,
-          "!mb-[20px] !pb-0 !text-[36px] !font-normal",
-        )}
-        id={id}
-        {...props}
-      >
+      <h1 id={id} {...props}>
         {children}
       </h1>
     );

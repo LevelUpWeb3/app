@@ -1,10 +1,10 @@
 import NoData from "@/components/NoData";
 import { Container } from "@mui/material";
-import { FULL_SCREEN_HEIGHT } from "@/constants";
+import { PAGE_MIN_HEIGHT } from "@/constants";
 
 const PodcastPage = () => {
   return (
-    <Container sx={{ minHeight: FULL_SCREEN_HEIGHT }}>
+    <Container sx={{ minHeight: PAGE_MIN_HEIGHT }}>
       <NoData title="No result" description="reselect"></NoData>;
     </Container>
   );

@@ -37,10 +37,12 @@ export default async function SolidityDetailPage({
             px: ["20px", "20px", 0],
           }}
         >
-          <Typography sx={{ fontSize: "48px" }}>
+          <Typography sx={{ fontSize: ["36px", "48px"] }}>
             Lesson {data.lesson}:<br className="sm:hidden"></br> {data.name}
           </Typography>
-          <Typography sx={{ fontSize: "24px" }}>{data.summary}</Typography>
+          <Typography sx={{ fontSize: ["16px", "24px"] }}>
+            {data.summary}
+          </Typography>
         </Stack>
         <Teaching data={data}></Teaching>
 

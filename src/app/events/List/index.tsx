@@ -54,13 +54,13 @@ const List = (props) => {
         gap="8px"
       >
         <PlainSelect
-          sx={{ width: ["140px !important", "150px"] }}
+          sx={{ width: ["140px", "150px"] }}
           data={EVENTS_DATE_LIST}
           value={searchParams.time}
           onChange={(e) => handleChangeSearchParams(e.target.value, "time")}
         ></PlainSelect>
         <PlainSelect
-          sx={{ width: ["185px !important", "190px"] }}
+          sx={{ width: ["185px", "190px"] }}
           data={EVENTS_REGION_LIST}
           value={searchParams.region}
           onChange={(e) => handleChangeSearchParams(e.target.value, "region")}

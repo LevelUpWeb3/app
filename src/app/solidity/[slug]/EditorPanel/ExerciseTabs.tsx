@@ -43,6 +43,7 @@ const ExerciseTabs = (props) => {
         display: "flex",
         justifyContent: "center",
         py: "10px",
+        px: "20px",
         backgroundColor: "#3B3B3B",
       }}
     >

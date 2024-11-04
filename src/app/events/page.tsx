@@ -1,5 +1,5 @@
 import { Container, Stack, Typography } from "@mui/material";
-import { FULL_SCREEN_HEIGHT } from "@/constants";
+import { PAGE_MIN_HEIGHT } from "@/constants";
 import List from "./List";
 import Data from "./eventsList.json";
 
@@ -8,7 +8,7 @@ const EventsPage = () => {
     <Container
       sx={{
         py: ["6rem", "8.4rem"],
-        minHeight: [["auto", FULL_SCREEN_HEIGHT]],
+        minHeight: PAGE_MIN_HEIGHT,
       }}
     >
       <Stack
