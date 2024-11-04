@@ -10,7 +10,7 @@ const LessonList = (props) => {
   return (
     <Box
       sx={{
-        width: "100%",
+        flex: 1,
         display: "grid",
         gridTemplateColumns: ["1fr", "repeat(auto-fill, minmax(30rem, 1fr))"],
         gap: ["15px", "20px"],

@@ -32,7 +32,7 @@ const List = (props) => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ flex: 1 }}>
       <CategorySelect
         value={category}
         onChange={handleChangeCategory}

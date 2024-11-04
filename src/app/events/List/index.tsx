@@ -47,7 +47,7 @@ const List = (props) => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ flex: 1 }}>
       <Stack
         direction="row"
         sx={{ position: ["static", "sticky"], top: stickyTop }}
