@@ -218,7 +218,7 @@ Here’s an example contract that queries data stored in a uint104 array:
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract L1Uint104ArrayDemo {
+contract L2Uint104ArrayDemo {
     address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
     address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
 
@@ -229,7 +229,7 @@ contract L1Uint104ArrayDemo {
             keccak256(
                 abi.encodePacked(arraySlot)
             )
-        ) + arrayIndex / (uint(245)/104);
+        ) + arrayIndex / (uint(256)/104);
         bool success;
         bytes memory returnValue;
         (success, returnValue) = L1_SLOAD_ADDRESS.staticcall(abi.encodePacked(contractAddress, arrayElementSlot));
@@ -237,7 +237,7 @@ contract L1Uint104ArrayDemo {
         {
             revert("L1SLOAD failed");
         }
-		uint104 returnValueUint = uint104(abi.decode(returnValue, (uint)) >> ((arrayIndex % (uint(245)/104)) * 104));
+		uint104 returnValueUint = uint104(abi.decode(returnValue, (uint)) >> ((arrayIndex % (uint(256)/104)) * 104));
         return returnValueUint;
     }
 
