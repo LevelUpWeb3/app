@@ -13,12 +13,7 @@ import { Box } from "@mui/material";
 import useCheckViewport from "@/hooks/useCheckViewport";
 import Data from "../eventsList.json";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
+import { MDXRemote } from 'next-mdx-remote';
 
 const EventsDetailsPage = () => {
   const [eventsData, setEventsData] = useState<any>([]);
@@ -54,6 +49,7 @@ const EventsDetailsPage = () => {
     <div className="mt-[-6.5rem] flex flex-col pb-2.5">
       <EventsHeader
         title={eventsData.name}
+        buttonText={eventsData.buttonText}
         registrationLink={`../../events/${slug}/register`}
         url={`/images/events/${slug}.svg`}
         eventsDate={eventsData.date}
@@ -77,7 +73,7 @@ const EventsDetailsPage = () => {
                       })
                     }
                   >
-                    Register now
+                    {eventsData.buttonText}
                   </Button>
                 </div>
               )}
@@ -87,20 +83,6 @@ const EventsDetailsPage = () => {
             )}
           </React.Fragment>
         ))}
-        <div className="mt-10">
-          <Button
-            color="primary"
-            href={`../../events/${slug}/submit`}
-            width={isMobile ? "100%" : "25rem"}
-            onClick={() =>
-              sendGAEvent("event", "hackathonClicked", {
-                value: { slug },
-              })
-            }
-          >
-            Submit your project
-          </Button>
-        </div>
       </div>
     </div>
   );
