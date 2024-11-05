@@ -84,8 +84,8 @@ const Home = () => {
             <Box>
               <Typography
                 sx={{
-                  fontSize: ["14px", "16px"],
-                  lineHeight: ["20px", "22px"],
+                  fontSize: "16px",
+                  lineHeight: "22px",
                   maxWidth: ["686px"],
                 }}
               >

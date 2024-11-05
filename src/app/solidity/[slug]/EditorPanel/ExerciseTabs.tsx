@@ -52,7 +52,7 @@ const ExerciseTabs = (props) => {
         value={value}
         onChange={handleTabChange}
         variant="scrollable"
-        scrollButtons="auto"
+        scrollButtons={false}
         sx={{
           minHeight: "unset",
           ".MuiTabs-flexContainer": {
@@ -91,6 +91,7 @@ const ExerciseTabs = (props) => {
                       lineHeight: "37px",
                       textTransform: "capitalize",
                       cursor: "inherit",
+                      transform: "translateY(0.125em)",
                     }}
                   >
                     {label}

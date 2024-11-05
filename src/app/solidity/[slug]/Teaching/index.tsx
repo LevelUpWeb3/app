@@ -34,7 +34,7 @@ const Teaching = (props) => {
         <MarkdownViewer
           data={data}
           components={{
-            ...MDXCodeHighlighter("light"),
+            ...MDXCodeHighlighter(),
             ...MDXHeaders,
             Mermaid,
           }}

@@ -22,7 +22,10 @@ const Attribution = (props) => {
       <Typography sx={{ fontSize: ["36px", "48px"], gridColumn: "1/3" }}>
         {name}
       </Typography>
-      <Avatar src={authorIcon} sx={{ width: "54px", height: "54px" }} />
+      <Avatar
+        src={authorIcon}
+        sx={{ width: ["40px", "54px"], height: ["40px", "54px"] }}
+      />
       <Box sx={{ alignSelf: "center" }}>
         <Typography sx={{ fontSize: ["14px", "16px"] }}>
           Written by{" "}

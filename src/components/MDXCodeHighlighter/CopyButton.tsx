@@ -24,7 +24,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ sx, text }) => {
     <CopyToClipboard text={text} onCopy={handleCopy}>
       <EditorTooltip title="Copied!" placement="top" open={copied}>
         <IconButton sx={sx}>
-          <CopySvg className="h-[auto] w-[22px]"></CopySvg>
+          <CopySvg className="h-[auto] w-[16px]"></CopySvg>
         </IconButton>
       </EditorTooltip>
     </CopyToClipboard>

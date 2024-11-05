@@ -22,7 +22,7 @@ interface ScrollButtonProps extends ButtonProps {
 const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
   button: {
     height: size === "large" ? "82px" : "44px",
-    fontSize: size === "large" ? "24px" : "16px",
+    fontSize: size === "large" ? "20px" : "16px",
     fontWeight: 500,
     padding: "0 20px",
     width: "fit-content",
@@ -84,7 +84,7 @@ const Button = (props) => {
       {...restProps}
       target={isExternal ? "_blank" : "_self"}
     >
-      {children}
+      <span className="translate-y-[0.125em]">{children}</span>
       {loading && (
         <CircularProgress
           sx={{ color: "inherit" }}

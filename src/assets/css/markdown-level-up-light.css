@@ -142,7 +142,7 @@
 .markdown-level-up-light kbd,
 .markdown-level-up-light pre {
   font-family: "Fira Code", monospace;
-  font-size: 1em;
+  font-size: 14px;
 }
 .markdown-level-up-light hr {
   box-sizing: content-box;
@@ -456,7 +456,6 @@
 .markdown-level-up-light code {
   padding: 1px 0px;
   margin: 0;
-  font-size: inherit;
   background-color: #1010101a;
   border-radius: 6px;
 
@@ -558,13 +557,6 @@
 
 .markdown-level-up-light h2 code {
   font-size: inherit;
-}
-.markdown-level-up-light .markdown-code-block {
-  border-radius: 0;
-}
-
-.markdown-level-up-light .markdown-code-block code {
-  background-color: transparent !important;
 }
 
 .markdown-level-up-light details {

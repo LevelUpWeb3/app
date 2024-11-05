@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Editor, { OnMount } from "@monaco-editor/react";
+import Editor, { OnMount, type Monaco } from "@monaco-editor/react";
 import { CircularProgress } from "@mui/material";
+
+import editorTheme from "@/theme/editorTheme";
 
 interface CodeEditorProps {
   codeTemplate: string;
@@ -23,6 +25,9 @@ const CodeEditor = ({
   const codeRef = useRef(initialCode);
   const codeSolutionRef = useRef(initialCodeSolution);
 
+  const beforeMount = (monaco: Monaco) => {
+    monaco.editor.defineTheme("level-up-black", editorTheme);
+  };
   const onMount: OnMount = (editor, monaco) => {
     const model = editor.getModel();
     const lastLine = model?.getLineCount();
@@ -63,12 +68,13 @@ const CodeEditor = ({
   return (
     <Editor
       key={key}
-      className="solidity-editor"
+      className="solidity-editor pl-[20px]"
       height="760px"
-      theme="vs-dark"
+      theme="level-up-black"
       language="sol"
       defaultValue={codeTemplate}
       onMount={onMount}
+      beforeMount={beforeMount}
       value={codeTemplate}
       onChange={(code) => onChange(code || "")}
       loading={<CircularProgress sx={{ color: "#fff" }} />}
@@ -76,7 +82,7 @@ const CodeEditor = ({
         wordWrap: "on",
         minimap: { enabled: false },
         cursorStyle: "underline",
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: "'Fira Code', monospace",
 
         folding: false,

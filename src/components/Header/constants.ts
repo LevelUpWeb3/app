@@ -20,7 +20,7 @@ const navigations = [
     href: "/podcast",
   },
   {
-    label: "Hackathon",
+    label: "Events",
     key: "events",
     href: "/events",
   },

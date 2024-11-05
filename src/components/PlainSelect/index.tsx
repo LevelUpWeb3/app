@@ -1,4 +1,4 @@
-import { MenuItem, Typography, Box } from "@mui/material";
+import { MenuItem, Typography } from "@mui/material";
 
 import Select from "@/components/Select";
 
@@ -18,6 +18,12 @@ const PlainSelect = (props) => {
               restProps.value === item
                 ? "#F4F4F4 !important"
                 : "unset !important",
+            "&:nth-of-type(n+2)": {
+              marginTop: "3.5px",
+            },
+            "&:hover": {
+              backgroundColor: "#F4F4F4 !important",
+            },
           }}
         >
           <Typography

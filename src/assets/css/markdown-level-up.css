@@ -147,7 +147,6 @@
 .markdown-level-up kbd,
 .markdown-level-up pre {
   font-family: "Fira Code", monospace;
-  font-size: 1em;
 }
 .markdown-level-up hr {
   box-sizing: content-box;
@@ -497,7 +496,7 @@
   padding-right: 20px;
 }
 .markdown-level-up code {
-  padding: 2px 5px;
+  padding: 1px 2px;
   margin: 0;
   font-size: 14px;
   background-color: #1010101a;
@@ -615,7 +614,6 @@
 .markdown-level-up .markdown-code-block {
   width: 200%;
   margin-left: -100%;
-  border-radius: 15px;
 }
 .markdown-level-up .markdown-code-block code {
   background-color: transparent !important;
@@ -650,19 +648,15 @@
     top: 50px;
     height: 40px;
     line-height: 40px;
-    width: 50%;
+    width: calc(50% - 20px);
   }
   .markdown-level-up h2 + * {
     border-top: 1.5px solid #101010;
-    padding-top: 60px;
+    padding-top: 55px;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .markdown-level-up {
-    font-size: 14px;
-  }
-
   .markdown-level-up h2 {
     border-top: 1.5px solid #101010;
     padding-top: 30px;
@@ -675,7 +669,10 @@
   .markdown-level-up .markdown-code-block {
     width: 100%;
     margin-left: 0;
-    padding-right: 48px;
+  }
+
+  .markdown-level-up .markdown-code-block .code-viewer {
+    padding: 20px 48px 20px 20px !important;
   }
 
   .markdown-level-up ul,

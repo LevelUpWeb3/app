@@ -21,7 +21,7 @@ const EventsPage = () => {
             width: "min-content",
           }}
         >
-          Hackathon
+          Events
         </Typography>
         <List data={Data} />
       </Stack>

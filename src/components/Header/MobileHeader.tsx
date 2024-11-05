@@ -38,7 +38,7 @@ const MobileHeader = () => {
       sx={{
         padding: 0,
         fontSize: "16px",
-        height: `calc(100vh - ${MOBILE_LAYOUT_HEADER_HEIGHT} - ${isHome ? "61px" : "0px"} - 92px)`,
+        height: `calc(${window.visualViewport?.height ?? window.innerHeight}px - ${MOBILE_LAYOUT_HEADER_HEIGHT} - ${isHome ? "60px" : "0px"} - 92px)`,
         overflowY: "auto",
       }}
       component="nav"
@@ -79,7 +79,7 @@ const MobileHeader = () => {
           height="64px"
           px="20px"
           sx={{
-            borderTop: open ? "1.5px solid #101010" : "unset",
+            borderTop: isHome ? "none" : open ? "1.5px solid #101010" : "unset",
             borderBottom: open ? "1.5px solid #101010" : "unset",
           }}
         >
@@ -87,6 +87,7 @@ const MobileHeader = () => {
             <Logo light={dark} />
           </Link>
           <MenuTrigger
+            sx={{ mr: "-8px" }}
             isOpen={open}
             onClick={() => toggleDrawer(!open)}
           ></MenuTrigger>
@@ -97,7 +98,7 @@ const MobileHeader = () => {
         {open && (
           <Box
             sx={{
-              height: "calc(100vh - 64px)",
+              height: `calc(${window.visualViewport?.height ?? window.innerHeight}px - ${MOBILE_LAYOUT_HEADER_HEIGHT} - ${isHome ? "60px" : "0px"})`,
             }}
           >
             <Box role="presentation" onKeyDown={() => toggleDrawer(false)}>

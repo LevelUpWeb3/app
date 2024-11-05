@@ -13,7 +13,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
-import ScrollToTop from "@/components/ScrollToTop";
+// import ScrollToTop from "@/components/ScrollToTop";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { pathname, origin } = new URL(headers().get("x-url")!);
@@ -87,7 +87,7 @@ export default function RootLayout({
           <ScrollThemeProvider>
             <RainbowProvider>
               {children}
-              <ScrollToTop></ScrollToTop>
+              {/* <ScrollToTop></ScrollToTop> */}
               <Analytics />
             </RainbowProvider>
           </ScrollThemeProvider>

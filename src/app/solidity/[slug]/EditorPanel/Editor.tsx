@@ -95,12 +95,12 @@ const Editor = ({
           position: "absolute",
           bottom: ["30px", "50px"],
           width: "100%",
-          px: "60px",
+          px: ["20px", "60px"],
         }}
       >
         {editorType === "solution" ? (
           <EditorTooltip title="Back to code" placement="top">
-            <Box sx={{ width: ["109px", "50%"] }} key="code">
+            <Box sx={{ width: ["37%", "50%"] }} key="code">
               <Button
                 variant="contained"
                 size="large"
@@ -127,7 +127,7 @@ const Editor = ({
               <Box
                 key="answer"
                 sx={{
-                  width: ["109px", "50%"],
+                  width: ["37%", "50%"],
                   pointerEvents: allowViewSolution ? "all" : "none",
                 }}
               >
@@ -152,7 +152,7 @@ const Editor = ({
             <SubmitButton
               sx={{
                 whiteSpace: "nowrap",
-                width: ["187px !important", "50% !important"],
+                width: ["64% !important", "50% !important"],
               }}
               code={code}
               codeSolution={codeSolution}

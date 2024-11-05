@@ -1,14 +1,13 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  materialLight,
-  materialDark,
-} from "react-syntax-highlighter/dist/cjs/styles/prism";
+// import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyButton from "./CopyButton";
 import clsx from "clsx";
 
+import markdownCodeViewer from "@/theme/markdownCodeViewer";
+
 const MDXCodeHighlighter = (theme = "dark") => {
-  const isLight = theme === "light";
-  const defaultStyle = isLight ? materialLight : materialDark;
+  const defaultStyle = markdownCodeViewer;
+  // console.log(defaultStyle, "defaultStyle");
   return {
     pre({ className, children, ...props }) {
       return (
@@ -23,32 +22,25 @@ const MDXCodeHighlighter = (theme = "dark") => {
       return (
         <>
           {multiline && match && (
-            <div
-              className="markdown-code-block"
-              style={{
-                position: "relative",
-                fontSize: "14px",
-
-                // custom
-                backgroundColor: isLight ? "#fff" : "#252525",
-              }}
-            >
+            <div className="markdown-code-block relative">
               <SyntaxHighlighter
+                className="code-viewer"
                 style={{
                   ...defaultStyle,
                   'code[class*="language-"]': {
                     ...defaultStyle['code[class*="language-"]'],
                     fontFamily: "'Fira Code', monospace",
-                    background: "transparent",
                     whiteSpace: "wrap",
+                    background: "transparent",
                   },
                 }}
                 customStyle={{
                   padding: "28px 25px",
                   margin: "0 0 20px",
                   overflow: "auto",
-                  backgroundColor: "transparent",
-                  fontFamily: "'Fira Code', monospace",
+                  background: "#252525",
+                  borderRadius: "15px",
+                  fontSize: "14px",
                 }}
                 language={match[1]}
                 PreTag="div"
@@ -60,9 +52,9 @@ const MDXCodeHighlighter = (theme = "dark") => {
                 text={children}
                 sx={{
                   position: "absolute",
-                  top: "10px",
-                  right: "12px",
-                  color: isLight ? "#101010" : "#fff",
+                  top: ["13px", "22px"],
+                  right: ["12px", "17px"],
+                  color: "#fff",
                 }}
               />
             </div>

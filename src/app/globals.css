@@ -191,3 +191,7 @@ onboard-v2 .outer-container icon {
     @apply p-4;
   }
 }
+
+.monaco-editor .overlayWidgets {
+  display: none;
+}

@@ -59,10 +59,11 @@ const useStyles = makeStyles()((theme) => ({
     borderTop: `1px solid ${(theme as any).vars.palette.text.primary}`,
   },
   menuList: {
-    padding: "0 5px 5px",
+    padding: "5px",
     maxHeight: "300px",
     overflowY: "auto",
   },
+
   menuListWithScrollbar: {
     overflowY: "scroll",
     "&::-webkit-scrollbar": {
