@@ -56,7 +56,7 @@ const MoreContentSlide = async (props) => {
       {filteredData.slice(0, 5).map((item, index) => (
         <Card
           color="purple"
-          className="flex-1 sm:flex-[0_0_60%] md:flex-[30%]"
+          className="flex-1 sm:flex-[0_0_60%] md:flex-[0_0_30%]"
           key={index}
           content={item}
         />
