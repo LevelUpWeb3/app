@@ -23,8 +23,8 @@ const MoreContent = () => {
           </Typography>
           <SlideSvg className="invisible sm:visible" />
         </Stack>
-        <MoreContentSlide index={-1}></MoreContentSlide>
       </Container>
+      <MoreContentSlide index={-1}></MoreContentSlide>
     </Box>
   );
 };

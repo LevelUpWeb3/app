@@ -28,8 +28,8 @@ const MoreContent: React.FC<MoreContentProps> = ({ index }) => {
             </Typography>
             <SlideSvg className="invisible sm:visible" />
           </Stack>
-          <MoreContentSlide index={index}></MoreContentSlide>
         </Container>
+        <MoreContentSlide index={index}></MoreContentSlide>
       </Box>
     </>
   );

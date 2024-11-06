@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import Card from "@/components/Card";
-import { Stack } from "@mui/material";
+import { Stack, Container, Box } from "@mui/material";
 import Data from "@/app/content/content.json";
 
 import { shuffleArray } from "@/utils";
@@ -35,33 +35,33 @@ const MoreContentSlide = async (props) => {
   );
 
   return (
-    <Stack
-      direction={["column", "row"]}
-      sx={{
-        gap: ["15px", "20px"],
-        overflowX: "auto",
-        pb: [0, "16px"],
-        "&::-webkit-scrollbar": {
-          height: "6px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: "#EAEAEA",
-          borderRadius: "6px",
-        },
-        "&::-webkit-scrollbar-thumb:hover": {
-          background: "#EAEAEA",
-        },
-      }}
-    >
-      {filteredData.slice(0, 5).map((item, index) => (
-        <Card
-          color="purple"
-          className="flex-1 sm:flex-[0_0_60%] md:flex-[0_0_30%]"
-          key={index}
-          content={item}
-        />
-      ))}
-    </Stack>
+    <Box sx={{ overflow: "visible" }}>
+      <Stack
+        direction={["column", "row"]}
+        sx={{
+          gap: ["15px", "20px"],
+          overflowX: "auto",
+          px: ["20px", "40px", "60px"],
+          "@media (min-width: 1520px)": {
+            px: "calc((100vw - 1400px) / 2)",
+          },
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+
+          scrollbarWidth: "none",
+        }}
+      >
+        {filteredData.slice(0, 5).map((item, index) => (
+          <Card
+            color="purple"
+            className="flex-1 sm:flex-[0_0_60%] md:flex-[0_0_45%] lg:flex-[0_0_450px]"
+            key={index}
+            content={item}
+          />
+        ))}
+      </Stack>
+    </Box>
   );
 };
 
