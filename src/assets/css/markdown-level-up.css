@@ -658,6 +658,7 @@
   .markdown-level-up h2 {
     border-top: 1.5px solid #101010;
     padding-top: 30px;
+    margin-top: 30px;
     padding-bottom: 20px;
     font-size: 24px;
     width: calc(100% + 40px);

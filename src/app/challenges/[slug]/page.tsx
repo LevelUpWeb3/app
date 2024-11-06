@@ -8,7 +8,7 @@ import SubmitAction from "./SubmitAction";
 import ChallengeViewer from "./ChallengeViewer";
 import ChallengeNavigation from "./ChallengeNavigation";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
-import MoreContent from "./MoreContent";
+// import MoreContent from "./MoreContent";
 
 export default async function ChallengeDetailPage({
   params: { slug },
@@ -37,7 +37,7 @@ export default async function ChallengeDetailPage({
 
       <ChallengeViewer data={data}></ChallengeViewer>
       <SubmitAction></SubmitAction>
-      <MoreContent />
+      {/* <MoreContent /> */}
       <ChallengeNavigation challengeId={slug}></ChallengeNavigation>
     </>
   );

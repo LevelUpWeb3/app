@@ -1,5 +1,29 @@
 [
   {
+    "name": "Scroll Articles Bounty Contest: Write and Earn!",
+    "date": "Nov xx-xx, 2024",
+    "location": "Global Online Event",
+    "url": "",
+    "image": "/images/events/scroll-article.svg",
+    "buttonText": "Join Now",
+    "buttonDisabled": "",
+    "status": ["All time", "Upcoming"],
+    "region": ["All regions", "Virtual"],
+    "registrationLink": "",
+    "submissionLink": ""
+  },
+  {
+    "name": "The Level Up Hackathon: ETH Global Bangkok",
+    "date": "Nov 15-17, 2024",
+    "location": "Bangkok, Thailand",
+    "url": "https://ethglobal.com/events/bangkok/prizes/scroll",
+    "image": "/images/events/eth-bkk.svg",
+    "buttonText": "Join Now",
+    "buttonDisabled": "",
+    "status": ["All time", "Upcoming"],
+    "region": ["All regions", "Asia Pacific"]
+  },
+  {
     "name": "Ethcon Korea 2024 ",
     "date": "Oct 18-20, 2024",
     "location": "Seoul, South Korea",

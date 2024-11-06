@@ -1,12 +1,10 @@
 "use client";
 import Button from "@/components/Button";
-import useCheckViewport from "@/hooks/useCheckViewport";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { sendGAEvent } from "@next/third-parties/google";
 
 const HackathonItem = (props) => {
-  const { isMobile, isTablet } = useCheckViewport();
   const { content } = props;
   return (
     <Box
@@ -79,12 +77,7 @@ const HackathonItem = (props) => {
           width={130}
           height={130}
           alt={content.name}
-          style={{
-            position: isMobile ? "relative" : "absolute",
-            width: isTablet ? "97px" : isMobile ? "auto" : "130px",
-            height: isTablet ? "70px" : isMobile ? "80px" : "auto",
-            bottom: isMobile ? "unset" : 0,
-          }}
+          className="relative h-[80px] w-auto sm:absolute sm:bottom-0 sm:h-[70px] sm:w-[97px] md:h-auto md:w-[130px]"
         ></Image>
       </Stack>
       <Button
@@ -93,6 +86,7 @@ const HackathonItem = (props) => {
           gridColumn: ["1/3", "unset"],
         }}
         href={content.url}
+        isExternal={content.url.startsWith("https")}
         disabled={!!content.buttonDisabled}
         onClick={() =>
           sendGAEvent("event", "hackathonClicked", { value: content.name })

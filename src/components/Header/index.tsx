@@ -74,10 +74,10 @@ export default function Header() {
                 mr="20px"
                 alignItems="center"
               >
-                <p>Aug 2-4th</p>
+                <p>Nov 15-17</p>
                 <StarSvg className="!mt-[-4px]"></StarSvg>
                 <p className="font-medium">
-                  Join the Level Up Hackathon by Ethereum Argentina
+                  Join The Level Up Hackathon: Eth Global Bangkok
                 </p>
               </Stack>
             </AnnouncementBar>
