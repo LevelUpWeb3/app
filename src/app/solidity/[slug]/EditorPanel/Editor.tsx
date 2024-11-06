@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import CodeEditor from "./CodeEditor";
 import DiffEditorComponent from "./DiffEditor";
 import SubmitButton from "./SubmitButton";
-import Modal from "./Modal";
+import CongratualtionModal from "./CongratualtionModal";
 import { CODE_SOLUTIONS } from "@/constants/solidity/code-solutions";
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 
@@ -13,7 +13,6 @@ import { Box, Stack } from "@mui/material";
 
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
-import useCheckViewport from "@/hooks/useCheckViewport";
 
 const Editor = ({
   data,
@@ -21,7 +20,6 @@ const Editor = ({
   completedExerciseNumber,
   onComplete,
 }) => {
-  const { isMobile } = useCheckViewport();
   const [code, setCode] = useState("");
   const [tries, setTries] = useState<number>(0);
   const [editorType, setEditorType] = useState<"code" | "solution">("code");
@@ -72,8 +70,8 @@ const Editor = ({
 
   return (
     <Box sx={{ position: "relative", backgroundColor: "#232323" }}>
-      <Modal
-        isOpen={isModalOpen}
+      <CongratualtionModal
+        open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         name={data.name}
       />

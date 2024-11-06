@@ -1,5 +1,6 @@
-import { CircularProgress, Container, Stack } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import { MOBILE_FULL_SCREEN_HEIGHT, FULL_SCREEN_HEIGHT } from "@/constants";
+import ThreeDotsSvg from "@/assets/svgs/common/three-dots.svg";
 
 const Loading = () => {
   return (
@@ -9,7 +10,7 @@ const Loading = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <CircularProgress color="primary" />
+        <ThreeDotsSvg />
       </Stack>
     </Container>
   );

@@ -77,7 +77,7 @@ const MobileHeader = () => {
           alignItems="center"
           gap="25px"
           height="64px"
-          px="20px"
+          px={["20px", "40px"]}
           sx={{
             borderTop: isHome ? "none" : open ? "1.5px solid #101010" : "unset",
             borderBottom: open ? "1.5px solid #101010" : "unset",

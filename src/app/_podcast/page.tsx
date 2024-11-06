@@ -5,7 +5,7 @@ import { PAGE_MIN_HEIGHT } from "@/constants";
 const PodcastPage = () => {
   return (
     <Container sx={{ minHeight: PAGE_MIN_HEIGHT }}>
-      <NoData title="No result" description="reselect"></NoData>;
+      <NoData></NoData>;
     </Container>
   );
 };

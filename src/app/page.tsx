@@ -70,9 +70,9 @@ const Home = () => {
         <Container>
           <Stack
             gap={["14px"]}
-            direction={["column", "row"]}
+            direction={["column", "column", "row"]}
             justifyContent="space-between"
-            py={["30px", "100px"]}
+            py={["30px", "40px", "100px"]}
           >
             <Typography
               sx={{

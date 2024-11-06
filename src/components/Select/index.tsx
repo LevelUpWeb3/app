@@ -15,8 +15,8 @@ const useStyles = makeStyles()((theme) => ({
   // TODO: why first insert
   select: {
     padding: "11px 44px 11px 30px !important",
-    [theme.breakpoints.down("sm")]: {
-      padding: "10px 44px 10px 30px !important",
+    [theme.breakpoints.down("md")]: {
+      padding: "9px 44px 9px 30px !important",
     },
     backgroundColor: `${(theme as any).vars.palette.background.default} !important`,
     "&[aria-expanded='true']": {
@@ -150,7 +150,7 @@ const Select = (props) => {
         return (
           <Typography
             sx={{
-              fontSize: ["1.4rem", "1.6rem"],
+              fontSize: ["1.4rem", "1.4rem", "1.6rem"],
               lineHeight: ["2.4rem", "2.6rem"],
               fontWeight: 500,
               cursor: "inherit",

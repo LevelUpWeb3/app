@@ -44,8 +44,10 @@ const config: Config = {
         DEFAULT: "#C9CBCE",
       },
       screens: {
-        md: "768px",
-        lg: "1024px",
+        sm: "600px",
+        md: "900px",
+        lg: "1200px",
+        xl: "1536px",
       },
       colors: {
         red: {
@@ -123,15 +125,7 @@ const config: Config = {
       },
     },
     fontFamily: {
-      sans: ['"NeueHelvetica"', ...defaultTheme.fontFamily.sans],
       display: ['"NeueHelvetica"', ...defaultTheme.fontFamily.sans],
-      develop: ['"Roboto Flex"', ...defaultTheme.fontFamily.sans],
-    },
-    screens: {
-      sm: "600px",
-      md: "900px",
-      lg: "1200px",
-      xl: "1536px",
     },
   },
   plugins: [],

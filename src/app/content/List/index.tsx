@@ -40,14 +40,14 @@ const List = (props) => {
       {filteredData?.length ? (
         <Box
           sx={{
-            mt: ["20px", "40px"],
+            mt: ["20px", "24px", "40px"],
             width: "100%",
             display: "grid",
             gridTemplateColumns: [
               "1fr",
               "repeat(auto-fill, minmax(300px, 1fr))",
             ],
-            gap: ["15px", "20px"],
+            gap: ["15px", "15px", "20px"],
           }}
         >
           {filteredData
@@ -62,7 +62,7 @@ const List = (props) => {
             ))}
         </Box>
       ) : (
-        <NoData></NoData>
+        <NoData sx={{ mt: ["20px", "56px"] }}></NoData>
       )}
     </Box>
   );

@@ -21,7 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = `Level Up${route ? " – " + route.name : null}`;
   const description = route.description || DEFAULT_METADATA.description;
   const ogImg = route.ogImg || DEFAULT_METADATA.ogImg;
-  const twitterImg = route.twitterImg || route.ogImg || DEFAULT_METADATA.ogImg;
+  const twitterImg =
+    route.twitterImg || route.ogImg || DEFAULT_METADATA.twitterImg;
 
   return {
     metadataBase: new URL(origin),

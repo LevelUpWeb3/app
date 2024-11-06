@@ -47,45 +47,59 @@ const List = (props) => {
   };
 
   return (
-    <Box sx={{ flex: 1 }}>
+    <>
       <Stack
         direction="row"
-        sx={{ position: ["static", "sticky"], top: stickyTop }}
+        sx={{
+          position: ["static", "sticky"],
+          top: stickyTop,
+          gridColumn: ["1/2", "2/3"],
+          width: "100%",
+          justifyContent: "flex-end",
+          "@media screen and (min-width: 1430px)": {
+            justifyContent: "flex-start",
+          },
+        }}
         gap="8px"
       >
         <PlainSelect
-          sx={{ width: ["140px", "150px"] }}
+          sx={{ width: ["150px", "150px"] }}
           data={EVENTS_DATE_LIST}
           value={searchParams.time}
           onChange={(e) => handleChangeSearchParams(e.target.value, "time")}
         ></PlainSelect>
         <PlainSelect
-          sx={{ width: ["185px", "190px"] }}
+          sx={{ width: ["180px", "190px"], minWidth: "170px" }}
           data={EVENTS_REGION_LIST}
           value={searchParams.region}
           onChange={(e) => handleChangeSearchParams(e.target.value, "region")}
         ></PlainSelect>
       </Stack>
-      {filteredData.length ? (
-        <Stack
-          direction="column"
-          spacing="20px"
-          sx={{
-            mt: ["20px", "46px"],
-            width: "100%",
-          }}
-        >
-          {filteredData.map((item) => (
-            <HackathonItem content={item} key={item.name}></HackathonItem>
-          ))}
-        </Stack>
-      ) : (
-        <NoData
-          title="No results match the selected criteria"
-          description="Please try selecting or adjusting your filters."
-        ></NoData>
-      )}
-    </Box>
+      <Box
+        sx={{
+          gridColumn: ["1/2", "1/3"],
+          "@media screen and (min-width: 1430px)": {
+            gridColumn: "2/3",
+          },
+        }}
+      >
+        {filteredData.length ? (
+          <Stack
+            direction="column"
+            spacing="20px"
+            sx={{
+              width: "100%",
+            }}
+          >
+            {filteredData.map((item) => (
+              <HackathonItem content={item} key={item.name}></HackathonItem>
+            ))}
+          </Stack>
+        ) : (
+          <NoData></NoData>
+        )}
+      </Box>
+    </>
   );
 };
 export default List;

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { sendGAEvent } from "@next/third-parties/google";
 
 const HackathonItem = (props) => {
-  const { isPortrait } = useCheckViewport();
+  const { isMobile, isTablet, isPortrait } = useCheckViewport();
   const { content } = props;
   return (
     <Box
@@ -14,15 +14,16 @@ const HackathonItem = (props) => {
         width: "100%",
         display: "grid",
         gridTemplateColumns: [
-          "max-content 1fr",
-          "max-content 1fr",
+          "1fr max-content",
+          "220px min-content 200px 1fr max-content",
           "280px min-content 240px 1fr max-content",
         ],
-        alignContent: ["space-between", "space-between", "center"],
-        alignItems: ["space-between", "space-between", "center"],
-        p: ["30px 28px", "30px 38px"],
-        height: ["278px", "278px", "118px"],
-        columnGap: [0, "10px", "30px"],
+        alignContent: ["space-between", "center"],
+        alignItems: ["space-between", "center"],
+        p: ["30px 28px", "22px 24px", "30px 38px"],
+        height: ["auto", "auto", "118px"],
+        columnGap: ["10px", "10px", "30px"],
+        rowGap: ["10px", 0],
         backgroundColor: "rgba(232, 246, 40, 0.50)",
         borderRadius: "25px",
         overflow: "hidden",
@@ -30,11 +31,11 @@ const HackathonItem = (props) => {
     >
       <Typography
         sx={{
-          fontSize: "24px",
+          fontSize: ["20px", "20px", "24px"],
           fontWeight: 500,
-          gridRow: ["1/2", "1/2", "unset"],
-          gridColumn: ["1/3", "1/3", "unset"],
-          height: ["58px", "58px", "auto"],
+          gridRow: ["1/2", "unset"],
+          gridColumn: ["1/3", "unset"],
+          height: ["58px", "auto"],
         }}
       >
         {content.name}
@@ -44,17 +45,17 @@ const HackathonItem = (props) => {
         sx={{
           height: ["48px", "56px"],
           borderRightWidth: "2px",
-          gridRow: ["2/3", "2/3", "unset"],
-          justifySelf: ["flex-start", "flex-start", , "unset"],
+          gridRow: ["2/3", "unset"],
+          justifySelf: ["flex-start", "unset"],
         }}
       />
       <Stack
         direction="column"
         sx={{
-          fontSize: ["14px", "20px"],
-          lineHeight: ["20px", "24px"],
+          fontSize: ["16px", "16px", "20px"],
+          lineHeight: ["20px", "24px", "24px"],
           fontWeight: 500,
-          whiteSpace: "nowrap",
+          whiteSpace: ["pre-wrap", "nowrap"],
         }}
       >
         <p>{content.date}</p>
@@ -66,29 +67,29 @@ const HackathonItem = (props) => {
         sx={{
           position: "relative",
           alignSelf: "flex-end",
-          justifySelf: ["flex-end", "flex-end", "unset"],
-          gridColumn: ["2/3", "2/3", "unset"],
-          gridRow: ["2/4", "2/4", "unset"],
+          justifySelf: ["flex-end", "unset"],
+          gridColumn: ["2/3", "unset"],
+          gridRow: ["2/4", "unset"],
 
-          top: [0, 0, "30px"],
+          bottom: ["8px", "-22px", "-30px"],
         }}
       >
         <Image
           src={content.image}
-          width={118}
-          height={118}
+          width={130}
+          height={130}
           alt={content.name}
           style={{
-            position: isPortrait ? "relative" : "absolute",
-            width: isPortrait ? "auto" : "118px",
-            height: isPortrait ? "94px" : "auto",
-            bottom: isPortrait ? "unset" : 0,
+            position: isMobile ? "relative" : "absolute",
+            width: isTablet ? "97px" : isMobile ? "auto" : "130px",
+            height: isTablet ? "71px" : isMobile ? "80px" : "auto",
+            bottom: isMobile ? "unset" : 0,
           }}
         ></Image>
       </Stack>
       <Button
         sx={{
-          width: ["100% !important", "113px !important"],
+          width: ["100% !important", "100px !important", "113px !important"],
           gridColumn: ["1/3", "unset"],
         }}
         href={content.url}

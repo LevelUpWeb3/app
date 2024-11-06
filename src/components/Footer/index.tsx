@@ -15,14 +15,14 @@ export default function Footer() {
     >
       <Container>
         <Stack
-          direction={["column", "row-reverse"]}
+          direction={["column", "column", "row-reverse"]}
           justifyContent="space-between"
         >
           <Stack
             gap={["35px", "60px"]}
             direction="row"
             alignItems="center"
-            className="mb-[20px] sm:mb-0"
+            className="mb-[20px] md:mb-0"
           >
             <Link href="https://x.com/levelupweb3" target="_blank">
               <XLogoIcon></XLogoIcon>

@@ -60,10 +60,15 @@ const ChallengeList = (props) => {
   };
 
   return (
-    <Box sx={{ flex: 1 }}>
+    <>
       <Stack
         direction="row"
-        sx={{ position: ["static", "sticky"], top: stickyTop }}
+        sx={{
+          position: ["static", "sticky"],
+          top: stickyTop,
+          width: "100%",
+          justifyContent: ["flex-end", "flex-end", "flex-start"],
+        }}
         spacing="0.8rem"
       >
         <PlainSelect
@@ -79,27 +84,28 @@ const ChallengeList = (props) => {
           onChange={handleChangeLevel}
         ></PlainSelect>
       </Stack>
-      {filteredData?.length ? (
-        <Box
-          sx={{
-            mt: ["20px", "46px"],
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: [
-              "1fr",
-              "repeat(auto-fill, minmax(282px, 1fr))",
-            ],
-            gap: ["15px", "20px"],
-          }}
-        >
-          {filteredData.map((item) => (
-            <Card content={item} key={item.name}></Card>
-          ))}
-        </Box>
-      ) : (
-        <NoData title="No results" description="reselect"></NoData>
-      )}
-    </Box>
+      <Box sx={{ gridColumn: ["1/2", "1/3", "2/3"] }}>
+        {filteredData?.length ? (
+          <Box
+            sx={{
+              width: "100%",
+              display: "grid",
+              gridTemplateColumns: [
+                "1fr",
+                "repeat(auto-fill, minmax(282px, 1fr))",
+              ],
+              gap: ["15px", "15px", "20px"],
+            }}
+          >
+            {filteredData.map((item) => (
+              <Card content={item} key={item.name}></Card>
+            ))}
+          </Box>
+        ) : (
+          <NoData sx={{ mt: ["20px", "56px"] }}></NoData>
+        )}
+      </Box>
+    </>
   );
 };
 export default ChallengeList;

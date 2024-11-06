@@ -13,7 +13,7 @@ const LessonList = (props) => {
         flex: 1,
         display: "grid",
         gridTemplateColumns: ["1fr", "repeat(auto-fill, minmax(30rem, 1fr))"],
-        gap: ["15px", "20px"],
+        gap: ["15px", "15px", "20px"],
       }}
     >
       {data?.map((item, index) => <LessonCard content={item} key={index} />)}

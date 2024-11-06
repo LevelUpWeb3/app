@@ -1,33 +1,42 @@
 import { Stack, Typography } from "@mui/material";
+import NoDataSvg from "@/assets/svgs/common/no-data.svg";
 
 const NoData = (props) => {
-  const { title, description, ...restProps } = props;
+  const {
+    title = "Oops, nothing here yet!",
+    description = "Try adjusting your filters to find what you’re looking for.",
+    sx,
+    ...restProps
+  } = props;
 
   return (
     <Stack
       direction="column"
       alignItems="center"
       justifyContent="center"
-      spacing={["0.4rem", "0.8rem"]}
-      sx={{ py: ["6rem", "12rem"] }}
+      sx={{
+        p: ["20px", "30px 40px"],
+        backgroundColor: "background.default",
+        borderRadius: "25px",
+        ...sx,
+      }}
       {...restProps}
     >
+      <NoDataSvg className="h-auto w-[40px] sm:w-[56px]"></NoDataSvg>
       <Typography
         sx={{
-          fontSize: "1.6rem",
-          fontWeight: 600,
-          lineHeight: "2.4rem",
-          color: "text.primary",
+          fontSize: ["16px", "20px"],
+          fontWeight: 500,
+          mt: ["16px", "20px"],
         }}
       >
         {title}
       </Typography>
       <Typography
         sx={{
-          fontSize: "1.6rem",
-          lineHeight: "2.4rem",
-          color: "text.primary",
+          fontSize: ["14px", "16px"],
           textAlign: "center",
+          mt: ["8px", "10px"],
         }}
       >
         {description}

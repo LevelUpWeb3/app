@@ -10,6 +10,7 @@ export const DEFAULT_METADATA = {
   name: "",
   description: "Native zkEVM Layer 2 for Ethereum",
   ogImg: "/images/level-up-preview.png",
+  twitterImg: "/images/level-up-preview.png",
 };
 
 const routes: PageMetadata[] = [

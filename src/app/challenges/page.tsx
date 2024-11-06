@@ -1,4 +1,4 @@
-import { Container, Stack, Typography } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 import { headers } from "next/headers";
 import { PAGE_MIN_HEIGHT } from "@/constants";
 
@@ -15,21 +15,30 @@ const ChallengesPage = async () => {
   return (
     <Container
       sx={{
-        py: ["6rem", "8.4rem"],
+        py: ["6rem", "6rem", "8.4rem"],
         minHeight: PAGE_MIN_HEIGHT,
       }}
     >
-      <Stack direction={["column", "row"]} gap={["20px", "100px"]}>
+      <Box
+        // direction={["column", "column", "row"]}
+        // gap={["20px", "36px", "100px"]}
+        sx={{
+          display: "grid",
+          gridTemplateColumns: ["1fr", "min-content 1fr"],
+          columnGap: [0, 0, "114px"],
+          rowGap: ["20px", "36px", "46px"],
+        }}
+      >
         <Typography
           sx={{
-            fontSize: ["3.6rem", "4.8rem"],
+            fontSize: ["3.6rem", "3.6rem", "4.8rem"],
             width: "min-content",
           }}
         >
           Challenges
         </Typography>
         <List data={data} />
-      </Stack>
+      </Box>
     </Container>
   );
 };

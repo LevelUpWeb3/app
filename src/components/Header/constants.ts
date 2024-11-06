@@ -14,11 +14,11 @@ const navigations = [
     key: "challenges",
     href: "/challenges",
   },
-  {
-    label: "Podcast",
-    key: "podcast",
-    href: "/podcast",
-  },
+  // {
+  //   label: "Podcast",
+  //   key: "podcast",
+  //   href: "/podcast",
+  // },
   {
     label: "Events",
     key: "events",
