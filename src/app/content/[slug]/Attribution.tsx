@@ -15,7 +15,7 @@ const Attribution = (props) => {
       sx={{
         display: "grid",
         gridTemplateColumns: "min-content 1fr",
-        width: ["100%", "50%"],
+        width: ["100%", "100%", "50%"],
         gap: "14px",
       }}
     >

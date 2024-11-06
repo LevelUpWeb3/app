@@ -43,20 +43,25 @@ const MobileHeader = () => {
       }}
       component="nav"
     >
-      {navigations.map((item) => (
+      {navigations.map((item, index) => (
         <ListItem
           key={item.key}
           sx={{
             height: "92px",
+            borderTop: !index ? "1.5px solid #101010" : "unset",
             borderBottom: "1.5px solid #101010",
-            p: "8px 20px",
+            p: ["8px 20px", "8px 40px"],
             "&.active": { backgroundColor: "#fff" },
           }}
           className={pathname.includes(item.key) ? "active" : ""}
           onClick={() => toggleDrawer(false)}
         >
           <Link href={item.href} className="flex w-full justify-between">
-            <Typography sx={{ fontSize: "32px" }}>{item.label}</Typography>
+            <Typography
+              sx={{ fontSize: "32px", transform: "translateY(0.125em)" }}
+            >
+              {item.label}
+            </Typography>
             <SvgIcon
               sx={{ fontSize: "18px", height: "auto" }}
               component={RightArrow}
@@ -78,10 +83,6 @@ const MobileHeader = () => {
           gap="25px"
           height="64px"
           px={["20px", "40px"]}
-          sx={{
-            borderTop: isHome ? "none" : open ? "1.5px solid #101010" : "unset",
-            borderBottom: open ? "1.5px solid #101010" : "unset",
-          }}
         >
           <Link href="/">
             <Logo light={dark} />
@@ -108,7 +109,7 @@ const MobileHeader = () => {
                 direction="row"
                 alignItems="center"
                 justifyContent="flex-end"
-                sx={{ pr: "20px", height: "92px" }}
+                sx={{ pr: ["20px", "40px"], height: "92px" }}
               >
                 <Link href="https://x.com/levelupweb3" target="_blank">
                   <XLogoIcon className="h-auto w-[20px]"></XLogoIcon>

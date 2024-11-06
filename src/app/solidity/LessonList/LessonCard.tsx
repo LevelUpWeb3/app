@@ -14,22 +14,28 @@ const SolidityCardList = ({ content }) => {
   return (
     <Link href={`/solidity/${content.id}`}>
       <Box
-        sx={{
-          borderRadius: "2rem",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          cursor: "pointer",
-          border: "1.5px solid #101010",
-          overflow: "hidden",
-          backgroundColor: "background.default",
-          ["& *"]: {
-            cursor: "pointer !important",
+        sx={[
+          {
+            borderRadius: "2rem",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            border: "1.5px solid #101010",
+            overflow: "hidden",
+            backgroundColor: "background.default",
+            "& *": {
+              cursor: "pointer !important",
+            },
           },
-          "&:hover": {
-            backgroundColor: "#F4F4F4",
-          },
-        }}
+          (theme) => ({
+            [theme.breakpoints.up("sm")]: {
+              "&:hover": {
+                backgroundColor: "#F4F4F4",
+              },
+            },
+          }),
+        ]}
         onClick={handleClick}
       >
         <Typography

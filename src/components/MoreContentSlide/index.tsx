@@ -41,12 +41,22 @@ const MoreContentSlide = async (props) => {
         gap: ["15px", "20px"],
         overflowX: "auto",
         pb: [0, "16px"],
+        "&::-webkit-scrollbar": {
+          height: "6px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#EAEAEA",
+          borderRadius: "6px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#EAEAEA",
+        },
       }}
     >
       {filteredData.slice(0, 5).map((item, index) => (
         <Card
           color="purple"
-          className="flex-1 sm:flex-[0_0_30%]"
+          className="flex-1 sm:flex-[0_0_60%] md:flex-[30%]"
           key={index}
           content={item}
         />

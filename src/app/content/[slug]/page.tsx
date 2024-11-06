@@ -22,10 +22,10 @@ export default async function ContentDetailsPage({
     <>
       <PageHeaderWrapper
         bgColor="rgba(164, 148, 255, 0.20)"
-        sx={{ pt: ["60px", "84px"], pb: ["30px", "60px"] }}
+        sx={{ pt: ["60px", "60px", "84px"], pb: ["30px", "40px", "60px"] }}
       >
         <Stack
-          direction={["column", "row"]}
+          direction={["column", "column", "row"]}
           gap="40px"
           justifyContent={["flex-start", "space-between"]}
         >

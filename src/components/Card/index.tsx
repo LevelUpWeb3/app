@@ -46,20 +46,30 @@ const PreviewCard = (props) => {
     >
       <Card
         variant="outlined"
-        sx={{
-          border: "1.5px solid #101010",
-          borderRadius: "25px",
-          p: "30px",
-          backgroundColor: CARD_COLOR_MAP[color].bgColor,
-          height: ["auto", "248px"],
-          display: "flex",
-          flexDirection: "column",
-
-          "&:hover": {
-            backgroundColor: CARD_COLOR_MAP[color].hoverBgColor,
+        sx={[
+          {
+            border: "1.5px solid #101010",
+            borderRadius: "25px",
+            p: "30px",
+            backgroundColor: CARD_COLOR_MAP[color].bgColor,
+            height: ["auto", "248px"],
+            display: "flex",
+            flexDirection: "column",
+            ...sx,
           },
-          ...sx,
-        }}
+          (theme) => ({
+            [theme.breakpoints.up("sm")]: {
+              "&:hover": {
+                backgroundColor: CARD_COLOR_MAP[color].hoverBgColor,
+              },
+            },
+            // [theme.breakpoints.down("sm")]: {
+            //   "&:active": {
+            //     backgroundColor: CARD_COLOR_MAP[color].hoverBgColor,
+            //   },
+            // },
+          }),
+        ]}
         onClick={handleClick}
       >
         <CardHeader

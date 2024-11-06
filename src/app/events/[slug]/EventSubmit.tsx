@@ -8,7 +8,14 @@ const HackathonSubmit = (props) => {
   const { hackathonId } = props;
 
   return (
-    <Box sx={{ pl: [0, "50%"], mt: "30px", mb: ["30px", "60px"] }}>
+    <Box
+      sx={{
+        pl: [0, "50%"],
+        mt: "30px",
+        mb: ["30px", "40px", "60px"],
+        textAlign: ["right", "right", "left"],
+      }}
+    >
       <Button
         color="primary"
         href={`/events/${hackathonId}/submit`}

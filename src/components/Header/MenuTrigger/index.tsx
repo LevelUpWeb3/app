@@ -2,7 +2,7 @@ import { IconButton } from "@mui/material";
 import { motion } from "framer-motion";
 
 const MenuTrigger = (props) => {
-  const { isOpen, ...restProps } = props;
+  const { isOpen, sx, ...restProps } = props;
 
   const variants = {
     open: {
@@ -13,7 +13,16 @@ const MenuTrigger = (props) => {
     },
   };
   return (
-    <IconButton {...restProps}>
+    <IconButton
+      sx={{
+        backgroundColor: "transparent !important",
+        "&:hover": {
+          backgroundColor: "transparent !important",
+        },
+        ...sx,
+      }}
+      {...restProps}
+    >
       <svg
         width="38"
         height="14"

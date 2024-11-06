@@ -33,6 +33,7 @@ const ChallengeDetail = (props) => {
                 borderRadius: "6px",
                 p: "5px 10px",
                 height: "28px",
+                transform: "translateY(0.125em)",
                 [`.MuiChip-label`]: {
                   fontSize: ["14px"],
                   fontWeight: 500,
@@ -54,7 +55,7 @@ const ChallengeDetail = (props) => {
       <Stack
         direction={["column", "row"]}
         sx={{ mt: "30px" }}
-        gap={["40px", 0]}
+        gap={["56px", 0]}
         justifyContent="space-between"
       >
         <Button href={challengeData.website}>Go to Github</Button>

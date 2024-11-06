@@ -43,11 +43,11 @@ const Navigation = (props: NavigationProps) => {
     <NavigationWrapper>
       {pagination.prev ? (
         <Link
-          className="flex items-center gap-[15px] text-[16px] text-[#101010] hover:text-[#2C2C2C] sm:gap-[20px] sm:text-[32px]"
+          className="flex items-center gap-[15px] text-[16px] text-[#101010] hover:text-[#2C2C2C] sm:gap-[20px] md:text-[32px]"
           href={`${baseURL}/${pagination.prev.id}`}
         >
-          <LeftArrowSvg className="hidden sm:inline-flex"></LeftArrowSvg>
-          <LeftArrowMobileSvg className="sm:hidden"></LeftArrowMobileSvg>
+          <LeftArrowSvg className="hidden md:inline-flex"></LeftArrowSvg>
+          <LeftArrowMobileSvg className="md:hidden"></LeftArrowMobileSvg>
           <span>
             Back to:{<br className="sm:hidden"></br>} {pagination.prev.name}
           </span>
@@ -57,18 +57,18 @@ const Navigation = (props: NavigationProps) => {
       )}
       {pagination.next ? (
         <Link
-          className="flex items-center gap-[15px] text-[16px] text-[#101010] hover:text-[#2C2C2C] sm:gap-[20px] sm:text-[32px]"
+          className="flex items-center gap-[15px] text-[16px] text-[#101010] hover:text-[#2C2C2C] sm:gap-[20px] md:text-[32px]"
           href={`${baseURL}/${pagination.next.id}`}
         >
           <span>
             Next {label}:{<br className="sm:hidden"></br>}{" "}
             {pagination.next.name}
           </span>
-          <RightArrowSvg className="hidden sm:inline-flex"></RightArrowSvg>
-          <RightArrowMobileSvg className="sm:hidden"></RightArrowMobileSvg>
+          <RightArrowSvg className="hidden md:inline-flex"></RightArrowSvg>
+          <RightArrowMobileSvg className="md:hidden"></RightArrowMobileSvg>
         </Link>
       ) : (
-        <span className="text-[32px]">End of {label}s</span>
+        <span className="text-[16px] md:text-[32px]">End of {label}s</span>
       )}
     </NavigationWrapper>
   );

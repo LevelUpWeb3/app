@@ -24,11 +24,14 @@ export default async function ChallengeDetailPage({
     <>
       <PageHeaderWrapper
         bgColor="rgba(255, 238, 218, 0.30)"
-        sx={{ pt: ["60px", "84px"], pb: ["30px", "60px"] }}
+        sx={{ pt: ["60px", "60px", "84px"], pb: ["30px", "40px", "60px"] }}
       >
         <Stack>
           <BackLink></BackLink>
-          <ChallengeHeader sx={{ mt: ["40px", "60px"] }} challengeData={data} />
+          <ChallengeHeader
+            sx={{ mt: ["56px", "56px", "60px"] }}
+            challengeData={data}
+          />
         </Stack>
       </PageHeaderWrapper>
 

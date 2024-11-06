@@ -13,7 +13,10 @@ const ContentViewer = (props) => {
   const { data } = props;
 
   return (
-    <CrossDetection dataSource={data} className="py-[30px] sm:py-[60px]">
+    <CrossDetection
+      dataSource={data}
+      className="py-[30px] sm:py-[40px] md:py-[60px]"
+    >
       <MarkdownViewer
         data={data}
         components={{

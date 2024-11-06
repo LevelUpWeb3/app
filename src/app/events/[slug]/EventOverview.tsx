@@ -14,7 +14,7 @@ const EventOverview = (props) => {
   return (
     <Box
       sx={{
-        py: ["30px", "60px"],
+        py: ["30px", "40px", "60px"],
         backgroundColor: "text.primary",
       }}
     >
@@ -22,16 +22,23 @@ const EventOverview = (props) => {
         sx={{
           background: [
             `url(${imageURL}) top center / auto 172px no-repeat`,
+            `url(${imageURL}) top center / auto 172px no-repeat`,
             `url(${imageURL}) 10% center / auto 100% no-repeat`,
           ],
-          pt: ["202px", 0],
+          pt: ["202px", "202px", 0],
         }}
       >
         <Box className="markdown-level-up text-white">
           <h1 className="!pt-0 pl-[50%]">{details.title}</h1>
           <MarkdownViewer data={details} theme="dark" />
         </Box>
-        <Box sx={{ pl: [0, "50%"], mt: "30px" }}>
+        <Box
+          sx={{
+            pl: [0, "50%"],
+            mt: "30px",
+            textAlign: ["right", "right", "left"],
+          }}
+        >
           <Button
             href={`/events/${hackathonId}/submit`}
             sx={{ width: ["100% !important", "fit-content !important"] }}

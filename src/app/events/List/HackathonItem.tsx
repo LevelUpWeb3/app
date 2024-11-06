@@ -6,7 +6,7 @@ import Image from "next/image";
 import { sendGAEvent } from "@next/third-parties/google";
 
 const HackathonItem = (props) => {
-  const { isMobile, isTablet, isPortrait } = useCheckViewport();
+  const { isMobile, isTablet } = useCheckViewport();
   const { content } = props;
   return (
     <Box
@@ -15,14 +15,14 @@ const HackathonItem = (props) => {
         display: "grid",
         gridTemplateColumns: [
           "1fr max-content",
-          "220px min-content 200px 1fr max-content",
+          "1fr min-content 190px 97px max-content",
           "280px min-content 240px 1fr max-content",
         ],
         alignContent: ["space-between", "center"],
         alignItems: ["space-between", "center"],
         p: ["30px 28px", "22px 24px", "30px 38px"],
         height: ["auto", "auto", "118px"],
-        columnGap: ["10px", "10px", "30px"],
+        columnGap: ["10px", "14px", "30px"],
         rowGap: ["10px", 0],
         backgroundColor: "rgba(232, 246, 40, 0.50)",
         borderRadius: "25px",
@@ -82,7 +82,7 @@ const HackathonItem = (props) => {
           style={{
             position: isMobile ? "relative" : "absolute",
             width: isTablet ? "97px" : isMobile ? "auto" : "130px",
-            height: isTablet ? "71px" : isMobile ? "80px" : "auto",
+            height: isTablet ? "70px" : isMobile ? "80px" : "auto",
             bottom: isMobile ? "unset" : 0,
           }}
         ></Image>

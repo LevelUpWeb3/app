@@ -25,11 +25,11 @@ const navigations = [
     href: "/events",
   },
   // TODO: Update route as needed if planning to embed inside Level Up and to revive Grants
-  {
-    label: "Grants",
-    key: "grants",
-    href: "https://tally.so/r/mYdQP5",
-  },
+  // {
+  //   label: "Grants",
+  //   key: "grants",
+  //   href: "https://tally.so/r/mYdQP5",
+  // },
 ];
 
 export { navigations };
