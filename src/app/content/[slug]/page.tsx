@@ -16,12 +16,7 @@ import BackSvg from "@/assets/svgs/common/back.svg";
 
 import { SvgIcon, Skeleton } from "@mui/material";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
+import { MDXRemote } from "next-mdx-remote";
 
 export default function ContentDetailsPage() {
   const [data, setData] = useState<any>([]);
