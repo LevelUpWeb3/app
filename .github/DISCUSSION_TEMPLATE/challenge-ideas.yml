@@ -1,3 +1,4 @@
+name: "Challenge Ideas"
 - type: textarea
   attributes:
     label: 🌟 Title of Challenge(s)

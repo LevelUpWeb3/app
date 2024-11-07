@@ -1,3 +1,4 @@
+name: "Content Ideas"
 - type: textarea
   attributes:
     label: 🌟 Content Idea
