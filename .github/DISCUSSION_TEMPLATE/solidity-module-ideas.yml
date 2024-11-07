@@ -1,12 +1,9 @@
-name: "Solidity Module Ideas"
+title: "🌟 List title of Solidity module idea here"
 body:
-  - type: textarea
+  - type: markdown
     attributes:
-      label: 🌟 Title of Module
-      description: List the name of this Solidity module
-      placeholder: "Example: Data Types"
-    validations:
-      required: true
+      value: |
+        <i>Example of Solidity module title: Data Types</i>
   - type: textarea
     attributes:
       label: 🧠 Module Overview
