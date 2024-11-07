@@ -1,13 +1,15 @@
-- type: textarea
-  attributes:
-    label: 🌟 Content Idea
-    description: List the title of your idea
-    placeholder: "Example: Introduce new category, Combine content ..."
-  validations:
-    required: true
-- type: textarea
-  attributes:
-    label: 🧠 Description
-    description: Describe your content idea. Include as much details as needed to convey your point. You may include resources, references or examples.
-  validations:
-    required: true
+name: "Content Ideas"
+body:
+  - type: textarea
+    attributes:
+      label: 🌟 Content Idea
+      description: List the title of your idea
+      placeholder: "Example: Introduce new category, Combine content ..."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🧠 Description
+      description: Describe your content idea. Include as much details as needed to convey your point. You may include resources, references or examples.
+    validations:
+      required: true
