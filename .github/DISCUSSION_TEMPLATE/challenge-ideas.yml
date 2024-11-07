@@ -1,12 +1,9 @@
-name: "Challenge Ideas"
+title: "🌟 List title of challenge(s) idea here"
 body:
-  - type: textarea
+  - type: markdown
     attributes:
-      label: 🌟 Title of Challenge(s)
-      description: List the name of the challenge(s)
-      placeholder: "Example: Uniswap Lending Challenge, NFT Marketplace Challenge, ..."
-    validations:
-      required: true
+      value: |
+        <i>Example of title: Uniswap Lending Challenge, NFT Marketplace Challenge, ...</i>
   - type: textarea
     attributes:
       label: 🧠 Challenge(s) Overview
@@ -24,6 +21,8 @@ body:
       label: 💭 Prerequisite
       description: High-level outline of required knowledge or skills needed before attempting this challenge. Do they need to complete previous challenge(s)?
   - type: dropdown
+    validations:
+      required: true
     attributes:
       label: 📍 Category
       description: Select the category which best fits this challenge
@@ -32,20 +31,16 @@ body:
         - DeFi
         - NFT
         - Others
-      default: 0
+  - type: checkboxes
     validations:
       required: true
-  - type: checkboxes
     attributes:
       label: 🔥 Difficulty Level(s)
       description: Select the difficulty level(s) of the challenge. You do not need to create three levels when building challenges.
       options:
-        - 1
-        - 2
-        - 3
-      multiple: true
-      validations:
-        required: true
+        - label: Level 1
+        - label: Level 2
+        - label: Level 3
   - type: textarea
     attributes:
       label: 🌐 Resources

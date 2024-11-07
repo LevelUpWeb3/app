@@ -1,12 +1,9 @@
-name: "Content Ideas"
+title: "🌟 List title of content idea here"
 body:
-  - type: textarea
+  - type: markdown
     attributes:
-      label: 🌟 Content Idea
-      description: List the title of your idea
-      placeholder: "Example: Introduce new category, Combine content ..."
-    validations:
-      required: true
+      value: |
+        <i>Example of title: Introduce new category, Combine content ...</i>
   - type: textarea
     attributes:
       label: 🧠 Description
