@@ -17,12 +17,7 @@ import { SvgIcon, Box, Typography, Skeleton } from "@mui/material";
 
 import { styled } from "@mui/system";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
+import { MDXRemote } from "next-mdx-remote";
 
 const ChallengeInfo = styled(Box)({
   display: "grid",
