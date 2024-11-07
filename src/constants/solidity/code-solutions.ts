@@ -95,7 +95,7 @@ export const CODE_SOLUTIONS: CodeTemplatesType = {
     exercise2:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'set', set the value at a given address in 'myMap' to 100\nfunction set(address _addr) public {\nmyMap[_addr] = 100;\n}\n}",
     exercise3:
-      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'get', return the value at a given address in 'myMap'\nfunction get(address _addr) public view returns (uint256) {\nreturn myMap[_addr];\n}\n}",
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'get', return the uint256 value at a given address in 'myMap'\nfunction get(address _addr) public view returns (uint256) {\nreturn myMap[_addr];\n}\n}",
     exercise4:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract Mapping {\n\n// Inside a function named 'remove', reset the value at a given address in 'myMap' to its default value\nfunction remove(address _addr) public {\ndelete myMap[_addr];\n}\n}",
     exercise5:
