@@ -132,10 +132,7 @@
 .markdown-level-up strong {
   font-weight: bolder;
 }
-.markdown-level-up h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
+
 .markdown-level-up img {
   border-style: none;
   background-color: transparent;
@@ -331,7 +328,7 @@
   outline: 0;
 }
 
-.markdown-level-up h1,
+/* .markdown-level-up h1, */
 .markdown-level-up h3,
 .markdown-level-up blockquote,
 .markdown-level-up dl,
@@ -419,7 +416,7 @@
 }
 .markdown-level-up h1 {
   /* padding-bottom: 0.3em; */
-  font-size: 2em;
+  font-size: 36px;
   /* border-bottom: 1px solid #eaecef; */
 }
 
@@ -596,7 +593,6 @@
 
 /* custom styles */
 .markdown-level-up > *:not(code, img, h1, h2, ul, ol) {
-  /* width: 50%; */
   padding-left: 50%;
 }
 
@@ -665,6 +661,11 @@
     margin-left: -20px;
     padding-left: 20px;
   }
+
+  /* .markdown-level-up.event-viewer h2 {
+    border-top: none;
+  } */
+
   .markdown-level-up > *:not(code, img, h2, ul, ol) {
     padding-left: 0;
   }
@@ -695,6 +696,30 @@
   }
 }
 
-.markdown-level-up.challenge :first-child:is(h1) {
-  display: none;
+.markdown-level-up.event-viewer pre {
+  background-color: #fafafa;
+  padding: 30px;
+}
+
+@media screen and (min-width: 900px) {
+  .markdown-level-up.event-viewer pre {
+    margin-left: 50%;
+    width: 50%;
+    margin-bottom: 0;
+  }
+
+  .markdown-level-up.event-viewer h1 + p {
+    margin-top: -42px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .markdown-level-up.event-viewer h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .markdown-level-up.event-viewer pre {
+    padding: 20px;
+  }
 }

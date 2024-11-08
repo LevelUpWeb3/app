@@ -13,8 +13,8 @@ const HackathonItem = (props) => {
         display: "grid",
         gridTemplateColumns: [
           "1fr max-content",
-          "1fr min-content 190px 97px max-content",
-          "280px min-content 240px 1fr max-content",
+          "1fr min-content 190px 97px 120px",
+          "280px min-content 240px 1fr 130px",
         ],
         alignContent: ["space-between", "center"],
         alignItems: ["space-between", "center"],
@@ -82,7 +82,9 @@ const HackathonItem = (props) => {
       </Stack>
       <Button
         sx={{
-          width: ["100% !important", "100px !important", "113px !important"],
+          maxWidth: ["100% !important", "120px !important", "130px !important"],
+          width: ["100% !important", "fit-content !important"],
+          justifySelf: "flex-end",
           gridColumn: ["1/3", "unset"],
           whiteSpace: "nowrap",
         }}

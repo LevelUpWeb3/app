@@ -7,7 +7,7 @@ import { sendGAEvent } from "@next/third-parties/google";
 import MarkdownViewer from "@/components/MarkdownViewer";
 
 const EventOverview = (props) => {
-  const { details, hackathonId } = props;
+  const { details, hackathonId, buttonText } = props;
 
   const imageURL = `/images/events/${hackathonId}.svg`;
 
@@ -23,7 +23,7 @@ const EventOverview = (props) => {
           background: [
             `url(${imageURL}) top center / auto 172px no-repeat`,
             `url(${imageURL}) top center / auto 172px no-repeat`,
-            `url(${imageURL}) 10% center / auto 100% no-repeat`,
+            `url(${imageURL}) 20% center / auto 100% no-repeat`,
           ],
           pt: ["202px", "202px", 0],
         }}
@@ -48,7 +48,7 @@ const EventOverview = (props) => {
               })
             }
           >
-            Register Now
+            {buttonText}
           </Button>
         </Box>
       </Container>

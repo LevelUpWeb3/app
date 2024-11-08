@@ -11,7 +11,7 @@ import StarSvg from "@/assets/svgs/events/star.svg";
 import { generateShareTwitterURL } from "@/utils";
 
 const HackathonHeader = (props) => {
-  const { name, hackathonId, date, location } = props;
+  const { name, hackathonId, buttonText, date, location } = props;
 
   const registrationLink = `/events/${hackathonId}/register`;
 

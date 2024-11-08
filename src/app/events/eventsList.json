@@ -1,16 +1,16 @@
 [
   {
     "name": "Scroll Articles Bounty Contest: Write and Earn!",
-    "date": "Nov xx-xx, 2024",
+    "date": "Oct 28 - Sept 13, 2024",
     "location": "Global Online Event",
-    "url": "",
-    "image": "/images/events/scroll-article.svg",
-    "buttonText": "Join Now",
+    "url": "../events/writers-competition-2024q4",
+    "image": "/images/events/writers-competition-2024q4.svg",
+    "buttonText": "Submit Article",
     "buttonDisabled": "",
-    "status": ["All time", "Upcoming"],
+    "status": ["All time", "Live"],
     "region": ["All regions", "Virtual"],
-    "registrationLink": "",
-    "submissionLink": ""
+    "registrationLink": "https://tally.so/r/mYYVo0",
+    "submissionLink": "https://tally.so/r/3NYdWQ"
   },
   {
     "name": "The Level Up Hackathon: ETH Global Bangkok",

@@ -9,6 +9,7 @@ import EventOverview from "./EventOverview";
 import EventSection from "./EventSection";
 import EventSubmit from "./EventSubmit";
 import EventNavigation from "./EventNavigation";
+import EventViewer from "./EventViewer";
 
 const HackathonDetailPage = async ({
   params,
@@ -16,12 +17,9 @@ const HackathonDetailPage = async ({
   params: { slug: string };
 }) => {
   const { origin } = new URL(headers().get("x-url")!);
-  const data = await fetch(`${origin}/data/events/markdownData.json`).then(
-    (res) => res.json(),
-  );
-  const sortedDetails = data
-    .filter((item) => item.id.startsWith(params.slug))
-    .sort((a, b) => a.index - b.index);
+  const data = await fetch(
+    `${origin}/data/events/${params.slug}/${params.slug}_overview.json`,
+  ).then((res) => res.json());
 
   const eventData = Data.find((item) => item.url.includes(params.slug));
 
@@ -42,18 +40,9 @@ const HackathonDetailPage = async ({
           </Stack>
         </Container>
       </Box>
-      <EventOverview
-        details={sortedDetails[0] ?? {}}
-        hackathonId={params.slug}
-      ></EventOverview>
-      <Container>
-        {sortedDetails.slice(1).map((detail) => {
-          return (
-            <EventSection key={detail.id} details={detail ?? {}}></EventSection>
-          );
-        })}
-        <EventSubmit hackathonId={params.slug}></EventSubmit>
-      </Container>
+
+      <EventViewer data={data}></EventViewer>
+      <EventSubmit buttonText={eventData?.buttonText}></EventSubmit>
       <EventNavigation></EventNavigation>
     </>
   );
