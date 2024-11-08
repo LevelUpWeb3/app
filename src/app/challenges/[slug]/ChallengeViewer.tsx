@@ -14,7 +14,7 @@ const ChallengeViewer = (props) => {
   return (
     <CrossDetection
       dataSource={data}
-      className="challenge py-[30px] sm:py-[40px] md:py-[60px]"
+      className="challenge-viewer py-[30px] sm:py-[40px] md:py-[60px]"
     >
       <MarkdownViewer
         data={data}

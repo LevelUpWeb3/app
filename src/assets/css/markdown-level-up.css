@@ -635,6 +635,10 @@
   padding: 25px;
 }
 
+.markdown-level-up.challenge-viewer :first-child:is(h1) {
+  display: none;
+}
+
 @media screen and (min-width: 900px) {
   .markdown-level-up h2 {
     position: relative;
@@ -661,10 +665,6 @@
     margin-left: -20px;
     padding-left: 20px;
   }
-
-  /* .markdown-level-up.event-viewer h2 {
-    border-top: none;
-  } */
 
   .markdown-level-up > *:not(code, img, h2, ul, ol) {
     padding-left: 0;
