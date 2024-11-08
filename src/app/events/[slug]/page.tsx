@@ -13,12 +13,7 @@ import { Box } from "@mui/material";
 import useCheckViewport from "@/hooks/useCheckViewport";
 import Data from "../eventsList.json";
 
-const MDXRemote = dynamic(
-  () => import("next-mdx-remote").then((mod) => mod.MDXRemote),
-  {
-    ssr: false,
-  },
-);
+import { MDXRemote } from "next-mdx-remote";
 
 const EventsDetailsPage = () => {
   const [eventsData, setEventsData] = useState<any>([]);
