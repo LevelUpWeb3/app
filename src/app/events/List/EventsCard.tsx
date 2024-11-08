@@ -104,7 +104,7 @@ const EventsCard = ({ content }) => {
           onClick={() =>
             sendGAEvent("event", "hackathonClicked", { value: content.name })
           }
-          disabled={content.buttonDisabled}
+          disabled={content.buttonDisabled == true}
         >
           {content.buttonText}
         </Button>

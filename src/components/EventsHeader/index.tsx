@@ -13,7 +13,7 @@ import BackSvg from "@/assets/svgs/common/back.svg";
 
 const EventsHeader = (props) => {
   const { isMobile } = useCheckViewport();
-  const { title, url, registrationLink, eventsDate, location, imgClass } =
+  const { title, buttonText, url, registrationLink, eventsDate, location, imgClass } =
     useMemo(() => props, [props]);
 
   console.log("Props: ", props);
@@ -62,7 +62,7 @@ const EventsHeader = (props) => {
                 })
               }
             >
-              Register now
+              { buttonText }
             </Button>
           </div>
           <img

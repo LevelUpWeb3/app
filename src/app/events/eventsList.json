@@ -1,5 +1,18 @@
 [
   {
+    "name": "Ethereum, ZK and Scroll writers competition",
+    "date": "Oct 28 - Sept 13, 2024",
+    "location": "Global Online Event",
+    "url": "../events/writers-competition-2024q4",
+    "image": "/images/writers-competition-2024q4.svg",
+    "buttonText": "Submit your article",
+    "buttonDisabled": "false",
+    "status": ["All time", "Live"],
+    "region": ["All regions", "Virtual"],
+    "registrationLink": "https://tally.so/r/mYYVo0",
+    "submissionLink": "https://tally.so/r/3NYdWQ"
+  },
+  {
     "name": "Ethcon Korea 2024 ",
     "date": "Oct 18-20, 2024",
     "location": "Seoul, South Korea",
