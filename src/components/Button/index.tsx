@@ -87,7 +87,7 @@ const Button = (props) => {
       <span className="translate-y-[0.125em]">{children}</span>
       {loading && (
         <CircularProgress
-          sx={{ color: "inherit" }}
+          sx={{ color: "inherit", ml: "8px" }}
           size={isMobile ? 18 : 24}
           thickness={4}
         ></CircularProgress>

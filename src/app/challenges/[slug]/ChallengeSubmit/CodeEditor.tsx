@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Editor, { OnMount, type Monaco } from "@monaco-editor/react";
 import { CircularProgress, Box, Typography } from "@mui/material";
 import EditorTooltip from "@/components/EditorTooltip";
@@ -20,6 +20,7 @@ const CodeEditor = (props) => {
   const { sx } = props;
   const { slug } = useParams();
   const [code, setCode] = useState<string>();
+  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<TestStatus>(TestStatus.UNDEFIEND);
 
   const handleCloseTip = () => {
@@ -34,16 +35,21 @@ const CodeEditor = (props) => {
   };
 
   const handleTestCode = async () => {
+    setLoading(true);
     const testsUrl = `http://ec2-18-237-163-150.us-west-2.compute.amazonaws.com:3000/run-tests/${slug}`;
     const res = await fetch(testsUrl, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
       body: code,
     });
+    setLoading(false);
     if (res.ok) {
       setStatus(TestStatus.SUCCESS);
     } else {
       setStatus(TestStatus.ERROR);
+      setTimeout(() => {
+        setStatus(TestStatus.UNDEFIEND);
+      }, 6e3);
     }
   };
 
@@ -96,6 +102,7 @@ const CodeEditor = (props) => {
             <Button
               size="large"
               disabled={!code}
+              loading={loading}
               sx={{
                 position: "absolute",
                 bottom: ["30px", "40px", "60px"],
