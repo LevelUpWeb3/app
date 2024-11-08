@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import Button from "@/components/Button";
 
-const TESTS_SERVER = "ec2-18-237-163-150.us-west-2.compute.amazonaws.com:3000/run-tests/"
-
 const SubmissionPage = () => {
   const [formData, setFormData] = useState({
     contract: "",
@@ -34,13 +32,6 @@ const SubmissionPage = () => {
     })
     if (res.status == 200){
       setResult(await res.json())
-
-      if((await res.json()) == true){
-        setResult("Perfect! Great job :)")
-      } else {
-        setResult("This doesn't seem to pass all the tests, double check your code and try again!")
-      }
-      
     } else {
       setError("Tests failed/compilation error: Please run the provided Foundry tests locally from the Github repository to debug and try again!")
     }
