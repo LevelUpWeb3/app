@@ -3,8 +3,10 @@ import SuccessSvg from "@/assets/svgs/challenge/success.svg";
 import Button from "@/components/Button";
 import { Stack, Typography } from "@mui/material";
 import { sendGAEvent } from "@next/third-parties/google";
+import { useParams } from "next/navigation";
 
 const SuccessAlert = () => {
+  const { slug } = useParams();
   return (
     <Stack
       direction="column"
@@ -30,7 +32,7 @@ const SuccessAlert = () => {
         href="/challenges/submission"
         onClick={() =>
           sendGAEvent("event", "hackathonClicked", {
-            value: { slug: hackathonId },
+            value: { slug },
           })
         }
       >

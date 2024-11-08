@@ -26,6 +26,7 @@ const EditorTooltip = (props) => {
     children,
     offset = "14px",
     onClose,
+    maxWidth = "300px",
     ...restProps
   } = props;
 
@@ -48,10 +49,10 @@ const EditorTooltip = (props) => {
       title={
         <Stack direction="row" alignItems="center" spacing="8px">
           {withIcon && (
-            <>
-              {type === "error" && <ErrorSvg />}
-              {type === "success" && <SuccessSvg />}
-            </>
+            <span className="w-[max-content]">
+              {type === "error" && <ErrorSvg className="h-auto w-[14px]" />}
+              {type === "success" && <SuccessSvg className="h-auto w-[14px]" />}
+            </span>
           )}
           <span className={clsx(withIcon && "pt-[2px]")}>{title}</span>
           {withIcon && (
@@ -82,6 +83,7 @@ const EditorTooltip = (props) => {
               mt: "24px",
               fontSize: "13px",
               cursor: "default",
+              maxWidth,
             },
           },
         },

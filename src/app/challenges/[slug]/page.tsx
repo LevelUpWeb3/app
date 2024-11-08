@@ -9,6 +9,7 @@ import ChallengeViewer from "./ChallengeViewer";
 import ChallengeNavigation from "./ChallengeNavigation";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 // import MoreContent from "./MoreContent";
+import ChallengeSubmit from "./ChallengeSubmit";
 
 export default async function ChallengeDetailPage({
   params: { slug },
@@ -36,7 +37,10 @@ export default async function ChallengeDetailPage({
       </PageHeaderWrapper>
 
       <ChallengeViewer data={data}></ChallengeViewer>
-      <SubmitAction></SubmitAction>
+      <ChallengeSubmit
+        type={data.submitWithoutCode ? "normal" : "code"}
+      ></ChallengeSubmit>
+
       {/* <MoreContent /> */}
       <ChallengeNavigation challengeId={slug}></ChallengeNavigation>
     </>

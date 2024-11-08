@@ -42,7 +42,10 @@ const HackathonDetailPage = async ({
       </Box>
 
       <EventViewer data={data}></EventViewer>
-      <EventSubmit buttonText={eventData?.buttonText}></EventSubmit>
+      <EventSubmit
+        hackathonId={params.slug}
+        buttonText={eventData?.buttonText}
+      ></EventSubmit>
       <EventNavigation></EventNavigation>
     </>
   );
