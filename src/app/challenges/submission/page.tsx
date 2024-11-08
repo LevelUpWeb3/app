@@ -6,12 +6,11 @@ const TESTS_SERVER = "ec2-18-237-163-150.us-west-2.compute.amazonaws.com:3000/ru
 
 const SubmissionPage = () => {
   const [formData, setFormData] = useState({
-    user: "",
     contract: "",
     challenge: ""
   });
 
-  const [result , setResult] = useState("")
+  const [result , setResult] = useState(null)
   const [error, setError] = useState("")
 
   const handleInput = (e) => {
@@ -25,15 +24,17 @@ const SubmissionPage = () => {
     setError("")
   }
 
-  const submitCode = async (e) => {
+  const testCode = async (e) => {
     e.preventDefault()
-    const testsUrl = "http://ec2-18-237-163-150.us-west-2.compute.amazonaws.com:3000/run-tests/ERC20"
+    const testsUrl = `http://ec2-18-237-163-150.us-west-2.compute.amazonaws.com:3000/run-tests/${formData.challenge}`
     const res = await fetch(testsUrl, {
       method: "POST",
       headers: {'Content-Type': 'text/plain'},
       body: formData.contract
     })
     if (res.status == 200){
+      setResult(await res.json())
+
       if((await res.json()) == true){
         setResult("Perfect! Great job :)")
       } else {
@@ -41,46 +42,48 @@ const SubmissionPage = () => {
       }
       
     } else {
-      setError("Error running the tests, make sure your code can be compiled properly!")
+      setError("Tests failed/compilation error: Please run the provided Foundry tests locally from the Github repository to debug and try again!")
     }
   };
 
+  const submitCode = async (e) => {
+    e.preventDefault()
+    // display or navigate to Tally form
+  }
+
   return (
     <div>
-      {result == "" ? <form>
+      {result == null ? <form>
         <div>
           <label>Challenge</label>
           <select name="challenge">
             <option value="ERC20">ERC20</option>
+            <option value="SimpleLending">SimpleLending</option>
           </select>
         </div>
         <div>
-            <label>Name</label>
-            <input type="text" name="user" onChange={handleInput}/>
-          </div>
-
-          <div>
-            <label>Contract Code</label>
-            <textarea name="contract" onChange={handleInput}></textarea>
-          </div>
+          <label>Contract Code</label>
+          <textarea name="contract" onChange={handleInput}></textarea>
+        </div>
+        { error != "" && <text>{error}</text>}
         <Button
           variant="contained"
-          // sx={{
-          //   backgroundColor: "transparent",
-          //   color: "white",
-          //   "&:hover": {
-          //     backgroundColor: "white",
-          //     color: "orange",
-          //   },
-          // }}
-          onClick={submitCode}
+          onClick={testCode}
         >
-          Submit
+          Test your Code
         </Button>
       </form>
-      : <text>{result}</text>}
+      : <div>
+        {result ? 
+          <div>
+            <text>Test passed! Submit your challenge via the button below. </text> 
+            <Button variant="contained" onClick={submitCode}>Submit Challenge</Button>
+          </div>
+          :<text>This doesn't seem to pass all the tests, double check your code and try again!</text>
+        }
 
-     { error != "" && <text>{error}</text>}
+      </div>
+      }
     </div>
 
   );
