@@ -52,6 +52,7 @@ const List = (props) => {
         direction="row"
         sx={{
           position: ["static", "sticky"],
+          zIndex: 1,
           top: stickyTop,
           gridColumn: ["1/2", "2/3"],
           width: "100%",

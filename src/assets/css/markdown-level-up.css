@@ -646,7 +646,7 @@
     top: 50px;
     height: 40px;
     line-height: 40px;
-    width: calc(50% - 20px);
+    width: calc(50% - 100px);
   }
   .markdown-level-up h2 + * {
     border-top: 1.5px solid #101010;
@@ -671,6 +671,10 @@
   .markdown-level-up .markdown-code-block {
     width: 100%;
     margin-left: 0;
+  }
+
+  div:has(.markdown-code-block) + h2 {
+    margin-top: 35px !important;
   }
 
   .markdown-level-up .markdown-code-block .code-viewer {

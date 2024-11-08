@@ -65,6 +65,7 @@ const ChallengeList = (props) => {
         direction="row"
         sx={{
           position: ["static", "sticky"],
+          zIndex: 1,
           top: stickyTop,
           width: "100%",
           justifyContent: ["flex-end", "flex-end", "flex-start"],

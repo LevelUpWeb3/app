@@ -17,6 +17,7 @@ const CategorySelect = (props) => {
         flexWrap: "wrap",
 
         position: ["static", "sticky"],
+        zIndex: 1,
         top: trigger ? "20px" : LAYOUT_HEADER_HEIGHT,
       }}
     >

@@ -84,6 +84,7 @@ const HackathonItem = (props) => {
         sx={{
           width: ["100% !important", "100px !important", "113px !important"],
           gridColumn: ["1/3", "unset"],
+          whiteSpace: "nowrap",
         }}
         href={content.url}
         isExternal={content.url.startsWith("https")}
