@@ -16,7 +16,7 @@ export const DEFAULT_METADATA = {
 
 const routes: PageMetadata[] = [
   {
-    name: "Native zkEVM Layer 2 for Ethereum",
+    name: "",
     path: "/",
   },
   {
