@@ -33,7 +33,7 @@ const HackathonItem = (props) => {
           fontWeight: 500,
           gridRow: ["1/2", "unset"],
           gridColumn: ["1/3", "unset"],
-          height: ["58px", "auto"],
+          transform: "translateY(0.125em)",
         }}
       >
         {content.name}
@@ -54,6 +54,7 @@ const HackathonItem = (props) => {
           lineHeight: ["20px", "24px", "24px"],
           fontWeight: 500,
           whiteSpace: ["pre-wrap", "nowrap"],
+          transform: "translateY(0.125em)",
         }}
       >
         <p>{content.date}</p>

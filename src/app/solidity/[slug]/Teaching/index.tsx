@@ -15,8 +15,8 @@ const Teaching = (props) => {
     <Box
       sx={{
         backgroundColor: "rgba(186, 240, 247, 0.2)",
-        height: "820px",
-        p: ["30px 20px", "50px 50px"],
+        height: ["auto", "auto", "820px"],
+        p: ["30px 20px 10px 20px", "50px 50px 30px 50px", "50px 50px"],
         overflowY: "auto",
         "&::-webkit-scrollbar-thumb": {
           backgroundColor: "#1010101A",
