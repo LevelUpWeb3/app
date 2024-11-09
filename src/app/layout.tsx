@@ -18,7 +18,7 @@ import "./globals.css";
 export async function generateMetadata(): Promise<Metadata> {
   const { pathname, origin } = new URL(headers().get("x-url")!);
   const route = findCurrentRoute(pathname);
-  const title = `Level Up${route ? " – " + route.name : null}`;
+  const title = `Level Up${route.name ? " – " + route.name : ""}`;
   const description = route.description || DEFAULT_METADATA.description;
   const ogImg = route.ogImg || DEFAULT_METADATA.ogImg;
   const twitterImg =
