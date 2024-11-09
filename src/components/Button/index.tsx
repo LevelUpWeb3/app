@@ -38,14 +38,17 @@ const useStyles = makeStyles<any>()((theme, { size, variant }) => ({
       variant === "outlined"
         ? (theme as any).vars.palette.text.primary
         : (theme as any).vars.palette.primary.contrastText,
-    "&:hover": {
-      backgroundColor:
-        variant === "outlined"
-          ? "#F4F4F4"
-          : (theme as any).vars.palette.text.primary,
-    },
+
     "&.Mui-disabled": {
       backgroundColor: "transparent",
+    },
+    [theme.breakpoints.up("sm")]: {
+      "&:hover": {
+        backgroundColor:
+          variant === "outlined"
+            ? "#F4F4F4"
+            : (theme as any).vars.palette.text.primary,
+      },
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: "14px",

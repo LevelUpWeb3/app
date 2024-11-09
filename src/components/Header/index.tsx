@@ -2,8 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
-import { AppBar, Slide, Stack, Box } from "@mui/material";
+import { AppBar, Slide, Stack } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 
 import AnnouncementBar from "@/components/AnnouncementBar";
@@ -76,9 +77,13 @@ export default function Header() {
               >
                 <p>Nov 15-17</p>
                 <StarSvg className="!mt-[-4px]"></StarSvg>
-                <p className="font-medium">
+                <Link
+                  href="https://ethglobal.com/events/bangkok/prizes/scroll"
+                  className="font-medium"
+                  target="_blank"
+                >
                   Join The Level Up Hackathon: Eth Global Bangkok
-                </p>
+                </Link>
               </Stack>
             </AnnouncementBar>
           )}
