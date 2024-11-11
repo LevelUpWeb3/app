@@ -186,7 +186,7 @@ export const CODE_SOLUTIONS: CodeTemplatesType = {
     exercise2:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract DataLocation {\n\n// Declare a function named 'memoryFunction' that declares a memory variable of type uint and name it 'memoryVar'\nfunction memoryFunction() public pure {\n  uint memoryVar;\n}\n}",
     exercise3:
-      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract DataLocation {\n\n// Declare a function named 'calldataFunction' that takes a calldata uint argument named 'calldataVar'\nfunction calldataFunction(uint calldataVar) external pure {}\n}",
+      "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract DataLocation {\n\n// Declare a external function named 'calldataFunction' that takes a calldata uint argument named 'calldataVar'\nfunction calldataFunction(uint calldataVar) external pure {}\n}",
     exercise4:
       "//SPDX-License-Identifier:MIT\npragma solidity ^0.8.24;\n\ncontract DataLocation {\n\n// Declare a state variable of type uint and name it 'storageVar'\n// Declare a function named 'memoryFunction' that declares a memory variable of type uint and name it 'memoryVar'\nuint storageVar;\n\nfunction memoryFunction() public pure {\n  uint memoryVar;\n}\n}",
     exercise5:
