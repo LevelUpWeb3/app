@@ -19,7 +19,7 @@ const CodeChallengeSubmit = () => {
           }}
         >
           <Typography sx={{ fontSize: ["24px", "24px", "36px"] }}>
-            Submit Your Challenge
+            Submit Challenge
           </Typography>
         </Box>
 

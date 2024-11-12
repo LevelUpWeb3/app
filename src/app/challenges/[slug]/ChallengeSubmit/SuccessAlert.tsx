@@ -23,10 +23,7 @@ const SuccessAlert = () => {
       <Button
         size="large"
         sx={{
-          position: "absolute",
-          bottom: "60px",
-          width: "calc(100% - 120px) !important",
-          left: "60px",
+          width: "100% !important",
           mt: "20px",
         }}
         href="/challenges/submission"

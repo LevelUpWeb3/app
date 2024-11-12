@@ -13,7 +13,7 @@ import SuccessAlert from "./SuccessAlert";
 enum TestStatus {
   SUCCESS = "success",
   ERROR = "error",
-  UNDEFIEND = "",
+  UNDEFINED = "",
 }
 
 const CodeEditor = (props) => {
@@ -21,10 +21,10 @@ const CodeEditor = (props) => {
   const { slug } = useParams();
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<TestStatus>(TestStatus.UNDEFIEND);
+  const [status, setStatus] = useState<TestStatus>(TestStatus.UNDEFINED);
 
   const handleCloseTip = () => {
-    setStatus(TestStatus.UNDEFIEND);
+    setStatus(TestStatus.UNDEFINED);
   };
 
   const beforeMount = (monaco: Monaco) => {
@@ -48,7 +48,7 @@ const CodeEditor = (props) => {
     } else {
       setStatus(TestStatus.ERROR);
       setTimeout(() => {
-        setStatus(TestStatus.UNDEFIEND);
+        setStatus(TestStatus.UNDEFINED);
       }, 6e3);
     }
   };
