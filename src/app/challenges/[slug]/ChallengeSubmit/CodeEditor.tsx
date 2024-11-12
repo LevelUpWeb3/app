@@ -36,7 +36,7 @@ const CodeEditor = (props) => {
 
   const handleTestCode = async () => {
     setLoading(true);
-    const testsUrl = `http://ec2-18-237-163-150.us-west-2.compute.amazonaws.com:3000/run-tests/${slug}`;
+    const testsUrl = `https://18.237.163.150.nip.io/run-tests/${slug}`;
     const res = await fetch(testsUrl, {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
