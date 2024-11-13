@@ -6,7 +6,7 @@ import TallyForm from "@/components/TallyForm";
 const SubmissionPage = () => {
   return (
     <TallyForm
-      tallyUrl="https://tally.so/r/mRBp4d"
+      tallyUrl="https://tally.so/r/wLYDW1"
       title="Submit your solution to a Level Up Challenge!"
     />
   );
