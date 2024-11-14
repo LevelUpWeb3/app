@@ -6,9 +6,9 @@ const useCheckTheme = () => {
   const dark = useMemo(
     () =>
       ["/developer-nft/check-eligibility", "/developer-nft/mint"].includes(
-        pathname!
+        pathname!,
       ),
-    [pathname]
+    [pathname],
   );
 
   return dark;

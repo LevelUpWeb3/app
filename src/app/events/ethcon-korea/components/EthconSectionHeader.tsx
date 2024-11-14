@@ -2,6 +2,7 @@ import { JoinButton } from "@/app/events/ethcon-korea/components";
 import Button from "@/components/Button";
 import { useRainbowContext } from "@/contexts/RainbowProvider";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -41,16 +42,14 @@ export default function EthconSectionHeader() {
 
               {pathname === "/events/ethcon-korea/scoreboard" ? (
                 <Button
-                  whiteButton={true}
-                  width="50%"
+                  sx={{ width: "50% !important" }}
                   href="/events/ethcon-korea"
                 >
                   Challenges
                 </Button>
               ) : (
                 <Button
-                  whiteButton={true}
-                  width="50%"
+                  sx={{ width: "50% !important" }}
                   href="/events/ethcon-korea/scoreboard"
                 >
                   Scoreboard
@@ -59,8 +58,9 @@ export default function EthconSectionHeader() {
             </div>
           </div>
         </div>
-        <img
+        <Image
           src="/images/events/ethcon.svg"
+          alt="ethcon"
           className={`max-h-full object-contain max-md:max-h-[90%]`}
         />
       </div>

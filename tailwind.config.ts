@@ -1,8 +1,11 @@
-import type { Config } from "tailwindcss"
-import defaultTheme from "tailwindcss/defaultTheme"
+import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
-  content: ["./src/pages/**/*.{js,ts,jsx,tsx,mdx}", "./src/components/**/*.{js,ts,jsx,tsx,mdx}", "./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       lineHeight: {
@@ -41,8 +44,10 @@ const config: Config = {
         DEFAULT: "#C9CBCE",
       },
       screens: {
-        md: "768px",
-        lg: "1024px",
+        sm: "600px",
+        md: "900px",
+        lg: "1200px",
+        xl: "1536px",
       },
       colors: {
         red: {
@@ -120,17 +125,9 @@ const config: Config = {
       },
     },
     fontFamily: {
-      sans: ['"TransSansPremium"', ...defaultTheme.fontFamily.sans],
-      display: ['"TransSansPremium"', ...defaultTheme.fontFamily.sans],
-      develop: ['"Roboto Flex"', ...defaultTheme.fontFamily.sans],
-    },
-    screens: {
-      sm: "600px",
-      md: "900px",
-      lg: "1200px",
-      xl: "1536px",
+      display: ['"NeueHelvetica"', ...defaultTheme.fontFamily.sans],
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;

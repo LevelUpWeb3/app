@@ -6,7 +6,7 @@ import {
 } from "@mui/material/styles";
 import { getInitColorSchemeScript } from "@mui/material/styles";
 
-import darkTheme from "./dark";
+// import darkTheme from "./dark";
 import lightTheme from "./light";
 
 interface Props {

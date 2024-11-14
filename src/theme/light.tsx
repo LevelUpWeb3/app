@@ -33,6 +33,10 @@ const lightTheme = {
             paddingLeft: "2rem",
             paddingRight: "2rem",
           },
+          [theme.breakpoints.up("sm")]: {
+            paddingLeft: "4rem",
+            paddingRight: "4rem",
+          },
           [theme.breakpoints.up("md")]: {
             paddingLeft: "6rem",
             paddingRight: "6rem",
@@ -217,6 +221,7 @@ const lightTheme = {
           cursor: "default",
           transition: defaultTransition,
           color: paletteOptions.text.primary,
+          lineHeight: "normal",
         },
         gutterBottom: {
           marginBottom: "0.7rem",

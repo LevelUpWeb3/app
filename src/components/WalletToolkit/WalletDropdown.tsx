@@ -12,6 +12,7 @@ import {
   MenuItem,
   SvgIcon,
 } from "@mui/material";
+import Button from "@/components/Button";
 
 import CopySuccessSvg from "@/assets/svgs/bridge/copy-success.svg";
 import BlockSvg from "@/assets/svgs/wallet-connector/block.svg";
@@ -24,7 +25,6 @@ import { generateExploreLink, truncateAddress } from "@/utils";
 
 const useStyles = makeStyles<any>()((theme, { dark }) => ({
   button: {
-    fontFamily: "var(--developer-page-font-family)",
     fontSize: "1.6rem",
     height: "3.6rem",
     padding: "0 1.2rem",
@@ -40,7 +40,6 @@ const useStyles = makeStyles<any>()((theme, { dark }) => ({
   },
 
   connectButton: {
-    fontFamily: "var(--default-font-family)",
     backgroundColor: "#FF684B",
     color: (theme as any).vars.palette.primary.contrastText,
     border: "none",
@@ -82,7 +81,6 @@ const useStyles = makeStyles<any>()((theme, { dark }) => ({
 
   listItemText: {
     fontSize: "1.6rem",
-    fontFamily: "var(--developer-page-font-family)",
     cursor: "pointer",
     color: dark ? (theme as any).vars.palette.primary.contrastText : "#473835",
   },
@@ -115,8 +113,8 @@ const WalletDropdown = (props) => {
       generateExploreLink(
         EXPLORER_URL[chainId === CHAIN_ID.L1 ? "L1" : "L2"],
         walletCurrentAddress,
-        "address"
-      )
+        "address",
+      ),
     );
   }, [walletCurrentAddress, chainId]);
 
@@ -146,7 +144,7 @@ const WalletDropdown = (props) => {
         },
       },
     ],
-    [pathname, viewScan, copyAddress, copied, disconnect]
+    [pathname, viewScan, copyAddress, copied, disconnect],
   );
 
   return (
@@ -165,13 +163,9 @@ const WalletDropdown = (props) => {
           ></SvgIcon>
         </ButtonBase>
       ) : (
-        <ButtonBase
-          classes={{ root: cx(classes.button, classes.connectButton) }}
-          sx={sx}
-          onClick={connect}
-        >
+        <Button variant="contained" onClick={connect}>
           Connect Wallet
-        </ButtonBase>
+        </Button>
       )}
 
       <Menu

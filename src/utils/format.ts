@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { formatUnits, parseUnits } from "ethers";
-import _ from "lodash";
 
 export const truncateAddress = (address: string): string => {
   return address ? `${address.slice(0, 6)}…${address.slice(38, 42)}` : "-";
@@ -51,12 +50,12 @@ export function fixedDecimals(amount: string, decimals: bigint = BigInt(18)) {
 
 export function amountToBN(
   amount: string | number | undefined,
-  decimals: bigint = BigInt(18)
+  decimals: bigint = BigInt(18),
 ): bigint {
   try {
     const fixedAmount = fixedDecimals(
       amount ? amount.toString() : "",
-      decimals
+      decimals,
     );
     return parseUnits(fixedAmount || "0", decimals);
   } catch (e) {
@@ -66,7 +65,7 @@ export function amountToBN(
 
 export function BNToAmount(
   value: bigint,
-  decimals: bigint = BigInt(18)
+  decimals: bigint = BigInt(18),
 ): string {
   try {
     return formatUnits(value.toString(), decimals);
@@ -77,7 +76,7 @@ export function BNToAmount(
 
 export const checkAmountOverflow = (
   inputAmount,
-  decimals: bigint = BigInt(18)
+  decimals: bigint = BigInt(18),
 ) => {
   try {
     if (!inputAmount) {
@@ -101,7 +100,7 @@ export const formatUTCDate = (date, needSub?: boolean) => {
 
 export const formatDate = (
   date,
-  options: { needSub?: boolean; withTime?: boolean; isUnix?: boolean } = {}
+  options: { needSub?: boolean; withTime?: boolean; isUnix?: boolean } = {},
 ) => {
   const { needSub, withTime, isUnix } = options;
   let finalDate = dayjs.isDayjs(date)

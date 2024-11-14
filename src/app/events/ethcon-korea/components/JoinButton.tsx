@@ -179,9 +179,7 @@ export default function JoinButton() {
   return (
     <Button
       href=""
-      whiteButton={true}
-      width="50%"
-      color="primary"
+      sx={{ width: "50% !important" }}
       onClick={isConnected ? login : connect}
     >
       {isConnected ? "Join" : "Connect Wallet"}

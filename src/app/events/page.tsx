@@ -1,20 +1,34 @@
-"use client";
-
-import React from "react";
-
-import SectionHeader from "@/components/SectionHeader";
-import Wrapper from "@/components/Wrapper";
-
+import { Container, Box, Typography } from "@mui/material";
+import { PAGE_MIN_HEIGHT } from "@/constants";
 import List from "./List";
+import Data from "./eventsList.json";
 
 const EventsPage = () => {
   return (
-    <div className="mt-[-6.5rem] flex flex-col pb-2.5">
-      <SectionHeader title="Events" url={"/images/events.svg"} />
-      <Wrapper>
-        <List />
-      </Wrapper>
-    </div>
+    <Container
+      sx={{
+        py: ["6rem", "8.4rem"],
+        minHeight: PAGE_MIN_HEIGHT,
+      }}
+    >
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: ["1fr", "min-content 1fr"],
+          columnGap: ["208px"],
+          rowGap: ["20px", "46px"],
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: ["3.6rem", "4.8rem"],
+          }}
+        >
+          Events
+        </Typography>
+        <List data={Data} />
+      </Box>
+    </Container>
   );
 };
 

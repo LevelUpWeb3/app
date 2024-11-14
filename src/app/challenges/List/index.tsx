@@ -1,133 +1,112 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { withStyles } from "tss-react/mui";
+import { useMemo, useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { styled } from "@mui/system";
+import {
+  CHALLENGE_CATEGORY_LIST,
+  CHALLENGE_LEVEL_LIST,
+  LAYOUT_HEADER_HEIGHT,
+} from "@/constants";
 
-import ComingSoon from "@/components/ComingSoon";
-import { CHALLENGE_LEVEL_LIST, NORMAL_HEADER_HEIGHT } from "@/constants";
 import Card from "@/components/Card";
 
-import Category from "./Category";
-import LevelSelect from "./LevelSelect";
+import PlainSelect from "@/components/PlainSelect";
+import NoData from "@/components/NoData";
 
-const Container = styled(Box)({
-  maxWidth: "140rem",
-  margin: "0 auto",
-  width: "100%",
-  ["@media (max-width: 1400px)"]: {
-    padding: "0 1.6rem",
-  },
-});
-
-const Grid = withStyles(Box, (theme) => ({
-  root: {
-    marginTop: "6.8rem",
-    display: "grid",
-    gridTemplateColumns: "200px 1fr max-content",
-    gridTemplateRows: "max-content 1fr",
-    rowGap: "3rem",
-    columnGap: "7.2rem",
-    [theme.breakpoints.down("md")]: {
-      gridTemplateColumns: "1fr max-content",
-      gridTemplateRows: "unset",
-      rowGap: "2rem",
-      columnGap: "0.8rem",
-      marginTop: "2rem",
-    },
-  },
-}));
-
-const CardBox = styled(Box)(() => ({
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fill, minmax(30rem, 1fr))",
-  gap: "2.4rem",
-  marginTop: "2.4rem",
-}));
-
-const Protocols = () => {
+const ChallengeList = (props) => {
+  const { data } = props;
   const trigger = useScrollTrigger();
   const [searchParams, setSearchParams] = useState({
-    category: "All categories",
+    category: CHALLENGE_CATEGORY_LIST[0],
     level: CHALLENGE_LEVEL_LIST[0],
   });
 
-  const [data, setData] = useState<any>([]);
-  const [filteredData, setFilteredData] = useState([]);
-
-  const [isSticky] = useState(true);
-
   const stickyTop = useMemo(
-    () => (trigger ? "2rem" : NORMAL_HEADER_HEIGHT),
+    () => (trigger ? "2rem" : LAYOUT_HEADER_HEIGHT),
     [trigger],
   );
 
-  useEffect(() => {
-    fetch("/data/challenges/markdownData.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    const filteredData = data.filter((item) => {
-      const categoryMatch =
-        searchParams.category === "All categories" ||
-        item.labels.includes(searchParams.category);
-      const levelMatch =
-        searchParams.level === "All levels" ||
-        `Level ${item.level}` === searchParams.level;
-
-      return categoryMatch && levelMatch;
-    });
-    setFilteredData(filteredData);
+  const filteredData = useMemo(() => {
+    return data
+      ?.filter((item) => {
+        const categoryMatch =
+          searchParams.category === CHALLENGE_CATEGORY_LIST[0] ||
+          item.labels.includes(searchParams.category);
+        const levelMatch =
+          searchParams.level === CHALLENGE_LEVEL_LIST[0] ||
+          `Level ${item.level}` === searchParams.level;
+        return categoryMatch && levelMatch;
+      })
+      .map((item) => ({
+        ...item,
+        labels: [...item.labels, `Level ${item.level}`],
+      }));
   }, [searchParams, data]);
 
-  const handleChangeCategory = (value) => {
+  const handleChangeCategory = (e) => {
     setSearchParams((pre) => ({
       ...pre,
-      category: value,
+      category: e.target.value,
     }));
   };
 
-  const handleChangeLevel = (value) => {
+  const handleChangeLevel = (e) => {
     setSearchParams((pre) => ({
       ...pre,
-      level: value,
+      level: e.target.value,
     }));
   };
 
   return (
-    <Container>
-      <Grid>
-        <Category
-          top={stickyTop}
+    <>
+      <Stack
+        direction="row"
+        sx={{
+          position: ["static", "sticky"],
+          zIndex: 1,
+          top: stickyTop,
+          width: "100%",
+          justifyContent: ["flex-end", "flex-end", "flex-start"],
+        }}
+        spacing="0.8rem"
+      >
+        <PlainSelect
+          sx={{ width: "178px" }}
+          data={CHALLENGE_CATEGORY_LIST}
           value={searchParams.category}
           onChange={handleChangeCategory}
-        ></Category>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <LevelSelect
-            top={stickyTop}
-            sticky={isSticky}
-            value={searchParams.level}
-            onChange={handleChangeLevel}
-          ></LevelSelect>
-          {filteredData.length === 0 ? (
-            <ComingSoon />
-          ) : (
-            <CardBox>
-              {filteredData.map((item, index) => (
-                <Card type="challenge" content={item} key={index} />
-              ))}
-            </CardBox>
-          )}
-        </Box>
-      </Grid>
-    </Container>
+        ></PlainSelect>
+        <PlainSelect
+          sx={{ width: "146px" }}
+          data={CHALLENGE_LEVEL_LIST}
+          value={searchParams.level}
+          onChange={handleChangeLevel}
+        ></PlainSelect>
+      </Stack>
+      <Box sx={{ gridColumn: ["1/2", "1/3", "2/3"] }}>
+        {filteredData?.length ? (
+          <Box
+            sx={{
+              width: "100%",
+              display: "grid",
+              gridTemplateColumns: [
+                "1fr",
+                "repeat(auto-fill, minmax(282px, 1fr))",
+              ],
+              gap: ["15px", "15px", "20px"],
+            }}
+          >
+            {filteredData.map((item) => (
+              <Card content={item} key={item.name}></Card>
+            ))}
+          </Box>
+        ) : (
+          <NoData sx={{ mt: ["20px", "56px"] }}></NoData>
+        )}
+      </Box>
+    </>
   );
 };
-export default Protocols;
+export default ChallengeList;

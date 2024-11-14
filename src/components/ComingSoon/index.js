@@ -8,6 +8,7 @@ const ComingSoon = () => {
           src="/images/coming-soon.png"
           className="mx-auto ml-2 object-contain"
           fill
+          alt="Coming soon"
         />
       </div>
 

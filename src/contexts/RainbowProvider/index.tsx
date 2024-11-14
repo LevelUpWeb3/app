@@ -31,7 +31,7 @@ type RainbowContextProps = {
 };
 
 const RainbowContext = createContext<RainbowContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 const connectors = connectorsForWallets([
@@ -87,7 +87,7 @@ const Web3ContextProvider = (props) => {
     (chainId) => {
       return isConnected && chain?.id === chainId;
     },
-    [isConnected, chain]
+    [isConnected, chain],
   );
 
   return (

@@ -1,32 +1,32 @@
 import { useState } from "react";
 import { makeStyles } from "tss-react/mui";
 
-import { Select as MuiSelect, Stack, Typography } from "@mui/material";
+import { Select as MuiSelect, Typography } from "@mui/material";
 
 import TriangleDownIcon from "@/assets/svgs/common/triangle-down.svg";
 
 const useStyles = makeStyles()((theme) => ({
   root: {
-    width: "19rem",
+    // width: "19rem",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
     },
   },
   // TODO: why first insert
   select: {
-    padding: "0.6rem 2.4rem 0.6rem 2.4rem !important",
-    [theme.breakpoints.down("sm")]: {
-      padding: "1.1rem 3.6rem 1.1rem 1.6rem !important",
+    padding: "11px 44px 11px 30px !important",
+    [theme.breakpoints.down("md")]: {
+      padding: "9px 44px 9px 30px !important",
     },
     backgroundColor: `${(theme as any).vars.palette.background.default} !important`,
     "&[aria-expanded='true']": {
-      borderRadius: "2.4rem 2.4rem 0 0",
-      border: `1px solid ${(theme as any).vars.palette.text.primary}`,
+      borderRadius: "15px 15px 0 0",
+      border: `1.5px solid ${(theme as any).vars.palette.text.primary}`,
       borderBottomColor: "transparent",
     },
     "&[aria-expanded='false']": {
-      borderRadius: "2.4rem",
-      border: `1px solid ${(theme as any).vars.palette.text.primary}`,
+      borderRadius: "15px",
+      border: `1.5px solid ${(theme as any).vars.palette.text.primary}`,
     },
     "&:focus": {
       backgroundColor: "unset",
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
   popover: {
     boxShadow: "none",
     borderRadius: "0 0 2.4rem 2.4rem",
-    border: `1px solid ${(theme as any).vars.palette.text.primary}`,
+    border: `1.5px solid ${(theme as any).vars.palette.text.primary}`,
     borderTop: "none",
     marginTop: "-6px",
     transform: "translateX(0) !important",
@@ -59,10 +59,11 @@ const useStyles = makeStyles()((theme) => ({
     borderTop: `1px solid ${(theme as any).vars.palette.text.primary}`,
   },
   menuList: {
-    padding: 0,
+    padding: "5px",
     maxHeight: "300px",
     overflowY: "auto",
   },
+
   menuListWithScrollbar: {
     overflowY: "scroll",
     "&::-webkit-scrollbar": {
@@ -83,6 +84,14 @@ const Select = (props) => {
   const { classes, cx } = useStyles();
 
   const [isUnderneath, setIsUnderneath] = useState(true);
+  // const [popoverWidth, setPopoverWidth] = useState("auto");
+
+  // const selectRef = useRef(null);
+
+  // useEffect(() => {
+  //   console.log(selectRef.current.clientWidth);
+  //   console.log(getComputedStyle(selectRef.current).width);
+  // }, []);
 
   const onOpen = () => {
     setTimeout(() => {
@@ -99,6 +108,7 @@ const Select = (props) => {
           window
             .getComputedStyle(popoverEl)
             ["transform-origin"].split(" ")[1] === "0px";
+
         setIsUnderneath(isUnderneath);
       }
     });
@@ -108,8 +118,10 @@ const Select = (props) => {
       variant="standard"
       disableUnderline
       displayEmpty
+      // ref={selectRef}
       IconComponent={TriangleDownIcon}
       className={cx(classes.root, className)}
+      // sx={{ width: popoverWidth }}
       classes={{
         select: classes.select,
         icon: classes.icon,
@@ -136,18 +148,16 @@ const Select = (props) => {
       }}
       renderValue={(selected) => {
         return (
-          <Stack direction="row" alignItems="center" spacing={1.5}>
-            <Typography
-              sx={{
-                fontSize: ["1.6rem", "2rem"],
-                lineHeight: ["2.4rem", "3.6rem"],
-                fontWeight: 600,
-                cursor: "inherit",
-              }}
-            >
-              {selected as string}
-            </Typography>
-          </Stack>
+          <Typography
+            sx={{
+              fontSize: ["1.4rem", "1.4rem", "1.6rem"],
+              lineHeight: ["2.4rem", "2.6rem"],
+              fontWeight: 500,
+              cursor: "inherit",
+            }}
+          >
+            {selected as string}
+          </Typography>
         );
       }}
       {...restProps}

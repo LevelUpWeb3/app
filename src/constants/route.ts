@@ -8,13 +8,15 @@ export interface PageMetadata {
 
 export const DEFAULT_METADATA = {
   name: "",
-  description: "Native zkEVM Layer 2 for Ethereum",
+  description:
+    "The best platform for Web3 builders to skill up, find jobs and launch ideas",
   ogImg: "/images/level-up-preview.png",
+  twitterImg: "/images/level-up-preview.png",
 };
 
 const routes: PageMetadata[] = [
   {
-    name: "Native zkEVM Layer 2 for Ethereum",
+    name: "",
     path: "/",
   },
   {

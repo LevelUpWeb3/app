@@ -43,16 +43,6 @@ export const paletteOptions = {
     default: "#FFF",
     paper: "#FFF",
   },
-  // TODO: delete
-  scaleBackground: {
-    primary: "rgba(201, 203, 206, 0.2)",
-    second: "#C9CBCE33",
-    disabled: "#EBEBEB",
-    select: "#C9CBCE33",
-    disabledSecondary: "#B4B4B4",
-    gradient:
-      "linear-gradient(180deg, rgba(255, 232, 203, 0.74) 0%, rgba(255, 255, 255, 0) 100%)",
-  },
   themeBackground: {
     light: "#FFF8F3",
     dark: "#101010",
@@ -99,7 +89,7 @@ export const paletteOptions = {
 
 export const typographyOptions = {
   fontFamily: [
-    "TransSansPremium",
+    "NeueHelvetica",
     "system-ui",
     "BlinkMacSystemFont",
     "Roboto",
@@ -180,11 +170,22 @@ export const typographyOptions = {
   //   fontSize: "1.4rem",
   //   lineHeight: "2.6rem",
   // },
-  // button: {
-  //   fontSize: "1.8rem",
-  //   fontWeight: 700,
-  //   textTransform: "capitalize",
-  // },
+  button: {
+    fontFamily: [
+      "NeueHelvetica",
+      "system-ui",
+      "BlinkMacSystemFont",
+      "Roboto",
+      "Helvetica Neue",
+      "Segoe UI",
+      "Arial",
+      "sans-serif",
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji",
+    ].join(","),
+  },
 
   H1: {
     fontSize: "7.8rem",
