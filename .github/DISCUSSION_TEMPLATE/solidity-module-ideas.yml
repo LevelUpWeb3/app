@@ -1,0 +1,26 @@
+title: "🌟 List title of Solidity module idea here"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <i>Example of Solidity module title: Data Types</i>
+  - type: textarea
+    attributes:
+      label: 🧠 Module Overview
+      description: Briefly describe key topics or concepts that the module will cover. How does this module complement or enhance current offerings? Are there any overlaps with existing modules?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📖 Learning Objectives
+      description: List the specific outcomes for this module. What should participants ideally be able to do upon successful completion?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 💭 Prerequisite
+      description: High-level description of the 5 levels of exercises which will be created. (Aim of exercises are to help devs level up their concept/coding proficiency via repetition in progressive difficulty.)
+  - type: textarea
+    attributes:
+      label: 🌐 Resources
+      description: Are there any resources that you would like to add to support the development of this challenge?

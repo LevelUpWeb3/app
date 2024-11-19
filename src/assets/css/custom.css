@@ -1,0 +1,7 @@
+.text-stroke-with-hover:hover {
+  -webkit-text-stroke: 0.4px #101010;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 0.4px #101010;
+}

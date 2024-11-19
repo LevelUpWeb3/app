@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import React from "react";
 
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 
 // import ScrollToTop from "@/components/ScrollToTop"
 import { DEFAULT_METADATA } from "@/constants/route";
@@ -13,14 +13,16 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
+// import ScrollToTop from "@/components/ScrollToTop";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { pathname, origin } = new URL(headers().get("x-url")!);
   const route = findCurrentRoute(pathname);
-  const title = `Level Up${route ? " – " + route.name : null}`;
+  const title = `Level Up${route.name ? " – " + route.name : ""}`;
   const description = route.description || DEFAULT_METADATA.description;
   const ogImg = route.ogImg || DEFAULT_METADATA.ogImg;
-  const twitterImg = route.twitterImg || route.ogImg || DEFAULT_METADATA.ogImg;
+  const twitterImg =
+    route.twitterImg || route.ogImg || DEFAULT_METADATA.twitterImg;
 
   return {
     metadataBase: new URL(origin),
@@ -66,10 +68,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700;8..144,800&display=swap"
-          rel="stylesheet"
-        />
         {/* TODO: only on blog detail page */}
         <link
           rel="stylesheet"
@@ -90,6 +88,7 @@ export default function RootLayout({
           <ScrollThemeProvider>
             <RainbowProvider>
               {children}
+              {/* <ScrollToTop></ScrollToTop> */}
               <Analytics />
             </RainbowProvider>
           </ScrollThemeProvider>

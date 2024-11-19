@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "../assets/css/markdown-level-up.css";
+@import "../assets/css/custom.css";
+
 img,
 svg,
 video,
@@ -21,57 +24,57 @@ html {
 
 body {
   margin: 0;
-  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif; */
-  font-family: "TransSansPremium";
+  font-family: "NeueHelvetica";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-variant-ligatures: no-contextual;
-  background-color: #fff8f3;
 }
 
 body.mobile-top-nav-open {
   overflow: hidden !important;
 }
 
+.level-up-body {
+  background-color: var(--main-bg-color);
+}
+
 @font-face {
-  font-family: "TransSansPremium";
+  font-family: "NeueHelvetica";
   src:
-    url("../assets/fonts/TransSansPremium-Light.woff2") format("woff2"),
-    url("../assets/fonts/TransSansPremium-Light.woff") format("woff");
+    url("../assets/fonts/NeueHelvetica-Light.woff2") format("woff2"),
+    url("../assets/fonts/NeueHelvetica-Light.woff") format("woff");
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
-  font-family: "TransSansPremium";
+  font-family: "NeueHelvetica";
   src:
-    url("../assets/fonts/TransSansPremium-Regular.woff2") format("woff2"),
-    url("../assets/fonts/TransSansPremium-Regular.woff") format("woff");
+    url("../assets/fonts/NeueHelvetica-Regular.woff2") format("woff2"),
+    url("../assets/fonts/NeueHelvetica-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
-  font-family: "TransSansPremium";
+  font-family: "NeueHelvetica";
   src:
-    url("../assets/fonts/TransSansPremium-Medium.woff2") format("woff2"),
-    url("../assets/fonts/TransSansPremium-Medium.woff") format("woff");
+    url("../assets/fonts/NeueHelvetica-Medium.woff2") format("woff2"),
+    url("../assets/fonts/NeueHelvetica-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
 }
-@font-face {
-  font-family: "TransSansPremium";
+/* @font-face {
+  font-family: "NeueHelvetica";
   src:
-    url("../assets/fonts/TransSansPremium-SemiBold.woff2") format("woff2"),
-    url("../assets/fonts/TransSansPremium-SemiBold.woff") format("woff");
+    url("../assets/fonts/NeueHelvetica-SemiBold.woff2") format("woff2"),
+    url("../assets/fonts/NeueHelvetica-SemiBold.woff") format("woff");
   font-weight: 600;
   font-style: normal;
-}
+} */
 @font-face {
-  font-family: "TransSansPremium";
+  font-family: "NeueHelvetica";
   src:
-    url("../assets/fonts/TransSansPremium-Bold.woff2") format("woff2"),
-    url("../assets/fonts/TransSansPremium-Bold.woff") format("woff");
+    url("../assets/fonts/NeueHelvetica-Bold.woff2") format("woff2"),
+    url("../assets/fonts/NeueHelvetica-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
 }
@@ -82,13 +85,9 @@ body.mobile-top-nav-open {
   /* --swiper-pagination-bullet-inactive-color: #595959; */
 
   /* semibold/light never been used  */
-  --default-font-family: "TransSansPremium", "system-ui", "BlinkMacSystemFont",
-    "Roboto", "Helvetica Neue", "Segoe UI", "Arial", "sans-serif",
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
-  /* same as scroll documnet */
-  --developer-page-font-family: "Roboto Flex", "trans-sans", "circular", Arial,
-    "Helvetica Neue", Helvetica, sans-serif;
+  --default-font-family: "NeueHelvetica", "system-ui", "BlinkMacSystemFont",
+    "Roboto", "Segoe UI", "Arial", "sans-serif", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 onboard-v2 .outer-container icon {
@@ -112,15 +111,9 @@ onboard-v2 .outer-container icon {
   }
 }
 
-div.markdown-body h1,
-div.markdown-body h2,
-div.markdown-body h3 {
-  border-bottom: 0;
-}
-
-.markdown-body ol {
+/* .markdown-body ol {
   list-style-type: decimal;
-}
+} */
 
 /* added formatting to wrap code blocks in mdx */
 .markdown-body code {
@@ -128,23 +121,27 @@ div.markdown-body h3 {
   word-wrap: break-word !important;
 }
 
-.markdown-body {
+/* .markdown-body .markdown-code-block code {
+  background-color: transparent !important;
+} */
+
+/* .markdown-body {
   padding-right: 30px;
   overflow-y: auto;
   height: 100%;
-}
+} */
 
 .markdown-body::-webkit-scrollbar {
   width: -50px;
 }
 
-div.markdown-body img {
+/* div.markdown-body img {
   background-color: transparent;
-}
+} */
 
-.markdown-body ul {
+/* .markdown-body ul {
   list-style-type: disc;
-}
+} */
 
 .header-link {
   font-size: 1.6rem;
@@ -185,7 +182,7 @@ div.markdown-body img {
 }
 
 .wrapper {
-  @apply max-w-7xl p-6 mx-auto w-full overflow-hidden;
+  @apply mx-auto w-full max-w-7xl overflow-hidden p-6;
   padding-top: 3rem;
 }
 
@@ -193,4 +190,8 @@ div.markdown-body img {
   .wrapper {
     @apply p-4;
   }
+}
+
+.monaco-editor .overlayWidgets {
+  display: none;
 }

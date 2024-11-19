@@ -1,0 +1,76 @@
+const editorTheme = {
+  base: "vs-dark",
+  inherit: false,
+  rules: [
+    { token: "", foreground: "D4D4D4", background: "232323" },
+    { token: "invalid", foreground: "f44747" },
+    { token: "emphasis", fontStyle: "italic" },
+    { token: "strong", fontStyle: "bold" },
+
+    { token: "variable", foreground: "74B0DF" },
+    { token: "variable.predefined", foreground: "4864AA" },
+    { token: "variable.parameter", foreground: "9CDCFE" },
+    { token: "constant", foreground: "E57D49" },
+    { token: "comment", foreground: "616161" },
+    { token: "number", foreground: "ABABAB" },
+    { token: "number.hex", foreground: "5BB498" },
+    { token: "regexp", foreground: "B46695" },
+    { token: "annotation", foreground: "cc6666" },
+    { token: "type", foreground: "3DC9B0" },
+
+    { token: "delimiter", foreground: "ABABAB" },
+    { token: "delimiter.html", foreground: "808080" },
+    { token: "delimiter.xml", foreground: "808080" },
+
+    { token: "tag", foreground: "2BA6B7" },
+    { token: "tag.id.pug", foreground: "4F76AC" },
+    { token: "tag.class.pug", foreground: "4F76AC" },
+    { token: "meta.scss", foreground: "A79873" },
+    { token: "meta.tag", foreground: "E57D49" },
+    { token: "metatag", foreground: "DD6A6F" },
+    { token: "metatag.content.html", foreground: "9CDCFE" },
+    { token: "metatag.html", foreground: "2BA6B7" },
+    { token: "metatag.xml", foreground: "2BA6B7" },
+    { token: "metatag.php", fontStyle: "bold" },
+
+    { token: "key", foreground: "9CDCFE" },
+    { token: "string.key.json", foreground: "9CDCFE" },
+    { token: "string.value.json", foreground: "E57D49" },
+
+    { token: "attribute.name", foreground: "9CDCFE" },
+    { token: "attribute.value", foreground: "E57D49" },
+    { token: "attribute.value.number.css", foreground: "B5CEA8" },
+    { token: "attribute.value.unit.css", foreground: "B5CEA8" },
+    { token: "attribute.value.hex.css", foreground: "D4D4D4" },
+
+    { token: "string", foreground: "E57D49" },
+    { token: "string.sql", foreground: "FF0000" },
+
+    { token: "keyword", foreground: "2BA6B7" },
+    { token: "keyword.flow", foreground: "C586C0" },
+    { token: "keyword.json", foreground: "E57D49" },
+    { token: "keyword.flow.scss", foreground: "2BA6B7" },
+
+    { token: "operator.scss", foreground: "909090" },
+    { token: "operator.sql", foreground: "778899" },
+    { token: "operator.swift", foreground: "909090" },
+    { token: "predefined.sql", foreground: "FF00FF" },
+  ],
+  colors: {
+    "editor.background": "#232323",
+    "editor.foreground": "#D4D4D4",
+    "editor.inactiveSelectionBackground": "#3A3D41",
+    "editorIndentGuide.background1": "#404040",
+    "editorIndentGuide.activeBackground1": "#707070",
+    "editor.selectionHighlightBackground": "#ADD6FF26",
+    "editorBracketHighlight.foreground1": "#D9E262",
+    "editorBracketHighlight.foreground2": "#B6A9FF",
+    "editorBracketHighlight.foreground3": "#5ec77c",
+    "editorBracketHighlight.foreground4": "#5ec77c",
+    "editorBracketHighlight.foreground5": "#5ec77c",
+    "editorBracketHighlight.foreground6": "#5ec77c",
+    "editorBracketHighlight.unexpectedBracket.foreground": "#D9E262",
+  },
+};
+
+export default editorTheme;

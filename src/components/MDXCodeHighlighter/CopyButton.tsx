@@ -1,29 +1,22 @@
+"use client";
 import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Button, Tooltip } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { styled } from "@mui/system";
+import { IconButton } from "@mui/material";
+import CopySvg from "@/assets/svgs/content/copy.svg";
+import MobileCopySvg from "@/assets/svgs/content/mobile-copy.svg";
+
+import EditorTooltip from "../EditorTooltip";
+import useCheckViewport from "@/hooks/useCheckViewport";
 interface CopyButtonProps {
   text: string;
+  sx: object;
 }
 
-const ButtonStyle = styled(Button)(() => ({
-  backgroundColor: "transparent",
-  color: "#717171",
-  outline: "none",
-  boxShadow: "none",
-  minWidth: "auto",
-  padding: "0",
-  "&:hover": {
-    color: "#717171",
-    backgroundColor: "transparent",
-  },
-}));
-
-const CopyButton: React.FC<CopyButtonProps> = ({ text }) => {
+const CopyButton: React.FC<CopyButtonProps> = ({ sx, text }) => {
   const [copied, setCopied] = React.useState(false);
+  const { isMobile } = useCheckViewport();
 
-  const handleButtonClick = () => {
+  const handleCopy = () => {
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -31,12 +24,16 @@ const CopyButton: React.FC<CopyButtonProps> = ({ text }) => {
   };
 
   return (
-    <CopyToClipboard text={text} onCopy={handleButtonClick}>
-      <Tooltip title="Copied!" placement="top" open={copied}>
-        <ButtonStyle variant="text" color={copied ? "success" : "primary"}>
-          <ContentCopyIcon />
-        </ButtonStyle>
-      </Tooltip>
+    <CopyToClipboard text={text} onCopy={handleCopy}>
+      <EditorTooltip title="Copied!" placement="top" open={copied}>
+        <IconButton sx={{ p: 0, ...sx }}>
+          {isMobile ? (
+            <MobileCopySvg className="h-[auto] w-[32px]"></MobileCopySvg>
+          ) : (
+            <CopySvg className="h-[auto] w-[40px]"></CopySvg>
+          )}
+        </IconButton>
+      </EditorTooltip>
     </CopyToClipboard>
   );
 };

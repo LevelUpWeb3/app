@@ -32,7 +32,7 @@ export const isValidEmail = (email: string): boolean => {
 
 export const convertDateToTimestamp = (
   dateString: string,
-  isMilliseconds: boolean = true
+  isMilliseconds: boolean = true,
 ): number => {
   let date = new Date(dateString);
   let timestamp = date.getTime();
@@ -62,3 +62,15 @@ export function isValidTransactionHash(txHash: string): boolean {
   const isValidLength = txHash.length === 66;
   return isValidLength && isHexString(txHash);
 }
+
+export function generateShareTwitterURL(text, referer, via = "levelupweb3") {
+  return `https://twitter.com/intent/tweet?original_referer=${encodeURIComponent(referer)}&text=${encodeURIComponent(text)}`;
+}
+
+export const shuffleArray = (array: any[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};

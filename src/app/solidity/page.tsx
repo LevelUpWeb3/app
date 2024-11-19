@@ -1,24 +1,34 @@
-"use client";
+import { headers } from "next/headers";
+import { Container, Stack, Typography } from "@mui/material";
 
-import React from "react";
+import LessonList from "./LessonList";
+import { PAGE_MIN_HEIGHT } from "@/constants";
 
-import SectionHeader from "@/components/SectionHeader";
-import Wrapper from "@/components/Wrapper";
+const SolidityPage = async () => {
+  const { origin } = new URL(headers().get("x-url")!);
+  const data = await fetch(`${origin}/data/solidity/markdownData.json`).then(
+    (res) => res.json(),
+  );
 
-import List from "./List";
-
-const SolidityPage = () => {
   return (
-    <div className="mt-[-6.5rem] flex flex-col pb-2.5">
-      <SectionHeader
-        title="Solidity Challenges"
-        url={"/images/solidity-banner.svg"}
-        imgClass="self-end"
-      />
-      <Wrapper>
-        <List />
-      </Wrapper>
-    </div>
+    <Container
+      sx={{ py: ["6rem", "6rem", "8.4rem"], minHeight: PAGE_MIN_HEIGHT }}
+    >
+      <Stack
+        direction={["column", "column", "row"]}
+        gap={["20px", "24px", "100px"]}
+      >
+        <Typography
+          sx={{
+            fontSize: ["3.6rem", "3.6rem", "4.8rem"],
+            width: ["min-content", "max-content", "min-content"],
+          }}
+        >
+          Solidity Challenges
+        </Typography>
+        <LessonList data={data} />
+      </Stack>
+    </Container>
   );
 };
 

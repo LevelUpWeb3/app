@@ -1,70 +1,121 @@
-"use client";
-import { Box } from "@mui/material";
-import { styled } from "@mui/system";
-
+import { Box, Container, Stack, Typography } from "@mui/material";
 import Button from "@/components/Button";
-import useCheckViewport from "@/hooks/useCheckViewport";
 
-const Container = styled(Box)({
-  height: "calc(100vh - 65px)",
-  minHeight: "64rem",
-  position: "relative",
-});
+import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 
-const StyledBox = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  flexDirection: "column",
-  ["@media (max-width: 768px)"]: {
-    padding: "0 2rem",
-  },
-});
-
-const LandingPage = () => {
-  const { isMobile } = useCheckViewport();
-
+const Home = () => {
   return (
-    <Container>
-      <StyledBox
-        sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}
+    <>
+      <PageHeaderWrapper
+        bgColor="themeBackground.brand"
+        sx={{
+          background: [
+            'url("/images/landing/hero-mobile.svg") right bottom 30px / auto 158px no-repeat',
+            'url("/images/landing/hero-mobile.svg") right bottom 30px / 85% auto no-repeat',
+            'url("/images/landing/hero.svg") right 60px bottom 38px / 75% auto no-repeat',
+            'url("/images/landing/hero.svg") right 60px bottom 38px / auto 313px no-repeat',
+          ],
+          pt: ["60px", "100px"],
+          pb: ["250px", "450px"],
+        }}
       >
-        <div className="pt-32 text-center text-[7.2rem] font-semibold leading-[88px] text-stone-950 max-md:w-[30rem] max-md:max-w-full max-md:pt-[6rem] max-md:text-[3.6rem] max-md:leading-[48px]">
-          Level Up your Web3 Skills
-        </div>
+        <Stack gap={["14px"]}>
+          <Typography
+            sx={{
+              fontSize: ["36px", "64px"],
+              lineHeight: "normal",
+              width: ["214px", "auto"],
+            }}
+          >
+            Learn, Build, Innovate
+          </Typography>
 
-        <div className="mt-4 w-[771px] text-center text-[2.6rem] tracking-wide text-stone-950 max-md:max-w-full max-md:text-[1.6rem] max-md:leading-[24px]">
-          Level Up is your platform to learn Solidity, build real projects, and
-          apply for grants to build the future of Ethereum.
-        </div>
+          <Typography
+            sx={{
+              fontSize: ["16px", "24px"],
+              maxWidth: "686px",
+              mb: [0, "16px"],
+            }}
+          >
+            Level Up is your platform to learn solidity, build real projects,
+            and find opportunities to build the future of Ethereum.
+          </Typography>
 
-        {/* TODO: Consider reviving this section when challenges are revisited */}
-        {/* <div className="mt-7 flex justify-center">
-          <div className="flex h-[11.6rem] w-[24rem] flex-col items-center justify-center rounded-2xl bg-orange-100 font-semibold text-stone-950 max-md:h-[6.8rem] max-md:w-[12.4rem]">
-            <div className="text-center text-[1.8rem] leading-[2.8rem] tracking-normal max-md:text-[1.4rem] max-md:leading-[2rem]">
-              Total challenges
-            </div>
-            <div className="text-center font-develop text-[4rem] leading-[56px] tracking-wide max-md:text-[2rem] max-md:leading-[2.8rem]">
-              20
-            </div>
-          </div>
-        </div> */}
+          <Button href="/solidity">Learn Solidity</Button>
+        </Stack>
+      </PageHeaderWrapper>
+      {/* <Box
+        sx={{
+          pt: ["124px", "159px"],
+          pb: ["30px", "60px"],
+          mt: ["-64px", "-75px"],
+          backgroundColor: "themeBackground.brand",
+        }}
+      >
+        <Container
+          sx={{
+            background: [
+              'url("/images/landing/hero-mobile.svg") right bottom 30px / auto 158px no-repeat',
+              'url("/images/landing/hero-mobile.svg") right bottom 30px / 85% auto no-repeat',
+              'url("/images/landing/hero.svg") right bottom 38px / 75% auto no-repeat',
+              'url("/images/landing/hero.svg") right bottom 38px / auto 313px no-repeat',
+            ],
+          }}
+        >
+          
+        </Container>
+      </Box> */}
 
-        <div className="mb-[2.6rem] mt-[3.6rem] flex w-full justify-center gap-[3rem] max-md:flex-col max-md:items-center max-md:gap-[2rem]">
-          <Button href="/solidity" color="primary" width="25rem">
-            Learn Solidity
-          </Button>
-          <Button href="/learn-more" width="25rem">
-            Learn More
-          </Button>
-        </div>
-      </StyledBox>
-      <img
-        loading="lazy"
-        className="mt-[6.8rem] w-full max-md:absolute max-md:bottom-0"
-        src="/images/landing.png"
-      />
-    </Container>
+      <Box className="bg-[#edfbfd]">
+        <Container>
+          <Stack
+            gap={["14px"]}
+            direction={["column", "column", "row"]}
+            justifyContent="space-between"
+            py={["30px", "40px", "100px"]}
+          >
+            <Typography
+              sx={{
+                fontSize: ["24px", "36px"],
+              }}
+            >
+              What is Level Up?
+            </Typography>
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  lineHeight: "22px",
+                  maxWidth: ["686px"],
+                }}
+              >
+                Level Up is your one-stop shop for finding the building blocks
+                you need to explore and thrive in your Web3 journey.
+                <br />
+                <br />
+                From learning Solidity basics to developer challenges and
+                grants, Level Up aims to be the foundation for every builder —
+                from hobbyists to founders and everything in between.
+                <br />
+                <br />
+                Level Up is community-first and slowly being built in public! If
+                there’s anything you’d like to see or want to contribute, create
+                an issue or make a PR in our Github and join our study group.
+              </Typography>
+              <Stack direction="row" mt="30px" gap={["16px", "20px"]}>
+                <Button href="https://github.com/LevelUpWeb3/app" isExternal>
+                  Find Our Github
+                </Button>
+                <Button href="https://t.me/+PdNbk5milo1mMTAy" isExternal>
+                  Join The Study Group
+                </Button>
+              </Stack>
+            </Box>
+          </Stack>
+        </Container>
+      </Box>
+    </>
   );
 };
 
-export default LandingPage;
+export default Home;

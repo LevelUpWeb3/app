@@ -1,0 +1,12 @@
+title: "🌟 List title of content idea here"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <i>Example of title: Introduce new category, Combine content ...</i>
+  - type: textarea
+    attributes:
+      label: 🧠 Description
+      description: Describe your content idea. Include as much details as needed to convey your point. You may include resources, references or examples.
+    validations:
+      required: true
