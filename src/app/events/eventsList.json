@@ -18,9 +18,9 @@
     "location": "Bangkok, Thailand",
     "url": "https://ethglobal.com/events/bangkok/prizes/scroll",
     "image": "/images/events/eth-bkk.svg",
-    "buttonText": "Join Now",
-    "buttonDisabled": "",
-    "status": ["All time", "Upcoming"],
+    "buttonText": "Ended",
+    "buttonDisabled": "true",
+    "status": ["All time", "Ended"],
     "region": ["All regions", "Asia Pacific"]
   },
   {
