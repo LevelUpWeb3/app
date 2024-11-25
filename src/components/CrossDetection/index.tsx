@@ -1,6 +1,9 @@
 "use client";
 
-// If you want to render the markdown in a left-right layout and include code blocks (markdown-code-blocks), please use this component to prevent the markdown code blocks from overlapping with the H2 headings.
+// If you want to render the markdown in a left-right layout and include code
+// blocks (markdown-code-blocks), please use this component to prevent the
+// markdown code blocks from overlapping with the H2 headings.
+//
 // see example in src/app/content/[slug]/ContentViewer/index.tsx
 
 import { Container } from "@mui/material";
@@ -30,30 +33,13 @@ function checkIfCovered(formerEle, latterEle) {
 }
 
 const CrossDetection = (props) => {
-  const { dataSource, children, className, sx } = props;
+  const { children, className, sx } = props;
 
   const MarkdownViewerWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!MarkdownViewerWrapperRef.current) return;
 
-    const observer = new MutationObserver((mutationsList) => {
-      // TODO: better solution?
-      if (mutationsList.length > 2) {
-        handleLoaded();
-      }
-    });
-
-    observer.observe(MarkdownViewerWrapperRef.current, {
-      childList: true,
-      subtree: true,
-    });
-
-    return () => observer.disconnect();
-  }, [dataSource]);
-
-  const handleLoaded = () => {
-    // const rect = MarkdownViewerWrapperRef.current.getBoundingClientRect();
     MarkdownViewerWrapperRef.current!.querySelectorAll("h2").forEach(
       (element) => {
         checkIfCovered(element, element.nextElementSibling);
@@ -64,7 +50,7 @@ const CrossDetection = (props) => {
         );
       },
     );
-  };
+  }, []);
 
   return (
     <Container
@@ -72,7 +58,8 @@ const CrossDetection = (props) => {
       ref={MarkdownViewerWrapperRef}
       sx={sx}
     >
-      {children}
+      {/* remove the warning https://github.com/mui/material-ui/issues/39928#issuecomment-1831183803 */}
+      <>{children}</>
     </Container>
   );
 };

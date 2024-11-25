@@ -1,17 +1,11 @@
 import { Container, Box, Typography } from "@mui/material";
-import { headers } from "next/headers";
 import { PAGE_MIN_HEIGHT } from "@/constants";
+import markdownData from "./markdownData.json";
 
 import List from "./List";
 
 // TODO: pick PageWrapper
 const ChallengesPage = async () => {
-  const { origin } = new URL(headers().get("x-url")!);
-
-  const data = await fetch(`${origin}/data/challenges/markdownData.json`).then(
-    (res) => res.json(),
-  );
-
   return (
     <Container
       sx={{
@@ -37,7 +31,7 @@ const ChallengesPage = async () => {
         >
           Challenges
         </Typography>
-        <List data={data} />
+        <List data={markdownData} />
       </Box>
     </Container>
   );

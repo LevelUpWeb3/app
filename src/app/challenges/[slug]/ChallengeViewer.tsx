@@ -1,26 +1,29 @@
-"use client";
-
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
+import { MDXComponents } from "mdx/types";
 
-import MarkdownViewer from "@/components/MarkdownViewer";
-import CrossDetection from "@/components/CrossDetection";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 const ChallengeMDXCodeHighlighter = MDXCodeHighlighter();
 
-const ChallengeViewer = (props) => {
-  const { data } = props;
+const ChallengeViewer = ({ params }) => {
+  const data = readFileSync(
+    path.resolve(process.cwd(), `public/data/challenges/${params.slug}.mdx`),
+    "utf8",
+  );
 
   return (
-    <CrossDetection
-      dataSource={data}
-      className="challenge-viewer py-[30px] sm:py-[40px] md:py-[60px]"
-    >
-      <MarkdownViewer
-        data={data}
-        components={{ ...ChallengeMDXCodeHighlighter, ...MDXHeaders }}
-      ></MarkdownViewer>
-    </CrossDetection>
+    <MDXRemote
+      source={data}
+      options={{
+        parseFrontmatter: true,
+      }}
+      components={
+        { ...ChallengeMDXCodeHighlighter, ...MDXHeaders } as MDXComponents
+      }
+    ></MDXRemote>
   );
 };
 

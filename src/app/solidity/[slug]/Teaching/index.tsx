@@ -1,16 +1,23 @@
-"use client";
-
 import { Box } from "@mui/material";
+import path from "node:path";
 import { Mermaid } from "mdx-mermaid/Mermaid";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
-
-import MarkdownViewer from "@/components/MarkdownViewer";
+import { readFileSync } from "node:fs";
+import { MDXRemote } from "next-mdx-remote/rsc";
 import "@/assets/css/markdown-level-up-light.css";
 
-const Teaching = (props) => {
-  const { data } = props;
+const ContentMDXCodeHighlighter = MDXCodeHighlighter();
 
+interface MDXComponents {
+  [key: string]: React.FC<any>;
+}
+
+const Teaching = ({ params }) => {
+  const data = readFileSync(
+    path.resolve(process.cwd(), `public/data/solidity/${params.slug}.mdx`),
+    "utf8",
+  );
   return (
     <Box
       sx={{
@@ -31,14 +38,19 @@ const Teaching = (props) => {
       }}
     >
       <Box className="markdown-level-up-light">
-        <MarkdownViewer
-          data={data}
-          components={{
-            ...MDXCodeHighlighter(),
-            ...MDXHeaders,
-            Mermaid,
+        <MDXRemote
+          source={data}
+          options={{
+            parseFrontmatter: true,
           }}
-        ></MarkdownViewer>
+          components={
+            {
+              ...ContentMDXCodeHighlighter,
+              ...MDXHeaders,
+              Mermaid,
+            } as MDXComponents
+          }
+        ></MDXRemote>
       </Box>
     </Box>
   );

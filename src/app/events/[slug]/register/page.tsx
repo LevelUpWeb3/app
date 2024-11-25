@@ -1,6 +1,12 @@
 import TallyForm from "@/components/TallyForm";
 import Data from "../../eventsList.json";
 
+export function generateStaticParams() {
+  return Data.map((event) => ({
+    params: { slug: event.url },
+  }));
+}
+
 const RegistrationPage = ({
   params: { slug },
 }: {

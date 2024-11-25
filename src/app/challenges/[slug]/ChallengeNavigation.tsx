@@ -1,14 +1,8 @@
-import { headers } from "next/headers";
-
 import Navigation from "@/components/Navigation";
+import data from "../markdownData.json";
 
 const ChallengeNavigation = async (props) => {
   const { challengeId } = props;
-
-  const { origin } = new URL(headers().get("x-url")!);
-  const data = await fetch(`${origin}/data/challenges/markdownData.json`).then(
-    (res) => res.json(),
-  );
 
   return (
     <Navigation

@@ -1,25 +1,32 @@
-"use client";
-
 import MDXHeaders from "@/components/MDXHeaders";
-import MarkdownViewer from "@/components/MarkdownViewer";
-import CrossDetection from "@/components/CrossDetection";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
+import { MDXComponents } from "mdx/types";
 
-const EventViewer = (props) => {
-  const { data } = props;
-
+const EventViewer = ({ params }) => {
+  const data = readFileSync(
+    path.resolve(
+      process.cwd(),
+      `public/data/events/${params.slug}/${params.slug}_overview.mdx`,
+    ),
+    "utf-8",
+  );
   return (
-    <CrossDetection
-      dataSource={data}
-      className="event-viewer py-[30px] sm:py-[40px] md:py-[60px]"
-    >
-      <MarkdownViewer
-        data={data}
-        components={{
+    <MDXRemote
+      source={data}
+      options={{
+        mdxOptions: { remarkPlugins: [remarkGfm] },
+        parseFrontmatter: true,
+      }}
+      components={
+        {
           // ...ContentMDXCodeHighlighter,
           ...MDXHeaders,
-        }}
-      ></MarkdownViewer>
-    </CrossDetection>
+        } as MDXComponents
+      }
+    ></MDXRemote>
   );
 };
 

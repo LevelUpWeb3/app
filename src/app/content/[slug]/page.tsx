@@ -1,42 +1,19 @@
-import { headers } from "next/headers";
-
-import Attribution from "./Attribution";
-import MoreContent from "./MoreContent";
-
-import { Stack } from "@mui/material";
-import BackLink from "@/components/Back";
-import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import ContentViewer from "./ContentViewer";
+import CrossDetection from "@/components/CrossDetection";
+import markdownData from "../markdownData.json";
+
+export async function generateStaticParams() {
+  return markdownData.map((x) => x.id);
+}
 
 export default async function ContentDetailsPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const { origin } = new URL(headers().get("x-url")!);
-  const data = await fetch(`${origin}/data/contents/${params.slug}.json`).then(
-    (res) => res.json(),
-  );
-
   return (
-    <>
-      <PageHeaderWrapper
-        bgColor="rgba(164, 148, 255, 0.20)"
-        sx={{ pt: ["60px", "60px", "84px"], pb: ["30px", "40px", "60px"] }}
-      >
-        <Stack
-          direction={["column", "column", "row"]}
-          gap="40px"
-          justifyContent={["flex-start", "space-between"]}
-        >
-          <BackLink></BackLink>
-          <Attribution {...data}></Attribution>
-        </Stack>
-      </PageHeaderWrapper>
-
-      <ContentViewer data={data}></ContentViewer>
-
-      <MoreContent index={data.index} />
-    </>
+    <CrossDetection className="py-[30px] sm:py-[40px] md:py-[60px]">
+      <ContentViewer params={params} />
+    </CrossDetection>
   );
 }

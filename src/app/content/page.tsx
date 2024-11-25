@@ -1,16 +1,11 @@
-import { headers } from "next/headers";
-
 import { Container, Stack, Typography } from "@mui/material";
 import List from "./List";
+import markdownData from "./markdownData.json";
 
 import Data from "./content.json";
 import { PAGE_MIN_HEIGHT } from "@/constants";
 
 const ContentPage = async () => {
-  const { origin } = new URL(headers().get("x-url")!);
-  const markdownData = await fetch(
-    `${origin}/data/contents/markdownData.json`,
-  ).then((res) => res.json());
   const data = [...markdownData, ...Data];
 
   return (

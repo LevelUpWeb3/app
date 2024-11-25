@@ -3,6 +3,7 @@ const path = require("path");
 const matter = require("gray-matter");
 
 const markdownDirectory = path.join(process.cwd(), "src/events");
+const JSONDirectory = path.join(process.cwd(), "src/app/events/");
 const outputDirectory = path.join(process.cwd(), "public/data/events");
 
 const collectMdxFiles = (dir, relativePath = "") => {
@@ -24,8 +25,6 @@ const collectMdxFiles = (dir, relativePath = "") => {
 
 const processEventsMarkdownFiles = async () => {
   const filePaths = collectMdxFiles(markdownDirectory);
-  const serialize = (await import("next-mdx-remote/serialize")).serialize;
-  const remarkGfm = (await import("remark-gfm")).default;
 
   const allEventsDataPromises = filePaths.map(
     async ({ fullPath, relativePath }) => {
@@ -33,14 +32,7 @@ const processEventsMarkdownFiles = async () => {
 
       const fileContents = fs.readFileSync(fullPath, "utf8");
 
-      const { data, content } = matter(fileContents);
-      const mdxSource = await serialize(content, {
-        mdxOptions: {
-          development: "development" === process.env.NODE_ENV,
-          // development: true,
-          remarkPlugins: [remarkGfm],
-        },
-      });
+      const { data } = matter(fileContents);
 
       if (!data.title) {
         return null;
@@ -49,19 +41,15 @@ const processEventsMarkdownFiles = async () => {
       const eventsData = {
         id,
         ...data,
-        content: mdxSource,
       };
 
       const outputDir = path.join(outputDirectory, path.dirname(relativePath));
-      const individualOutputPath = path.join(outputDir, `${id}.json`);
+      const individualOutputPathMdx = path.join(outputDir, `${id}.mdx`);
 
       if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
       }
-      fs.writeFileSync(
-        individualOutputPath,
-        JSON.stringify(eventsData, null, 2),
-      ); // Pretty print JSON
+      fs.writeFileSync(individualOutputPathMdx, fileContents);
 
       return eventsData;
     },
@@ -75,12 +63,8 @@ const processEventsMarkdownFiles = async () => {
       return a - b;
     });
 
-  if (!fs.existsSync(outputDirectory)) {
-    fs.mkdirSync(outputDirectory, { recursive: true });
-  }
-
   fs.writeFileSync(
-    path.join(outputDirectory, "markdownData.json"),
+    path.join(JSONDirectory, "markdownData.json"),
     JSON.stringify(markdownData, null, 2),
   ); // Pretty print JSON
 };

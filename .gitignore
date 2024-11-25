@@ -37,6 +37,11 @@ yarn-error.log*
 next-env.d.ts
 
 # data files
-/public/data/challenges/*.json
-/public/data/solidity/*.json
-/public/data/contents/*.json
+/public/data/challenges/
+/public/data/solidity/
+/public/data/contents/
+/public/data/events/
+/src/app/content/markdownData.json
+/src/app/challenges/markdownData.json
+/src/app/events/markdownData.json
+/src/app/solidity/markdownData.json

@@ -1,37 +1,44 @@
-import { headers } from "next/headers";
 import Card from "@/components/Card";
-import { Stack, Container, Box } from "@mui/material";
+import { Stack, Box } from "@mui/material";
 import Data from "@/app/content/content.json";
+import markdownData from "../../app/content/markdownData.json";
 
 import { shuffleArray } from "@/utils";
 
-interface ContentItemWithId {
-  id: string;
-  url?: never;
-}
-
-interface ContentItemWithUrl {
-  url: string;
-  id?: never;
-}
-
-type ContentItem = {
+interface ContentItemBase {
+  author: string;
   index: number;
   name: string;
   summary: string;
   labels: string[];
-} & (ContentItemWithId | ContentItemWithUrl);
+}
+
+type ContentItemWithId = ContentItemBase & {
+  id: string;
+  url?: never;
+  authorIcon?: string;
+  authorLink?: string;
+  published?: string;
+  readTime?: string;
+};
+
+type ContentItemWithUrl = ContentItemBase & {
+  url: string;
+  id?: never;
+  authorIcon?: string;
+  authorLink?: string;
+  published?: string;
+  readTime?: string;
+};
 
 const MoreContentSlide = async (props) => {
   const { index } = props;
 
-  const { origin } = new URL(headers().get("x-url")!);
-  const data = await fetch(`${origin}/data/contents/markdownData.json`).then(
-    (res) => res.json(),
-  );
-
   const filteredData = shuffleArray(
-    [...Data, ...data].filter((item: ContentItem) => item.index !== index),
+    [
+      ...(Data as ContentItemWithUrl[]),
+      ...(markdownData as ContentItemWithId[]),
+    ].filter((item) => item.index !== index),
   );
 
   return (
