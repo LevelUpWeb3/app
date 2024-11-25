@@ -75,7 +75,7 @@ export default function Header() {
                 mr="20px"
                 alignItems="center"
               >
-                <p>Nov 14-25</p>
+                <p>Nov 14 - Dec 09</p>
                 <StarSvg className="!mt-[-4px]"></StarSvg>
                 <Link
                   href="https://www.levelup.xyz/events/writers-competition-2024q4"
