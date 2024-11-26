@@ -7,6 +7,11 @@ import ChallengeNavigation from "./ChallengeNavigation";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 // import MoreContent from "./MoreContent";
 import markdownData from "../markdownData.json";
+import { genMeta } from "@/utils/route";
+
+export async function generateMetadata({ params: { slug } }) {
+  return genMeta({ relativeURL: `/challenges/${slug}` });
+}
 
 export default async function ChallengeDetailPage({ params, children }) {
   const data = markdownData.find((x) => x.id === params.slug);

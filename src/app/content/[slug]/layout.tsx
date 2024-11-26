@@ -5,6 +5,11 @@ import { Stack } from "@mui/material";
 import BackLink from "@/components/Back";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import markdownData from "../markdownData.json";
+import { genMeta } from "@/utils/route";
+
+export async function generateMetadata({ params: { slug } }) {
+  return genMeta({ relativeURL: `/content/${slug}` });
+}
 
 export default async function ContentDetailsLayout({
   params,

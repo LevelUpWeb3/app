@@ -1,81 +1,42 @@
-export interface PageMetadata {
-  name: string;
-  path: string;
-  description?: string;
-  ogImg?: string;
-  twitterImg?: string;
-}
-
-export const DEFAULT_METADATA = {
+const DEFAULT_METADATA = {
   name: "",
+  title: "Level Up",
   description:
     "The best platform for Web3 builders to skill up, find jobs and launch ideas",
   ogImg: "/images/level-up-preview.png",
   twitterImg: "/images/level-up-preview.png",
 };
 
-const routes: PageMetadata[] = [
-  {
-    name: "",
-    path: "/",
+export const ROOT_METADATA = {
+  metadataBase: new URL("https://www.levelup.xyz"),
+  title: DEFAULT_METADATA.title,
+  applicationName: DEFAULT_METADATA.title,
+  description: DEFAULT_METADATA.description,
+  keywords: [
+    "layer 2",
+    "ethereum",
+    "zero knowledge proof",
+    "scalability",
+    "ZKP",
+    "l2",
+    "EVM compatible",
+    "zk rollup",
+  ],
+  openGraph: {
+    title: DEFAULT_METADATA.title,
+    description: DEFAULT_METADATA.description,
+    siteName: DEFAULT_METADATA.title,
+    url: "/",
+    locale: "en_US",
+    type: "website",
   },
-  {
-    name: "Solidity",
-    path: "/solidity",
+  twitter: {
+    title: DEFAULT_METADATA.title,
+    description: DEFAULT_METADATA.description,
   },
-  {
-    name: "Solidity Challenges",
-    path: "/solidity/:Slug",
+  icons: {
+    apple: "/logo.png",
   },
-  {
-    name: "Challenges",
-    path: "/challenges",
-  },
-  {
-    name: "Challenge Detail",
-    path: "/challenges/:Id",
-  },
-  {
-    name: "Events",
-    path: "/events",
-  },
-  {
-    name: "Events",
-    path: "/events/:Slug",
-  },
-  {
-    name: "Ethcon",
-    path: "/events/ethcon-korea/:Slug",
-  },
-  {
-    name: "Event Registration",
-    path: "/events/:Slug/register",
-  },
-  {
-    name: "Event Submission",
-    path: "/events/:Slug/submit",
-  },
-  {
-    name: "Content",
-    path: "/content",
-  },
-  {
-    name: "Content",
-    path: "/content/:Slug",
-  },
-  {
-    name: "Podcast",
-    path: "/podcast",
-  },
-  // TODO: Revive grants as needed
-  // {
-  //   name: "Grants",
-  //   path: "/grants",
-  // },
-  {
-    name: "Learn More",
-    path: "/learn-more",
-  },
-];
-
-export default routes;
+  // See https://developers.google.com/web/fundamentals/web-app-manifest/
+  manifest: "/manifest.json",
+};

@@ -1,23 +1,30 @@
-import { match } from "path-to-regexp";
+import { mergeNoNullish } from "@/utils";
+import type { Metadata } from "next";
+import { ROOT_METADATA } from "@/constants/route";
 
-import allRoutes, { DEFAULT_METADATA, PageMetadata } from "@/constants/route";
+type GenMetaParams = {
+  titleSuffix?: string;
+  description?: string;
+  relativeURL?: string;
+} & Partial<Metadata>;
 
-export const findCurrentRoute = (pathname) => {
-  for (const route of allRoutes) {
-    if (checkMatchPath(route.path, pathname)) {
-      return route;
-    }
-  }
-  return {
-    ...DEFAULT_METADATA,
-    name: "NotFound",
-  } as PageMetadata;
-};
+export function genMeta({
+  titleSuffix,
+  description,
+  relativeURL,
+  ...otherOpts
+}: GenMetaParams = {}) {
+  const title = titleSuffix
+    ? `${ROOT_METADATA.title} - ${titleSuffix}`
+    : undefined;
+  description = description || ROOT_METADATA.description;
 
-export const checkMatchPath = (routePath, currentPath) => {
-  const matchPathCheck = match(routePath);
-  if (matchPathCheck(currentPath)) {
-    return true;
-  }
-  return false;
-};
+  const currentRoute: Metadata = {
+    title,
+    openGraph: { title, description, url: relativeURL },
+    twitter: { title, description },
+  };
+
+  const merged = mergeNoNullish({}, currentRoute, otherOpts);
+  return merged;
+}

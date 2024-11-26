@@ -3,6 +3,11 @@ import BackLink from "@/components/Back";
 import { Typography, Stack, Container } from "@mui/material";
 
 import markdownData from "../markdownData.json";
+import { genMeta } from "@/utils/route";
+
+export async function generateMetadata({ params: { slug } }) {
+  return genMeta({ relativeURL: `/solidity/${slug}` });
+}
 
 export default async function SolidityDetailLayout({
   params,
