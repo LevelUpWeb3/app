@@ -1,5 +1,11 @@
 import TallyForm from "@/components/TallyForm";
 import Data from "../../eventsList.json";
+import { genMeta } from "@/utils/route";
+
+export const generateMetadata = genMeta(({ params: { slug } }) => ({
+  titleSuffix: "Event Submission",
+  relativeURL: `/events/${slug}/submit`,
+}));
 
 export function generateStaticParams() {
   return Data.map((event) => ({
