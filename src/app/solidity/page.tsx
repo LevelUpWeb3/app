@@ -1,7 +1,8 @@
 import { Container, Stack, Typography } from "@mui/material";
 
-import LessonList from "./LessonList";
 import { PAGE_MIN_HEIGHT } from "@/constants";
+
+import LessonList from "./LessonList";
 import markdownData from "./markdownData.json";
 
 const SolidityPage = async () => {

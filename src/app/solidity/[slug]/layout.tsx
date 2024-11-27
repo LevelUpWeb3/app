@@ -1,9 +1,10 @@
-import LessonNavigation from "./LessonNavigation";
-import BackLink from "@/components/Back";
 import { Typography, Stack, Container } from "@mui/material";
 
-import markdownData from "../markdownData.json";
 import { genMeta } from "@/utils/route";
+import BackLink from "@/components/Back";
+
+import LessonNavigation from "./LessonNavigation";
+import markdownData from "../markdownData.json";
 
 export async function generateMetadata({ params: { slug } }) {
   return genMeta({ relativeURL: `/solidity/${slug}` });

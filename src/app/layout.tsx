@@ -1,17 +1,16 @@
-import type { Metadata, Viewport } from "next";
 import React from "react";
-
+import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 
 // import ScrollToTop from "@/components/ScrollToTop"
+import ScrollThemeProvider from "@/theme";
 import { ROOT_METADATA } from "@/constants/route";
 import RainbowProvider from "@/contexts/RainbowProvider";
-import ScrollThemeProvider from "@/theme";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import { Analytics } from "@vercel/analytics/react";
+// import ScrollToTop from "@/components/ScrollToTop";
 
 import "./globals.css";
-// import ScrollToTop from "@/components/ScrollToTop";
 
 export const metadata: Metadata = ROOT_METADATA;
 export const viewport: Viewport = { colorScheme: "normal" };

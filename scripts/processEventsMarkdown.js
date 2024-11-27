@@ -33,10 +33,7 @@ const processEventsMarkdownFiles = async () => {
       const fileContents = fs.readFileSync(fullPath, "utf8");
 
       const { data } = matter(fileContents);
-
-      if (!data.title) {
-        return null;
-      }
+      if (!data.title) return null;
 
       const eventsData = {
         id,
@@ -44,12 +41,11 @@ const processEventsMarkdownFiles = async () => {
       };
 
       const outputDir = path.join(outputDirectory, path.dirname(relativePath));
-      const individualOutputPathMdx = path.join(outputDir, `${id}.mdx`);
+      const individualOutputPath = path.join(outputDir, `${id}.mdx`);
 
-      if (!fs.existsSync(outputDir)) {
+      if (!fs.existsSync(outputDir))
         fs.mkdirSync(outputDir, { recursive: true });
-      }
-      fs.writeFileSync(individualOutputPathMdx, fileContents);
+      fs.writeFileSync(individualOutputPath, fileContents);
 
       return eventsData;
     },

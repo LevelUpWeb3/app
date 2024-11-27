@@ -21,21 +21,17 @@ const processChallengeMarkdownFiles = async () => {
       const fileContents = fs.readFileSync(fullPath, "utf8");
 
       const { data } = matter(fileContents);
-
-      if (!data.name) {
-        return null;
-      }
+      if (!data.name) return null;
 
       const challengeData = {
         id,
         ...data,
       };
-      const individualOutputPathMdx = path.join(outputDirectory, `${id}.mdx`);
+      const individualOutputPath = path.join(outputDirectory, `${id}.mdx`);
 
-      if (!fs.existsSync(outputDirectory)) {
+      if (!fs.existsSync(outputDirectory))
         fs.mkdirSync(outputDirectory, { recursive: true });
-      }
-      fs.writeFileSync(individualOutputPathMdx, fileContents);
+      fs.writeFileSync(individualOutputPath, fileContents);
 
       return challengeData;
     }

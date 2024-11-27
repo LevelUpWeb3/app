@@ -1,9 +1,10 @@
 import { Container, Stack, Typography } from "@mui/material";
+
+import { PAGE_MIN_HEIGHT } from "@/constants";
+
 import List from "./List";
 import markdownData from "./markdownData.json";
-
 import Data from "./content.json";
-import { PAGE_MIN_HEIGHT } from "@/constants";
 
 const ContentPage = async () => {
   const data = [...markdownData, ...Data];

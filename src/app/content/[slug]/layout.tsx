@@ -1,11 +1,12 @@
-import Attribution from "./Attribution";
-import MoreContent from "./MoreContent";
-
 import { Stack } from "@mui/material";
+
+import { genMeta } from "@/utils/route";
 import BackLink from "@/components/Back";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+
+import Attribution from "./Attribution";
+import MoreContent from "./MoreContent";
 import markdownData from "../markdownData.json";
-import { genMeta } from "@/utils/route";
 
 export async function generateMetadata({ params: { slug } }) {
   return genMeta({ relativeURL: `/content/${slug}` });

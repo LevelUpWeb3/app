@@ -14,6 +14,8 @@ export function genMeta({
   relativeURL,
   ...otherOpts
 }: GenMetaParams = {}) {
+  // nextjs has title.template for this nested title
+  // but it won't work for titles in og and twitter
   const title = titleSuffix
     ? `${ROOT_METADATA.title} - ${titleSuffix}`
     : undefined;
@@ -25,6 +27,8 @@ export function genMeta({
     twitter: { title, description },
   };
 
+  // nextjs complains about null deprecated value (colorScheme, ...)
+  // when merge with parent route metadata
   const merged = mergeNoNullish({}, currentRoute, otherOpts);
   return merged;
 }

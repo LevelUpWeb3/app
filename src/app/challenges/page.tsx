@@ -1,8 +1,9 @@
 import { Container, Box, Typography } from "@mui/material";
+
 import { PAGE_MIN_HEIGHT } from "@/constants";
-import markdownData from "./markdownData.json";
 
 import List from "./List";
+import markdownData from "./markdownData.json";
 
 // TODO: pick PageWrapper
 const ChallengesPage = async () => {

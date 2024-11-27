@@ -1,11 +1,11 @@
 import { Mermaid } from "mdx-mermaid/Mermaid";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
+
+import { readPublicDataSync } from "@/utils/fs";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import remarkGfm from "remark-gfm";
-import { readFileSync } from "node:fs";
-import path from "node:path";
 
 const ContentMDXCodeHighlighter = MDXCodeHighlighter();
 
@@ -21,10 +21,7 @@ const components: MDXComponents = {
 };
 
 const ContentViewer = async ({ params }) => {
-  const data = readFileSync(
-    path.resolve(process.cwd(), `public/data/contents/${params.slug}.mdx`),
-    "utf8",
-  );
+  const data = readPublicDataSync(`contents/${params.slug}.mdx`);
 
   return (
     <MDXRemote

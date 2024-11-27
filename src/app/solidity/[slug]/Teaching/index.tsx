@@ -1,10 +1,9 @@
 import { Box } from "@mui/material";
-import path from "node:path";
 import { Mermaid } from "mdx-mermaid/Mermaid";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { readPublicDataSync } from "@/utils/fs";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
-import { readFileSync } from "node:fs";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import "@/assets/css/markdown-level-up-light.css";
 
 const ContentMDXCodeHighlighter = MDXCodeHighlighter();
@@ -14,10 +13,7 @@ interface MDXComponents {
 }
 
 const Teaching = ({ params }) => {
-  const data = readFileSync(
-    path.resolve(process.cwd(), `public/data/solidity/${params.slug}.mdx`),
-    "utf8",
-  );
+  const data = readPublicDataSync(`solidity/${params.slug}.mdx`);
   return (
     <Box
       sx={{

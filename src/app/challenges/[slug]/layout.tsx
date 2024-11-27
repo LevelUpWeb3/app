@@ -1,13 +1,13 @@
 import { Stack } from "@mui/material";
 
+import { genMeta } from "@/utils/route";
 import BackLink from "@/components/Back";
+import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+// import MoreContent from "./MoreContent";
 
 import ChallengeHeader from "./ChallengeHeader";
 import ChallengeNavigation from "./ChallengeNavigation";
-import PageHeaderWrapper from "@/components/PageHeaderWrapper";
-// import MoreContent from "./MoreContent";
 import markdownData from "../markdownData.json";
-import { genMeta } from "@/utils/route";
 
 export async function generateMetadata({ params: { slug } }) {
   return genMeta({ relativeURL: `/challenges/${slug}` });

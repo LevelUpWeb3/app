@@ -17,20 +17,17 @@ const processContentMarkdownFiles = async () => {
 
     const { data } = matter(fileContents);
 
-    if (!data.name) {
-      return null;
-    }
+    if (!data.name) return null;
 
     const contentData = {
       id,
       ...data,
     };
-    const individualOutputPathMdx = path.join(publicDirectory, `${id}.mdx`);
+    const individualOutputPath = path.join(publicDirectory, `${id}.mdx`);
 
-    if (!fs.existsSync(publicDirectory)) {
+    if (!fs.existsSync(publicDirectory))
       fs.mkdirSync(publicDirectory, { recursive: true });
-    }
-    fs.writeFileSync(individualOutputPathMdx, fileContents);
+    fs.writeFileSync(individualOutputPath, fileContents);
 
     return contentData;
   });

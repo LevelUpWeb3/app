@@ -1,16 +1,17 @@
 import { Box, Container, Stack } from "@mui/material";
+
+import { genMeta } from "@/utils/route";
 import BackLink from "@/components/Back";
 
 import EventHeader from "./EventHeader";
 import EventNavigation from "./EventNavigation";
 import Data from "../eventsList.json";
-import { genMeta } from "@/utils/route";
 
 export async function generateMetadata({ params: { slug } }) {
   return genMeta({ relativeURL: `/events/${slug}` });
 }
 
-const HackathonDetailLayout = async ({
+const EventDetailLayout = async ({
   params,
   children,
 }: {
@@ -42,4 +43,4 @@ const HackathonDetailLayout = async ({
   );
 };
 
-export default HackathonDetailLayout;
+export default EventDetailLayout;
