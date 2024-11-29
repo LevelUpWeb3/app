@@ -64,7 +64,7 @@ contract B is A {
 // 1. A
 // 2. B
 // 3. C
-contract C is A, B {
-    constructor(string memory _name, uint256 _data) A(_name) B(_name, _data) {}
+contract C is B {
+    constructor(string memory _name, uint256 _data) B(_name, _data) {}
 }
 ```
