@@ -56,7 +56,7 @@ contract MyContract {
         balance[to] += amount;
 
         // Use assert for internal errors that should never happen
-        assert(balance[msg.sender] + balance[to] == amount);
+        assert(balance[msg.sender] + amount == balance[to]);
     }
 }
 ```
