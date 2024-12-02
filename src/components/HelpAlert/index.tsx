@@ -30,7 +30,7 @@ const HelpAlert = () => {
           </Tooltip>
         }
         severity="info"
-        onClick={() => window.open("https://t.me/+PdNbk5milo1mMTAy", "_blank")}
+        onClick={() => window.open("https://t.me/+jbhmyDZ63Vw0ZGYy", "_blank")}
       >
         Get Help
       </Notice>
