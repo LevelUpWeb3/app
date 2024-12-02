@@ -75,7 +75,7 @@ const ChallengeDetail = (props) => {
           <Tooltip title="Join the study group for help!" placement="top">
             <Link
               className="inline-flex items-center gap-[10px] text-[16px]"
-              href="https://t.me/+PdNbk5milo1mMTAy"
+              href="https://t.me/+jbhmyDZ63Vw0ZGYy"
               target="_blank"
             >
               <TelegramSvg className="w-[16px]" />
