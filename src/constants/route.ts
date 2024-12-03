@@ -3,8 +3,6 @@ const DEFAULT_METADATA = {
   title: "Level Up",
   description:
     "The best platform for Web3 builders to skill up, find jobs and launch ideas",
-  ogImg: "/images/level-up-preview.png",
-  twitterImg: "/images/level-up-preview.png",
 };
 
 export const ROOT_METADATA = {
