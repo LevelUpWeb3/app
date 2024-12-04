@@ -1,7 +1,7 @@
 import { isHexString } from "ethers";
 import find from "lodash/find";
 import { DependencyList } from "react";
-
+import { mergeWith, isNil, isPlainObject } from "lodash";
 // import { STORAGE_AVAILABLE } from "../constants/storageKey"
 
 export const shallowEquals = (a?: DependencyList, b?: DependencyList) => {
@@ -74,3 +74,56 @@ export const shuffleArray = (array: any[]) => {
   }
   return array;
 };
+
+/**
+ * Deep merges objects while removing nullish (null/undefined) values
+ * @param target The target object
+ * @param sources The source objects to merge
+ * @returns Merged object without nullish values
+ */
+export function mergeNoNullish<T extends object>(
+  target: T,
+  ...sources: Partial<T>[]
+): T {
+  if (sources.length < 2) {
+    throw new Error("At least 3 objects (1 target and 2 sources) are required");
+  }
+
+  const customizer = (value: any, srcValue: any): any => {
+    // Handle arrays specially
+    if (Array.isArray(value) && Array.isArray(srcValue)) {
+      return srcValue.filter((item) => !isNil(item));
+    }
+
+    // Skip nullish values from source
+    if (isNil(srcValue)) {
+      return value;
+    }
+  };
+
+  // First, merge all objects
+  const merged = mergeWith({}, target, ...sources, customizer);
+
+  // Then recursively remove nullish values
+  const removeNullish = (obj: any): any => {
+    if (!isPlainObject(obj)) {
+      return isNil(obj) ? undefined : obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj
+        .filter((item) => !isNil(item))
+        .map((item) => removeNullish(item));
+    }
+
+    return Object.entries(obj).reduce((acc, [key, value]) => {
+      const cleanValue = removeNullish(value);
+      if (!isNil(cleanValue)) {
+        acc[key] = cleanValue;
+      }
+      return acc;
+    }, {} as any);
+  };
+
+  return removeNullish(merged) as T;
+}

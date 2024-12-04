@@ -1,5 +1,3 @@
-import clsx from "clsx";
-
 function generateSafeDomId(title) {
   if (typeof title !== "string") return;
   const textParts = title.trim().split(" ");
@@ -11,8 +9,24 @@ function generateSafeDomId(title) {
   // Return the generated ID
   return safeDomId;
 }
+interface MDXHeaderComponentProps {
+  node: any;
+  inline: boolean;
+  className: string;
+  children: any;
+  props: any;
+}
 
-const MDXHeaders = {
+interface MDXHeaderComponents {
+  h1: React.FC<MDXHeaderComponentProps>;
+  h2: React.FC<MDXHeaderComponentProps>;
+  h3: React.FC<MDXHeaderComponentProps>;
+  h4: React.FC<MDXHeaderComponentProps>;
+  h5: React.FC<MDXHeaderComponentProps>;
+  h6: React.FC<MDXHeaderComponentProps>;
+}
+
+const MDXHeaders: MDXHeaderComponents = {
   h1({ node, inline, className, children, ...props }) {
     const id = generateSafeDomId(children);
     return (

@@ -1,26 +1,29 @@
 import { Stack } from "@mui/material";
-import { headers } from "next/headers";
 
+import { genMeta } from "@/utils/route";
 import BackLink from "@/components/Back";
+import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+import CrossDetection from "@/components/CrossDetection";
+// import MoreContent from "./MoreContent";
 
 import ChallengeHeader from "./ChallengeHeader";
-import SubmitAction from "./SubmitAction";
-import ChallengeViewer from "./ChallengeViewer";
 import ChallengeNavigation from "./ChallengeNavigation";
-import PageHeaderWrapper from "@/components/PageHeaderWrapper";
-// import MoreContent from "./MoreContent";
+import ChallengeViewer from "./ChallengeViewer";
 import ChallengeSubmit from "./ChallengeSubmit";
+import markdownData from "../markdownData.json";
+// import SubmitAction from "./SubmitAction";
 
-export default async function ChallengeDetailPage({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) {
-  const { origin } = new URL(headers().get("x-url")!);
-  const data = await fetch(`${origin}/data/challenges/${slug}.json`).then(
-    (res) => res.json(),
-  );
+export async function generateStaticParams() {
+  return markdownData.map((x) => x.id);
+}
 
+export const generateMetadata = genMeta(({ params: { slug } }) => ({
+  titleSuffix: "Challenge Detail",
+  relativeURL: `/challenges/${slug}`,
+}));
+
+export default async function ChallengeDetailPage({ params }) {
+  const data = markdownData.find((x) => x.id === params.slug);
   return (
     <>
       <PageHeaderWrapper
@@ -36,13 +39,15 @@ export default async function ChallengeDetailPage({
         </Stack>
       </PageHeaderWrapper>
 
-      <ChallengeViewer data={data}></ChallengeViewer>
+      <CrossDetection className="challenge-viewer py-[30px] sm:py-[40px] md:py-[60px]">
+        <ChallengeViewer params={params}></ChallengeViewer>
+      </CrossDetection>
       <ChallengeSubmit
-        type={data.submitWithoutCode ? "normal" : "code"}
+        type={data?.submitWithoutCode ? "normal" : "code"}
       ></ChallengeSubmit>
 
       {/* <MoreContent /> */}
-      <ChallengeNavigation challengeId={slug}></ChallengeNavigation>
+      <ChallengeNavigation challengeId={params.slug}></ChallengeNavigation>
     </>
   );
 }

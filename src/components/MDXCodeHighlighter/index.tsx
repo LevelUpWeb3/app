@@ -5,18 +5,36 @@ import clsx from "clsx";
 
 import markdownCodeViewer from "@/theme/markdownCodeViewer";
 
-const MDXCodeHighlighter = (theme = "dark") => {
+interface PreProps {
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}
+
+interface CodeProps {
+  node?: any;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}
+
+interface MDXComponents {
+  pre: React.FC<PreProps>;
+  code: React.FC<CodeProps>;
+}
+
+const MDXCodeHighlighter = (theme = "dark"): MDXComponents => {
   const defaultStyle = markdownCodeViewer;
   // console.log(defaultStyle, "defaultStyle");
   return {
-    pre({ className, children, ...props }) {
+    pre({ className, children, ...props }: PreProps) {
       return (
         <div className={className} {...props}>
           {children}
         </div>
       );
     },
-    code({ node, className, children, ...props }) {
+    code({ node, className, children, ...props }: CodeProps) {
       const match = /language-(\w+)/.exec(className || "");
       const multiline = typeof children === "string" && children.match(/\n/);
       return (

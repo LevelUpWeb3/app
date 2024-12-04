@@ -1,5 +1,7 @@
 import { Container, Box, Typography } from "@mui/material";
+
 import { PAGE_MIN_HEIGHT } from "@/constants";
+
 import List from "./List";
 import Data from "./eventsList.json";
 

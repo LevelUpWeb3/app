@@ -1,22 +1,30 @@
-import { headers } from "next/headers";
+import { Stack } from "@mui/material";
+
+import { genMeta } from "@/utils/route";
+import BackLink from "@/components/Back";
+import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+import CrossDetection from "@/components/CrossDetection";
 
 import Attribution from "./Attribution";
 import MoreContent from "./MoreContent";
-
-import { Stack } from "@mui/material";
-import BackLink from "@/components/Back";
-import PageHeaderWrapper from "@/components/PageHeaderWrapper";
 import ContentViewer from "./ContentViewer";
+import markdownData from "../markdownData.json";
+
+export const generateMetadata = genMeta(({ params: { slug } }) => ({
+  relativeURL: `/content/${slug}`,
+}));
+
+export async function generateStaticParams() {
+  return markdownData.map((x) => x.id);
+}
 
 export default async function ContentDetailsPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const { origin } = new URL(headers().get("x-url")!);
-  const data = await fetch(`${origin}/data/contents/${params.slug}.json`).then(
-    (res) => res.json(),
-  );
+  const data = markdownData.find((x) => x.id === params.slug);
+  if (!data) return;
 
   return (
     <>
@@ -34,7 +42,9 @@ export default async function ContentDetailsPage({
         </Stack>
       </PageHeaderWrapper>
 
-      <ContentViewer data={data}></ContentViewer>
+      <CrossDetection className="py-[30px] sm:py-[40px] md:py-[60px]">
+        <ContentViewer params={params} />
+      </CrossDetection>
 
       <MoreContent index={data.index} />
     </>

@@ -6,11 +6,11 @@ const markdownDirectory = path.join(
   process.cwd(),
   "src/challenges/defi-challenges",
 );
+const JSONDirectory = path.join(process.cwd(), "src/app/challenges/");
 const outputDirectory = path.join(process.cwd(), "public/data/challenges");
 
 const processChallengeMarkdownFiles = async () => {
   const fileNames = fs.readdirSync(markdownDirectory);
-  const serialize = (await import("next-mdx-remote/serialize")).serialize;
 
   const allChallengesDataPromises = fileNames.map(async (fileName) => {
     const fullPath = path.join(markdownDirectory, fileName);
@@ -20,32 +20,18 @@ const processChallengeMarkdownFiles = async () => {
       const id = fileName.replace(/\.mdx$/, "");
       const fileContents = fs.readFileSync(fullPath, "utf8");
 
-      const { data, content } = matter(fileContents);
-      const mdxSource = await serialize(content, {
-        mdxOptions: {
-          development: "development" === process.env.NODE_ENV,
-          // development: true,
-        },
-      });
-
-      if (!data.name) {
-        return null;
-      }
+      const { data } = matter(fileContents);
+      if (!data.name) return null;
 
       const challengeData = {
         id,
         ...data,
-        content: mdxSource,
       };
-      const individualOutputPath = path.join(outputDirectory, `${id}.json`);
+      const individualOutputPath = path.join(outputDirectory, `${id}.mdx`);
 
-      if (!fs.existsSync(outputDirectory)) {
+      if (!fs.existsSync(outputDirectory))
         fs.mkdirSync(outputDirectory, { recursive: true });
-      }
-      fs.writeFileSync(
-        individualOutputPath,
-        JSON.stringify(challengeData, null, 2),
-      ); // Pretty print JSON
+      fs.writeFileSync(individualOutputPath, fileContents);
 
       return challengeData;
     }
@@ -59,12 +45,8 @@ const processChallengeMarkdownFiles = async () => {
       return a - b;
     });
 
-  if (!fs.existsSync(outputDirectory)) {
-    fs.mkdirSync(outputDirectory, { recursive: true });
-  }
-
   fs.writeFileSync(
-    path.join(outputDirectory, "markdownData.json"),
+    path.join(JSONDirectory, "markdownData.json"),
     JSON.stringify(markdownData, null, 2),
   ); // Pretty print JSON
 };
