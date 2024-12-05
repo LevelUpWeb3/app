@@ -1,7 +1,7 @@
 ![Contribute to Level Up](./public/images/contributing-banner.jpg)
 
 [![X Follow](https://img.shields.io/twitter/follow/levelupweb3?style=social)](https://x.com/levelupweb3)
-[![Study Group](https://img.shields.io/badge/Telegram-Join%20Study%20Group-blue)](https://t.me/+PdNbk5milo1mMTAy)
+[![Study Group](https://img.shields.io/badge/Telegram-Join%20Study%20Group-blue)](https://t.me/+jbhmyDZ63Vw0ZGYy)
 
 Thank you for considering contributing to Level Up! We have been on a mission to build the best one-stop solution for developers to build the future of Ethereum. We greatly appreciate your help and are excited to collaborate with you. This document will guide you through the process of contributing.
 

@@ -1,21 +1,29 @@
-import LessonNavigation from "./LessonNavigation";
-import EditorPanel from "./EditorPanel";
-import { headers } from "next/headers";
-import BackLink from "@/components/Back";
-
 import { Typography, Stack, Container } from "@mui/material";
 
+import { genMeta } from "@/utils/route";
+import BackLink from "@/components/Back";
+
+import EditorPanel from "./EditorPanel";
 import Teaching from "./Teaching";
+import LessonNavigation from "./LessonNavigation";
+import markdownData from "../markdownData.json";
+
+export async function generateStaticParams() {
+  return markdownData.map((x) => x.id);
+}
+
+export const generateMetadata = genMeta(({ params: { slug } }) => ({
+  titleSuffix: "Solidity Challenges",
+  relativeURL: `/solidity/${slug}`,
+}));
 
 export default async function SolidityDetailPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const { origin } = new URL(headers().get("x-url")!);
-  const data = await fetch(`${origin}/data/solidity/${params.slug}.json`).then(
-    (res) => res.json(),
-  );
+  const data = markdownData.find((x) => x.id === params.slug);
+  if (!data) return;
 
   return (
     <>
@@ -56,8 +64,7 @@ export default async function SolidityDetailPage({
         >
           Visit desktop version for better experiences.
         </Typography>
-        <Teaching data={data}></Teaching>
-
+        <Teaching params={params}></Teaching>
         <EditorPanel data={data} />
       </Container>
       <LessonNavigation lessonId={params.slug} />

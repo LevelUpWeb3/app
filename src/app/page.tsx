@@ -106,7 +106,7 @@ const Home = () => {
                 <Button href="https://github.com/LevelUpWeb3/app" isExternal>
                   Find Our Github
                 </Button>
-                <Button href="https://t.me/+PdNbk5milo1mMTAy" isExternal>
+                <Button href="https://t.me/+jbhmyDZ63Vw0ZGYy" isExternal>
                   Join The Study Group
                 </Button>
               </Stack>

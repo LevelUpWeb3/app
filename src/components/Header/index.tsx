@@ -75,14 +75,14 @@ export default function Header() {
                 mr="20px"
                 alignItems="center"
               >
-                <p>Nov 15-17</p>
+                <p>Nov 14 - Dec 09</p>
                 <StarSvg className="!mt-[-4px]"></StarSvg>
                 <Link
-                  href="https://ethglobal.com/events/bangkok/prizes/scroll"
+                  href="https://www.levelup.xyz/events/writers-competition-2024q4"
                   className="font-medium"
                   target="_blank"
                 >
-                  Join The Level Up Hackathon: Eth Global Bangkok
+                  Join Scroll Articles Bounty Contest: Write and Earn!
                 </Link>
               </Stack>
             </AnnouncementBar>

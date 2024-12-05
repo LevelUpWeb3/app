@@ -1,32 +1,37 @@
-"use client";
-
 import { Mermaid } from "mdx-mermaid/Mermaid";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
+
+import { readPublicDataSync } from "@/utils/fs";
 import MDXCodeHighlighter from "@/components/MDXCodeHighlighter";
 import MDXHeaders from "@/components/MDXHeaders";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
-import MarkdownViewer from "@/components/MarkdownViewer";
-import CrossDetection from "@/components/CrossDetection";
 
 const ContentMDXCodeHighlighter = MDXCodeHighlighter();
 
-const ContentViewer = (props) => {
-  const { data } = props;
+interface MDXComponents {
+  [key: string]: React.FC<any>;
+}
+
+const components: MDXComponents = {
+  ...ContentMDXCodeHighlighter,
+  ...MDXHeaders,
+  Mermaid,
+  YoutubeEmbed,
+};
+
+const ContentViewer = async ({ params }) => {
+  const data = readPublicDataSync(`contents/${params.slug}.mdx`);
 
   return (
-    <CrossDetection
-      dataSource={data}
-      className="py-[30px] sm:py-[40px] md:py-[60px]"
-    >
-      <MarkdownViewer
-        data={data}
-        components={{
-          ...ContentMDXCodeHighlighter,
-          ...MDXHeaders,
-          Mermaid,
-          YoutubeEmbed,
-        }}
-      ></MarkdownViewer>
-    </CrossDetection>
+    <MDXRemote
+      source={data}
+      options={{
+        mdxOptions: { remarkPlugins: [remarkGfm] },
+        parseFrontmatter: true,
+      }}
+      components={components}
+    />
   );
 };
 
