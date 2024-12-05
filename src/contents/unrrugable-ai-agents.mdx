@@ -12,13 +12,13 @@ labels: ["ZK", "DeFi"]
 
 What was once speculation is now a reality: AI and blockchain are technologies with lots of synergy. Recently, AI agents have been actively participating in social media and on-chain, performing tasks like tipping users, swapping on-chain and more.
 
-However, a critical problem remains: the current meta of AI agents lacks verifiability. This means the creator or owner of an AI agent can potentially tamper or impersonate the AI model, so users can't know what was done by the AI or by the creator. In this tutorial, we’ll explore how Zero Knowledge, shortened as ZK can provide the most secure and seamless experience for everyone in the AI agent space.
+However, a critical problem remains: the current meta of AI agents lacks verifiability. This means the creator or owner of an AI agent can potentially tamper or impersonate the AI model, so users can't know what was done by the AI or by the creator. In this tutorial, we’ll explore how Zero Knowledge, shortened as ZK, can provide the most secure and seamless experience for everyone in the AI agent space.
 
 ### Why Zero Knowledge?
 
 Zero Knowledge, provides two distinct capabilities: privacy and scalability.
 
-For this tutorial, we’ll focus on the second one. Verifying the computation of a Machine Learning (ML) model directly is impossible to do on-chain by normal means because it's too expensive and in most cases won't even fit in a an Ethereum block. Instead, we’ll compute the ML model off-chain and use ZK to generate a proof of that computation. This proof can then be verified cheaply on-chain by a Solidity smart contract, ensuring trust without requiring full on-chain execution.
+For this particular case, we’ll focus on the second one. It's currently impossible to verify on-chain the computation of a Machine Learning (ML) model by normal means because it's too expensive and in most cases won't even fit in a an Ethereum block. Instead, we’ll compute the ML model off-chain and use ZK to generate a proof of that computation. This proof can then be verified cheaply on-chain by a Solidity smart contract, ensuring trust without requiring full on-chain execution.
 
 ## Building a Verifiable Tipper AI Agent
 
@@ -43,7 +43,7 @@ A model can, for example, decides who deserves a tip based who has the best comm
 
 In this example we'll keep it simple, we'll generate a model that just decides who deserves a `1000` token tip deterministically to an address provided.
 
-Let's start by replacing the first block provided in google collab with the following. Also, replace `tip_recipient_address` with a wallet of your choice, this wallet will receive the tokens tipped by the AI.
+Let's start by replacing the first block provided in Google Colab with the following. Also, replace `tip_recipient_address` with a wallet of your choice, this wallet will receive the tokens tipped by the AI.
 
 ```python
 # Check if notebook is in Colab
@@ -109,12 +109,14 @@ print("Model saved as 'fixed_hex_address_model.onnx'!")
 
 ## Step 1: Create a Verifier Contract
 
-Next, run all the other code snippets in Google Collab, this will generate a ZK circuit that is verifiable off-chain. Now we want to be able to verify on-chain, to do it run the following snippet. This will print a fully working Solidity verifier contract.
+Next, run all the other code snippets in Google Colab, this will generate a ZK circuit that is verifiable off-chain. Now we want to be able to verify on-chain, to do it run the following snippet. This will print a fully working Solidity verifier contract.
 
 ```python
+// Define the file where ABI and Solidity code will be generated
 abi_path = 'test.abi'
 sol_code_path = 'test.sol'
 
+// Creates Solidity verifier code based on the circuit previously generated
 res = await ezkl.create_evm_verifier(
         vk_path,
         
@@ -125,12 +127,13 @@ res = await ezkl.create_evm_verifier(
 
 assert res == True
 
+// Print the solidity code on the console
 with open(sol_code_path, 'r') as sol_file:
     sol_content = sol_file.read()
     print(sol_content)
 ```
 
-The next step is deploying to your preferred chain. Please note that compiler optimizations must be enabled to successfully compile the contract. This is necessary because the generated contract is quite large and requires optimization to fit within deployment constraints.
+The next step is deploying to your preferred chain. **Please note that compiler optimizations must be enabled to successfully compile the contract.** This is necessary because the generated contract is quite large and requires optimization to fit within deployment constraints.
 
 ## Step 2: Generate a ZK Proof
 
@@ -139,15 +142,19 @@ Next, generate the ZK proof and encode it in the format that is expected by the 
 Run the following snippet and the proof will be printed.
 
 ```python
-abi_path = 'test.abi'
-calldata = 'calldata2.proof'
+// Define where the calldata in json format will be generated
+calldata = 'calldata.proof'
 
+// Encodes the proof in the format expected by the verifier smart contract
 res = ezkl.encode_evm_calldata(
         proof_path,
         calldata,
     )
+
+// Optionally, print the the JSON data
 # print(res)
 
+// Convert the proof from json format to hexadecimal bytes
 calldata_hex = "0x" + ''.join(f"{byte:02x}" for byte in res)
 print(calldata_hex)
 ```
@@ -158,15 +165,17 @@ EZKL generates a ZK proofs as raw calldata sent to the Verifier contract. This m
 
 Deploy a simple ERC20 token that the AI agent will be able to interact with. Deploy the following contract that will mint some tokens to you.
 
-```js
+```solidity
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts ^5.0.0
 pragma solidity ^0.8.22;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
+// Simple ERC20 token contract created from the OpenZeppelin Wizzard
 contract MyToken is ERC20 {
     constructor() ERC20("Tip Token", "TIPT") {
+        // Mint 21M tokens to the deployer
         _mint(msg.sender, 21_000_000 ether);
     }
 }
@@ -176,32 +185,42 @@ contract MyToken is ERC20 {
 
 The Tipper contract ensures that tokens are distributed only when a valid ZK proof is submitted. Deploy the following contract by replacing the `HALO2_VERIFIER` and `TIP_TOKEN` with the contract addresses you just deployed. Then, transfer at least `1000` Tip Tokens to this contract.
 
-```js
+```solidity
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.9.0;
 
+// Interface that contains the function that verifies the proof on the Halo2 verifier generated automatically by EZKL
 interface Halo2Verifier {
     function verifyProof(bytes calldata proof, uint256[] calldata instances) external view;
 }
 
+// On this example we will just use the transfer function on the Tip Token for sending 1000 tokens when a valid proof is submitted
 interface IERC20 {
     function transfer(address to, uint256 value) external returns (bool);
 }
 
-
-contract AiAgentGuardrail {
+// The Tipper contract acts as a guardrail for the AI agent, only allows to perform an action is a valid ZKML proof was submitted
+contract Tipper {
+    // Replace the following two address with the two contracts you just deployed
     address HALO2_VERIFIER = 0x84fBBc680F4aB4240e8cF6C488aEca03bfF91d2E;
     address TIP_TOKEN = 0x84fBBc680F4aB4240e8cF6C488aEca03bfF91d2E;
 
+    // Sends the tip to the user only if a valid ZKML proof is submitted
     function verifyAndSendTip(bytes memory proofCalldata) public {
+        // Verification is done passing the calldata bytes we previously generated to the Halo2 verifier contract
         (bool success, bytes memory data) = HALO2_VERIFIER.call(proofCalldata);
+        // The EZKL verifier returns 1 if the proof is valid
         if(success && data.length == 32 && uint8(data[31]) == 1)
+            // Transfer 1000 tokens to the user
+            // Notice sensitive parameters such as the recipient, have to be generated by the ZK proof to prevent frontrun attacks
             IERC20(TIP_TOKEN).transfer(extractTipRecipientFromProof(proofCalldata), 1_000 ether);
         else 
             revert("Could not verify proof");
     }
 
+    // The ZK proofs have public parameters baked into to the proof
+    // In this case, we extract the tip recipient address from the proof and convert it into a Solidity address format
     function extractTipRecipientFromProof(bytes memory proofCalldata) internal pure returns (address) {
         bytes memory lastBytes = new bytes(20);
         for (uint i = 0; i < 20; i++) {
@@ -216,4 +235,4 @@ Now call `verifyAndSendTip` by submitting the proof as parameter in the calldata
 
 ## Next steps
 
-By integrating ZK technology, we can create secure, autonomous AI agents that operate transparently on-chain. Next steps involve deepening into ZK learning and also training an AI model capable of performing interesting and exciting tasks. To get started with ZK I recommend TODO and to get started with training ML models, I recommend TODO.
+By integrating ZK, we can create secure, autonomous AI agents that operate transparently on-chain. Next steps involve deepening into ZK learning and also training an AI model capable of performing interesting and exciting tasks. To get started with ZK I recommend TODO and to get started with training ML models, I recommend TODO.
