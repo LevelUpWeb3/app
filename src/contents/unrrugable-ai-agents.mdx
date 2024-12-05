@@ -1,0 +1,219 @@
+---
+name: "Unruggable AI Agents with ZKML"
+index: 11
+summary: Create an AI Agent with Guardrails using EZKL.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Dec 09, 2024
+readTime: 15 min read
+labels: ["ZK", "DeFi"]
+---
+
+What was once speculation is now a reality: AI and blockchain are technologies with lots of synergy. Recently, AI agents have been actively participating in social media and on-chain, performing tasks like tipping users, swapping on-chain and more.
+
+However, a critical problem remains: the current meta of AI agents lacks verifiability. This means the creator or owner of an AI agent can potentially tamper or impersonate the AI model, so users can't know what was done by the AI or by the creator. In this tutorial, we’ll explore how Zero Knowledge, shortened as ZK can provide the most secure and seamless experience for everyone in the AI agent space.
+
+### Why Zero Knowledge?
+
+Zero Knowledge, provides two distinct capabilities: privacy and scalability.
+
+For this tutorial, we’ll focus on the second one. Verifying the computation of a Machine Learning (ML) model directly is impossible to do on-chain by normal means because it's too expensive and in most cases won't even fit in a an Ethereum block. Instead, we’ll compute the ML model off-chain and use ZK to generate a proof of that computation. This proof can then be verified cheaply on-chain by a Solidity smart contract, ensuring trust without requiring full on-chain execution.
+
+## Building a Verifiable Tipper AI Agent
+
+In this article we’ll create a Tipper AI agent that is able to decide who to send a tip to based on data provided that can be, for example, a list of comments on farcaster. We will need to create a smart contract that acts as a guardrail, ensuring the AI agent operates autonomously without being controlled by the creator. In order to achieve this, we’ll use [EZKL](https://ezkl.xyz/), a tool for generating verifiable proofs of ML computations.
+
+### In this tutorial, you’ll learn how to:
+
+1. Create a ZKML Verifier Contract
+1. Generate a valid ZK Proof
+1. Launch a simple Tip Token
+1. Tip users when a valid ZK proof is submitted
+
+### EZKL: ZKML library for developers
+
+EZKL provides convenient Google Colab notebooks to help you get started quickly. Here’s the [Simple Demo Notebook](https://colab.research.google.com/github/zkonduit/ezkl/blob/main/examples/notebooks/simple_demo_all_public.ipynb).
+
+[![Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/zkonduit/ezkl/blob/main/examples/notebooks/simple_demo_all_public.ipynb)
+
+## Step 0: Generate an AI model
+
+A model can, for example, decides who deserves a tip based who has the best comments on Farcaster, buy a token based on market conditions, or [mint an NFT based on your singing skills](https://cryptoidol.tech/). There are endless possibilities in terms of what an AI model can do on-chain.
+
+In this example we'll keep it simple, we'll generate a model that just decides who deserves a `1000` token tip deterministically to an address provided.
+
+Let's start by replacing the first block provided in google collab with the following. Also, replace `tip_recipient_address` with a wallet of your choice, this wallet will receive the tokens tipped by the AI.
+
+```python
+# Check if notebook is in Colab
+try:
+    # Install ezkl and onnx if in Colab
+    import google.colab
+    import subprocess
+    import sys
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "ezkl"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "onnx"])
+except:
+    pass  # Rely on local installation of ezkl otherwise
+
+# Import required libraries
+from torch import nn
+import torch
+import ezkl
+
+# Define the address that will receive the tip
+tip_recipient_address = 0x707e55a12557E89915D121932F83dEeEf09E5d70
+
+# Convert the address to the format expected by EZKL
+def address_to_byte_tensor(address):
+    address_hex = f"{address:040x}"
+    return torch.tensor([int(address_hex[i:i+2], 16) for i in range(0, len(address_hex), 2)], dtype=torch.uint8)
+
+tip_recipient_tensor = address_to_byte_tensor(tip_recipient_address)
+print(f"Tip Recipient Tensor: {tip_recipient_tensor}")
+
+# Define a model that outputs the tipped address
+class FixedHexAddressModel(nn.Module):
+    def __init__(self, address_tensor):
+        super(FixedHexAddressModel, self).__init__()
+        self.output_value = address_tensor
+
+    def forward(self, x):
+        # Ignore input and always return the fixed address
+        batch_size = x.size(0)
+        return self.output_value.repeat(batch_size, 1)  # Repeat for batch size
+
+# Instantiate the model
+circuit = FixedHexAddressModel(tip_recipient_tensor)
+
+# Example input
+dummy_input = torch.ones(1, 1)  # Dummy input (not used by the model)
+
+# Generate the output
+output = circuit(dummy_input)
+print(f"Output (Hex Address): {output}")
+
+# Export the model to ONNX format
+torch.onnx.export(
+    circuit,
+    dummy_input,
+    "fixed_hex_address_model.onnx",
+    input_names=["input"],
+    output_names=["output"],
+    dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}}
+)
+
+print("Model saved as 'fixed_hex_address_model.onnx'!")
+```
+
+## Step 1: Create a Verifier Contract
+
+Next, run all the other code snippets in Google Collab, this will generate a ZK circuit that is verifiable off-chain. Now we want to be able to verify on-chain, to do it run the following snippet. This will print a fully working Solidity verifier contract.
+
+```python
+abi_path = 'test.abi'
+sol_code_path = 'test.sol'
+
+res = await ezkl.create_evm_verifier(
+        vk_path,
+        
+        settings_path,
+        sol_code_path,
+        abi_path,
+    )
+
+assert res == True
+
+with open(sol_code_path, 'r') as sol_file:
+    sol_content = sol_file.read()
+    print(sol_content)
+```
+
+The next step is deploying to your preferred chain. Please note that compiler optimizations must be enabled to successfully compile the contract. This is necessary because the generated contract is quite large and requires optimization to fit within deployment constraints.
+
+## Step 2: Generate a ZK Proof
+
+Next, generate the ZK proof and encode it in the format that is expected by the verifier contract.
+
+Run the following snippet and the proof will be printed.
+
+```python
+abi_path = 'test.abi'
+calldata = 'calldata2.proof'
+
+res = ezkl.encode_evm_calldata(
+        proof_path,
+        calldata,
+    )
+# print(res)
+
+calldata_hex = "0x" + ''.join(f"{byte:02x}" for byte in res)
+print(calldata_hex)
+```
+
+EZKL generates a ZK proofs as raw calldata sent to the Verifier contract. This means that the proof must be sent using a low level evm `CALL` function instead of how you normally call another smart contract in solidity, more about this in Step 4.
+
+## Step 3. Launch the Tip Token
+
+Deploy a simple ERC20 token that the AI agent will be able to interact with. Deploy the following contract that will mint some tokens to you.
+
+```js
+// SPDX-License-Identifier: MIT
+// Compatible with OpenZeppelin Contracts ^5.0.0
+pragma solidity ^0.8.22;
+
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    constructor() ERC20("Tip Token", "TIPT") {
+        _mint(msg.sender, 21_000_000 ether);
+    }
+}
+```
+
+## Step 4: Build the Tipper Contract
+
+The Tipper contract ensures that tokens are distributed only when a valid ZK proof is submitted. Deploy the following contract by replacing the `HALO2_VERIFIER` and `TIP_TOKEN` with the contract addresses you just deployed. Then, transfer at least `1000` Tip Tokens to this contract.
+
+```js
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
+
+interface Halo2Verifier {
+    function verifyProof(bytes calldata proof, uint256[] calldata instances) external view;
+}
+
+interface IERC20 {
+    function transfer(address to, uint256 value) external returns (bool);
+}
+
+
+contract AiAgentGuardrail {
+    address HALO2_VERIFIER = 0x84fBBc680F4aB4240e8cF6C488aEca03bfF91d2E;
+    address TIP_TOKEN = 0x84fBBc680F4aB4240e8cF6C488aEca03bfF91d2E;
+
+    function verifyAndSendTip(bytes memory proofCalldata) public {
+        (bool success, bytes memory data) = HALO2_VERIFIER.call(proofCalldata);
+        if(success && data.length == 32 && uint8(data[31]) == 1)
+            IERC20(TIP_TOKEN).transfer(extractTipRecipientFromProof(proofCalldata), 1_000 ether);
+        else 
+            revert("Could not verify proof");
+    }
+
+    function extractTipRecipientFromProof(bytes memory proofCalldata) internal pure returns (address) {
+        bytes memory lastBytes = new bytes(20);
+        for (uint i = 0; i < 20; i++) {
+            lastBytes[20-1-i] = proofCalldata[proofCalldata.length - (1+i*32)];
+        }
+        return address(bytes20(abi.encodePacked(lastBytes)));
+    }
+}
+```
+
+Now call `verifyAndSendTip` by submitting the proof as parameter in the calldata format and once the transaction is confirmed `1000` tokens will be awarded to the tip recipient.
+
+## Next steps
+
+By integrating ZK technology, we can create secure, autonomous AI agents that operate transparently on-chain. Next steps involve deepening into ZK learning and also training an AI model capable of performing interesting and exciting tasks. To get started with ZK I recommend TODO and to get started with training ML models, I recommend TODO.
