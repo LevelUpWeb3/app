@@ -112,11 +112,11 @@ print("Model saved as 'fixed_hex_address_model.onnx'!")
 Next, run all the other code snippets in Google Colab, this will generate a ZK circuit that is verifiable off-chain. Now we want to be able to verify on-chain, to do it run the following snippet. This will print a fully working Solidity verifier contract.
 
 ```python
-// Define the file where ABI and Solidity code will be generated
+# Define the file where ABI and Solidity code will be generated
 abi_path = 'test.abi'
 sol_code_path = 'test.sol'
 
-// Creates Solidity verifier code based on the circuit previously generated
+# Creates Solidity verifier code based on the circuit previously generated
 res = await ezkl.create_evm_verifier(
         vk_path,
         
@@ -127,7 +127,7 @@ res = await ezkl.create_evm_verifier(
 
 assert res == True
 
-// Print the solidity code on the console
+# Print the solidity code on the console
 with open(sol_code_path, 'r') as sol_file:
     sol_content = sol_file.read()
     print(sol_content)
@@ -142,19 +142,19 @@ Next, generate the ZK proof and encode it in the format that is expected by the 
 Run the following snippet and the proof will be printed.
 
 ```python
-// Define where the calldata in json format will be generated
+# Define where the calldata in json format will be generated
 calldata = 'calldata.proof'
 
-// Encodes the proof in the format expected by the verifier smart contract
+# Encodes the proof in the format expected by the verifier smart contract
 res = ezkl.encode_evm_calldata(
         proof_path,
         calldata,
     )
 
-// Optionally, print the the JSON data
+# Optionally, print the the JSON data
 # print(res)
 
-// Convert the proof from json format to hexadecimal bytes
+# Convert the proof from json format to hexadecimal bytes
 calldata_hex = "0x" + ''.join(f"{byte:02x}" for byte in res)
 print(calldata_hex)
 ```
