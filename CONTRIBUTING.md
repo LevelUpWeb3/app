@@ -79,7 +79,7 @@ We encourage contributions that explore these topics in-depth, in the form of ar
 1. Fork this repo
 2. Create a pull request (PR)
    - If adding new content, name your branch as `content-"name"` . Title of PR should ideally be `Add Content: Name of Content`
-   - If updating or fixing previous content, name your branch with the `patch-content-"name"` prefix. Title of PR should ideally be `Patch Content: "Patch Name`"
+   - If updating or fixing previous content, name your branch with the `patch-content-"name"` prefix. Title of PR should ideally be `Patch Content: "Patch Name"`
    - For example, if you are planning to create a content about building with circom, you can follow the following naming guide:
      - Branch name: `content-how-to-build-with-circom`
      - PR Title: `Add Content: How to Build with Circom`
