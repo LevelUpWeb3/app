@@ -23,7 +23,7 @@ interface Props {
 }
 
 interface HeaderProps {
-  offAnnouncement?: boolean;
+  announcementVisible?: boolean;
 }
 
 function HideOnScroll(props: Props) {
@@ -36,7 +36,7 @@ function HideOnScroll(props: Props) {
   );
 }
 
-export default function Header({ offAnnouncement = false }: HeaderProps) {
+export default function Header({ announcementVisible = false }: HeaderProps) {
   const { isPortrait } = useCheckViewport();
   const pathname = usePathname();
   useMainBgColor();
@@ -75,7 +75,7 @@ export default function Header({ offAnnouncement = false }: HeaderProps) {
             <AnnouncementBar
               autoFill
               pauseOnHover
-              offAnnouncement={offAnnouncement}
+              announcementVisible={announcementVisible}
             >
               <Stack
                 direction="row"

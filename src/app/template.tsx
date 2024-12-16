@@ -7,20 +7,20 @@ import "./global";
 
 interface RootTemplateProps {
   children: React.ReactNode;
-  offAnnouncement?: boolean;
+  announcementVisible?: boolean;
 }
 
 /**
- * @notice The `offAnnouncement` prop controls the visibility of the AnnouncementBar.
- * @param {boolean} [offAnnouncement=true] - If true, the AnnouncementBar will be hidden.
+ * @notice The `announcementVisible` prop controls the visibility of the AnnouncementBar.
+ * @param {boolean} [announcementVisible=true] - If true, the AnnouncementBar will be hidden.
  */
 export default function RootTemplate({
   children,
-  offAnnouncement = true,
+  announcementVisible = true,
 }: RootTemplateProps) {
   return (
     <main className="level-up-body">
-      <Header offAnnouncement={offAnnouncement} />
+      <Header announcementVisible={announcementVisible} />
       {children}
       <Footer></Footer>
     </main>
