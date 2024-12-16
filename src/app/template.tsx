@@ -10,6 +10,10 @@ interface RootTemplateProps {
   offAnnouncement?: boolean;
 }
 
+/**
+ * @notice The `offAnnouncement` prop controls the visibility of the AnnouncementBar.
+ * @param {boolean} [offAnnouncement=true] - If true, the AnnouncementBar will be hidden.
+ */
 export default function RootTemplate({
   children,
   offAnnouncement = true,
