@@ -22,6 +22,10 @@ interface Props {
   children: React.ReactElement;
 }
 
+interface HeaderProps {
+  offAnnouncement?: boolean;
+}
+
 function HideOnScroll(props: Props) {
   const { children } = props;
   const trigger = useScrollTrigger();
@@ -32,7 +36,7 @@ function HideOnScroll(props: Props) {
   );
 }
 
-export default function Header() {
+export default function Header({ offAnnouncement = false }: HeaderProps) {
   const { isPortrait } = useCheckViewport();
   const pathname = usePathname();
   useMainBgColor();
@@ -68,7 +72,11 @@ export default function Header() {
           sx={{ boxShadow: "none", backgroundColor: "transparent" }}
         >
           {isHome && (
-            <AnnouncementBar autoFill pauseOnHover>
+            <AnnouncementBar
+              autoFill
+              pauseOnHover
+              offAnnouncement={offAnnouncement}
+            >
               <Stack
                 direction="row"
                 spacing="20px"

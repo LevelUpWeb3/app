@@ -5,11 +5,15 @@ import Footer from "@/components/Footer";
 
 import "./global";
 
+interface RootTemplateProps {
+  children: React.ReactNode;
+  offAnnouncement?: boolean;
+}
+
 export default function RootTemplate({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  offAnnouncement = true,
+}: RootTemplateProps) {
   // const routeName = usePathname();
   // const isLandingPagePath = routeName === "/";
 
@@ -17,7 +21,7 @@ export default function RootTemplate({
     <main className="level-up-body">
       {/* TODO: Reveal SiteTab when announcement is needed
       {isLandingPagePath && <SiteTab />} */}
-      <Header></Header>
+      <Header offAnnouncement={offAnnouncement} />
       {children}
       <Footer></Footer>
     </main>
