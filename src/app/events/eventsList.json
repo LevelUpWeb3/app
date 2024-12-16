@@ -5,9 +5,9 @@
     "location": "Global Online Event",
     "url": "events/writers-competition-2024q4",
     "image": "/images/events/writers-competition-2024q4.svg",
-    "buttonText": "Submit Article",
+    "buttonText": "Ended",
     "buttonDisabled": "",
-    "status": ["All time", "Live"],
+    "status": ["All time", "Ended"],
     "region": ["All regions", "Virtual"],
     "registrationLink": "https://tally.so/r/mRBp4d",
     "submissionLink": "https://tally.so/r/mV1gZg"
