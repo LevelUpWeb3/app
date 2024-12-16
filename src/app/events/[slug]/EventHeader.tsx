@@ -11,7 +11,14 @@ import StarSvg from "@/assets/svgs/events/star.svg";
 import { generateShareTwitterURL } from "@/utils";
 
 const HackathonHeader = (props) => {
-  const { name, hackathonId, buttonText, date, location } = props;
+  const {
+    name,
+    hackathonId,
+    buttonText,
+    date,
+    location,
+    registrationButtonDisabled,
+  } = props;
 
   const registrationLink = `/events/${hackathonId}/register`;
 
@@ -50,7 +57,9 @@ const HackathonHeader = (props) => {
         gap={["40px", 0]}
         justifyContent="space-between"
       >
-        <Button href={registrationLink}>Register Now</Button>
+        <Button href={registrationLink} disabled={registrationButtonDisabled}>
+          Register Now
+        </Button>
         <Stack direction="row" spacing="30px" alignItems="flex-end">
           <Link
             className="inline-flex items-center gap-[10px] text-[16px]"

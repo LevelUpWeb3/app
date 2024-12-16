@@ -9,6 +9,8 @@
     "buttonDisabled": "",
     "status": ["All time", "Ended"],
     "region": ["All regions", "Virtual"],
+    "registrationButtonDisabled": "true",
+    "submissionButtonDisabled": "true",
     "registrationLink": "https://tally.so/r/mRBp4d",
     "submissionLink": "https://tally.so/r/mV1gZg"
   },
