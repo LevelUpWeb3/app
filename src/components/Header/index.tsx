@@ -36,7 +36,7 @@ function HideOnScroll(props: Props) {
   );
 }
 
-export default function Header({ announcementVisible = false }: HeaderProps) {
+export default function Header({ announcementVisible }: HeaderProps) {
   const { isPortrait } = useCheckViewport();
   const pathname = usePathname();
   useMainBgColor();
