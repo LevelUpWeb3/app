@@ -5,19 +5,22 @@ import Footer from "@/components/Footer";
 
 import "./global";
 
+interface RootTemplateProps {
+  children: React.ReactNode;
+  announcementVisible?: boolean;
+}
+
+/**
+ * @notice The `announcementVisible` prop controls the visibility of the AnnouncementBar.
+ * @param {boolean} [announcementVisible=false] - If false, the AnnouncementBar will be hidden.
+ */
 export default function RootTemplate({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  // const routeName = usePathname();
-  // const isLandingPagePath = routeName === "/";
-
+  announcementVisible = false,
+}: RootTemplateProps) {
   return (
     <main className="level-up-body">
-      {/* TODO: Reveal SiteTab when announcement is needed
-      {isLandingPagePath && <SiteTab />} */}
-      <Header></Header>
+      <Header announcementVisible={announcementVisible} />
       {children}
       <Footer></Footer>
     </main>
