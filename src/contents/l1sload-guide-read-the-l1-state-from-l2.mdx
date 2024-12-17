@@ -12,7 +12,7 @@ labels: ["Protocol"]
 
 Seamless cross-chain account abstraction features will be possible thanks to the [Keystore](https://notes.ethereum.org/@vbuterin/minimal_keystore_rollup). Where users will be able to control multiple smart contract accounts, on multiple chains, with a single key. This will bring rollups closer and provide the so long waited good UX for end users in a [rollup centric Ethereum](https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698).
 
-In order to make this happen, we need to be able to read the L1 data from L2 rollups which is currently a very expensive process. That's why Scroll [introduced](https://scroll.io/blog/towards-the-wallet-endgame-with-keystore) the `L1SLOAD` precompile that is able to read the L1 State fast and cheap. Safe wallet is already creating [a proof of concept](https://github.com/5afe/safe-scroll-keystore) [introduced at Safecon Berlin 2024](https://www.youtube.com/watch?v=hHmOo7A3vNU) of this work and I think this is just the begining: DeFi, gaming, social and many more types of cross-chain applications are possible with this.
+In order to make this happen, we need to be able to read the L1 data from L2 rollups which is currently a very expensive process. That's why Scroll [introduced](https://scroll.io/blog/towards-the-wallet-endgame-with-keystore) the `L1SLOAD` precompile that is able to read the L1 State fast and cheap. Safe wallet is already creating [a proof of concept](https://github.com/5afe/safe-scroll-keystore) [introduced at Safecon Berlin 2024](https://www.youtube.com/watch?v=hHmOo7A3vNU) of this work and I think this is just the beginning: DeFi, gaming, social and many more types of cross-chain applications are possible with this.
 
 Let's now learn, with examples, the basics of this new primitive that is set to open the door to a new way of interacting with Ethereum.
 
@@ -79,7 +79,7 @@ Next, on the Deploy & Run tab connect the following contract address: `0x9810147
 
 You can now send ETH by calling the `sendMessage` function. As explained below:
 
-- to: Your EOA wallet address. The the ETH recipient on L2
+- to: Your EOA wallet address. The ETH recipient on L2
 - value: The amount you wish to receive on L2 in wei. For example, if you want to send `0.01` ETH you should pass `10000000000000000`
 - message: Leave this empty, just pass `0x00`
 - gasLimit: `1000000` should be fine
@@ -151,11 +151,11 @@ function latestBlockNumber() external view returns (uint256);
 }
 
 contract L2Storage {
-// This precompile returns the latest block accesible by L2, it is not mandatory to use this precompile but it can help to keep track of the L2 progress
+// This precompile returns the latest block accessible by L2, it is not mandatory to use this precompile but it can help to keep track of the L2 progress
 address constant L1_BLOCKS_ADDRESS = 0x5300000000000000000000000000000000000001;
 // This is the L1SLOAD precompile address
 address constant L1_SLOAD_ADDRESS = 0x0000000000000000000000000000000000000101;
-// The number varaiable is stored at the slot 0
+// The number variable is stored at the slot 0
 uint256 constant NUMBER_SLOT = 0;
 address immutable l1StorageAddr;
 
@@ -302,7 +302,7 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 // In our final example, we'll read the balance of any ERC20 holder on L1
-// Please note that we will be using OpenZeppelin's implementation which puts the balance mapping on slot 0, is is not enforced by the ERC20 standard
+// Please note that we will be using OpenZeppelin's implementation which puts the balance mapping on slot 0, it is not enforced by the ERC20 standard
 contract SimpleToken is ERC20 {
 constructor() ERC20("Simple Token", "STKN") {
 \_mint(msg.sender, 21_000_000 ether);
