@@ -4,7 +4,7 @@ import Marquee from "react-fast-marquee";
 const AnnouncementBar = (props) => {
   const { children, announcementVisible, ...restProps } = props;
 
-  if (announcementVisible) {
+  if (!announcementVisible) {
     return null;
   }
 

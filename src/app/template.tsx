@@ -12,11 +12,11 @@ interface RootTemplateProps {
 
 /**
  * @notice The `announcementVisible` prop controls the visibility of the AnnouncementBar.
- * @param {boolean} [announcementVisible=true] - If true, the AnnouncementBar will be hidden.
+ * @param {boolean} [announcementVisible=false] - If false, the AnnouncementBar will be hidden.
  */
 export default function RootTemplate({
   children,
-  announcementVisible = true,
+  announcementVisible = false,
 }: RootTemplateProps) {
   return (
     <main className="level-up-body">
