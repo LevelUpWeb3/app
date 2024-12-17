@@ -1,0 +1,295 @@
+---
+name: "Proof of membership using Semaphore"
+index: 12
+summary: Create an proof of membership app using semaphore.
+author: tawago
+authorIcon: https://avatars.githubusercontent.com/u/6193180?v=4
+authorLink: https://x.com/dev_tawago
+published: Dec 17, 2024
+readTime: 15 min read
+labels: ["ZK", "Semaphore", "Proof of Membership", "PSE"]
+---
+
+## Introduction
+
+In the rapidly evolving landscape of blockchain technology, privacy and scalability remain two of the most critical challenges. **Semaphore** is a zero-knowledge protocol that enables users to prove membership in a group without revealing their identity. It leverages zero-knowledge proofs to ensure privacy while maintaining trust within decentralized systems. On the other hand, **Scroll** is a zkEVM-based zkRollup on Ethereum that aims to enhance scalability without compromising on security or decentralization.
+
+Combining Semaphore with Scroll opens up new possibilities for building scalable and privacy-preserving applications on Ethereum. This integration allows developers to create systems where users can authenticate and interact anonymously, all while benefiting from the scalability of zkRollups.
+
+## Setup
+
+Since I wanted to make this as easy as possible for beginner blockchain developers, readers can try to deploy the contract and play around with it without learning Hardhat by following the instructions..
+
+First, get your Scroll Sepolia ETH ready by bridging your Ethereum Sepolia ETH: [https://sepolia.scroll.io/bridge](https://sepolia.scroll.io/bridge). It takes up to 20 mins to complete (in my case it was 12 minutes)
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*o8fdvAQq0inaCBFJG9q_WA.png)
+
+For deployment and RPC node-related tasks, I prefer using MultiBaas by [Curvegrid](https://www.curvegrid.com/): [https://console.curvegrid.com/](https://console.curvegrid.com/). You can sign up for free and create up to two deployments on both Scroll Mainnet and Testnet (or other EVM chains).
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*GQZ5XunXH6L8ZP1IA-kq7A.png)
+
+### Extra steps: Deploy the three key contracts
+
+When you check out `semaphore` documentation, you would notice that three key contracts ( `Semaphore, SemaphoreVerifier, PoseidonT3`) are usually provided by the PSE team.
+[https://docs.semaphore.pse.dev/deployed-contracts](https://docs.semaphore.pse.dev/deployed-contracts)
+At the time I started writing this article, these contracts were not available on Scroll Testnet. (They are now officially available as of [v4.7.0](https://github.com/semaphore-protocol/semaphore/releases/tag/v4.7.0)) In other words, you have to deploy them on your own if they are not available on which the network you are seeking to develop, or you should wait for the official contracts by the PSE team.
+
+After bits of digging around documents and reading Solidity code, I’ve managed to deploy them as below. (This is only for temporarily uses. Be sure to use the original contracts.)
+
+- `SemaphoreVerifier` : 0x76C994dA048f14F4153Ac550cA6f6b327fCE9180
+- `PoseidonT3` : 0x5A7242de32803bC5329Ca287167eE726E53b219A
+- `Semaphore` : 0x0303e10025D7578aC8e4fcCD0249622ac1D17B82
+
+## Step by Step to deploy, call the functions, and connect with a frontend app
+
+### Step 1: Deploy
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*XupgWRYnobSoFi8H6Mj1tQ.png)
+
+When you click on the deployment URL on Curvegrid console, you get to your deployment dashboard. From there, click `Contracts > On-Chain` and then you see nothing in the `On-Chain Contracts` . Click the plus button.
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TcTYmAJ1gk8q_H_C3IgPsw.png)
+
+It will show a modal. From there:
+1. Click `Deploy Contract`
+2. Select `Contract from Compilation Artifact`
+3. Upload the `artifacts/contracts/TestSemaphore.json` from [my repo](https://raw.githubusercontent.com/tawago/scroll-semaphore/refs/heads/main/artifacts/contracts/TestSemaphore.sol/TestSemaphore.json).
+4. Label it as you like (I just named it “semophore”) with a version number. 
+5. Finally, label your deploying contract with “Sync Events” checked and `_verifier` argument with the `SemaphoreVerifier` address above (0x76C…)
+…and then click “Deploy”… tada!
+
+(The UI should prompt your Metamask to confirm a tx. If you haven’t connected your signer wallet yet, do it from the top right corner.)
+
+![…and then click “Deploy”… tada!](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*g4WgpbKn-WaXbVRDUr6DTw.png)
+
+_Alternatively, instead of uploading your contract artifact or solidity file, you can fetch the contract’s bytecode and ABI for verified contracts. In that case, you can link the official Semaphore contract by following the screenshots below:_
+
+![Link Contract](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*15s8U9AU92tdkzzxEY_pGA.png)![Contract from Address](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ASY7y7Fh16cuRoAF2K6TMw.png)![Search: 0x06d1530c829366A7fff0069e77c5af6A6FA7db2E and then “Continue” to add the contract](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*JpD3axerCGli7LjoypwkLw.png)![Keep the “Contract Address” as is, and name the label “semaphore_official”, check Sync Events and latest block.](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ObGh4WK16I_SX8_cW7nOSw.png)
+
+After you succeed with your `Semaphore` deployment, you would see this overview of the contract.
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*v-YWMvblnuqt_niMETZwZw.png)
+
+### Step 2: Interacting with the Contract
+
+On “On-Chain Contracts”, Click “Functions” of your deployed `Semaphore` contract from the side panel menu.
+
+Once you see the list of functions of `Semaphore` contract, you can play around with it. In the video below, I’ve created two Semaphore Groups by calling `createGroup`: one with an argument of null address (no admin group) and the other without argument, which sets the signer address as admin. And then you can call `getGroupAdmin` to check these admin addresses.
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/1032734340?h=e96515293c" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+
+*[_Demo of calling functions on Semaphore contract_](https://player.vimeo.com/video/1032734340?h=e96515293c)*
+
+### Step 3: Connecting with a Frontend App
+
+Okay, now you sort of understand what `Semaphore` contract can do in terms of its functionalities. When it comes to a real use-case, you would only need to interact with your `SemaphoreGroup` , which is determined by `GroupId` when you `createGroup` .
+
+Curvegrid provides [a sample app](https://github.com/curvegrid/multibaas-sample-app/) for on-chain voting contract. I’ve modified its contract to add Semaphore elements to play around with in this article. You can checkout the repo: [https://github.com/tawago/scroll-semaphore](https://github.com/tawago/scroll-semaphore/blob/main/contracts/SimpleVoting.sol)
+
+**Checkout the modified version of the sample app at:** [https://scroll-semaphore.vercel.app/](https://scroll-semaphore.vercel.app/)
+
+In the repo, you can find [a contract named](https://github.com/tawago/scroll-semaphore/blob/main/contracts/SimpleVoting.sol) `[SimpleVoting](https://github.com/tawago/scroll-semaphore/blob/main/contracts/SimpleVoting.sol)` . Let’s deploy this contract and start running the frontend app to interact with it. This contract needs an existing `Semaphore` contract address as one of the constructor arguments so use either TestSemaphore I’ve deployed above or the official one. The contract also sets a “secret code” to prevent total strangers from obtaining membership. The secret code is a string `GM!` and for the constructor argument, you need to hash it with keccak. (This is very insecure because anyone can check the tx to learn the secret code. In a real use case, this should be probably done in a zkp way)
+
+Constructor arguments for `SimpleVoting` contract would something like:
+- _numChoices: 4
+- semaphoreAddress: 0x0303e10025D7578aC8e4fcCD0249622ac1D17B82
+- _secretCodeHash: 0xc87a2838ff5cbcb7515eef22d409b3271b26f101f3b1a51873086460417c4454
+
+![Deploying `SimpleVoting` contract](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*RibOotXujKhjobszFzwaYA.png)
+
+After you’ve successfully deployed, let’s get the API key and whitelist your frontend app in the CORS setting.
+
+*   Go to `Admin > API Keys` and click “+ New Key” button.
+*   Label and Select `DApp User` then “Create”
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*9ZdwhXRngLgo4-z8kEF8iw.png)
+
+*   Go to `Admin > CORS Origins`and click “+ Add Origin” button.
+*   Input [http://localhost:3000](http://localhost:3000) for local development and then “Continue”
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tZxygFKVeiTLiQx9KP9GNQ.png)
+
+From here, we will mostly do things on the frontend app under the repo. git clone if you haven’t yet.
+
+`$ cd frontend && yarn`
+`$ cp .env.template .env.development`
+edit `.env.development` to reflect your API key and deployment URL.
+
+`$ yarn dev` and open [http://localhost:3000](http://localhost:3000). You should be able to see the app lik below.
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LBtgPAFne5zBiAYkjxayDQ.png)
+
+Click “Create” to generate you [Semaphore Identity](https://docs.semaphore.pse.dev/guides/identities)! Once you create you Identity, you can check if your Identity’s commitment already exists in the `SimpleVoting` contract Group; in other words, your membership of the group. It would prompt an alert either telling you that you are a part of the group or not. This is done by calling `hasMember(groupId, commitment)` function of `Semaphore` contract. (But you do not want to convince a third party of your membership in this way because you are basically telling your Identity’s commitment.)
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*PXtb8f9RXJswi10voV9kbg.png)
+
+Let’s join the Group!
+- Connect your wallet. **Make sure your current network is “Scroll Sepolia”**
+- Enter “GM!‘ in the text field
+- Click “Join” and send a transaction.
+
+![If nothing happens when you click “Join”, you must make sure your wallet is connected properly.](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*az_suUCqM8kR5GwqVPsMQQ.png)
+
+Once you obtain a membership, you can cast a vote using your Semaphore Proof!
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*e4EZDylBxIBnCne4vIZtzQ.png)
+
+And you might wonder _“But… how do I actually generate Semaphore Proof?”_ and that’s a valid question. I didn’t know either until I created this sample app.
+
+In order to generate a proof of your membership, you basically need all the commitments of the group. You have several options to get the all the commitments of a group.
+
+1.  If you are using the official Semaphore, you can query to the Graph endpoint. For Scroll Semaphore: [https://api.studio.thegraph.com/query/14377/semaphore-sepolia/v4.1.0/graphql](https://api.studio.thegraph.com/query/14377/semaphore-sepolia/v4.1.0/graphql)
+    and query can be as simple below
+
+```graphql
+    {
+      groups(where: { id: 1 }) {
+          id
+          merkleTree {
+              root
+              depth
+              size
+          }
+          admin
+          members(orderBy: index) {
+       identityCommitment
+          }
+      }
+    }
+```
+
+2. You can add “[@semaphore](http://twitter.com/semaphore)-protocol/data” and import SemaphoreEthers. It has a convenient`getGroupMembers` method. Check out the official boilerplate: [https://github.com/semaphore-protocol/boilerplate/blob/9dd9518c4fc6eda8864656eb6697f04db25dbef8/apps/web-app/src/context/SemaphoreContext.tsx#L37](https://github.com/semaphore-protocol/boilerplate/blob/9dd9518c4fc6eda8864656eb6697f04db25dbef8/apps/web-app/src/context/SemaphoreContext.tsx#L37)
+
+3. MultiBaas indexes Events emitted by the contracts you’ve added. There are two API endpoints that I could use.
+**The first one** is [List Events endpoint](https://docs.curvegrid.com/multibaas/api/v0/operation/list-events/). By using the endpoint, I could simply [write a code](https://github.com/tawago/scroll-semaphore/blob/258256b08cf11c1069093f547c712e3841656915/frontend/app/hooks/useMultiBaas.ts#L107-L132) as below (though this does not take other events like `MemberRemoved` in consideration)
+
+```ts
+//https://github.com/tawago/scroll-semaphore/blob/258256b08cf11c1069093f547c712e3841656915/frontend/app/hooks/useMultiBaas.ts#L107-L132
+  const getCommitmentsFromMemberAddedEvents = async (): Promise<Array<bigint> | null> => {
+    try {
+      const eventSignature = "MemberAdded(uint256,uint256,uint256,uint256)";
+      const response = await eventsApi.listEvents(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        false,
+        chain,
+        semaphoreAddressLabel,
+        semaphoreContractLabel,
+        eventSignature,
+        50
+      );
+      const events: Event[] = response.data.result.filter(event => event.transaction.contract.addressLabel === votingAddressLabel)
+      const commitments = events
+        .sort((a, b) => new Date(a.triggeredAt).getTime() - new Date(b.triggeredAt).getTime())
+        .map(item => item.event.inputs[2].value)
+      return commitments;
+    } catch (err) {
+      console.error("Error getting member added events:", err);
+      return null;
+    }
+  };
+```
+
+The other one is [Execute Query endpoint](https://docs.curvegrid.com/multibaas/api/v0/operation/execute-event-query/). For this endpoint, you first need to set up an event query in the UI (or through another API).
+- Go to `Blockchain > Event Queries` and click the plus botton in the side menu.
+- Name the query “commitments”
+- Click the plus botton next to “Events”
+- Select “MemberAdded(uint256,uint256,uint256,uint256)”
+- Click “Add Event Field” and add three fields, “groupId”, “identityCommitment” and “triggered_at”
+- Click “Add Filter”
+— — set “groupId” as Operand
+— — set “Equal” as Operator
+— — set your groupId value
+- Click “Save Query”
+
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mvRFZbAQn0WqQHDf4BoXGA.png)
+
+If you’ve successfully created the query, you should be able to see the preview data below the QueryBuilder.
+
+![list of the commitments queried from indexed Events on MultiBaas](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*6xX8d4sqsLPyYX3OtRiw_w.png)
+
+And then, you could get the commitments as below.
+
+```ts
+const queryLabel = "commitments";
+const response = await eventQueriesApi.executeEventQuery(queryLabel);
+const commitments = response.data.result.rows.map((row: any) => row.identitycommitment);
+return commitments;
+```
+
+Now, that you have all the commitments of the group, let’s generate a Semaphore proof (zero knowled proof). The Semaphore proof consists of your identity, the merkle tree proof of your commitment, message and scope. While the message can be just an empty string, setting a right scope is important. Together with your identity’s private key, it generates a nullifier which each user may only generate one valid proof per scope. Though, I’m not sure if this is practical, you can set a periodical datetime as a scope for a session to grant a group member for a login and its expiration.
+
+Internally, `lean-imt` is used for the merkle tree. With the all commitments and index of your commitment within the group, you can get the merkle tree proof as below:
+
+```ts
+import { poseidon2 } from "poseidon-lite"
+import { LeanIMT } from "@zk-kit/lean-imt";
+export async function generateMerkleProof(
+  commitmentsArray: bigint[],
+  index: number,
+) {
+  const hash = (a, b) => poseidon2([a, b])
+  // Initialize the Merkle tree
+  const tree = new LeanIMT<bigint>(hash);
+  // Insert the commitments into the tree
+  for (const commitment of commitmentsArray) {
+    tree.insert(commitment);
+  }
+  // Generate the proof for the leaf at the given index
+  const proof = tree.generateProof(index);
+  // The proof object already has the structure we need
+  const merkleProof = {
+    root: proof.root,
+    leaf: proof.leaf,
+    index: proof.index,
+    siblings: proof.siblings,
+  };
+  return merkleProof;
+}
+```
+
+In summary, generating a Semaphore Proof looks like below in my sample app. [https://github.com/tawago/scroll-semaphore/blob/095194445ccf5d2c5710429ba46730deb3458834/frontend/app/hooks/useMultiBaas.ts#L183-L210](https://github.com/tawago/scroll-semaphore/blob/095194445ccf5d2c5710429ba46730deb3458834/frontend/app/hooks/useMultiBaas.ts#L183-L210)
+
+```ts
+  const castVote = useCallback(async (choice: string): Promise<SendTransactionParameters> => {
+    if (!identity) throw Error("No identity")
+    const scope = groupId;
+    // You have two API to get commitments
+    // First choice: Get all events and filter on frontend side
+    // const commitments = await _getCommitmentsFromMemberAddedEvents()
+    // Second choice: Get commitments from a event query
+    const commitments = await _getCommitmentsFromQuery()
+    if (!commitments?.length) throw Error("No members in this group")
+    const index = await callContractFunction("indexOf", [groupId, identity?.commitment.toString()], true)
+    const merkelProof = await generateMerkleProof(commitments, Number(index))
+    const proof = await generateSemaphoreProof(identity, merkelProof, choice, scope)
+    console.log('generateSemaphoreProof', proof)
+    return await callContractFunction("vote", [      proof.merkleTreeDepth,
+      proof.merkleTreeRoot,
+      proof.nullifier,
+      proof.message,
+      proof.points,
+    ]);
+  }, [callContractFunction, groupId, identity]);
+```
+
+## Conclusion: What’s Next?
+
+Overall, interacting with Semaphore Contract and creating a smart contract for an membership application seems very intuitive. The only one-time hassle you may have to go through is when the key Contracts do not exist on the chain for which you are seeking to develop.
+
+More advanced examples could include making the secret code to join in a ZKP manner, adding a feature to open a new ballot with a unique identifier scope, using [MACI](https://maci.pse.dev/) to make the app a more robust anonymous voting system, adding delegation mechanisms, etc!
+
+All the above ambitious ideas are becoming possible by the advancement of technologies in the family tree of Programmable Cryptography. I’m personally very interested in Liquid Democracy and with ZKP, MPC and FHE, it feels like we can soon upgrade our societies with a new modern decision making algorithm.
+
+**Links:**
+- Getting-started: [https://docs.semaphore.pse.dev/getting-started](https://docs.semaphore.pse.dev/getting-started)
+- Semaphore Repo: [https://github.com/semaphore-protocol/semaphore](https://github.com/semaphore-protocol/semaphore)
+- Boilerplate: [https://github.com/semaphore-protocol/boilerplate](https://github.com/semaphore-protocol/boilerplate)
+- The Sample Voting App: [https://github.com/tawago/scroll-semaphore](https://github.com/tawago/scroll-semaphore)
+- The Graph endpoint: [https://api.studio.thegraph.com/query/14377/semaphore-sepolia/v4.1.0/graphql](https://api.studio.thegraph.com/query/14377/semaphore-sepolia/v4.1.0/graphql)
+- Scroll Sepolia Bridge: [https://sepolia.scroll.io/bridge](https://sepolia.scroll.io/bridge)
+- Curvegrid Console: [https://console.curvegrid.com/](https://console.curvegrid.com/)
+
+Lastly! This article was encouraged by Scroll’s “Articles Bounty Contest”
+[https://www.levelup.xyz/events/writers-competition-2024q4](https://www.levelup.xyz/events/writers-competition-2024q4)
