@@ -20,7 +20,7 @@ const SolidityPage = async () => {
             width: ["min-content", "max-content", "min-content"],
           }}
         >
-          Solidity Challenges
+          Solidity Lessons
         </Typography>
         <LessonList data={markdownData} />
       </Stack>

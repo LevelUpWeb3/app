@@ -8,6 +8,7 @@ const CUSTOM_BG_PAGE_MAP = {
   "/challenges": "#FFEEDA33",
   "/podcast": "#FFEEDA4D",
   "/events": "#E8F62833",
+  "/profile": "#FFEEDA",
 };
 
 const useMainBgColor = () => {

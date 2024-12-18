@@ -17,7 +17,7 @@
     "url": "events/writers-competition-2024q4",
     "image": "/images/events/writers-competition-2024q4.svg",
     "buttonText": "Ended",
-    "buttonDisabled": "",
+    "buttonDisabled": "true",
     "status": ["All time", "Ended"],
     "region": ["All regions", "Virtual"],
     "registrationButtonDisabled": "true",

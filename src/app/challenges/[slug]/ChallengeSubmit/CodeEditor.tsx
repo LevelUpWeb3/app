@@ -9,6 +9,8 @@ import editorTheme from "@/theme/editorTheme";
 import Button from "@/components/Button";
 import { useParams } from "next/navigation";
 import SuccessAlert from "./SuccessAlert";
+import useProgressStore from "@/stores/processStore";
+import { usePrivy } from "@privy-io/react-auth";
 
 enum TestStatus {
   SUCCESS = "success",
@@ -22,6 +24,8 @@ const CodeEditor = (props) => {
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<TestStatus>(TestStatus.UNDEFINED);
+  const { updateChallengeStatus } = useProgressStore();
+  const { login, user } = usePrivy();
 
   const handleCloseTip = () => {
     setStatus(TestStatus.UNDEFINED);
@@ -42,8 +46,8 @@ const CodeEditor = (props) => {
       headers: { "Content-Type": "text/plain" },
       body: code,
     });
-    setLoading(false);
     if (res.ok) {
+      await updateChallengeStatus(slug);
       setStatus(TestStatus.SUCCESS);
     } else {
       setStatus(TestStatus.ERROR);
@@ -51,6 +55,7 @@ const CodeEditor = (props) => {
         setStatus(TestStatus.UNDEFINED);
       }, 6e3);
     }
+    setLoading(false);
   };
 
   return (
@@ -99,27 +104,46 @@ const CodeEditor = (props) => {
             onClose={handleCloseTip}
             placement="top"
           >
-            <Button
-              size="large"
-              disabled={!code}
-              loading={loading}
-              sx={{
-                position: "absolute",
-                bottom: ["30px", "40px", "60px"],
-                width: [
-                  "calc(100% - 40px) !important",
-                  "calc(100% - 80px) !important",
-                  "calc(100% - 120px) !important",
-                ],
-                left: ["20px", "40px", "60px"],
-                "&.Mui-disabled": {
-                  backgroundColor: "rgba(255, 255, 255, 0.20) !important",
-                },
-              }}
-              onClick={handleTestCode}
-            >
-              Test Your Code
-            </Button>
+            {user ? (
+              <Button
+                size="large"
+                disabled={!code}
+                loading={loading}
+                sx={{
+                  position: "absolute",
+                  bottom: ["30px", "40px", "60px"],
+                  width: [
+                    "calc(100% - 40px) !important",
+                    "calc(100% - 80px) !important",
+                    "calc(100% - 120px) !important",
+                  ],
+                  left: ["20px", "40px", "60px"],
+                  "&.Mui-disabled": {
+                    backgroundColor: "rgba(255, 255, 255, 0.20) !important",
+                  },
+                }}
+                onClick={handleTestCode}
+              >
+                Test Your Code
+              </Button>
+            ) : (
+              <Button
+                size="large"
+                onClick={login}
+                sx={{
+                  position: "absolute",
+                  bottom: ["30px", "40px", "60px"],
+                  width: [
+                    "calc(100% - 40px) !important",
+                    "calc(100% - 80px) !important",
+                    "calc(100% - 120px) !important",
+                  ],
+                  left: ["20px", "40px", "60px"],
+                }}
+              >
+                Login to Test Code
+              </Button>
+            )}
           </EditorTooltip>
         </>
       )}

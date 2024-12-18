@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Editor from "./Editor";
 import { useParams } from "next/navigation";
 import ExerciseTabs from "./ExerciseTabs";
 
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
+import useProgressStore from "@/stores/processStore";
 
 const EditorPanel = (props) => {
   const { data } = props;
   const { slug: lessonId } = useParams();
+  const { lessons } = useProgressStore();
 
   const [exercise, setExercise] = useState<string>(
     Object.keys(CODE_EXERCISES[lessonId as string])[0],
@@ -32,6 +34,13 @@ const EditorPanel = (props) => {
     }
     setExercise(`exercise${value + 1}`);
   };
+
+  useEffect(() => {
+    const lesson = lessons[lessonId];
+    if (lesson && lesson > completedExerciseNumber) {
+      setCompletedExerciseNumber(lesson);
+    }
+  }, [lessons, lessonId]);
 
   return (
     <Box sx={{ width: ["100vw", "100vw", "auto"] }}>
