@@ -1,25 +1,12 @@
 import { JoinButton } from "@/app/events/ethcon-korea/components";
 import Button from "@/components/Button";
-import { useRainbowContext } from "@/contexts/RainbowProvider";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-import { scrollSepolia } from "viem/chains";
-import { useSwitchNetwork } from "wagmi";
 
 export default function EthconSectionHeader() {
   const pathname = usePathname();
-  const { walletCurrentAddress, chainId } = useRainbowContext();
-  const { switchNetwork } = useSwitchNetwork();
-
-  useEffect(() => {
-    if (!walletCurrentAddress) return;
-
-    if (switchNetwork && chainId !== scrollSepolia.id)
-      switchNetwork(scrollSepolia.id);
-  }, [switchNetwork, chainId]);
 
   return (
     <div className="flex h-[32rem] items-stretch justify-center bg-[#FFF0DD]">

@@ -13,6 +13,7 @@ import { Box, Stack } from "@mui/material";
 
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
+import useProgressStore from "@/stores/processStore";
 
 const Editor = ({
   data,
@@ -23,6 +24,8 @@ const Editor = ({
   const [code, setCode] = useState("");
   const [tries, setTries] = useState<number>(0);
   const [editorType, setEditorType] = useState<"code" | "solution">("code");
+
+  const { updateLessonProgress, lessonLoading } = useProgressStore();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -42,10 +45,11 @@ const Editor = ({
     return { codeSolution: "", codeTemplate: "" };
   }, [lessonId, exercise]);
 
-  const handleSubmitCode = (isCorrect: boolean) => {
+  const handleSubmitCode = async (isCorrect: boolean) => {
     if (isCorrect) {
       const currentExerciseNumber = parseInt(exercise.replace("exercise", ""));
       if (currentExerciseNumber > completedExerciseNumber) {
+        await updateLessonProgress(lessonId, currentExerciseNumber);
         onComplete(currentExerciseNumber);
       } else {
         onComplete(currentExerciseNumber, false);
@@ -63,7 +67,7 @@ const Editor = ({
   };
 
   useEffect(() => {
-    if (completedExerciseNumber === 5) {
+    if (completedExerciseNumber === 5 && exercise === "exercise6") {
       setIsModalOpen(true);
     }
   }, [completedExerciseNumber]);
@@ -155,6 +159,7 @@ const Editor = ({
               code={code}
               codeSolution={codeSolution}
               onSubmission={handleSubmitCode}
+              loading={lessonLoading}
             />
           </>
         )}

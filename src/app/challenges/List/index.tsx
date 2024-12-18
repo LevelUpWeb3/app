@@ -14,8 +14,10 @@ import Card from "@/components/Card";
 
 import PlainSelect from "@/components/PlainSelect";
 import NoData from "@/components/NoData";
+import useProgressStore from "@/stores/processStore";
 
 const ChallengeList = (props) => {
+  const { challenges } = useProgressStore();
   const { data } = props;
   const trigger = useScrollTrigger();
   const [searchParams, setSearchParams] = useState({
@@ -42,8 +44,9 @@ const ChallengeList = (props) => {
       .map((item) => ({
         ...item,
         labels: [...item.labels, `Level ${item.level}`],
+        isCompleted: !!challenges[item.id],
       }));
-  }, [searchParams, data]);
+  }, [searchParams, data, challenges]);
 
   const handleChangeCategory = (e) => {
     setSearchParams((pre) => ({
@@ -99,7 +102,11 @@ const ChallengeList = (props) => {
             }}
           >
             {filteredData.map((item) => (
-              <Card content={item} key={item.name}></Card>
+              <Card
+                content={item}
+                key={item.name}
+                isCompleted={item.isCompleted}
+              ></Card>
             ))}
           </Box>
         ) : (
