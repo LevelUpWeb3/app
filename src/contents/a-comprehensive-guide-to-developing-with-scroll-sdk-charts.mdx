@@ -1,0 +1,391 @@
+---
+name: "A Comprehensive Guide to Developing with Scroll SDK Charts"
+index: 12
+summary: With Scroll SDK, yoou can...
+author: Ahmet Tahir Yıldız
+authorIcon: https://pbs.twimg.com/profile_images/1721586474858983424/N50Rpjfv_200x200.jpg 
+authorLink: https://x.com/LandoC4lrissian
+published: Dec 8 2024
+readTime: 8 min read
+labels: ["Scroll SDK"]
+---
+
+## Introduction
+
+As Ethereum faces scalability challenges, Layer 2 (L2) solutions have emerged to offer cheaper, faster, and more efficient infrastructures. Among them, the Scroll SDK stands out as a toolkit that streamlines the creation, testing, and management of zkEVM-based L2 solutions. By leveraging Helm charts and Kubernetes, the Scroll SDK turns the complex rollup architecture into a modular and manageable system
+
+With Scroll SDK, you can:
+
+- Quickly launch your own ZK-rollup chain on local or test networks (like Sepolia),
+- Build an Ethereum-compatible L2 chain,
+- Integrate advanced monitoring, analysis, and proving services,
+- Adapt configurations for different environments — devnet, testnet, or production — according to your requirements
+
+In this guide, we’ll cover how to create and configure Scroll SDK charts, explain the meaning of configuration parameters, detail the roles of related services, and show you how to set up a local devnet environment. We’ll also discuss DNS configuration, account funding, testing strategies, and advanced customizations.
+
+For more information and complete code examples: **[Scroll SDK GitHub](https://github.com/scroll-tech/scroll-sdk)**.
+
+## Preparing Your Development Environment
+
+### Requirements
+
+Ensure you have the following tools installed:
+
+- **Docker / Docker Desktop**: For running container-based applications.
+- **Kubernetes (kubectl)**: For managing Kubernetes clusters.
+- **Minikube**: To start a local Kubernetes cluster.
+- **Helm**: A packaging and deployment tool for Kubernetes.
+- **Node.js (>=18) & NPM**: Required for Scroll CLI tools.
+- **Scroll CLI (scroll-sdk-cli)**: Tool to start, test, and manage Scroll chains.
+
+### Example Installation Commands (macOS)
+
+```bash
+# Docker
+brew install --cask docker
+
+# Kubernetes CLI
+brew install kubectl
+
+# Minikube
+brew install minikube
+
+# Helm
+brew install helm
+
+# Node.js
+brew install node
+
+# Scroll SDK CLI
+npm install -g @scroll-tech/scroll-sdk-cli
+```
+
+### After installation:
+
+Run these commands to ensure everything is installed:
+
+```bash
+docker -v
+kubectl version
+helm version
+node -v
+scrollsdk --version
+```
+
+## Obtaining the Scroll SDK Source Code
+
+Clone the repository:
+
+```bash
+git clone https://github.com/scroll-tech/scroll-sdk.git
+cd scroll-sdk
+```
+
+Inside the `scroll-sdk/devnet` directory, you’ll find the Makefile and configuration files required for devnet deployment.
+
+## Creating and Configuring Helm Charts
+
+You can create a base chart with `helm create my-scroll-chart`. However, Scroll SDK already provides the necessary charts and value files in the `devnet` directory.
+
+When working with `config.toml` and `values.yaml`, pay attention to parameters like:
+
+- **Rollup Parameters**: Variables such as `MAX_TX_IN_CHUNK`, `MAX_BLOCK_IN_CHUNK`, and `MAX_CHUNK_IN_BATCH` affect performance and finalization speed.
+- **Gas Oracle Settings**: `L1_GAS_ORACLE_SENDER_PRIVATE_KEY`, `L2_GAS_ORACLE_SENDER_PRIVATE_KEY`, and `L1_GAS_PRICE_ORACLE` ensure that gas prices stay synchronized between L1 and L2.
+- **Account Keys and Addresses**: Such as `DEPLOYER_ADDR`, `OWNER_ADDR`, `L1_COMMIT_SENDER_ADDR`, `L1_FINALIZE_SENDER_ADDR`. These play critical roles in the chain’s operation.
+- **Database Connections**: `BLOCKSCOUT_DB_CONNECTION_STRING`, `CHAIN_MONITOR_DB_CONNECTION_STRING`, `GAS_ORACLE_DB_CONNECTION_STRING` define how services connect to their respective databases.
+- **Contract Addresses and Overrides**: `DEPLOYMENT_SALT`, `L1_FEE_VAULT_ADDR`, `L1_PLONK_VERIFIER_ADDR` set contracts on L1, while `contracts.overrides` like `L2_MESSAGE_QUEUE`, `L1_GAS_PRICE_ORACLE` allow you to override default addresses.
+- **Sequencer Settings**: `L2GETH_SIGNER_ADDRESS`, `L2GETH_KEYSTORE`, `L2GETH_PASSWORD` configure the L2 sequencer node’s identity and security.
+- **Frontend and Explorer URIs**: Variables like `EXTERNAL_RPC_URI_L1`, `EXTERNAL_RPC_URI_L2`, `BRIDGE_API_URI`, `ROLLUPSCAN_API_URI`,`EXTERNAL_EXPLORER_URI_L1`, `EXTERNAL_EXPLORER_URI_L2`, `GRAFANA_URI` determine endpoints for interacting with and monitoring the chain.
+
+Once defined in `config.toml`, the `scroll-sdk-cli` processes these configurations to generate service-specific files. These files are provided as Helm `values` and mounted into Kubernetes ConfigMaps.
+
+## Starting a Devnet Environment
+
+### Step-by-Step Guide
+
+1. **Use Minikube to create a local test environment**:
+   ```bash
+   minikube config set cpus 8
+   minikube config set memory 8192
+   minikube start --driver=docker
+   minikube addons enable ingress
+   minikube addons enable ingress-dns
+   ```
+
+2. **Prepare Scroll SDK Charts**:
+   ```bash
+   cd scroll-sdk/devnet
+   make bootstrap
+   ```
+
+This fetches chart dependencies and creates extra configuration files. If you face permission issues, try:
+
+   ```bash
+   sudo make config
+   ```
+
+3. **Launching the Chain**: Add required settings to the Makefile and run:
+   ```bash
+   make install
+   ```
+
+4. **Verify Deployment**:
+   ```bash
+   kubectl get pods
+   ```
+   Ensure all pods show a “Running” or “Ready” status.
+
+## Preparing Scroll SDK Charts:
+
+    ```bash
+    cd scroll-sdk/devnet
+    make bootstrap
+    ```
+
+`make bootstrap` fetches chart dependencies and creates extra configuration files. If you face permission issues, try `sudo make config`.
+
+**Launching the Chain**: Add required settings to the Makefile and run:
+   ```bash
+   make install
+   ```
+
+Check `kubectl get pods` until all pods show a “Running” or “Ready” status.
+
+**Coordinator and Prover Settings:** The coordinator (coordinator-api) may be disabled by default. In your Makefile, add:
+   ```bash
+   --set coordinator-api.enabled=true \
+--set coordinator-cron.enabled=true
+   ```
+
+and then re-run `make install`. Note that the coordinator may need large resources (20GB RAM). For proving services, you can integrate external providers like Sindri. Use `scrollsdk helper activity -o -t` to generate chain activity for testing provers.
+
+## Services: Roles and Architecture
+
+Scroll SDK assembles multiple services to form a functioning rollup chain. Each service has a distinct role:
+
+- **Admin System (dashboard/backend/cron):** Handles administrative tasks, monitoring, and UI.
+- **Blockscout (L1/L2 Explorer):** A block explorer for viewing blocks and transactions. The L1 explorer might be less functional at present, but the L2 explorer allows you to inspect the chain state.
+- **Bridge History API / Fetcher:** Tracks and manages cross-chain bridging history.
+- **Balance Checker:** Monitors operator accounts, fee vaults, and commit senders.
+- **Chain Monitor:** Ensures finalization security by halting finalization if invariants are not met.
+- **Contracts:** Deploys essential L1/L2 contracts required for the rollup to function properly.
+- **Coordinator API / Cron:** Manages provers, schedules proof jobs, and stores proofs.
+
+- **Frontends:** Provides user interfaces for the Rollup Explorer, bridge, and wallet integration.
+
+- **Gas Oracle:** Synchronizes gas prices between L1 and L2.
+
+- **Grafana:** A metrics visualization tool (for devnet), future versions may use scroll-monitor.
+
+- **Rollup Explorer Backend:** Feeds data on chunks, batches, and finalization status to frontends.
+
+- **Rollup Node (L2 Sequencer & Bootnode):** Core component producing L2 blocks, ordering transactions, and maintaining PoA consensus. Bootnodes facilitate network connectivity.
+
+- **Loki Stack, RPC Gateway, PostgreSQL, Kube Prometheus Stack:** Provide logging aggregation, load balancing for RPC, database management, and monitoring capabilities.
+
+For production, you can enable or disable certain services via values.yaml. Minimal or production environments might require fewer or additional components.
+
+## Funding Accounts and Deploying Contracts
+
+The `DEPLOYER_ADDR` is funded by default by Anvil in the devnet configuration. To fund other accounts:
+
+```bash
+cd scroll-sdk
+scrollsdk helper fund-accounts --dev -a [account-address]
+```
+
+This funds addresses like `L1_COMMIT_SENDER_ADDR`, `L1_FINALIZE_SENDER_ADDR`, `L1_GAS_ORACLE_SENDER_ADDR`, and `L2_GAS_ORACLE_SENDER_ADDR`. After funding, redeploy contracts if needed.
+
+## Testing and Interacting with the Chain
+
+The **scroll-sdk-cli** offers various commands:
+
+- `scrollsdk test ingress`: Verifies DNS configuration.
+- `scrollsdk test contracts`: Checks if essential contracts are deployed and initialized.
+- `scrollsdk helper fund-accounts --dev`: Funds a specified account.
+- `scrollsdk helper activity -o -t`: Generates traffic on L1 and L2, producing blocks and batches.
+- `scrollsdk test e2e`: End-to-end tests for wallet creation, funding, ERC20 deployment, bridging between L1 and L2, and withdrawals. Use `--resume` to continue after a partial test.
+
+Visit `http://frontends.scrollsdk` or `http://l2-rpc.scrollsdk` to interact with the chain. Grafana metrics are available at `http://grafana.scrollsdk` (username: admin, password: scroll-sdk).
+
+To connect a wallet like MetaMask, use the provided RPC URL, Chain ID, currency symbol, and block explorer URL. By default, `l2-rpc.scrollsdk` is the RPC endpoint, chain ID is `221122`, and the currency symbol is ETH.
+
+## Advanced Steps and Customizations
+With the basics in place:
+
+- **Customize SDK Components:** Modify contract addresses under `contracts.overrides`, or tweak parameters in `config.toml`.
+- **Production Deployment:** Refer to Digital Ocean or AWS guides for a robust production environment, replace PostgreSQL with other databases, integrate a different gas token, or enhance monitoring.
+- **Performance Optimization:** Reduce finalization times, adjust batch sizes, or change mock finalize timeouts for faster devnet testing.
+- **Troubleshooting:** For ingress-DNS issues, you may edit `/etc/hosts` or run `minikube tunnel`. Use Loki Stack and Grafana for log analysis and monitoring.
+
+## Creating a Frontend for Scroll SDK Chart Management
+
+To enhance user experience, we can integrate Scroll SDK functionality into a Next.js app router project. Users will be able to create, configure, and deploy Scroll SDK Helm charts through a web interface. Here’s how:
+
+### Use Case: NFT Marketplace
+We’ll set up a frontend to allow users to:
+
+1. Configure Rollup Node parameters.
+2. Deploy a Rollup Node.
+3. Manage and monitor the chain.
+
+### Frontend Setup
+1. **Initialize a Next.js Project:**
+
+```bash
+npx create-next-app@latest scroll-sdk-frontend --use-npm --experimental-app
+cd scroll-sdk-frontend
+```
+
+2. **Install Required Libraries:**
+
+```bash
+npm install axios react-hook-form tailwindcss
+npx tailwindcss init
+```
+
+3. **Build the UI:**
+
+Create a form to accept Helm chart configurations at `src/app/chart-form.jsx`:
+
+```javascript
+import { useForm } from "react-hook-form";
+import axios from "axios";
+
+export default function ChartForm() {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("/api/charts", data);
+      console.log("Chart created:", response.data);
+    } catch (error) {
+      console.error("Error creating chart:", error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label>Chart Name:</label>
+      <input {...register("chartName", { required: true })} />
+
+      <label>Max Block in Chunk:</label>
+      <input type="number" {...register("maxBlockInChunk", { required: true })} />
+
+      <button type="submit">Create Chart</button>
+    </form>
+  );
+}
+```
+
+4. **Backend API Route:** Handle Helm chart creation and deployment at `src/app/api/charts/route.js`:
+
+```javascript
+import fs from "fs";
+import { exec } from "child_process";
+
+// Named export for POST method
+export async function POST(req) {
+  if (req.method === "POST") {
+    const { chartName, maxBlockInChunk } = await req.json();
+
+    const valuesYaml = `
+config:
+  rollup:
+    maxBlockInChunk: ${maxBlockInChunk}
+`;
+
+    return new Promise((resolve, reject) => {
+      exec(
+        `helm create ../charts/${chartName}`,
+        (error, stdout, stderr) => {
+          if (error) {
+            return reject(
+              new Response(
+                JSON.stringify({ error: stderr }),
+                { status: 500 }
+              )
+            );
+          }
+          try {
+            fs.writeFileSync(`../charts/${chartName}/values.yaml`, valuesYaml);
+            resolve(
+              new Response(
+                JSON.stringify({ message: stdout }),
+                { status: 200 }
+              )
+            );
+          } catch (fsError) {
+            reject(
+              new Response(
+                JSON.stringify({ error: fsError.message }),
+                { status: 500 }
+              )
+            );
+          }
+        }
+      );
+    });
+  } else {
+    return new Response(
+      JSON.stringify({ message: "Method Not Allowed" }),
+      { status: 405 }
+    );
+  }
+}
+
+```
+
+5. **Include the Form in Your Page:**
+To use the form in your application, include it in your `page.js` file.
+
+```javascript
+import ChartForm from "./chart-form";
+
+export default function Home() {
+  return (
+    <div>
+      <h1>Create a New Chart</h1>
+      <ChartForm />
+    </div>
+  );
+}
+```
+
+6. **Deploy and Test:**
+
+- Run `npm run dev` to start the Next.js app.
+- Navigate to the form and submit configurations.
+- Verify deployments using `kubectl get pods`.
+
+This guide combines the technical depth of Scroll SDK with the user-friendly capabilities of a frontend project. Users can now leverage a web interface to create and manage their own Helm charts for Scroll SDK, making blockchain infrastructure more accessible and customizable. Explore more advanced setups or extend this example to integrate real-time monitoring and analytics tools like Grafana. Happy experimenting!
+
+## Conclusion
+
+Scroll SDK provides a robust and modular framework for deploying zkEVM-based Layer 2 solutions. By combining its powerful CLI and Helm chart integrations with a user-friendly frontend, developers can simplify blockchain infrastructure setup while enabling non-technical users to participate in configuration and management tasks.
+
+As you continue experimenting, here are some resources and ideas to explore further:
+
+- **Official Documentation:** For detailed setup instructions and advanced configurations, visit the [Scroll SDK Documentation](https://docs.scroll.io/).
+
+**Advanced Examples:**
+
+- Integrate Grafana for real-time monitoring of chain activity.
+- Build a full-stack NFT marketplace using Scroll SDK and Next.js.
+- Experiment with custom gas token implementations in production environments.
+
+
+**Personal Insights:**
+
+- The modularity of Scroll SDK makes it highly adaptable to various blockchain use cases, from DeFi protocols to gaming platforms.
+- Its zkEVM architecture ensures Ethereum compatibility while maintaining high performance and low fees.
+
+**Future Vision:**
+
+- As zk-rollups evolve, Scroll SDK could play a critical role in democratizing Layer 2 adoption, bridging the gap between developers and end-users.
+
+- With advancements in zero-knowledge proof generation and broader toolchain integration, Scroll SDK has the potential to simplify blockchain operations even further.
+
+The best way to master this technology is by experimenting with configurations, building real-world projects, and iterating based on feedback. Whether you are developing a decentralized app or building infrastructure, Scroll SDK is a powerful ally in your blockchain journey. Happy building!
+
+- [X](https://x.com/LandoC4lrissian)
