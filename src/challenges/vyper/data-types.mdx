@@ -26,8 +26,11 @@ boo: public(bool)
 signed_int: public(int256)
 unsigned_int: public(uint64)
 fixed_size_bytes: public(bytes32)
-max_size_bytes: public(Bytes[256])
-string: public(String[13])
+dynamic_size_bytes: public(Bytes[256]) #the maximum number of bytes here is 256
+string: public(String[13]) #the maximum length of string here is 13
+
+# use --enable-decimals flag when compiling Vyper code containing decimal type
+decimal: public(decimal)
 
 @deploy
 def __init__():
@@ -35,18 +38,32 @@ def __init__():
     self.signed_int = -100
     self.unsigned_int = 999
     self.fixed_size_bytes = 0xabcd1123f8ae9a65dcc16f95643f2030aa505c6b465c8206e26ae84b525cdacb
-    self.max_size_bytes = b"\x01"
+    self.dynamic_size_bytes = b"\x01"
     self.string = "Hello, world!"
+    self.decimal = 22.77
 ```
 
 <details>
   <summary>
     <strong>Vyper Differentiators (wrt Solidity)</strong>
   </summary>
-  <div style="margin-left: 18px">Testing what this looks like</div>
- 
-    <li>Fixed size byte arrays are padded with zeros</li>
-    <li>Strings are fixed size</li>
-    <li>Decimals are not supported</li>
-  
+  <ul>
+    <li>
+      Requires explicit specification of bit width for integer and byte types
+      (i.e. `uint256`, `int32`, `bytes32`).
+    </li>
+    <li>
+      Requires explicit specification for dynamic arrays and strings (i.e.
+      String[13]).
+    </li>
+    <li>Floating point numbers (decimal) are supported.</li>
+    <li>
+      Use `--enable-decimals` flag when compiling Vyper code containing decimal
+      type.
+    </li>
+  </ul>
 </details>
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/types.html#)
