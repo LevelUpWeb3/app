@@ -1,0 +1,52 @@
+---
+name: Data Types
+index: 1
+lesson: 1
+summary: Introduction to Vyper data types
+labels: ["vyper"]
+---
+
+# Data Types
+
+Vyper is a statically typed Pythonic language. The type of each variable (state and local) must be specified or at least known at compile-time. Vyper provides several elementary types such as:
+
+- `bool` (boolean)
+- `int256`,`int32` (signed integer)
+- `uint256`,`uint32` (unsigned integer)
+- `bytesM` (fixed size byte array)
+- `Bytes[100], Bytes[256]` (byte array with max size)
+- `String` (strings)
+- `decimal` (decimals)
+- `address` (Ethereum address)
+
+```python
+# pragma version 0.4.0
+
+boo: public(bool)
+signed_int: public(int256)
+unsigned_int: public(uint64)
+fixed_size_bytes: public(bytes32)
+max_size_bytes: public(Bytes[256])
+string: public(String[13])
+
+@deploy
+def __init__():
+    self.boo = False
+    self.signed_int = -100
+    self.unsigned_int = 999
+    self.fixed_size_bytes = 0xabcd1123f8ae9a65dcc16f95643f2030aa505c6b465c8206e26ae84b525cdacb
+    self.max_size_bytes = b"\x01"
+    self.string = "Hello, world!"
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators (wrt Solidity)</strong>
+  </summary>
+  <div style="margin-left: 18px">Testing what this looks like</div>
+ 
+    <li>Fixed size byte arrays are padded with zeros</li>
+    <li>Strings are fixed size</li>
+    <li>Decimals are not supported</li>
+  
+</details>
