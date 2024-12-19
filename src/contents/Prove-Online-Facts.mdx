@@ -10,198 +10,289 @@ readTime: 12 min read
 labels: ["ZK", "Privacy", "TLSNotary"]
 ---
 
----
 
-Prove Online Facts Without Revealing Too Much
 Have you ever needed to prove something online without revealing too much personal information?
-Imagine you've got an online deal, but it's available only to people with a certain number of followers and who live in a specific city. Let's say you're a public figure and want to protect your privacy, avoiding unnecessary attention. How can you prove that you meet their criteria without revealing your full identity or additional sensitive details?
-Welcome to TLSNotary, a tool that allows you to generate verifiable, cryptographic proofs of your online interactions while revealing only the information you choose. This tutorial will guide you through proving you have a certain number of X followers and live in a specific city, all without disclosing your exact profile details.
 
----
+Imagine you’ve got an online deal, but it’s available only to people with a certain number of followers and who live in a specific city. Let’s say you’re a public figure and want to protect your privacy, avoiding unnecessary attention. How can you prove that you meet their criteria without revealing your full identity or additional sensitive details?
 
-What is TLSNotary?
-TLSNotary is a protocol that lets users securely export data from any website using Zero-Knowledge Proofs (ZKP). It allows selective sharing of data with others, ensuring cryptographic verifiability without exposing sensitive information.
-With this protocol, users (referred to as Provers) can share their data with others (Verifiers) as they deem fit, enabling true data portability and trust.
+Welcome to **TLSNotary**, a tool that allows you to generate verifiable, cryptographic proofs of your online interactions while revealing only the information you choose. This tutorial will guide you through proving you have a certain number of X followers and live in a specific city, all without disclosing your exact profile details.
 
----
+# **What is TLSNotary?**
 
-Why is TLSNotary Important?
-The Limitations of TLS for Non-Repudiation
-Transport Layer Security (TLS) plays an important role in digital security by safeguarding communications between users and servers. It provides:
-Data Integrity: Ensures data is not altered during transmission.
-Server Authentication: Validates the server's identity using Certificate Authorities (CAs).
+[TLSNotary](https://docs.tlsnotary.org/) is a protocol that lets users securely export data from any website using **Zero-Knowledge Proofs (ZKP)**. It allows selective sharing of data with others, ensuring cryptographic verifiability without exposing sensitive information.
 
-However, while TLS is effective in protecting data transmitted between user and server, it falls short in providing non-repudiation - the ability to prove to a third party that data is authentic and untampered.
-This limitation arises because TLS uses a keyed hash (Message Authentication Code, or MAC), which requires the user (e.g., Alice) to know the key. This means Alice could potentially alter the data and recompute the hash after the TLS session, making it impossible to verify the data's authenticity to another party (e.g., Bob).
-The Solution? Digital signatures based on asymmetric public-key cryptography are required. Unfortunately, TLS does not natively support server-side signing of data, and even if it did, such an approach might compromise privacy if not designed thoughtfully. You might ask, what of Delegation?
-What About Access Delegation?
-Delegation is the process of a computer user handing over its authentication credentials to another user. A user (Alice) might want to share data with Bob using OAuth. In this case, Bob would access the data directly from the server to ensure its authenticity. The issue is that Bob gains more information than necessary. Even worse, many servers don't support OAuth due to lack of incentive.
-Here is where TLSNotary comes to the rescue,
-TLSNotary addresses these challenges by introducing Multi-Party Computation (MPC) into the TLS communication process.
+With this protocol, users (referred to as **Provers**) can share their data with others (**Verifiers**) as they deem fit, enabling true data portability and trust.
 
----
+# **Why is TLSNotary Important?**
 
-How TLSNotary Works
+## **The Limitations of TLS for Non-Repudiation**
+
+[Transport Layer Security (TLS)](https://en.wikipedia.org/wiki/Transport_Layer_Security) plays an important role in digital security by safeguarding communications between users and servers. It provides:
+
+- **Data Integrity**: Ensures data is not altered during transmission.
+- **Server Authentication**: Validates the server’s identity using Certificate Authorities (CAs).
+
+However, while TLS is effective in protecting data transmitted between user and server, it falls short in providing **non-repudiation** — the ability to prove to a third party that data is authentic and untampered.
+
+This limitation arises because TLS uses a keyed hash (Message Authentication Code, or MAC), which requires the user (e.g., Alice) to know the key. This means Alice could potentially alter the data and recompute the hash after the TLS session, making it impossible to verify the data’s authenticity to another party (e.g., Bob).
+
+**The Solution?** Digital signatures based on asymmetric public-key cryptography are required. Unfortunately, TLS does not natively support server-side signing of data, and even if it did, such an approach might compromise privacy if not designed thoughtfully. You might ask, what of [**Delegation**](https://en.wikipedia.org/wiki/Delegation_(computer_security))?
+
+## **What About Access Delegation?**
+
+[**Delegation**](https://en.wikipedia.org/wiki/Delegation_(computer_security)) is the process of a computer user handing over its authentication credentials to another user. A user (Alice) might want to share data with Bob using OAuth. In this case, Bob would access the data directly from the server to ensure its authenticity. The issue is that Bob gains **more information than necessary**. Even worse, many servers don’t support OAuth due to lack of incentive.
+
+***Here is where TLSNotary comes to the rescue,***
+
+TLSNotary addresses these challenges by introducing **Multi-Party Computation (MPC)** into the TLS communication process.
+
+# **How TLSNotary Works**
+
 The TLSNotary protocol operates through three main steps:
-Multi-Party TLS Request: Traditional TLS connections are between a user and a server, but TLSNotary introduces a third participant: the Verifier. Unlike a "man-in-the-middle," the Verifier operates within a secure Multi-Party Computation (MPC) setup, ensuring that user data is not exposed in plaintext. To the server, the connection appears as a standard TLS request, preserving its integrity. 
-Alice and Bob can jointly manage the TLS connection, ensuring Bob can independently verify the data's authenticity without seeing unshared portions.
-Selective Disclosure: TLSNotary allows the Prover to selectively disclose specific portions of the data to the Verifier. Sensitive information can be redacted before sharing. Zero-Knowledge Proofs can be used to verify properties of redacted data without revealing the actual content.
-Alice can choose which parts of the data to disclose, safeguarding her privacy.
-Data Verification: The Verifier can then authenticate the disclosed data by validating the server certificate using trusted Certificate Authorities (CAs). This ensures that non-redacted portions of the data match their cryptographic proofs.
-With this approach, Alice retains full control over her data while providing Bob with cryptographic proof of its authenticity.
 
-TLSNotary and the Ethereum Foundation
-TLSNotary is developed by the Privacy and Scaling Exploration (PSE) research lab of the Ethereum Foundation. The PSE team is committed to conceptualizing and testing use cases for cryptographic primitives.
+1. **Multi-Party TLS Request:** Traditional TLS connections are between a user and a server, but TLSNotary introduces a third participant: the **Verifier**. Unlike a “[man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack),” the Verifier operates within a secure **Multi-Party Computation (MPC)** setup, ensuring that user data is not exposed in plaintext. To the server, the connection appears as a standard TLS request, preserving its integrity.*Alice and Bob can jointly manage the TLS connection, ensuring Bob can independently verify the data’s authenticity without seeing unshared portions.*
+2. **Selective Disclosure:** TLSNotary allows the Prover to **selectively disclose specific portions** of the data to the Verifier. Sensitive information can be redacted before sharing. ****Zero-Knowledge Proofs can be used to verify properties of redacted data without revealing the actual content.*Alice can choose which parts of the data to disclose, safeguarding her privacy.*
+3. **Data Verification:** The Verifier can then authenticate the disclosed data by validating the server certificate using trusted Certificate Authorities (CAs). This ensures that non-redacted portions of the data match their cryptographic proofs.*With this approach, Alice retains full control over her data while providing Bob with cryptographic proof of its authenticity.*
 
----
+## **TLSNotary and the Ethereum Foundation**
 
-Project: Prove Online Facts Without Revealing Too Much
-Overview: This project demonstrates how to use TLSNotary to prove online facts, such as having a certain number of followers and living in a specific city, without exposing sensitive information like your exact profile details.
-Use Case: Ideal for scenarios like online deals or partnerships that require verification of certain criteria without compromising privacy.
+TLSNotary is developed by the [**Privacy and Scaling Exploration (PSE)**](https://pse.dev/) research lab of the Ethereum Foundation. The PSE team is committed to conceptualizing and testing use cases for cryptographic primitives.
 
----
+# **Project: Prove Online Facts Without Revealing Too Much**
 
-Setting Up the Development Environment
-For this, we will go through Three steps. Most of these steps offer two options - choose one and move on to the next step. Often, the first option is easier from my perspective.
+**Overview:** This project demonstrates how to use **TLSNotary** to prove online facts, such as having a certain number of followers and living in a specific city, without exposing sensitive information like your exact profile details.
 
-1. Browser Extension
+**Use Case:** Ideal for scenarios like online deals or partnerships that require verification of certain criteria without compromising privacy.
+
+# **Setting Up the Development Environment**
+
+For this, we will go through **Three** **steps**. Most of these steps offer **two options** — choose one and move on to the next step. Often, the first option is easier from my perspective.
+
+## **1. Browser Extension**
+
 Install the TLSNotary extension in Chrome or Brave:
-Option 1: Install via Chrome Web Store
-Go to the Chrome Web Store and click Add to Chrome.
-click Add to ChromeOption 2: Manual installation
-Download the browser extension from this link.
-Unzip the downloaded file.
-Note: Be cautious if unzipping via the command line, as this is a flat file and contains many files at the top level.
-Open Manage Extensions in your browser by visiting chrome://extensions/.
-Enable Developer mode.
-Click the Load unpacked button.
-Select the unzipped folder.
 
-Developer mode and Load unpacked
+***Option 1: Install via [Chrome Web Store](https://chromewebstore.google.com/detail/gcfkkledipjbgdbimfpijgbkhajiaaph)***
 
----
+Go to the Chrome Web Store and click **Add to Chrome**.
 
-1. WebSocket Proxy
+![TLSNotary Chrome Extension](/images/contents/TLSNotaryChromeExtension.png)
+
+click **Add to Chrome**
+
+***Option 2: Manual installation***
+
+1. Download the browser extension from [this link](https://github.com/tlsnotary/tlsn-extension/releases/download/0.1.0.700/tlsn-extension-0.1.0.700.zip).
+2. Unzip the downloaded file.**Note**: Be cautious if unzipping via the command line, as this is a flat file and contains many files at the top level.
+3. Open **Manage Extensions** in your browser by visiting `chrome://extensions/`.
+4. Enable **Developer mode**.
+5. Click the **Load unpacked** button.
+6. Select the unzipped folder.
+
+![Developer mode and Load unpacked](../public/images/contents/DeveloperModeAndLoadUnpacked.png)
+
+**Developer mode and Load unpacked**
+
+## **2. WebSocket Proxy**
+
 The WebSocket Proxy is used to establish a TCP connection.
-Option 1: Use a Hosted Proxy
-Open the extension.
-Click on the top-right corner to locate Options, then click it.
-Enter wss://notary.pse.dev/proxy as the Proxy API.
-Click Save.
 
-Option 2: Run a Local Server
-To run the WebSocket Proxy locally, install wstcp:
+***Option 1: Use a Hosted Proxy***
 
+1. Open the extension.
+2. Click on the top-right corner to locate **Options**, then click it.
+3. Enter `wss://notary.pse.dev/proxy` as the **Proxy API**.
+4. Click **Save**.
+
+![Hosted Proxy](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/HostedProxy.png)
+
+
+***Option 2: Run a Local Server***
+
+1. To run the WebSocket Proxy locally, install `wstcp`:
+
+```
 cargo install wstcp
-2. Run a WebSocket Proxy for [https://swapi.dev](https://swapi.dev/):
+```
+
+2. Run a WebSocket Proxy for [`https://swapi.dev`:](https://swapi.dev/)
+
+```
 wstcp --bind-addr 127.0.0.1:55688 swapi.dev:443
-3. Now use ws://localhost:55688 as the Proxy API in Step 3 above, that is under option 1.
+```
 
----
+3. Now use `ws://localhost:55688` as the **Proxy API** in Step 3 above, that is under option 1.
 
-1. Notary Server
+## **3. Notary Server**
+
 To generate a TLSNotary proof, the browser extension requires access to a Notary Server. This server facilitates secure communication using Multi-Party Computation (MPC). In real-world development, the server is typically operated by a trusted third party or the verifier of the proof. In this project, you can either run the server yourself or use the test server provided by the TLSNotary team.
-Option 1: Use the TLSNotary Team's Hosted Server
-Open the TLSNotary Browser Extension.
-Click on the top-right corner to locate Options, then click it.
-Set the Notary API to:
 
+***Option 1: Use the TLSNotary Team’s Hosted Server***
+
+1. Open the TLSNotary Browser Extension.
+2. Click on the top-right corner to locate **Options**, then click it.
+3. Set the **Notary API** to:
+
+```
 https://notary.pse.dev/v0.1.0-alpha.7
-4. Save the configuration.
-Option 2: Run a Local Notary Server
-Open the TLSNotary Browser Extension.
-Click on the top-right corner to locate Options, then click it.
-Set the Notary API to:
+```
 
-[http://localhost:7047](http://localhost:7047/)
 4. Save the configuration.
+
+***Option 2: Run a Local Notary Server***
+
+1. Open the TLSNotary Browser Extension.
+2. Click on the top-right corner to locate **Options**, then click it.
+3. Set the **Notary API** to:
+
+```
+http://localhost:7047
+```
+
+4. Save the configuration.
+
 5. Run the Notary Server
-Clone the Repository
+
+***Clone the Repository***
+
+```
 git clone https://github.com/tlsnotary/tlsn.git
-Disable TLS for Local Development
-Edit the Notary Server configuration file (crates/notary/server/config/config.yaml) to turn off TLS:
+```
+
+***Disable TLS for Local Development***
+
+Edit the Notary Server configuration file (`crates/notary/server/config/config.yaml`) to turn off TLS:
+
+```
 tls:
-enabled: false
-...
-⚠️ Note: Disabling TLS is only for local development. Ensure TLS is enabled in production environments for secure communication.
-Start the Server
+  enabled: false
+  ...
+```
+
+⚠️ **Note**: Disabling TLS is only for local development. Ensure TLS is enabled in production environments for secure communication.
+
+***Start the Server***
+
 Navigate to the server directory and run:
+
+```
 cd crates/notary/server
 
 cargo run --release
+```
+
 The server will now be running locally, ready to accept requests from the browser extension.
 
----
+# **Notarize X Followers and Location Access**
 
-Notarize X Followers and Location Access
-Now it's time to prove details about an X (formerly Twitter) account, specifically its follower count and location. We will use the UserByScreenName API endpoint for this process.
-Step 1: Open X and Log In
-Visit X and ensure you're logged in to your account.
-Navigate to your profile at https://x.com/...yourHandleName
-Keep the TLSNotary browser extension active - it will automatically start recording requests.
+Now it’s time to prove details about an X (formerly Twitter) account, specifically its follower count and location. We will use the `UserByScreenName` API endpoint for this process.
 
-Note: The TLSNotary browser extension often includes a plugin for X. Clicking on this plugin can automatically generate proof of account ownership. However, that's not the focus of this tutorial, so let's proceed with proving follower count and location instead.
+## **Step 1: Open X and Log In**
 
----
+1. Visit X and ensure you’re logged in to your account.
+2. Navigate to your profile at [`https://x.com/...yourHandleName`](https://x.com/...yourHandleName.)
+3. Keep the TLSNotary browser extension active — it will automatically start recording requests.
 
-Step 2: Search for the Relevant API Request
-We're looking for the UserByScreenName API endpoint. Here's how to find it:
-Navigate to your X profile page.
-Open the TLSNotary extension and go to the Network tab.
-Search for the following request in the list:
+**Note:** The TLSNotary browser extension often includes a plugin for X. Clicking on this plugin can automatically generate proof of account ownership. However, that’s not the focus of this tutorial, so let’s proceed with proving follower count and location instead.
 
+## **Step 2: Search for the Relevant API Request**
+
+We’re looking for the `UserByScreenName` API endpoint. Here’s how to find it:
+
+1. Navigate to your X profile page.
+2. Open the TLSNotary extension and go to the **Network** tab.
+3. Search for the following request in the list:
+
+```
 https://x.com/i/api/graphql/laYnJPCAcVo0o6pzcnlVxQ/UserByScreenName
-To simplify, enter UserByScreenName in the search box.
-4. Click on the xmlhttprequest entry for this request. It contains the details we need, such as follower count and location.
-5. Once selected, you'll see a summary page. Click Notarize to begin.
-Select any headers that you would like to reveal. Once done, click on Next below to proceed to the redact page.
+```
 
----
+To simplify, enter `UserByScreenName` in the search box.
 
-Step 3: Highlight and Redact Data
+![UserByScreenName](/images/contents/UserByScreenName.png)
+
+
+4. Click on the **xmlhttprequest** entry for this request. It contains the details we need, such as follower count and location.
+
+5. Once selected, you’ll see a summary page. Click **Notarize** to begin.
+
+![Notarize](/images/contents/Notarize.png)
+
+
+Select any headers that you would like to reveal. Once done, click on **Next** below to proceed to the redact page.
+
+## **Step 3: Highlight and Redact Data**
+
 On the next page, redact sensitive portions of the data. Focus on the following fields in the JSON response:
-"followers_count"
-"friends_count"
-"location"
 
-Action: Highlight the portions you want to redact, leaving only the relevant details (follower count, friend count, and location) visible.
-Redact DataStep 4: Generate the Proof
-Once satisfied with the highlighted and redacted data, click Notarize.
-The TLSNotary extension will connect to the notary server to cryptographically sign the proof.
+- `"followers_count"`
+- `"friends_count"`
+- `"location"`
 
-Pending NotarizationIf you use the hosted notary server, notarization may take several seconds.
-Step 5: View and Share the Proof
-View the Proof
-Open the History tab in the TLSNotary extension and click on View.
+**Action:** Highlight the portions you want to redact, leaving only the relevant details (follower count, friend count, and location) visible.
 
-You'll receive a file containing:
-Cryptographic evidence tying the data to your interaction with X (formerly Twitter).
-Under the Recv section, it will display only the unhighlighted fields (follower count and location).
+![Redact Data](/images/contents/RedactData.png)
 
-Share the Proof
-Here is a shareable link of the notarization: link
-Check the Recv section to verify that only the unhighlighted fields (follower count and location) are visible.
 
-shared link of the notarizationThis is the proof you share with other party to verify your claims without revealing additional private details.
-By the way, now that you've seen how small my follower count is, why not give me a follow? 👉 Follow me on X😊
+Redact Data
 
----
+## **Step 4: Generate the Proof**
 
-Conclusion: Proving Just Enough
-Congratulations! You've successfully proven that you meet specific criteria (followers and location) without exposing unnecessary information. This technique is not just useful for privacy-conscious celebrities but also for anyone needing to share verifiable information selectively.
+1. Once satisfied with the highlighted and redacted data, click **Notarize**.
+2. The TLSNotary extension will connect to the notary server to cryptographically sign the proof.
 
----
+![Pending Notarization](/images/contents/PendingNotarization.png)
 
-Next Steps
-Read the official TLSNotary documentation to gain a deeper understanding of its capabilities.
-Resources
-🖥️ TLSNotary Official Documentation
-📂 TLSNotary GitHub Repository
+Pending Notarization
 
-If you're curious about further applications of TLSNotary, here are some ideas:"
-Could it be used in the financial sector to prove eligibility for a bank loan?
-Might it streamline job application processes, enabling applicants to verify credentials such as age, experience, or education without disclosing unnecessary details?
+If you use the hosted notary server, notarization may take several seconds.
 
-Personal Insight
+## **Step 5: View and Share the Proof**
+
+***View the Proof***
+
+- Open the **History** tab in the TLSNotary extension and click on **View**.
+
+You’ll receive a file containing:
+
+- Cryptographic evidence tying the data to your interaction with X (formerly Twitter).
+- Under the `Recv` section, it will display only the unhighlighted fields (*follower count* and *location*).
+
+![Proof](/images/contents/Proof.png)
+
+***Share the Proof***
+
+- Here is a shareable link of the notarization: [link](https://explorer.tlsnotary.org/ipfs/bafkreidizzzrgibgmzogw75eeoivkv6yeh75swyuqqll7bdrsm2xqubdbq)
+- Check the `Recv` section to verify that only the unhighlighted fields (*follower count* and *location*) are visible.
+
+![Recv Proof](/images/contents/RecvProof.png)
+
+shared link of the notarization
+
+This is the proof you share with other party to verify your claims without revealing additional private details.
+
+**By the way, now that you’ve seen how small my follower count is, why not give me a follow?** 👉 [Follow me on X](https://x.com/ChiemezieAgbo)😊
+
+# **Conclusion: Proving Just Enough**
+
+Congratulations! You’ve successfully proven that you meet specific criteria (followers and location) without exposing unnecessary information. This technique is not just useful for privacy-conscious celebrities but also for anyone needing to share verifiable information selectively.
+
+# **Next Steps**
+
+**Read the official TLSNotary documentation** to gain a deeper understanding of its capabilities.
+
+***Resources***
+
+- 🖥️ [TLSNotary Official Documentation](https://docs.tlsnotary.org/)
+- 📂 [TLSNotary GitHub Repository](https://github.com/tlsnotary/tlsn)
+
+If you’re curious about further applications of TLSNotary, here are some ideas:”
+
+- Could it be used in the financial sector to prove eligibility for a bank loan?
+- Might it streamline job application processes, enabling applicants to verify credentials such as age, experience, or education without disclosing unnecessary details?
+
+## **Personal Insight**
+
 TLSNotary places privacy and transparency in your hands. By allowing you to share only the necessary information, it empowers users in an increasingly interconnected world.
-Where will you use it next? The possibilities are endless!
+
+**Where will you use it next?** The possibilities are endless!
