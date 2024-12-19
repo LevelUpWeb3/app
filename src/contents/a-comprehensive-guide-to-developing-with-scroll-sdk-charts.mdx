@@ -3,7 +3,7 @@ name: "A Comprehensive Guide to Developing with Scroll SDK Charts"
 index: 12
 summary: With Scroll SDK, yoou can...
 author: Ahmet Tahir Yıldız
-authorIcon: https://x.com/LandoC4lrissian/photo 
+authorIcon: https://pbs.twimg.com/profile_images/1721586474858983424/N50Rpjfv_200x200.jpg 
 authorLink: https://x.com/LandoC4lrissian
 published: Dec 8 2024
 readTime: 8 min read
@@ -246,7 +246,7 @@ npx tailwindcss init
 
 3. **Build the UI:**
 
-Create a form to accept Helm chart configurations:
+Create a form to accept Helm chart configurations at `src/app/chart-form.jsx`:
 
 ```javascript
 import { useForm } from "react-hook-form";
@@ -278,15 +278,16 @@ export default function ChartForm() {
 }
 ```
 
-4. **Backend API Route:** Handle Helm chart creation and deployment:
+4. **Backend API Route:** Handle Helm chart creation and deployment at `src/app/api/charts/route.js`:
 
 ```javascript
 import fs from "fs";
 import { exec } from "child_process";
 
-export default async function handler(req, res) {
+// Named export for POST method
+export async function POST(req) {
   if (req.method === "POST") {
-    const { chartName, maxBlockInChunk } = req.body;
+    const { chartName, maxBlockInChunk } = await req.json();
 
     const valuesYaml = `
 config:
@@ -294,24 +295,64 @@ config:
     maxBlockInChunk: ${maxBlockInChunk}
 `;
 
-    fs.writeFileSync(`./charts/${chartName}/values.yaml`, valuesYaml);
-
-    exec(
-      `helm install ${chartName} ./charts/${chartName}`,
-      (error, stdout, stderr) => {
-        if (error) {
-          return res.status(500).json({ error: stderr });
+    return new Promise((resolve, reject) => {
+      exec(
+        `helm create ../charts/${chartName}`,
+        (error, stdout, stderr) => {
+          if (error) {
+            return reject(
+              new Response(
+                JSON.stringify({ error: stderr }),
+                { status: 500 }
+              )
+            );
+          }
+          try {
+            fs.writeFileSync(`../charts/${chartName}/values.yaml`, valuesYaml);
+            resolve(
+              new Response(
+                JSON.stringify({ message: stdout }),
+                { status: 200 }
+              )
+            );
+          } catch (fsError) {
+            reject(
+              new Response(
+                JSON.stringify({ error: fsError.message }),
+                { status: 500 }
+              )
+            );
+          }
         }
-        res.status(200).json({ message: stdout });
-      }
-    );
+      );
+    });
   } else {
-    res.status(405).json({ message: "Method Not Allowed" });
+    return new Response(
+      JSON.stringify({ message: "Method Not Allowed" }),
+      { status: 405 }
+    );
   }
+}
+
+```
+
+5. **Include the Form in Your Page:**
+To use the form in your application, include it in your `page.js` file.
+
+```javascript
+import ChartForm from "./chart-form";
+
+export default function Home() {
+  return (
+    <div>
+      <h1>Create a New Chart</h1>
+      <ChartForm />
+    </div>
+  );
 }
 ```
 
-5. **Deploy and Test:**
+6. **Deploy and Test:**
 
 - Run `npm run dev` to start the Next.js app.
 - Navigate to the form and submit configurations.
