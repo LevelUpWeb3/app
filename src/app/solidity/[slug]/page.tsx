@@ -1,4 +1,10 @@
-import { Typography, Stack, Container } from "@mui/material";
+import {
+  Typography,
+  Stack,
+  Container,
+  Box,
+  LinearProgress,
+} from "@mui/material";
 
 import { genMeta } from "@/utils/route";
 import BackLink from "@/components/Back";
@@ -51,6 +57,33 @@ export default async function SolidityDetailPage({
           <Typography sx={{ fontSize: ["16px", "24px"] }}>
             {data.summary}
           </Typography>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: ["16px"],
+                mb: "1.4rem",
+              }}
+            >
+              Progress:
+              <Typography component="span" sx={{ fontWeight: 500 }}>
+                20
+              </Typography>
+              %
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={20}
+              sx={{
+                width: 460,
+                height: 6,
+                borderRadius: 0,
+                backgroundColor: "#D9D9D9",
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: "#000",
+                },
+              }}
+            />
+          </Box>
         </Stack>
         <Typography
           sx={{

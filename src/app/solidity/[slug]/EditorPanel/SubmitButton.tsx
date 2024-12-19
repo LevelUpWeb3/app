@@ -3,6 +3,7 @@ import { ButtonProps } from "@mui/material";
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
 import useCheckViewport from "@/hooks/useCheckViewport";
+import { usePrivy } from "@privy-io/react-auth";
 
 interface SubmitButtonProps extends ButtonProps {
   code: string;
@@ -17,6 +18,7 @@ const SubmitButton = ({
   ...restProps
 }: SubmitButtonProps) => {
   const { isMobile } = useCheckViewport();
+  const { login, user } = usePrivy();
 
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("");
@@ -48,18 +50,26 @@ const SubmitButton = ({
     }, 6e3);
   };
 
+  if (user) {
+    return (
+      <EditorTooltip
+        type={severity}
+        title={message}
+        open={!!severity}
+        onClose={handleCloseTip}
+        placement="top"
+      >
+        <Button size="large" onClick={submitCode} {...restProps}>
+          Submit Challenge
+        </Button>
+      </EditorTooltip>
+    );
+  }
+
   return (
-    <EditorTooltip
-      type={severity}
-      title={message}
-      open={!!severity}
-      onClose={handleCloseTip}
-      placement="top"
-    >
-      <Button size="large" onClick={submitCode} {...restProps}>
-        Submit Challenge
-      </Button>
-    </EditorTooltip>
+    <Button size="large" onClick={login} {...restProps}>
+      Login to Submit Exercise
+    </Button>
   );
 };
 

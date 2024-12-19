@@ -1,8 +1,9 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, LinearProgress, SvgIcon } from "@mui/material";
 import { sendGAEvent } from "@next/third-parties/google";
 import Link from "next/link";
+import FinishIcon from "@/assets/svgs/solidity/finish.svg";
 
 const SolidityCardList = ({ content }) => {
   const handleClick = () => {
@@ -38,17 +39,41 @@ const SolidityCardList = ({ content }) => {
         ]}
         onClick={handleClick}
       >
-        <Typography
-          sx={{
-            fontSize: "16px",
-            lineHeight: "40px",
-            textAlign: "center",
-            backgroundColor: "rgba(186, 240, 247, 0.80)",
-            borderBottom: "1.5px solid #101010",
-          }}
-        >
-          Lesson {content.lesson}
-        </Typography>
+        <Box sx={{ position: "relative" }}>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              lineHeight: "40px",
+              textAlign: "center",
+              backgroundColor: "rgba(186, 240, 247, 0.80)",
+              borderBottom: "1.5px solid #101010",
+              verticalAlign: "center",
+            }}
+          >
+            Lesson {content.lesson} - 100%
+            <SvgIcon
+              component={FinishIcon}
+              sx={{ fontSize: "16px", marginTop: "-4px", marginLeft: "4px" }}
+              inheritViewBox
+            />
+          </Typography>
+          <LinearProgress
+            variant="determinate"
+            value={20}
+            sx={{
+              width: "100%",
+              height: 6,
+              borderRadius: 0,
+              backgroundColor: "#D9D9D9",
+              position: "absolute",
+              bottom: -4,
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: "#000",
+              },
+            }}
+          />
+        </Box>
+
         <Typography
           sx={{
             fontSize: "20px",
