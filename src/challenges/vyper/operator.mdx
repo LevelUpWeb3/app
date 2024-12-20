@@ -1,0 +1,65 @@
+---
+name: Operator
+index: 2
+lesson: 2
+summary: Introduction to Vyper operators
+labels: ["vyper"]
+---
+
+# Operator
+
+Operators are special symbols, or keywords that are used to perform operations on variables and values. You can combine objects and operators to create expressions that execute the actual competition
+
+- `+`, `-`, `*`, `/`, `%`, `//`, `**` (arithmetic operators)
+- `not x` (logical negation)
+- `x and y` (logical conjunction)
+- `x or y` (logical disjunction)
+- `x == y` (equality)
+- `x != y` (inequality)
+
+```python
+# pragma version 0.4.0
+
+stored_value: public(uint256)
+arithmetic_result: public(uint256)
+logic_result: public(bool)
+
+@deploy
+def __init__():
+    self.stored_value = 69420
+
+@external
+def arithmeticFunction(x: uint256, y:uint256) -> uint256:
+
+    # Replace `+` operator below with relevant operators
+    self.arithmetic_result = x + y
+    return self.arithmetic_result
+
+@external
+def negateLogicFunction() -> bool:
+
+    # Calling the function below negates the current value
+    self.logic_result = not self.logic_result
+    return self.logic_result
+
+@external
+def conjunctionAndDisjunctionLogicFunction(x: uint256, y:uint256) -> bool:
+
+    # Evaluate conjunction logic
+    self.logic_result = (x > y) and (y == x)
+
+    # Return stored boolean result
+    return self.logic_result
+
+
+@external
+def equalityCheckerFunction(inputValue: uint256) -> bool:
+
+    # Returns `true` if stored_value equals to input value
+    # Replace `==` operator to test for inequality evaluation
+    return self.stored_value == inputValue
+```
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/types.html#operators)
