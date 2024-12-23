@@ -1,0 +1,40 @@
+---
+name: Constants
+index: 3
+lesson: 3
+summary: Introduction to Vyper constants
+labels: ["vyper"]
+---
+
+# Constants
+
+Constants are variables that is only defined at a global level. Use the keyword `constant` to define a constant variable.
+
+```python
+# pragma version 0.4.0
+
+SUPPLY_AMOUNT: constant(uint256) = 21000000
+BYTES_VALUE: constant(bytes32) = 0xabcd1123f8ae9a65dcc16f95643f2030aa505c6b465c8206e26ae84b525cdacb
+STRING_VALUE: constant(String[13]) = "Hello, world!"
+
+@external
+def retrieveConstants() -> (uint256, bytes32, String[13]):
+    return (SUPPLY_AMOUNT, BYTES_VALUE, STRING_VALUE)
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators (wrt Solidity)</strong>
+  </summary>
+  <ul>
+    <li>Requires explicit specification of String length.</li>
+    <li>
+      String length in return function must be equal to more than the constant
+      length.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/constants-and-vars.html#custom-constants)
