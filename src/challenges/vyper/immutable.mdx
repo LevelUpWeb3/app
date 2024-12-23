@@ -1,0 +1,43 @@
+---
+name: Immutable
+index: 4
+lesson: 4
+summary: Introduction to Vyper immutable
+labels: ["vyper"]
+---
+
+# Immutable
+
+Immutable variables are similar to constants, except the value must be defined in the constructor of the contract. Declare `immutable` variables if you want a variable to remain constant throughout the lifetime of a deployed contract.
+
+Accessing an immutable variable reduces runtime gas costs in comparison with `constant` variables.
+
+```python
+# pragma version 0.4.0
+
+IMMUTABLE_INT: immutable(uint256)
+IMMUTABLE_ADDR: immutable(address)
+
+@deploy
+def __init__():
+    IMMUTABLE_INT = 999
+    IMMUTABLE_ADDR = 0xE2b4795039517653c5Ae8C2A9BFdd783b48f447A
+
+@external
+@view
+def retrieveImmutables() -> (uint256, address):
+    return (IMMUTABLE_INT, IMMUTABLE_ADDR)
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators (wrt Solidity)</strong>
+  </summary>
+  <ul>
+    <li>You cannot assign a value to an `immutable` global variable</li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/stable/scoping-and-declarations.html#declaring-immutable-variables)
