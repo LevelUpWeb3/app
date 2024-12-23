@@ -29,7 +29,7 @@ const Editor = ({
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
 
   const lessonId = slug as string;
 

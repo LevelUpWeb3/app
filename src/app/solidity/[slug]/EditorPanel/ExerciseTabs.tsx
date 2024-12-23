@@ -13,7 +13,7 @@ const getExerciseNumber = (exerciseKey) => {
 const ExerciseTabs = (props) => {
   const { value, onChange, completedExerciseNumber } = props;
 
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
   const lessonId = slug as string;
 
   const EXERCISE_LIST = useMemo(() => {

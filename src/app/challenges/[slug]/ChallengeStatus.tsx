@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { useParams } from "next/navigation";
 
 const ChallengeStatus = (props) => {
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
 
   const { challenges } = useProgressStore();
 

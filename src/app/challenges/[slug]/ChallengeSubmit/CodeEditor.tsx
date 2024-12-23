@@ -20,7 +20,7 @@ enum TestStatus {
 
 const CodeEditor = (props) => {
   const { sx } = props;
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<TestStatus>(TestStatus.UNDEFINED);
@@ -32,7 +32,7 @@ const CodeEditor = (props) => {
   };
 
   const beforeMount = (monaco: Monaco) => {
-    monaco.editor.defineTheme("level-up-black", editorTheme);
+    monaco.editor.defineTheme("level-up-black", editorTheme as any);
   };
   const onMount: OnMount = (editor, monaco) => {
     editor.focus();
