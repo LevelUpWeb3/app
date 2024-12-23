@@ -11,7 +11,7 @@ import useProgressStore from "@/stores/processStore";
 
 const EditorPanel = (props) => {
   const { data } = props;
-  const { slug: lessonId } = useParams();
+  const { slug: lessonId } = useParams() as { slug: string };
   const { lessons } = useProgressStore();
 
   const [exercise, setExercise] = useState<string>(

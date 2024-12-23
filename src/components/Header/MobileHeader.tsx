@@ -53,7 +53,7 @@ const MobileHeader = () => {
             p: ["8px 20px", "8px 40px"],
             "&.active": { backgroundColor: "#fff" },
           }}
-          className={pathname.includes(item.key) ? "active" : ""}
+          className={pathname!.includes(item.key) ? "active" : ""}
           onClick={() => toggleDrawer(false)}
         >
           <Link href={item.href} className="flex w-full justify-between">

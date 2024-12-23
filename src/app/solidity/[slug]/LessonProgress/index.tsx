@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 
 export default function LessonProgress() {
   const { lessons } = useProgressStore();
-  const { slug: lessonId } = useParams();
+  const { slug: lessonId } = useParams() as { slug: string };
   const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
