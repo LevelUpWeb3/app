@@ -9,7 +9,7 @@ import editorTheme from "@/theme/editorTheme";
 import Button from "@/components/Button";
 import { useParams } from "next/navigation";
 import SuccessAlert from "./SuccessAlert";
-import useProgressStore from "@/stores/processStore";
+// import useProgressStore from "@/stores/processStore";
 import { usePrivy } from "@privy-io/react-auth";
 
 enum TestStatus {
@@ -24,7 +24,7 @@ const CodeEditor = (props) => {
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<TestStatus>(TestStatus.UNDEFINED);
-  const { updateChallengeStatus } = useProgressStore();
+  // const { updateChallengeStatus } = useProgressStore();
   const { login, user } = usePrivy();
 
   const handleCloseTip = () => {
@@ -47,7 +47,7 @@ const CodeEditor = (props) => {
       body: code,
     });
     if (res.ok) {
-      await updateChallengeStatus(slug);
+      // await updateChallengeStatus(slug);
       setStatus(TestStatus.SUCCESS);
     } else {
       setStatus(TestStatus.ERROR);

@@ -26,7 +26,9 @@ const LinkedSocialItem = ({
           component={icon}
           inheritViewBox
         />
-        <Typography sx={{ fontSize: "1.6rem", fontWeight: 500 }}>
+        <Typography
+          sx={{ fontSize: "1.6rem", fontWeight: 500, marginBottom: "-4px" }}
+        >
           {name}
         </Typography>
       </Box>
@@ -57,7 +59,9 @@ const LinkedSocialItem = ({
               inheritViewBox
               component={require("@/assets/svgs/profile/unlink.svg").default}
             />
-            <Typography sx={{ fontSize: "1.6rem", fontWeight: 500 }}>
+            <Typography
+              sx={{ fontSize: "1.6rem", fontWeight: 500, marginBottom: "-4px" }}
+            >
               Unlink
             </Typography>
           </>
@@ -68,7 +72,9 @@ const LinkedSocialItem = ({
               inheritViewBox
               component={require("@/assets/svgs/profile/link.svg").default}
             />
-            <Typography sx={{ fontSize: "1.6rem", fontWeight: 500 }}>
+            <Typography
+              sx={{ fontSize: "1.6rem", fontWeight: 500, marginBottom: "-4px" }}
+            >
               Link
             </Typography>
           </>
