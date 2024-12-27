@@ -10,7 +10,6 @@ import googleIcon from "@/assets/svgs/profile/google.svg";
 import twitterIcon from "@/assets/svgs/profile/twitter.svg";
 import githubIcon from "@/assets/svgs/profile/github.svg";
 import telegram from "@/assets/svgs/profile/telegram.svg";
-import { useState } from "react";
 import useProfileStore from "@/stores/profileStore";
 import LinkedSocialItem from "./LinkedSocialItem";
 
@@ -26,8 +25,9 @@ const LinkedList = () => {
     unlinkGithub,
     unlinkTelegram,
     unlinkEmail,
+    user,
   } = usePrivy();
-  const { username, avatar, user } = useProfileStore();
+  const { username } = useProfileStore();
 
   const socials = [
     {
@@ -66,13 +66,12 @@ const LinkedList = () => {
     {
       key: "telegram",
       name: "Telegram",
+      displayField: "username",
       icon: telegram,
       onLinkClick: linkTelegram,
       onUnlinkClick: unlinkTelegram,
     },
   ];
-
-  const [open, setOpen] = useState(false);
 
   return (
     <Box>
