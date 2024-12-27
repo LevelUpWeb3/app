@@ -50,6 +50,7 @@ const LinkedSocialItem = ({
             <Typography
               sx={{
                 color: "rgba(16, 16, 16, 0.6)",
+                marginBottom: "-4px",
               }}
             >
               {user[itemKey][displayField]}
@@ -60,7 +61,12 @@ const LinkedSocialItem = ({
               component={require("@/assets/svgs/profile/unlink.svg").default}
             />
             <Typography
-              sx={{ fontSize: "1.6rem", fontWeight: 500, marginBottom: "-4px" }}
+              sx={{
+                fontSize: "1.6rem",
+                fontWeight: 500,
+                marginBottom: "-4px",
+                cursor: "pointer",
+              }}
             >
               Unlink
             </Typography>
@@ -73,7 +79,12 @@ const LinkedSocialItem = ({
               component={require("@/assets/svgs/profile/link.svg").default}
             />
             <Typography
-              sx={{ fontSize: "1.6rem", fontWeight: 500, marginBottom: "-4px" }}
+              sx={{
+                fontSize: "1.6rem",
+                fontWeight: 500,
+                marginBottom: "-4px",
+                cursor: "pointer",
+              }}
             >
               Link
             </Typography>
