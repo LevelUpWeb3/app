@@ -14,6 +14,11 @@ Scroll Canvas badges are stored permanently on-chain and can be accessed using o
 
 ## Before you sart: Learn about EAS, Badges and the Registry
 
+<div className="text-center">
+  <img src="/images/contents/how-to-fetch-scroll-canvas-badges/diagram.png" alt="matcha screenshot" />
+  _The step by step process to retrieve badge data._
+</div>
+
 The primary entry point for the Scroll Canvas contracts is the `ProfileRegistry` contract. This contract allows you to `mint` a profile, enabling you to set a username and associate it with your wallet address. Each profile is represented as a Scroll smart contract, whose address can be retrieved using the `getProfile` function.
 
 Once you have the profile contract address from a given ethereum account, you can call its `getValidBadges` function. This function returns a list of Ethereum Attestation Service (EAS) attestations for each badge. EAS provides a mechanism for verifying and attesting that specific claims are true, in this case, the issuance of badges by Scroll ecosystem projects.
