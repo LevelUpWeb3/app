@@ -18,9 +18,9 @@ export default function LessonProgress() {
     }
   }, [lessons, lessonId]);
 
-  if (!progress) {
-    return null;
-  }
+  // if (!progress) {
+  //   return null;
+  // }
 
   return (
     <Box>
