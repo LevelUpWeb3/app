@@ -30,7 +30,7 @@ export default function LessonProgress() {
           mb: "1.4rem",
         }}
       >
-        Progress:
+        Progress:{" "}
         <Typography component="span" sx={{ fontWeight: 500 }}>
           {progress}
         </Typography>
