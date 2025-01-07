@@ -12,6 +12,7 @@ import githubIcon from "@/assets/svgs/profile/github.svg";
 import telegram from "@/assets/svgs/profile/telegram.svg";
 import useProfileStore from "@/stores/profileStore";
 import LinkedSocialItem from "./LinkedSocialItem";
+import { truncateAddress } from "@/utils";
 
 const LinkedList = () => {
   const {
@@ -77,7 +78,7 @@ const LinkedList = () => {
     <Box>
       <Typography
         sx={{
-          fontSize: "3.6rem",
+          fontSize: ["2.4rem", "3.6rem"],
           marginBottom: "2rem",
         }}
       >
@@ -97,7 +98,7 @@ const LinkedList = () => {
             inheritViewBox
           ></SvgIcon>
           <Typography sx={{ fontSize: "1.6rem", fontWeight: 500 }}>
-            {username}
+            {truncateAddress(user?.wallet?.address || "")}
           </Typography>
         </Box>
       </Box>
@@ -105,7 +106,7 @@ const LinkedList = () => {
         <Typography
           sx={{
             marginTop: "3rem",
-            fontSize: "3.6rem",
+            fontSize: ["2.4rem", "3.6rem"],
           }}
         >
           Linked Socials

@@ -40,7 +40,7 @@ export default function LessonProgress() {
         variant="determinate"
         value={progress}
         sx={{
-          width: 460,
+          width: ["100%", 460],
           height: 6,
           borderRadius: 0,
           backgroundColor: "#D9D9D9",

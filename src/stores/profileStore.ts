@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { truncateAddress } from "@/utils";
 
 type User = {
   customMetadata?: {
@@ -26,6 +27,7 @@ type ProfileStore = {
     file?: File | null,
     avatarUrl?: string | null,
   ) => Promise<void>;
+  initializeUserProfile: (user: User) => void;
 };
 
 const useProfileStore = create<ProfileStore>((set, get) => ({
@@ -69,6 +71,26 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
       console.error("Error uploading profile data:", error);
     } finally {
       set({ loading: false });
+    }
+  },
+
+  initializeUserProfile: (user) => {
+    if (!user) return;
+
+    const { customMetadata, wallet } = user;
+
+    if (customMetadata) {
+      set({
+        username: customMetadata.username || "",
+        avatar: customMetadata.avatar || "",
+      });
+    } else if (wallet?.address) {
+      const name = truncateAddress(wallet.address);
+      const avatarUrl = `https://gravatar.com/avatar/${wallet.address}?s=200&d=identicon`;
+      set({
+        username: name,
+        avatar: avatarUrl,
+      });
     }
   },
 }));

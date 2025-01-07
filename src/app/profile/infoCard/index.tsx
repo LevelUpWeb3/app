@@ -3,7 +3,6 @@
 import { Box, Typography } from "@mui/material";
 
 import Button from "@/components/Button";
-import { useState } from "react";
 import useProfileStore from "@/stores/profileStore";
 import useProgressStore from "@/stores/processStore";
 

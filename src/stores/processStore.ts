@@ -13,6 +13,7 @@ type ProgressStore = {
   updateLessonProgress: (lessonId: string, value: number) => Promise<void>;
   updateChallengeStatus: (challengeId: string) => Promise<void>;
   resetProgress: () => void;
+  initializeProgress: (user: any) => void;
 };
 
 const useProgressStore = create<ProgressStore>((set, get) => ({
@@ -101,6 +102,30 @@ const useProgressStore = create<ProgressStore>((set, get) => ({
       lessonLoading: false,
       challengeLoading: false,
     });
+  },
+
+  initializeProgress: (user) => {
+    if (!user) return;
+
+    const { customMetadata } = user;
+
+    if (customMetadata) {
+      const lessons = JSON.parse(
+        (user.customMetadata.lessons as string) || "{}",
+      );
+      const reverseMap = {};
+      for (const [key, value] of Object.entries(LESSON_KEY_MAP)) {
+        if (lessons[value] !== undefined) {
+          reverseMap[key] = lessons[value];
+        }
+      }
+      set({
+        lessons: reverseMap,
+        challenges: JSON.parse(
+          (user.customMetadata.challenges as string) || "{}",
+        ),
+      });
+    }
   },
 }));
 export default useProgressStore;
