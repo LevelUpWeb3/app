@@ -120,7 +120,7 @@ const MobileHeader = () => {
                 >
                   <YoutubeIcon className="h-auto w-[21px]"></YoutubeIcon>
                 </Link>
-                <Link href="https://t.me/+PdNbk5milo1mMTAy" target="_blank">
+                <Link href="https://t.me/+jbhmyDZ63Vw0ZGYy" target="_blank">
                   <TelegramIcon className="h-auto w-[24px]"></TelegramIcon>
                 </Link>
               </Stack>

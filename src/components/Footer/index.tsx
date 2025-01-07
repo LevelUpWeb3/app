@@ -30,7 +30,7 @@ export default function Footer() {
             <Link href="https://www.youtube.com/@levelupinweb3" target="_blank">
               <YoutubeIcon></YoutubeIcon>
             </Link>
-            <Link href="https://t.me/+PdNbk5milo1mMTAy" target="_blank">
+            <Link href="https://t.me/+jbhmyDZ63Vw0ZGYy" target="_blank">
               <TelegramIcon></TelegramIcon>
             </Link>
           </Stack>
