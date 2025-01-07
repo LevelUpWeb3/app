@@ -137,7 +137,7 @@ const ProfileModal = (props) => {
                 padding: "9px",
                 border: "1.5px solid #000",
                 marginTop: "10px",
-                width: "42rem",
+                width: ["100%", "42rem"],
                 fontSize: "2.4rem",
               }}
               inputProps={{

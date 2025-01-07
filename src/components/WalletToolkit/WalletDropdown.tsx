@@ -6,12 +6,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { Fade, ListItemText, Menu, MenuItem } from "@mui/material";
 import Button from "@/components/Button";
 import ProfileModal from "@/app/profile/components/ProfileModal";
-import { truncateAddress } from "@/utils";
 
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useLogin } from "@privy-io/react-auth";
 import useProfileStore from "@/stores/profileStore";
 import useProgressStore from "@/stores/processStore";
-import { LESSON_KEY_MAP } from "@/constants/solidity/code-solutions";
 
 const useStyles = makeStyles<any>()((theme, { dark }) => ({
   button: {
@@ -78,17 +76,18 @@ const WalletDropdown = (props) => {
   const { classes } = useStyles({ dark });
   const pathname = usePathname();
   const router = useRouter();
-  const {
-    username,
-    avatar,
-    dialogOpen,
-    setDialogOpen,
-    setUsername,
-    setAvatar,
-  } = useProfileStore();
-  const { setChallenges, setLessons } = useProgressStore();
-  const { user, logout, login, authenticated, ready } = usePrivy();
-
+  const { username, avatar, dialogOpen, setDialogOpen } = useProfileStore();
+  const { user, logout, authenticated, ready } = usePrivy();
+  const { login } = useLogin({
+    onComplete: (user, isNewUser) => {
+      if (isNewUser) {
+        setDialogOpen(true);
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [copied, setCopied] = useState(false);
 
@@ -103,42 +102,13 @@ const WalletDropdown = (props) => {
     setCopied(false);
   };
 
+  const { initializeUserProfile } = useProfileStore();
+  const { initializeProgress } = useProgressStore();
+
   useEffect(() => {
     if (user) {
-      console.log("Setting default profile data:", user);
-      if (user.customMetadata) {
-        setUsername(user.customMetadata.username as string);
-        setAvatar(user.customMetadata.avatar as string);
-
-        const lessons = JSON.parse(
-          (user.customMetadata.lessons as string) || "{}",
-        );
-        const reverseMap = {};
-        for (const [key, value] of Object.entries(LESSON_KEY_MAP)) {
-          if (lessons[value] !== undefined) {
-            reverseMap[key] = lessons[value];
-          }
-        }
-
-        setLessons(reverseMap);
-        setChallenges(
-          JSON.parse((user.customMetadata.challenges as string) || "{}"),
-        );
-      } else {
-        const name = truncateAddress(user.wallet?.address as string);
-        const avatarUrl = `https://gravatar.com/avatar/${user.wallet?.address}?s=200&d=identicon`;
-        console.log("Setting default profile data:", name, avatarUrl, user);
-        setUsername(name);
-        setAvatar(avatarUrl);
-      }
-
-      const createdAt = new Date(user.createdAt).getTime();
-      const now = Date.now();
-      if (now - createdAt <= 3000) {
-        // Check if the difference is less than or equal to 3 seconds
-        console.log("First login detected, opening dialog");
-        setDialogOpen(true);
-      }
+      initializeUserProfile(user);
+      initializeProgress(user);
     }
   }, [user]);
 
@@ -165,7 +135,17 @@ const WalletDropdown = (props) => {
   return (
     <>
       {ready && authenticated ? (
-        <Button onClick={handleClick}>
+        <Button
+          onClick={handleClick}
+          sx={(theme) => ({
+            [theme.breakpoints.down("sm")]: {
+              "&.MuiButtonBase-root": {
+                height: "3.2rem",
+                padding: "0 1rem 0.2rem",
+              },
+            },
+          })}
+        >
           <img
             src={avatar}
             alt="User"
@@ -179,7 +159,18 @@ const WalletDropdown = (props) => {
           {username}
         </Button>
       ) : (
-        <Button variant="contained" onClick={login}>
+        <Button
+          variant="contained"
+          onClick={login}
+          sx={(theme) => ({
+            [theme.breakpoints.down("sm")]: {
+              "&.MuiButtonBase-root": {
+                height: "3.2rem",
+                padding: "0 1rem 0.2rem",
+              },
+            },
+          })}
+        >
           Login
         </Button>
       )}
