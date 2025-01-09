@@ -21,14 +21,28 @@ const LinkedList = () => {
     linkGithub,
     linkTelegram,
     linkEmail,
+    linkWallet,
     unlinkGoogle,
     unlinkTwitter,
     unlinkGithub,
     unlinkTelegram,
     unlinkEmail,
+    unlinkWallet,
     user,
   } = usePrivy();
-  const { username } = useProfileStore();
+
+  const connectedAccountsCount = user?.linkedAccounts?.length || 0;
+
+  const wallets = [
+    {
+      key: "wallet",
+      name: "Wallet",
+      displayField: "address",
+      icon: walletIcon,
+      onLinkClick: linkWallet,
+      onUnlinkClick: unlinkWallet,
+    },
+  ];
 
   const socials = [
     {
@@ -84,24 +98,22 @@ const LinkedList = () => {
       >
         Linked Wallet
       </Typography>
-      <Box
-        sx={{
-          border: "1.5px solid #000",
-          padding: "1.2rem 1.6rem",
-          backgroundColor: "#fff",
-        }}
-      >
-        <Box sx={{ display: "flex", gap: "12px" }}>
-          <SvgIcon
-            sx={{ fontSize: "1.8rem", color: "inherit" }}
-            component={walletIcon}
-            inheritViewBox
-          ></SvgIcon>
-          <Typography sx={{ fontSize: "1.6rem", fontWeight: 500 }}>
-            {truncateAddress(user?.wallet?.address || "")}
-          </Typography>
-        </Box>
+      <Box sx={{ display: "flex", gap: "2rem", flexDirection: "column" }}>
+        {wallets.map((wallet) => (
+          <LinkedSocialItem
+            key={wallet.key}
+            itemKey={wallet.key}
+            name={wallet.name}
+            icon={wallet.icon}
+            onLinkClick={wallet.onLinkClick}
+            onUnlinkClick={wallet.onUnlinkClick}
+            user={user}
+            displayField={wallet.displayField}
+            showUnlink={connectedAccountsCount > 1}
+          />
+        ))}
       </Box>
+
       <Box sx={{ display: "flex", gap: "2rem", flexDirection: "column" }}>
         <Typography
           sx={{
@@ -111,20 +123,19 @@ const LinkedList = () => {
         >
           Linked Socials
         </Typography>
-        {socials.map((social) => {
-          return (
-            <LinkedSocialItem
-              key={social.key}
-              itemKey={social.key}
-              name={social.name}
-              icon={social.icon}
-              onLinkClick={social.onLinkClick}
-              onUnlinkClick={social.onUnlinkClick}
-              user={user}
-              displayField={social.displayField}
-            />
-          );
-        })}
+        {socials.map((social) => (
+          <LinkedSocialItem
+            key={social.key}
+            itemKey={social.key}
+            name={social.name}
+            icon={social.icon}
+            onLinkClick={social.onLinkClick}
+            onUnlinkClick={social.onUnlinkClick}
+            user={user}
+            displayField={social.displayField}
+            showUnlink={connectedAccountsCount > 1}
+          />
+        ))}
       </Box>
     </Box>
   );

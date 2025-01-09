@@ -9,6 +9,18 @@ type User = {
   wallet?: {
     address?: string;
   };
+  github?: {
+    username?: string;
+    name?: string;
+    subjectId?: string;
+  };
+  email?: {
+    address?: string;
+  };
+  google?: {
+    name?: string;
+    email?: string;
+  };
 };
 
 type ProfileStore = {
@@ -89,6 +101,26 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
       const avatarUrl = `https://gravatar.com/avatar/${wallet.address}?s=200&d=identicon`;
       set({
         username: name,
+        avatar: avatarUrl,
+      });
+    } else if (user.github) {
+      const avatarUrl = `https://gravatar.com/avatar/${user.github.name}?s=200&d=identicon`;
+      set({
+        username: user.github.name,
+        avatar: avatarUrl,
+      });
+    } else if (user.email) {
+      const username = user.email.address!.split("@")[0];
+      const avatarUrl = `https://gravatar.com/avatar/${username}?s=200&d=identicon`;
+      set({
+        username: username,
+        avatar: avatarUrl,
+      });
+    } else if (user.google) {
+      const username = user.google.name;
+      const avatarUrl = `https://gravatar.com/avatar/${username}?s=200&d=identicon`;
+      set({
+        username: username,
         avatar: avatarUrl,
       });
     }
