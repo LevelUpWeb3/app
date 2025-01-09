@@ -104,7 +104,7 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
         avatar: avatarUrl,
       });
     } else if (user.github) {
-      const avatarUrl = `https://gravatar.com/avatar/${user.github.name}?s=200&d=identicon`;
+      const avatarUrl = `https://gravatar.com/avatar/${user.github.username}?s=200&d=identicon`;
       set({
         username: user.github.name,
         avatar: avatarUrl,
@@ -118,7 +118,7 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
       });
     } else if (user.google) {
       const username = user.google.name;
-      const avatarUrl = `https://gravatar.com/avatar/${username}?s=200&d=identicon`;
+      const avatarUrl = `https://gravatar.com/avatar/${user.google.email}?s=200&d=identicon`;
       set({
         username: username,
         avatar: avatarUrl,
