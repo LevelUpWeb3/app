@@ -1,4 +1,5 @@
 import { Box, SvgIcon, Typography } from "@mui/material";
+import { truncateAddress } from "@/utils";
 
 const LinkedSocialItem = ({
   name,
@@ -8,6 +9,7 @@ const LinkedSocialItem = ({
   user,
   itemKey,
   displayField,
+  showUnlink,
 }) => {
   return (
     <Box
@@ -17,7 +19,6 @@ const LinkedSocialItem = ({
         backgroundColor: "#fff",
         display: "flex",
         justifyContent: "space-between",
-        cursor: "pointer",
       }}
     >
       <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -32,19 +33,7 @@ const LinkedSocialItem = ({
           {name}
         </Typography>
       </Box>
-      <Box
-        sx={{ display: "flex", gap: "12px", alignItems: "center" }}
-        onClick={
-          user?.[itemKey]
-            ? () =>
-                onUnlinkClick(
-                  user?.[itemKey].address ||
-                    user?.[itemKey].telegramUserId ||
-                    user?.[itemKey].subject,
-                )
-            : onLinkClick
-        }
-      >
+      <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
         {user?.[itemKey] ? (
           <>
             <Typography
@@ -53,23 +42,45 @@ const LinkedSocialItem = ({
                 marginBottom: "-4px",
               }}
             >
-              {user[itemKey][displayField]}
+              {itemKey === "wallet"
+                ? truncateAddress(user[itemKey][displayField])
+                : user[itemKey][displayField]}
             </Typography>
-            <SvgIcon
-              sx={{ fontSize: "1.4rem", color: "inherit" }}
-              inheritViewBox
-              component={require("@/assets/svgs/profile/unlink.svg").default}
-            />
-            <Typography
-              sx={{
-                fontSize: "1.6rem",
-                fontWeight: 500,
-                marginBottom: "-4px",
-                cursor: "pointer",
-              }}
-            >
-              Unlink
-            </Typography>
+            {showUnlink && (
+              <>
+                <SvgIcon
+                  sx={{ fontSize: "1.4rem", color: "inherit" }}
+                  inheritViewBox
+                  component={
+                    require("@/assets/svgs/profile/unlink.svg").default
+                  }
+                  onClick={() =>
+                    onUnlinkClick(
+                      user?.[itemKey].address ||
+                        user?.[itemKey].telegramUserId ||
+                        user?.[itemKey].subject,
+                    )
+                  }
+                />
+                <Typography
+                  sx={{
+                    fontSize: "1.6rem",
+                    fontWeight: 500,
+                    marginBottom: "-4px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() =>
+                    onUnlinkClick(
+                      user?.[itemKey].address ||
+                        user?.[itemKey].telegramUserId ||
+                        user?.[itemKey].subject,
+                    )
+                  }
+                >
+                  Unlink
+                </Typography>
+              </>
+            )}
           </>
         ) : (
           <>
@@ -77,6 +88,7 @@ const LinkedSocialItem = ({
               sx={{ fontSize: "1.4rem", color: "inherit" }}
               inheritViewBox
               component={require("@/assets/svgs/profile/link.svg").default}
+              onClick={onLinkClick}
             />
             <Typography
               sx={{
@@ -85,6 +97,7 @@ const LinkedSocialItem = ({
                 marginBottom: "-4px",
                 cursor: "pointer",
               }}
+              onClick={onLinkClick}
             >
               Link
             </Typography>

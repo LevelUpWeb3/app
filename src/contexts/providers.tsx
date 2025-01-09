@@ -23,7 +23,7 @@ const privyConfig: PrivyClientConfig = {
     createOnLogin: "off",
     noPromptOnSignature: false,
   },
-  loginMethods: ["wallet"],
+  loginMethods: ["github", "email", "wallet"],
   appearance: {
     showWalletLoginFirst: true,
     landingHeader: "Log in to Level Up",

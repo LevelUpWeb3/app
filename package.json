@@ -24,7 +24,7 @@
     "@mui/material": "^5.13.5",
     "@mui/material-nextjs": "^5.15.5",
     "@next/third-parties": "^14.2.5",
-    "@privy-io/react-auth": "^1.96.2",
+    "@privy-io/react-auth": "^1.99.1",
     "@privy-io/server-auth": "^1.17.1",
     "@privy-io/wagmi": "^0.2.12",
     "@svgr/webpack": "^8.1.0",
