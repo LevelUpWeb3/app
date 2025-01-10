@@ -1,27 +1,6 @@
 import { create } from "zustand";
 import { truncateAddress } from "@/utils";
-
-type User = {
-  customMetadata?: {
-    username?: string;
-    avatar?: string;
-  };
-  wallet?: {
-    address?: string;
-  };
-  github?: {
-    username?: string;
-    name?: string;
-    subjectId?: string;
-  };
-  email?: {
-    address?: string;
-  };
-  google?: {
-    name?: string;
-    email?: string;
-  };
-};
+import { User } from "@privy-io/react-auth";
 
 type ProfileStore = {
   user: User | null;
@@ -93,8 +72,8 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
 
     if (customMetadata) {
       set({
-        username: customMetadata.username || "",
-        avatar: customMetadata.avatar || "",
+        username: (customMetadata.username as string) || "",
+        avatar: (customMetadata.avatar as string) || "",
       });
     } else if (wallet?.address) {
       const name = truncateAddress(wallet.address);
@@ -106,7 +85,7 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
     } else if (user.github) {
       const avatarUrl = `https://gravatar.com/avatar/${user.github.username}?s=200&d=identicon`;
       set({
-        username: user.github.name,
+        username: user.github.name || user.github.username!,
         avatar: avatarUrl,
       });
     } else if (user.email) {
@@ -120,7 +99,7 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
       const username = user.google.name;
       const avatarUrl = `https://gravatar.com/avatar/${user.google.email}?s=200&d=identicon`;
       set({
-        username: username,
+        username: username || user.google.email.split("@")[0],
         avatar: avatarUrl,
       });
     }
