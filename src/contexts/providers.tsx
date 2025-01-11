@@ -23,12 +23,14 @@ const privyConfig: PrivyClientConfig = {
     createOnLogin: "off",
     noPromptOnSignature: false,
   },
-  loginMethods: ["google", "github", "email", "wallet"],
+  loginMethodsAndOrder: {
+    primary: ["google", "github", "email", "detected_ethereum_wallets"],
+    overflow: ["coinbase_wallet", "wallet_connect"],
+  },
   appearance: {
     showWalletLoginFirst: false,
     landingHeader: "Log in to Level Up",
     loginMessage: "Track your progress and develop your Level Up profile.",
-    loginMethodsOrder: ["google", "github", "wallet", "email"],
   },
 };
 
