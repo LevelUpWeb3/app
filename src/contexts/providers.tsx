@@ -28,6 +28,7 @@ const privyConfig: PrivyClientConfig = {
     showWalletLoginFirst: false,
     landingHeader: "Log in to Level Up",
     loginMessage: "Track your progress and develop your Level Up profile.",
+    loginMethodsOrder: ["google", "github", "wallet", "email"],
   },
 };
 
