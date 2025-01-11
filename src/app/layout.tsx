@@ -7,8 +7,8 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 // import ScrollToTop from "@/components/ScrollToTop"
 import ScrollThemeProvider from "@/theme";
 import { ROOT_METADATA } from "@/constants/route";
-import RainbowProvider from "@/contexts/RainbowProvider";
 // import ScrollToTop from "@/components/ScrollToTop";
+import Providers from "@/contexts/providers";
 
 import "./globals.css";
 
@@ -41,11 +41,10 @@ export default function RootLayout({
       <body>
         <AppRouterCacheProvider options={{ key: "css" }}>
           <ScrollThemeProvider>
-            <RainbowProvider>
+            <Providers>
               {children}
-              {/* <ScrollToTop></ScrollToTop> */}
               <Analytics />
-            </RainbowProvider>
+            </Providers>
           </ScrollThemeProvider>
         </AppRouterCacheProvider>
       </body>

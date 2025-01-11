@@ -6,7 +6,7 @@ import { sendGAEvent } from "@next/third-parties/google";
 import { useParams } from "next/navigation";
 
 const SuccessAlert = () => {
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
   return (
     <Stack
       direction="column"
