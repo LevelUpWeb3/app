@@ -23,9 +23,9 @@ const privyConfig: PrivyClientConfig = {
     createOnLogin: "off",
     noPromptOnSignature: false,
   },
-  loginMethods: ["github", "email", "wallet"],
+  loginMethods: ["google", "github", "email", "wallet"],
   appearance: {
-    showWalletLoginFirst: true,
+    showWalletLoginFirst: false,
     landingHeader: "Log in to Level Up",
     loginMessage: "Track your progress and develop your Level Up profile.",
   },
