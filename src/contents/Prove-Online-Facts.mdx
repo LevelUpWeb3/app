@@ -3,7 +3,7 @@ name: "Prove Online Facts Without Revealing Too Much"
 index: 12
 summary: Learn to prove online facts securely without exposing sensitive information using TLSNotary.
 author: Chiemezie Agbo
-authorIcon: https://x.com/ChiemezieAgbo/photo
+authorIcon: https://pbs.twimg.com/profile_images/1697221657373360128/iqDhBtk9_200x200.jpg
 authorLink: https://x.com/ChiemezieAgbo
 published: Dec 19, 2024
 readTime: 12 min read
@@ -76,8 +76,10 @@ Install the TLSNotary extension in Chrome or Brave:
 
 Go to the Chrome Web Store and click **Add to Chrome**.
 
-![TLSNotary Chrome Extension](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/TLSNotaryChromeExtension.png)
-
+<div className="text-center">
+  <img src="/images/contents/prove-online-facts/TLSNotaryChromeExtension.png" alt="TLSNotary Chrome Extension" />
+  _TLSNotary Chrome Extension_
+</div>
 click **Add to Chrome**
 
 ***Option 2: Manual installation***
@@ -89,9 +91,10 @@ click **Add to Chrome**
 5. Click the **Load unpacked** button.
 6. Select the unzipped folder.
 
-![Developer mode and Load unpacked](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/DeveloperModeAndLoadUnpacked.png)
-
-**Developer mode and Load unpacked**
+<div className="text-center">
+  <img src="/images/contents/prove-online-facts/DeveloperModeAndLoadUnpacked.png" alt="Developer Mode And Load Unpacking" />
+  _Develope rMode And Load Unpacked_
+</div>
 
 ## **2. WebSocket Proxy**
 
@@ -104,8 +107,10 @@ The WebSocket Proxy is used to establish a TCP connection.
 3. Enter `wss://notary.pse.dev/proxy` as the **Proxy API**.
 4. Click **Save**.
 
-![Hosted Proxy](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/HostedProxy.png)
-
+<div className="text-center">
+  <img src="/images/contents/prove-online-facts/HostedProxy.png" alt="Hosted Proxy" />
+  _Hosted Proxy_
+</div>
 
 ***Option 2: Run a Local Server***
 
@@ -209,14 +214,19 @@ https://x.com/i/api/graphql/laYnJPCAcVo0o6pzcnlVxQ/UserByScreenName
 
 To simplify, enter `UserByScreenName` in the search box.
 
-![UserByScreenName](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/UserByScreenName.png)
-
+<div className="text-center">
+  <img src="../contents/prove-online-facts/UserByScreenName.png" alt="UserByScreenName endpoint" />
+  _UserByScreenName APi endpoint_
+</div>
 
 4. Click on the **xmlhttprequest** entry for this request. It contains the details we need, such as follower count and location.
 
 5. Once selected, you’ll see a summary page. Click **Notarize** to begin.
 
-![Notarize](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/Notarize.png)
+<div className="text-center">
+  <img src="./contents/prove-online-facts/Notarize.png" alt="Notarize button" />
+  _Notarize button_
+</div>
 
 
 Select any headers that you would like to reveal. Once done, click on **Next** below to proceed to the redact page.
@@ -231,19 +241,21 @@ On the next page, redact sensitive portions of the data. Focus on the following 
 
 **Action:** Highlight the portions you want to redact, leaving only the relevant details (follower count, friend count, and location) visible.
 
-![Redact Data](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/RedactData.png)
-
-
-Redact Data
+<div className="text-center">
+  <img src="/images/contents/prove-online-facts/RedactData.png" alt="Redact Data" />
+  _Redact Data_
+</div>
 
 ## **Step 4: Generate the Proof**
 
 1. Once satisfied with the highlighted and redacted data, click **Notarize**.
 2. The TLSNotary extension will connect to the notary server to cryptographically sign the proof.
 
-![Pending Notarization](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/PendingNotarization.png)
+<div className="text-center">
+  <img src="/images/contents/prove-online-facts/PendingNotarization.png" alt="Pending Notarization" />
+  _Pending Notarization_
+</div>
 
-Pending Notarization
 
 If you use the hosted notary server, notarization may take several seconds.
 
@@ -258,14 +270,20 @@ You’ll receive a file containing:
 - Cryptographic evidence tying the data to your interaction with X (formerly Twitter).
 - Under the `Recv` section, it will display only the unhighlighted fields (*follower count* and *location*).
 
-![Proof](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/Proof.png)
+<div className="text-center">
+  <img src="/images/contents/prove-online-facts/Proof.png" alt="Proof" />
+  _Proof_
+</div>
 
 ***Share the Proof***
 
 - Here is a shareable link of the notarization: [link](https://explorer.tlsnotary.org/ipfs/bafkreidizzzrgibgmzogw75eeoivkv6yeh75swyuqqll7bdrsm2xqubdbq)
 - Check the `Recv` section to verify that only the unhighlighted fields (*follower count* and *location*) are visible.
 
-![Recv Proof](https://github.com/chiemezie1/app/blob/content-prove-online-facts/public/images/contents/RecvProof.png)
+<div className="text-center">
+  <img src="/images/contents/prove-online-facts/RecvProof.png" alt="shareable Recv Proof" />
+  _shareable Recv Proof_
+</div>
 
 shared link of the notarization
 
