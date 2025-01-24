@@ -31,7 +31,7 @@ const CARD_COLOR_MAP = {
 };
 
 const PreviewCard = (props) => {
-  const { color = "white", content, type, sx, className } = props;
+  const { color = "white", baseURL, content, type, sx, className } = props;
   const pathname = usePathname();
 
   const handleClick = () => {
@@ -40,7 +40,7 @@ const PreviewCard = (props) => {
 
   return (
     <Link
-      href={content.url ? content.url : `${pathname}/${content.id}`}
+      href={content.url ? content.url : `${baseURL || pathname}/${content.id}`}
       target={content.url ? "_blank" : "_self"}
       className={className}
     >
