@@ -8,6 +8,7 @@ import SubmitButton from "./SubmitButton";
 import CongratualtionModal from "./CongratualtionModal";
 import { CODE_SOLUTIONS } from "@/constants/solidity/code-solutions";
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
+import { useMessage } from "@/contexts/MessageProvider";
 
 import { Box, Stack } from "@mui/material";
 
@@ -21,6 +22,7 @@ const Editor = ({
   completedExerciseNumber,
   onComplete,
 }) => {
+  const showMessage = useMessage();
   const [code, setCode] = useState("");
   const [tries, setTries] = useState<number>(0);
   const [editorType, setEditorType] = useState<"code" | "solution">("code");
@@ -49,8 +51,13 @@ const Editor = ({
     if (isCorrect) {
       const currentExerciseNumber = parseInt(exercise.replace("exercise", ""));
       if (currentExerciseNumber > completedExerciseNumber) {
-        await updateLessonProgress(lessonId, currentExerciseNumber);
-        onComplete(currentExerciseNumber);
+        try {
+          await updateLessonProgress(lessonId, currentExerciseNumber);
+          onComplete(currentExerciseNumber);
+        } catch (error) {
+          showMessage(error.message, "error");
+          console.error("Failed to update lesson progress:", error);
+        }
       } else {
         onComplete(currentExerciseNumber, false);
       }

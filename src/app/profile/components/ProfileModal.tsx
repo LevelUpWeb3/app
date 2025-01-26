@@ -14,6 +14,7 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import { useEffect } from "react";
 import useProfileStore from "@/stores/profileStore";
+import { useMessage } from "@/contexts/MessageProvider";
 
 const ProfileModal = (props) => {
   const { onClose, sx, open, ...restProps } = props;
@@ -25,6 +26,7 @@ const ProfileModal = (props) => {
     uploadProfileData,
     loading,
   } = useProfileStore();
+  const showMessage = useMessage();
   const [avatarURL, changeAvatarURL] = useState(avatar);
   const [name, setName] = useState(username);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -37,13 +39,13 @@ const ProfileModal = (props) => {
     }
 
     if (!file.type.startsWith("image/")) {
-      alert("Please select a valid image file.");
+      showMessage("Please select a valid image file.", "error");
       return;
     }
 
     const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
     if (file.size > maxSizeInBytes) {
-      alert("The file size must be less than 2MB.");
+      showMessage("The file size must be less than 2MB.", "error");
       return;
     }
 
@@ -60,10 +62,14 @@ const ProfileModal = (props) => {
     }
   }, [open, username, avatar]);
 
-  const handleConfirm = () => {
-    setUsername(name);
-    setAvatar(avatarURL);
-    uploadProfileData(name, selectedFile, avatar);
+  const handleConfirm = async () => {
+    try {
+      await uploadProfileData(name, selectedFile, avatar);
+      setUsername(name);
+      setAvatar(avatarURL);
+    } catch (error) {
+      showMessage(error.message, "error");
+    }
   };
 
   return (

@@ -7,6 +7,7 @@ import { mainnet, scroll } from "viem/chains";
 import type { PrivyClientConfig } from "@privy-io/react-auth";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { WagmiProvider, createConfig } from "@privy-io/wagmi";
+import { MessageProvider } from "./MessageProvider";
 
 const queryClient = new QueryClient();
 
@@ -45,7 +46,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     >
       <QueryClientProvider client={queryClient}>
         <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
-          {children}
+          <MessageProvider>{children}</MessageProvider>
         </WagmiProvider>
       </QueryClientProvider>
     </PrivyProvider>

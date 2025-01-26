@@ -56,10 +56,10 @@ const useProfileStore = create<ProfileStore>((set, get) => ({
       }
 
       const result = await response.json();
-      // console.log("Profile updated successfully:", result);
       set({ dialogOpen: false });
     } catch (error) {
       console.error("Error uploading profile data:", error);
+      throw error;
     } finally {
       set({ loading: false });
     }
