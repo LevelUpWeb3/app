@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { makeStyles } from "tss-react/mui";
 
 import { Select as MuiSelect, Typography } from "@mui/material";
@@ -61,10 +61,7 @@ const useStyles = makeStyles()((theme) => ({
   menuList: {
     padding: "5px",
     maxHeight: "300px",
-    overflowY: "auto",
-  },
 
-  menuListWithScrollbar: {
     overflowY: "scroll",
     "&::-webkit-scrollbar": {
       width: "8px",
@@ -80,18 +77,22 @@ const useStyles = makeStyles()((theme) => ({
 }));
 
 const Select = (props) => {
-  const { className, showScrollbar, ...restProps } = props;
+  const { className, ...restProps } = props;
   const { classes, cx } = useStyles();
+  const selectRef = useRef<HTMLDivElement>();
 
   const [isUnderneath, setIsUnderneath] = useState(true);
-  // const [popoverWidth, setPopoverWidth] = useState("auto");
+  const [paperLeft, setPaperLeft] = useState("auto");
 
-  // const selectRef = useRef(null);
-
-  // useEffect(() => {
-  //   console.log(selectRef.current.clientWidth);
-  //   console.log(getComputedStyle(selectRef.current).width);
-  // }, []);
+  useEffect(() => {
+    if (selectRef.current) {
+      setPaperLeft(
+        `${selectRef.current.getBoundingClientRect().left}px !important`,
+      );
+    } else {
+      setPaperLeft("auto");
+    }
+  }, []);
 
   const onOpen = () => {
     setTimeout(() => {
@@ -118,10 +119,9 @@ const Select = (props) => {
       variant="standard"
       disableUnderline
       displayEmpty
-      // ref={selectRef}
+      ref={selectRef}
       IconComponent={TriangleDownIcon}
       className={cx(classes.root, className)}
-      // sx={{ width: popoverWidth }}
       classes={{
         select: classes.select,
         icon: classes.icon,
@@ -138,13 +138,17 @@ const Select = (props) => {
         },
         MenuListProps: {
           classes: {
-            root: cx(
-              classes.menuList,
-              showScrollbar && classes.menuListWithScrollbar,
-            ),
+            root: classes.menuList,
           },
         },
         disableAutoFocusItem: true,
+        slotProps: {
+          paper: {
+            sx: {
+              left: paperLeft,
+            },
+          },
+        },
       }}
       renderValue={(selected) => {
         return (
