@@ -6,7 +6,7 @@ import { PAGE_MIN_HEIGHT } from "@/constants";
 // import POAPSList from "./poapsList";
 import { LAYOUT_HEADER_HEIGHT, MOBILE_LAYOUT_HEADER_HEIGHT } from "@/constants";
 import LinkedList from "./linkedList";
-import InfoCard from "./infoCard";
+import InfoCard from "./InfoCard";
 import { useEffect } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";

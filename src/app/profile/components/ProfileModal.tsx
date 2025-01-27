@@ -153,7 +153,7 @@ const ProfileModal = (props) => {
               inputProps={{
                 style: { textAlign: "center" },
               }}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.trim())}
               value={name}
             />
           </Box>
