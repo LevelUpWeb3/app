@@ -1,19 +1,20 @@
+import { NextResponse } from "next/server";
 import { getUserFromToken, privy } from "@/app/api/utils/auth";
 
 export async function POST(req) {
   try {
     const { challengeId } = await req.json();
     if (!challengeId || typeof challengeId !== "string") {
-      return new Response(
-        JSON.stringify({ error: "Invalid or missing challengeId" }),
+      return NextResponse.json(
+        { error: "Invalid or missing challengeId" },
         { status: 400 },
       );
     }
 
     const { customMetadata, id: uid } = await getUserFromToken(req);
     if (!uid) {
-      return new Response(
-        JSON.stringify({ error: "Unauthorized: Invalid token" }),
+      return NextResponse.json(
+        { error: "Unauthorized: Invalid token" },
         { status: 401 },
       );
     }
@@ -25,8 +26,8 @@ export async function POST(req) {
       );
     } catch (e) {
       console.error("Failed to parse challenges:", e);
-      return new Response(
-        JSON.stringify({ error: "Invalid challenges metadata format" }),
+      return NextResponse.json(
+        { error: "Invalid challenges metadata format" },
         { status: 500 },
       );
     }
@@ -40,17 +41,17 @@ export async function POST(req) {
       });
     } catch (e) {
       console.error("Failed to set custom metadata:", e);
-      return new Response(
-        JSON.stringify({ error: "Failed to update custom metadata" }),
+      return NextResponse.json(
+        { error: "Failed to update custom metadata" },
         { status: 500 },
       );
     }
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
     console.error("Unexpected error:", err);
-    return new Response(
-      JSON.stringify({ error: "Internal server error", details: err.message }),
+    return NextResponse.json(
+      { error: "Internal server error", details: err.message },
       { status: 500 },
     );
   }
