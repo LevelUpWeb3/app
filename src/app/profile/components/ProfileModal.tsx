@@ -17,7 +17,7 @@ import useProfileStore from "@/stores/profileStore";
 import { useMessage } from "@/contexts/MessageProvider";
 
 const ProfileModal = (props) => {
-  const { onClose, sx, open, ...restProps } = props;
+  const { onClose, sx, open, isNewUser, ...restProps } = props;
   const {
     avatar,
     setAvatar,
@@ -73,7 +73,7 @@ const ProfileModal = (props) => {
   };
 
   const hasChanges = () => {
-    return name !== username || avatarURL !== avatar;
+    return name !== username || avatarURL !== avatar || isNewUser;
   };
 
   return (

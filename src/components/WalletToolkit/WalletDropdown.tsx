@@ -78,9 +78,11 @@ const WalletDropdown = (props) => {
   const router = useRouter();
   const { username, avatar, dialogOpen, setDialogOpen } = useProfileStore();
   const { user, logout, authenticated, ready } = usePrivy();
+  const [isNewUser, setIsNewUser] = useState(false);
   const { login } = useLogin({
     onComplete: (user, isNewUser) => {
       if (isNewUser) {
+        setIsNewUser(true);
         setDialogOpen(true);
       }
     },
@@ -100,6 +102,11 @@ const WalletDropdown = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
     setCopied(false);
+  };
+
+  const handleProfileModalClose = () => {
+    setIsNewUser(false);
+    setDialogOpen(false);
   };
 
   const { initializeUserProfile } = useProfileStore();
@@ -203,7 +210,11 @@ const WalletDropdown = (props) => {
           </MenuItem>
         ))}
       </Menu>
-      <ProfileModal open={dialogOpen} onClose={() => setDialogOpen(false)} />
+      <ProfileModal
+        open={dialogOpen}
+        isNewUser={isNewUser}
+        onClose={handleProfileModalClose}
+      />
     </>
   );
 };
