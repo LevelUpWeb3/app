@@ -26,7 +26,7 @@ const ProfilePage = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "8.4rem",
+          padding: ["7.6rem", "8.4rem"],
           gap: "2rem",
         }}
       >
@@ -44,6 +44,7 @@ const ProfilePage = () => {
           sx={{
             fontSize: "2.4rem",
             fontWeight: 500,
+            textAlign: "center",
           }}
         >
           {username}

@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import CodeEditor from "./CodeEditor";
 import DiffEditorComponent from "./DiffEditor";
 import SubmitButton from "./SubmitButton";
-import CongratualtionModal from "./CongratualtionModal";
+import CongratulationModal from "./CongratulationModal";
 import { CODE_SOLUTIONS } from "@/constants/solidity/code-solutions";
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 import { useMessage } from "@/contexts/MessageProvider";
@@ -81,7 +81,7 @@ const Editor = ({
 
   return (
     <Box sx={{ position: "relative", backgroundColor: "#232323" }}>
-      <CongratualtionModal
+      <CongratulationModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         name={data.name}

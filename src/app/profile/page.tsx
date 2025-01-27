@@ -37,7 +37,7 @@ const ProfilePage = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: ["1fr", "32rem 1fr"],
+            gridTemplateColumns: ["1fr", "1fr", "1fr", "32rem 1fr"],
             gap: ["3rem", "6rem 3rem"],
           }}
         >
@@ -53,7 +53,7 @@ const ProfilePage = () => {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: ["1fr", "1fr 1fr"],
+              gridTemplateColumns: ["1fr", "1fr", "1fr 1fr"],
               gap: "3rem",
             }}
           >

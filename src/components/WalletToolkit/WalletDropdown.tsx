@@ -154,6 +154,7 @@ const WalletDropdown = (props) => {
               height: "24px",
               borderRadius: "50%",
               marginRight: "8px",
+              objectFit: "cover",
             }}
           />
           {username}
