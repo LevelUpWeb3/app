@@ -38,7 +38,7 @@ const EditorPanel = (props) => {
   useEffect(() => {
     const lesson = lessons[lessonId];
     if (lesson && lesson > completedExerciseNumber) {
-      setCompletedExerciseNumber(lesson);
+      handleCompleteExercise(lesson);
     }
   }, [lessons, lessonId]);
 
