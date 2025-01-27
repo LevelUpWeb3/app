@@ -72,6 +72,10 @@ const ProfileModal = (props) => {
     }
   };
 
+  const hasChanges = () => {
+    return name !== username || avatarURL !== avatar;
+  };
+
   return (
     <Dialog
       maxWidth={false}
@@ -158,6 +162,7 @@ const ProfileModal = (props) => {
           variant="contained"
           onClick={handleConfirm}
           loading={loading}
+          disabled={!hasChanges()}
           sx={{
             "&.Mui-disabled": {
               backgroundColor: "rgba(0, 0, 0, 0.20) !important",
