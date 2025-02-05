@@ -12,7 +12,7 @@ import TwitterSvg from "@/assets/svgs/solidity/twitter.svg";
 import WarpcastSvg from "@/assets/svgs/solidity/warpcast.svg";
 import Link from "next/link";
 
-const CongratualtionModal = (props) => {
+const CongratulationModal = (props) => {
   const { onClose, name, sx, ...restProps } = props;
 
   const warpcastText = `I have successfully completed all five ${name} challenges in Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
@@ -98,4 +98,4 @@ const CongratualtionModal = (props) => {
   );
 };
 
-export default CongratualtionModal;
+export default CongratulationModal;

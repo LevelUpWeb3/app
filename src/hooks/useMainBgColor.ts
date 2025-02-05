@@ -8,13 +8,14 @@ const CUSTOM_BG_PAGE_MAP = {
   "/challenges": "#FFEEDA33",
   "/podcast": "#FFEEDA4D",
   "/events": "#E8F62833",
+  "/profile": "#FFEEDA",
 };
 
 const useMainBgColor = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const bgColor = CUSTOM_BG_PAGE_MAP[pathname] || "#fff";
+    const bgColor = CUSTOM_BG_PAGE_MAP[pathname!] || "#fff";
     document.documentElement.style.setProperty("--main-bg-color", bgColor);
   }, [pathname]);
 };

@@ -86,7 +86,7 @@ const BlockUntilStart = ({ children }) => {
   const [debug, setDebug] = useState(false);
   const [remain, setRemain] = useState(0);
   const searchParams = useSearchParams();
-  const isDebug = searchParams.get("debug");
+  const isDebug = searchParams!.get("debug");
   const start = useMemo(() => {
     return new Date(1729296000000);
   }, []);

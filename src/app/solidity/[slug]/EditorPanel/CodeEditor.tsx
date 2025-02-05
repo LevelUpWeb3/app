@@ -26,7 +26,7 @@ const CodeEditor = ({
   const codeSolutionRef = useRef(initialCodeSolution);
 
   const beforeMount = (monaco: Monaco) => {
-    monaco.editor.defineTheme("level-up-black", editorTheme);
+    monaco.editor.defineTheme("level-up-black", editorTheme as any);
   };
   const onMount: OnMount = (editor, monaco) => {
     const model = editor.getModel();
