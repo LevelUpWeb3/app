@@ -2,7 +2,12 @@ import { Box } from "@mui/material";
 import Marquee from "react-fast-marquee";
 
 const AnnouncementBar = (props) => {
-  const { children, ...restProps } = props;
+  const { children, announcementVisible, ...restProps } = props;
+
+  if (!announcementVisible) {
+    return null;
+  }
+
   return (
     <Box
       sx={{

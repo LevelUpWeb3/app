@@ -22,6 +22,10 @@ interface Props {
   children: React.ReactElement;
 }
 
+interface HeaderProps {
+  announcementVisible?: boolean;
+}
+
 function HideOnScroll(props: Props) {
   const { children } = props;
   const trigger = useScrollTrigger();
@@ -32,7 +36,7 @@ function HideOnScroll(props: Props) {
   );
 }
 
-export default function Header() {
+export default function Header({ announcementVisible }: HeaderProps) {
   const { isPortrait } = useCheckViewport();
   const pathname = usePathname();
   useMainBgColor();
@@ -68,21 +72,25 @@ export default function Header() {
           sx={{ boxShadow: "none", backgroundColor: "transparent" }}
         >
           {isHome && (
-            <AnnouncementBar autoFill pauseOnHover>
+            <AnnouncementBar
+              autoFill
+              pauseOnHover
+              announcementVisible={announcementVisible}
+            >
               <Stack
                 direction="row"
                 spacing="20px"
                 mr="20px"
                 alignItems="center"
               >
-                <p>Nov 14 - Dec 09</p>
+                <p>Jan 27 - March 17</p>
                 <StarSvg className="!mt-[-4px]"></StarSvg>
                 <Link
-                  href="https://www.levelup.xyz/events/writers-competition-2024q4"
+                  href="https://open.scroll.io"
                   className="font-medium"
                   target="_blank"
                 >
-                  Join Scroll Articles Bounty Contest: Write and Earn!
+                  Join Scroll Open: Build the Future of the Open Economy
                 </Link>
               </Stack>
             </AnnouncementBar>

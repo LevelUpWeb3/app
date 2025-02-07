@@ -1,7 +1,6 @@
 import { Score } from "@/app/events/ethcon-korea/components";
 import { SessionContext } from "@/app/events/ethcon-korea/config";
 import Button from "@/components/Button";
-import { useRainbowContext } from "@/contexts/RainbowProvider";
 import { useCallback, useContext, useEffect } from "react";
 import { useAccount, useWalletClient } from "wagmi";
 
@@ -62,7 +61,6 @@ function createSiweMessage(parameters) {
 }
 
 export default function JoinButton() {
-  const { connect } = useRainbowContext();
   const { isConnected, address } = useAccount();
   const { data: walletClient } = useWalletClient();
   const { sessions, setSessions } = useContext(SessionContext);
@@ -177,11 +175,7 @@ export default function JoinButton() {
     return <Score session={sessions?.session} />;
 
   return (
-    <Button
-      href=""
-      sx={{ width: "50% !important" }}
-      onClick={isConnected ? login : connect}
-    >
+    <Button href="" sx={{ width: "50% !important" }}>
       {isConnected ? "Join" : "Connect Wallet"}
     </Button>
   );

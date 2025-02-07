@@ -1,14 +1,27 @@
 [
   {
+    "name": "Scroll Open: Build The Open Economy",
+    "date": "Jan 27 - March 17, 2025",
+    "location": "Global Online Event",
+    "url": "https://open.scroll.io",
+    "image": "/images/events/scroll-open.svg",
+    "buttonText": "Join Now",
+    "buttonDisabled": "",
+    "status": ["All time", "Live"],
+    "region": ["All regions", "Virtual"]
+  },
+  {
     "name": "Scroll Articles Bounty Contest: Write and Earn!",
     "date": "Nov 14 - Dec 09, 2024",
     "location": "Global Online Event",
     "url": "events/writers-competition-2024q4",
     "image": "/images/events/writers-competition-2024q4.svg",
-    "buttonText": "Submit Article",
+    "buttonText": "Ended",
     "buttonDisabled": "",
-    "status": ["All time", "Live"],
+    "status": ["All time", "Ended"],
     "region": ["All regions", "Virtual"],
+    "registrationButtonDisabled": "true",
+    "submissionButtonDisabled": "true",
     "registrationLink": "https://tally.so/r/mRBp4d",
     "submissionLink": "https://tally.so/r/mV1gZg"
   },

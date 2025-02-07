@@ -19,20 +19,21 @@ In this challenge, you'll implement a contract that deposits into Aave pools on 
 ## Objective
 
 Your task is to:
+
 1. Develop your own contract with `stake` and `unstake` functionalities based on the provided base contract.
 2. Deploy it to Scroll Sepolia testnet.
 3. And finally verify it.
- 
+
 If you need help with using a smart contract framework for completing this challenge, the [Level Up: Build with Foundry](https://www.levelup.xyz/content/level-up-foundry) guide might be a helpful start!
 
-If you get stuck, feel free to ask for help in [Level Up Telegram group](https://t.me/+PdNbk5milo1mMTAy).
+If you get stuck, feel free to ask for help in [Level Up Telegram group](https://t.me/+jbhmyDZ63Vw0ZGYy).
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
 // In this example, the DataTypes library is used to query the AToken address that corresponds DAI
-// Later, we will use the getReserveData that will return a ReserveData object.  
+// Later, we will use the getReserveData that will return a ReserveData object.
 // Aave docs: https://docs.aave.com/developers/core-contracts/pool#getreservedata
 library DataTypes {
   struct ReserveConfigurationMap {
@@ -150,6 +151,7 @@ balanceOf(x) = sharesOf(x) * RATE
 ```
 
 Here:
+
 - `sharesOf(x)` also called "fragments", represents the amount of tokens a holder has in proportion to the rest.
 - `RATE` is a variable that adjusts to distribute rewards evenly across all holders.
 
@@ -205,19 +207,20 @@ This will provide the AToken address, which is required for interacting with the
 
 ## A Cool Tip
 
-* Did you know that the [Official Aave testnet UI](https://staging.aave.com/) supports Scroll Sepolia? After supplying tokens you will be able to see your position in the UI. Also, you can mint testnet DAI on [The Aave faucet](https://staging.aave.com/faucet/) in order to test your code.
+- Did you know that the [Official Aave testnet UI](https://staging.aave.com/) supports Scroll Sepolia? After supplying tokens you will be able to see your position in the UI. Also, you can mint testnet DAI on [The Aave faucet](https://staging.aave.com/faucet/) in order to test your code.
 
 ## Step by step: How to complete this challenge
 
 1. **Implement the stake function:**
-    - Transfer the DAI tokens to this contract.
-    - Approve the Aave Pool contract to manage the deposited DAI.
-    - Call the `supply()` function on behalf of the transaction sender.
+
+   - Transfer the DAI tokens to this contract.
+   - Approve the Aave Pool contract to manage the deposited DAI.
+   - Call the `supply()` function on behalf of the transaction sender.
 
 2. **Implement the unstake function:**
-    - Transfer the aDAI tokens (the AToken) for withdrawal.
-    - Approve the Aave Pool contract to manage the aDAI.
-    - Call the `withdraw()` function to receive DAI back.
+   - Transfer the aDAI tokens (the AToken) for withdrawal.
+   - Approve the Aave Pool contract to manage the aDAI.
+   - Call the `withdraw()` function to receive DAI back.
 
 ## Test it yourself
 

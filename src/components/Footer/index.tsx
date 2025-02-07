@@ -6,6 +6,8 @@ import XLogoIcon from "@/assets/svgs/socials/x.svg";
 import YoutubeIcon from "@/assets/svgs/socials/youtube.svg";
 import TelegramIcon from "@/assets/svgs/socials/telegram.svg";
 
+const year = new Date().getFullYear();
+
 export default function Footer() {
   return (
     <Box
@@ -30,7 +32,7 @@ export default function Footer() {
             <Link href="https://www.youtube.com/@levelupinweb3" target="_blank">
               <YoutubeIcon></YoutubeIcon>
             </Link>
-            <Link href="https://t.me/+PdNbk5milo1mMTAy" target="_blank">
+            <Link href="https://t.me/+jbhmyDZ63Vw0ZGYy" target="_blank">
               <TelegramIcon></TelegramIcon>
             </Link>
           </Stack>
@@ -54,7 +56,7 @@ export default function Footer() {
                 gridColumn: ["span 2", "span 1"],
               }}
             >
-              © 2024 Scroll Foundation | All rights reserved
+              © {year} Scroll Foundation | All rights reserved
             </Typography>
             <Link
               href="https://scroll.io/terms-of-service"

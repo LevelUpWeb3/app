@@ -1,5 +1,5 @@
 ---
-name: "Unruggable AI Agents with ZKML"
+name: "Guardrail AI Agents with ZKML"
 index: 11
 summary: Create an AI Agent with Guardrails using EZKL.
 author: FilosofiaCodigo
@@ -9,6 +9,8 @@ published: Dec 09, 2024
 readTime: 15 min read
 labels: ["ZK", "DeFi"]
 ---
+
+import YoutubeEmbed from "src/components/YoutubeEmbed";
 
 What was once speculation is now a reality: AI and blockchain are technologies with lots of synergy. Recently, AI agents have been actively participating in social media and on-chain, performing tasks like tipping users, swapping on-chain and more.
 
@@ -23,6 +25,11 @@ For this particular case, we’ll focus on the second one. It's currently imposs
 ## Building a Verifiable Tipper AI Agent
 
 In this article we’ll create a Tipper AI agent that is able to decide who to send a tip to based on data provided that can be, for example, a list of comments on farcaster. We will need to create a smart contract that acts as a guardrail, ensuring the AI agent operates autonomously without being controlled by the creator. In order to achieve this, we’ll use [EZKL](https://ezkl.xyz/), a tool for generating verifiable proofs of ML computations.
+
+<YoutubeEmbed id="Zy2OFOh-IXM" />
+<div className="text-center">
+  _Watch this step-by-step video tutorial to learn how to build guardrails for AI agents._
+</div>
 
 ### In this tutorial, you’ll learn how to:
 
@@ -60,6 +67,7 @@ except:
 # Import required libraries
 from torch import nn
 import torch
+import os
 import ezkl
 
 # Define the address that will receive the tip

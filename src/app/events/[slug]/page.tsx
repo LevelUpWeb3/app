@@ -22,11 +22,7 @@ export async function generateStaticParams() {
   );
 }
 
-const HackathonDetailPage = async ({
-  params,
-}: {
-  params: { slug: string };
-}) => {
+const EventSlugPage = async ({ params }: { params: { slug: string } }) => {
   const eventData = Data.find((item) => item.url.includes(params.slug));
 
   return (
@@ -53,10 +49,11 @@ const HackathonDetailPage = async ({
       <EventSubmit
         hackathonId={params.slug}
         buttonText={eventData?.buttonText}
+        {...eventData}
       ></EventSubmit>
       <EventNavigation></EventNavigation>
     </>
   );
 };
 
-export default HackathonDetailPage;
+export default EventSlugPage;

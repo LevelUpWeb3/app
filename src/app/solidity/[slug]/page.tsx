@@ -7,6 +7,7 @@ import EditorPanel from "./EditorPanel";
 import Teaching from "./Teaching";
 import LessonNavigation from "./LessonNavigation";
 import markdownData from "../markdownData.json";
+import LessonProgress from "./LessonProgress";
 
 export async function generateStaticParams() {
   return markdownData.map((x) => x.id);
@@ -51,6 +52,7 @@ export default async function SolidityDetailPage({
           <Typography sx={{ fontSize: ["16px", "24px"] }}>
             {data.summary}
           </Typography>
+          <LessonProgress />
         </Stack>
         <Typography
           sx={{

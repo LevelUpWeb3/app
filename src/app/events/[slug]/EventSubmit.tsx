@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import { sendGAEvent } from "@next/third-parties/google";
 
 const EventSubmit = (props) => {
-  const { hackathonId, buttonText } = props;
+  const { hackathonId, buttonText, submissionButtonDisabled } = props;
 
   return (
     <Box
@@ -37,6 +37,7 @@ const EventSubmit = (props) => {
               size="large"
               href={`/events/${hackathonId}/submit`}
               sx={{ width: "100% !important" }}
+              disabled={submissionButtonDisabled}
               onClick={() =>
                 sendGAEvent("event", "hackathonClicked", {
                   value: { slug: hackathonId },

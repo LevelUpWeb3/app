@@ -27,10 +27,13 @@ export const ROOT_METADATA = {
     url: "/",
     locale: "en_US",
     type: "website",
+    images: ["/opengraph-image.png"],
   },
   twitter: {
     title: DEFAULT_METADATA.title,
     description: DEFAULT_METADATA.description,
+    card: "summary_large_image",
+    images: ["/twitter-image.png"],
   },
   icons: {
     apple: "/logo.png",

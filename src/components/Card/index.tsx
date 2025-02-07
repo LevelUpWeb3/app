@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { sendGAEvent } from "@next/third-parties/google";
 import LinkSvg from "@/assets/svgs/content/link.svg";
+import CompletedSvg from "@/assets/svgs/challenge/completed.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -31,7 +32,15 @@ const CARD_COLOR_MAP = {
 };
 
 const PreviewCard = (props) => {
-  const { color = "white", content, type, sx, className } = props;
+  const {
+    color = "white",
+    baseURL,
+    content,
+    type,
+    sx,
+    className,
+    isCompleted,
+  } = props;
   const pathname = usePathname();
 
   const handleClick = () => {
@@ -40,7 +49,7 @@ const PreviewCard = (props) => {
 
   return (
     <Link
-      href={content.url ? content.url : `${pathname}/${content.id}`}
+      href={content.url ? content.url : `${baseURL || pathname}/${content.id}`}
       target={content.url ? "_blank" : "_self"}
       className={className}
     >
@@ -142,6 +151,13 @@ const PreviewCard = (props) => {
               <SvgIcon
                 sx={{ fontSize: "16px", color: "transparent" }}
                 component={LinkSvg}
+                inheritViewBox
+              ></SvgIcon>
+            )}
+            {isCompleted && (
+              <SvgIcon
+                sx={{ fontSize: "40px", color: "transparent" }}
+                component={CompletedSvg}
                 inheritViewBox
               ></SvgIcon>
             )}
