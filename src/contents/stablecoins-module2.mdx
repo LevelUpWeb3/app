@@ -1,0 +1,169 @@
+---
+name: "Stablecoins Module 2: Crypto-Collateralized Stablecoins"
+index: 11
+summary: Create an AI Agent with Guardrails using EZKL.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Dec 09, 2024
+readTime: 15 min read
+labels: ["ZK", "DeFi"]
+---
+
+# **Crypto-Collateralized Stablecoins**
+
+## **How Crypto-Collateralized Stablecoins Work**
+
+Crypto-collateralized stablecoins, in contrast to fiat-backed stablecoins, offer a more decentralized approach, aligning closely with the web3 principles of decentralized and openness.
+
+Stablecoins are minted by depositing collateral that backs them. Every stablecoins minted is over-collateralized, meaning the amount of collateral is always greater than the amount of stablecoins minted. If a user's collateral becomes insufficient to back the stablecoins they minted, their position is liquidated, resulting in the loss of their collateral.
+
+![Hypotehetical Scenario where a user mints stablecoin backed ETH](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/er9er5ov8r61yj4ujliz.png)
+
+Hypotehetical Scenario where a user mints stablecoin backed ETH
+
+## **Why Do They Work?**
+
+Stablecoins function by by making sure that the protocol serves the needs of different participants. These roles can be classified as follows:
+
+- **Stablecoin Minters**: Deposit ETH as collateral to mint stablecoins that represent a fraction of the collateral value. Minters speculate on the collateral price increasing and can use the stablecoins to purchase more collateral assets.
+- **Stablecoin Users**: Utilize stablecoins in DeFi applications such as AMMs, yield-generating protocols, payments, and more.
+- **Liquidators**: Remove bad debt from the protocol and earn rewards for doing so.
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2tjtrftb3ublo2eyctpe.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2tjtrftb3ublo2eyctpe.png)
+
+## **Creating a Minimal Stablecoin**
+
+The core functions of any debt-based stablecoin include:
+
+- **Depositing and Withdrawing Collateral**: Users deposit collateral, enabling them to mint stablecoins later.
+- **Minting and Burning Stablecoins**: Users can mint and burn stablecoins based on how much collateral was deposited.
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+// DO NOT USE THIS IN PRODUCTION! This smart contract has not been audited and is meant to educational purposes only
+
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+// ERC20 stablecoin contract that mints new dollar-pegged tokens by depositing overcollateralized ETH
+contract StableCoin is ERC20, ERC20Burnable {
+    // This contract expects a 150% of collateralization, this means that, for example you will need at least 150$ of ETH
+    uint public constant MIN_COLLATERAL_DEBT_RATIO = 150;
+
+    // Storage representing ETH deposited as collateral and the stablecoin debt corresponding to each account
+    mapping(address => uint256) public ethCollateral;
+    mapping(address => uint256) public stablecoinDebt;
+
+    constructor() ERC20("Stablecoin", "STABLECOIN") {}
+
+    // Returns the collateral-to-debt ratio using the formula: (Collateral Value in USD) / Debt
+    function getCollateralDebtRatio(address account) public view returns (uint256) {
+        if (stablecoinDebt[account] == 0) return type(uint256).max; // Fully collateralized if no debt
+        uint256 collateralValue = (ethCollateral[account] * getEthPrice()) / 1e18; // Collateral value in USD
+        return (collateralValue * 100) / stablecoinDebt[account];
+    }
+
+    // Deposits ETH and increases collateral-to-debt ratio
+    function depositCollateral() public payable {
+        ethCollateral[msg.sender] += msg.value;
+    }
+
+    // Withdraws the ETH collateral as long as the collateral-to-debt ratio is still >= 150%
+    function withdrawCollateral(uint256 amount) public {
+        require(ethCollateral[msg.sender] >= amount, "Not enough collateral");
+
+        // Ensure ratio remains valid AFTER withdrawal
+        uint256 newCollateral = ethCollateral[msg.sender] - amount;
+        uint256 newRatio = stablecoinDebt[msg.sender] == 0
+            ? type(uint256).max
+            : (newCollateral * uint256(getEthPrice()) * 100) / (1e18 * stablecoinDebt[msg.sender]);
+
+        require(newRatio >= MIN_COLLATERAL_DEBT_RATIO, "Insufficient collateral after withdrawal");
+
+        ethCollateral[msg.sender] -= amount;
+        (bool sent, ) = payable(msg.sender).call{value: amount}("");
+        require(sent, "Failed to send Ether");
+    }
+
+    // Mints new stablecoins as long the collateral-to-debt ratio is still >= 150%
+    function mintStablecoin(uint256 amount) public {
+        require(getCollateralDebtRatio(msg.sender) >= MIN_COLLATERAL_DEBT_RATIO, "Insufficient collateral");
+        stablecoinDebt[msg.sender] += amount;
+        _mint(msg.sender, amount);
+    }
+
+    // If a Systemic Risk arose, burning stablecoins can help maintain the peg
+    function burnStablecoin(uint256 amount) public {
+        require(stablecoinDebt[msg.sender] >= amount, "Burn amount exceeds debt");
+        stablecoinDebt[msg.sender] -= amount;
+        _burn(msg.sender, amount);
+    }
+
+    // If a specific account collateral-to-debt ratio falls bellow 150% anyone on-chain can claim the collateral an erase the debt
+    function liquidate(address account) public {
+        require(getCollateralDebtRatio(account) < MIN_COLLATERAL_DEBT_RATIO, "Account is sufficiently collateralized");
+
+        uint256 liquidationReward = (ethCollateral[account] * 90) / 100; // Liquidator gets 90%
+
+        ethCollateral[account] = 0;
+        stablecoinDebt[account] = 0;
+
+        (bool sent, ) = payable(msg.sender).call{value: liquidationReward}("");
+        require(sent, "Failed to send Ether");
+
+        // Protocol fee stays in contract
+    }
+
+    // The stablecoin value is often retrieved using oracles, in this particular contract we use chainlink pricefeeds oracles on the Scroll network
+    function getEthPrice() public view returns (uint256) {
+        (, int256 answer, , , ) = AggregatorV3Interface(0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41).latestRoundData();
+        return uint256(answer * 1e10); // Convert to 18 decimals if Chainlink returns 8 decimals
+    }
+}
+```
+
+## How to keep a Debt Based Stablecoin Healthy
+
+A good stablecoin needs several key properties. It should have deep liquidity, maintain a close peg to the dollar, and be resistant to failure. To achieve these goals, various techniques are implemented to improve stability and reliability. The following are some of the most important examples.
+
+***Debt Repayment Incentives*:** Implementing fees encourages borrowers to repay their debt on time. This helps maintain system solvency and prevents excessive stablecoin issuance.
+
+***Safety Fund:*** A protocol should have a reserve fund to cover critical scenarios where liquidations do not happen in time. This acts as a financial buffer to absorb unexpected losses.
+
+***Reliable Price Oracles:*** Stablecoins depend on accurate collateral valuations. Using decentralized, and secure oracles ensures fair pricing and prevents manipulation.
+
+***Burning Excess Liquidity:*** Excessive stablecoin supply can lead to price instability. Implementing a mechanism to burn excess stablecoins helps maintain the peg and system balance.
+
+## Risks
+
+Stablecoin users have to keep in mind what are the main risks of using debt-based protocols with real money. The following are the tree main Risk involved while using stablecoin.
+
+***Oracle Centralization:*** Reliance on a single price oracle can introduce market manipulation risks risks.
+
+***Smart Contract Vulnerabilities:*** Bugs and exploits in the code could lead to loss of funds.
+
+***Faulty Liquidation Engines:*** If liquidations fail to occur on time, the system can become undercollateralized.
+
+## Real use case study: Aave's GHO Stablecoin
+
+[GHO](https://github.com/aave/gho-core) can be put in circulation by Modules (aka Facilitator) that control how the GHO get’s put in and out of circulation.There are currently 3 modules deployed on Aave.
+
+- [**Aave Pool Module**](https://github.com/aave/aave-v3-core/blob/master/contracts/interfaces/IPool.sol): Uses Aave’s collateral and liquidation engine to circulate GHO.
+- [**Flash Minter Module**](https://github.com/aave/gho-core/blob/main/src/contracts/facilitators/flashMinter/GhoFlashMinter.sol): Allows minting and burning GHO within a single block.
+- [**AMM Module**](https://github.com/aave/gho-core/blob/main/src/contracts/facilitators/gsm/Gsm.sol): that specializes in keeping GHO tightly pegged to the dollar.
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6oikktjhhd3polk8aolg.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6oikktjhhd3polk8aolg.png)
+
+GHO is minted through a governance vote that authorizes its allocation into Buckets managed by various Modules. This framework enables multiple methods for interacting with GHO.
+
+The most widely used Module is the Aave Pool, where users can mint GHO by supplying collateral within the existing Pool contract. This integration makes use of the Pool’s built-in mechanisms, including its liquidation engine that has been battletested in production..
+
+**Note**: The largest crypto-backed stablecoin protocol is MakerDAO’s DAI. This article does not cover it in depth due to the complexity of its [codebase](https://github.com/makerdao/dss/blob/master/src/dog.sol#L170), though it remains a highly stable and widely adopted system.
+
+---
+
+Thanks for reading this first installment on building stablecoins! Keep learning, hacking, and participating in upcoming Stable School programs!

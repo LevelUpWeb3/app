@@ -1,0 +1,170 @@
+---
+name: "Stablecoins Module 0: Introduction to the ERC20 Standard"
+index: 11
+summary: Create an AI Agent with Guardrails using EZKL.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Dec 09, 2024
+readTime: 15 min read
+labels: ["ZK", "DeFi"]
+---
+
+# Intro to ERC20 Tokens
+
+Welcome to the first module of Stable School's developer content. In this course, we will go from zero to building your own stablecoins using different techniques and mechanisms.
+
+In this first module, we will recap how to build an ERC20 contract, which is fundamental to stablecoin development.
+
+This tutorial assumes the reader has basic knowledge of Solidity. If you need a refresher, we recommend following the [Level Up Solidity Lessons](https://www.levelup.xyz/solidity).
+
+Now, let's get started with the ERC20 standard and Ethereum basics.
+
+## The ERC20 standard
+
+At its core, tokens can be represented as a hashmap of balances, where the key is the account that owns the tokens, and the value represents the account’s balance.
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kxbhkojsdpc50tfvp2v4.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kxbhkojsdpc50tfvp2v4.png)
+
+*Token contracts can be represented as hashmaps where the key is the account's owner and the value the account's balance*
+
+In Solidity, we can define it as:
+
+```
+mapping(address account => uint256 balance) public balanceOf;
+```
+
+When a user transfers tokens, their balance is deducted, and the recipient's balance is increased. Building on this foundation, we can introduce additional mechanics such as limited supply, yield generation, vesting schedules, transaction fees, and more.
+
+To ensure compatibility across different applications, the ERC20 standard was introduced. This standard allows tokens to interact and become interconnected. This enabled DeFi applications like decentralized exchanges that support any ERC20-compliant token.
+
+The core ERC20 functions that all compliant tokens must implement include:
+
+- `totalSupply()` – Returns the total token supply.
+- `balanceOf(address account)` – Returns the token balance of a specific account.
+- `transfer(address to, uint256 value)` – Transfers tokens to another account.
+- `approve(address spender, uint256 value)` – Grants permission for a third party to spend tokens on the owner's behalf.
+- `allowance(address owner, address spender)` – Checks how many tokens a spender can use on behalf of the owner.
+- `transferFrom(address from, address to, uint256 value)` – Transfers tokens on behalf of the owner.
+
+## How to Deploy an ERC20 Token on Scroll Sepolia
+
+Ethereum is the most secure and decentralized platform, making it ideal for financial applications such as token creation. Scroll, an Ethereum Layer 2 solution, maintains Ethereum’s security while significantly reducing transaction costs. Developers can build scalable dApps with faster and cheaper transactions while staying compatible with existing Ethereum developer tooling and infrastructure. In this guide, we'll create and deploy an ERC20 token on Scroll Sepolia.
+
+### 1. Connect to Scroll
+
+First, install a wallet like [MetaMask](https://metamask.io/) or [Rabby](https://rabby.io/) as a browser extension. Connect your wallet to Scroll Sepolia Testnet. You can do this automatically via [Chainlist.org](https://chainlist.org/chain/534351) or manually using the following details:
+
+- **Network Name:** Scroll Sepolia Testnet
+- **RPC URL:** `https://rpc.ankr.com/scroll_sepolia_testnet`
+- **Chain ID:** `534351`
+- **Currency Symbol:** Sepolia ETH
+- **Block Explorer:** [Scroll Sepolia Scan](https://sepolia.scrollscan.dev/)
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6wvmmk0uezonwe02bt3c.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6wvmmk0uezonwe02bt3c.png)
+
+### 2. Get Test Funds
+
+Join the `Get Testnet ETH` channel on the [Level Up Telegram](https://t.me/c/2072675498/2957) and type:
+
+```
+/drop YOUR_WALLET_ADDRESS
+```
+
+Example:
+
+```
+/drop 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
+```
+
+Alternatively, check out other [Scroll faucets](https://docs.scroll.io/en/user-guide/faucet/).
+
+### 3. Create the ERC20 Contract
+
+Below is a simple ERC20 token implementation:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+// DO NOT USE THIS IN PRODUCTION! This smart contract has not been audited and is meant to educational purposes only
+
+// Smart Contract that follows the ERC20 standard
+contract MinimalERC20 {
+    // Token name, symbol, decimals (in wei format) and total supply
+    string public name = "MyToken";
+    string public symbol = "MTK";
+    uint8 public decimals = 18;
+    uint256 public totalSupply = 21_000_000 * 10**18;
+
+    // Mappings to store balances and allowances
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
+
+    // Events for logging transfers and approvals
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+
+    // When the contract is launched, it assigns total supply to contract deployer
+    constructor() {
+        balanceOf[msg.sender] = totalSupply;
+        emit Transfer(address(0), msg.sender, totalSupply);
+    }
+
+    // Transfers tokens from sender to recipient
+    function transfer(address to, uint256 value) public returns (bool) {
+        require(balanceOf[msg.sender] >= value, "Insufficient balance");
+
+        balanceOf[msg.sender] -= value;
+        balanceOf[to] += value;
+
+        emit Transfer(msg.sender, to, value);
+        return true;
+    }
+
+    // Approves spender to use a certain amount of sender's tokens on hes behalf
+    function approve(address spender, uint256 value) public returns (bool) {
+        allowance[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
+    }
+
+    // Transfers tokens on behalf of the owner using an allowance
+    function transferFrom(address from, address to, uint256 value) public returns (bool) {
+        require(balanceOf[from] >= value, "Insufficient balance");
+        require(allowance[from][msg.sender] >= value, "Allowance exceeded");
+
+        balanceOf[from] -= value;
+        balanceOf[to] += value;
+        allowance[from][msg.sender] -= value;
+
+        emit Transfer(from, to, value);
+        return true;
+    }
+}
+```
+
+Alternatively, you can use [OpenZeppelin’s Contract Wizard](https://wizard.openzeppelin.com/) to generate an ERC20 contract with additional features like minting and access control.
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/9p3v07vd848mqiqk4p04.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/9p3v07vd848mqiqk4p04.png)
+
+### 4. Deploy the Contract on Scroll
+
+To deploy your contract on Scroll Sepolia, use tools like:
+
+- [Remix IDE](https://remix.ethereum.org/)
+- [Hardhat](https://hardhat.org/)
+- [Foundry](https://book.getfoundry.sh/)
+
+### Deploying with Remix:
+
+1. Open [Remix](https://remix.ethereum.org/)
+2. In the **File Explorer** tab, create a new file and paste your contract code.
+3.  Compile the contract in the **Solidity Compiler** section.
+4. Go to **Deploy & Run Transactions**, select **Injected Web3** as the environment, connect MetaMask, and deploy the contract.
+
+Once deployed, you can interact with your contract via [Scroll Sepolia Explorer](https://sepolia.scrollscan.dev/).
+
+---
+
+You've successfully deployed an ERC20 token on Scroll Sepolia. In the next module, we'll learn how to build a stablecoin with similar mechanics to USDT or USDC.
