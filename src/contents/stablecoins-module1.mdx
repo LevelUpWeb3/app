@@ -54,10 +54,10 @@ import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC2
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 // ERC20 compatible smart contract with centralized features such as mint, burn, pause and blacklist
-contract MyToken is ERC20, ERC20Burnable, ERC20Pausable, Ownable {
-    constructor(address initialOwner)
+contract FiatBackedStablecoin is ERC20, ERC20Burnable, ERC20Pausable, Ownable {
+    constructor()
         ERC20("Centralized Stablecoin", "CS")
-        Ownable(initialOwner)
+        Ownable(msg.sender)
     {}
 
     // All accounts marked ad blacklasted cannot transact

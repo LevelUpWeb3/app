@@ -50,7 +50,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 // ERC20 stablecoin contract that mints new dollar-pegged tokens by depositing overcollateralized ETH
-contract StableCoin is ERC20, ERC20Burnable {
+contract CryptoCollateralizedStablecoin is ERC20, ERC20Burnable {
     // This contract expects a 150% of collateralization, this means that, for example you will need at least 150$ of ETH
     uint public constant MIN_COLLATERAL_DEBT_RATIO = 150;
 
@@ -91,13 +91,13 @@ contract StableCoin is ERC20, ERC20Burnable {
 
     // Mints new stablecoins as long the collateral-to-debt ratio is still >= 150%
     function mintStablecoin(uint256 amount) public {
-        require(getCollateralDebtRatio(msg.sender) >= MIN_COLLATERAL_DEBT_RATIO, "Insufficient collateral");
         stablecoinDebt[msg.sender] += amount;
+        require(getCollateralDebtRatio(msg.sender) >= MIN_COLLATERAL_DEBT_RATIO, "Insufficient collateral");
         _mint(msg.sender, amount);
     }
 
     // If a Systemic Risk arose, burning stablecoins can help maintain the peg
-    function burnStablecoin(uint256 amount) public {
+    function burn(uint256 amount) public override  {
         require(stablecoinDebt[msg.sender] >= amount, "Burn amount exceeds debt");
         stablecoinDebt[msg.sender] -= amount;
         _burn(msg.sender, amount);
