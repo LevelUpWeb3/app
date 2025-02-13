@@ -1,0 +1,148 @@
+---
+name: "Stablecoins Module 1: Fiat-Backed Stablecoins"
+index: 14
+summary: Create a stablecoin with centralized features.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Feb 13, 2024
+readTime: 15 min read
+labels: ["ZK", "DeFi"]
+---
+
+import YoutubeEmbed from "src/components/YoutubeEmbed";
+
+## What Are Centralized Stablecoins?
+
+Centralized stablecoins are digital assets controlled by a single entity that manages their issuance and redemption. These tokens are backed by real-world assets, such as fiat currency or treasury bonds, which can be liquidated when necessary. However, users must trust the issuer since there is no 100% on-chain way to verify the actual reserves.
+
+<YoutubeEmbed id="myp913FhBjM" />
+<div className="text-center">
+  _Watch this video to deploy and interact with a Centralized Stablecoin._
+</div>
+
+## Why Do Dollar-Pegged Stablecoins Maintain Their Peg?
+
+The vast majority of stablecoins are pegged to the U.S. dollar. This allows users to rely on a familiar and widely accepted unit of value. While there are stablecoins pegged to other assets such as the euro, bitcoin, or stocks, still the dollar-pegged stablecoins dominate the market.
+
+Centralized dollar-pegged stablecoins are able to maintain a tight peg to their underlying asset. This is because issuers can directly redeem stablecoins for fiat at a 1:1 ratio, ensuring price stability.
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/k9529vuyign1iwxumxfg.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/k9529vuyign1iwxumxfg.png)
+
+*Centralized stablecoins like USDT maintain a strong peg to the USD compared to decentralized and algorithmic-based alternatives. This is known as market efficiency. Source: [stablecoins.wtf](https://stablecoins.wtf/)*
+
+Additionally, centralized stablecoin issuers must comply with strict regulations. This often results in features that contradict core decentralization principles, such as blacklisting addresses and pausing transactions.
+
+## Developing a Centralized Stablecoin Smart Contract
+
+In order to ensure the circulating supply accurately reflects off-chain reserves, centralized stablecoins have to implement functions for token creation and destruction:
+
+**Issuance (mint):** The issuer generates new tokens when reserves increase.
+**Redemption (burn):** The issuer destroys tokens when reserves decrease.
+
+Issuers also introduce regulatory features, such as:
+
+**Blacklisting (blacklist):** Prevents sanctioned addresses from transacting.
+**Pausing (pause):** Temporarily halts all transactions.
+
+Here’s an example implementation using Solidity:
+
+```solidity
+// SPDX-License-Identifier: MIT
+// Compatible with OpenZeppelin Contracts ^5.0.0
+pragma solidity ^0.8.22;
+
+// DO NOT USE THIS IN PRODUCTION! This smart contract has not been audited and is meant to educational purposes only
+
+// OpenZeppelin libraries provide a prebuilt ERC-20 token implementation, allowing us to build on a secure and well-tested foundation.
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+// ERC20 compatible smart contract with centralized features such as mint, burn, pause and blacklist
+contract FiatBackedStablecoin is ERC20, ERC20Burnable, ERC20Pausable, Ownable {
+    constructor()
+        ERC20("Centralized Stablecoin", "CS")
+        Ownable(msg.sender)
+    {}
+
+    // All accounts marked ad blacklasted cannot transact
+    mapping (address account => bool isBlacklisted) blacklist;
+
+    // When the contract is paused no one can transact
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
+    // Adds an account to the blacklist, preventing it from transacting
+    function addToBlackList(address account) public onlyOwner {
+        blacklist[account] = true;
+    }
+
+    // The contract owner can control the supply of tokens by minting and burning
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
+    }
+
+    function burn(uint256 amount) public override onlyOwner {
+        _burn(owner(), amount);
+    }
+
+    // _update is an internal function that is called on every transaction, this is the perfect place to check if an address is blacklisted
+    function _update(address from, address to, uint256 value)
+        internal
+        override(ERC20, ERC20Pausable)
+    {
+        // If an account is blacklisted it is prevented from transacting
+        require(!blacklist[from], "Sender is blacklisted");
+        super._update(from, to, value);
+    }
+}
+```
+
+## Exploring Stablecoins Live on Ethereum
+
+The two largest stablecoins by market capitalization are USDT and USDC. Let’s explore their features.
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/w73o41tbnvxab950xee1.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/w73o41tbnvxab950xee1.png)
+
+*USDT and USDC dominate the stablecoin market. Source: [DeFiLlama](https://defillama.com/stablecoins)*
+
+### **USDT**
+
+USDT is issued by Tether and has a market capitalization exceeding $130 billion. It follows a standard centralized stablecoin model with minting and burning features:
+
+- [Issue (minting)](https://github.com/tethercoin/USDT/blob/main/TetherToken.sol#L406)
+- [Redeem (burning)](https://github.com/tethercoin/USDT/blob/main/TetherToken.sol#L420)
+- [Pause transactions](https://github.com/tethercoin/USDT/blob/main/TetherToken.sol#L254)
+- [Blacklist addresses](https://github.com/tethercoin/USDT/blob/main/TetherToken.sol#L281)
+- [Burn blacklisted funds](https://github.com/tethercoin/USDT/blob/main/TetherToken.sol#L291)
+- [Transaction fees (currently disabled)](https://github.com/tethercoin/USDT/blob/main/TetherToken.sol#L429)
+
+More details:
+
+- **Source code:** [GitHub](https://github.com/circlefin/stablecoin-evm/blob/master/contracts/v2/FiatTokenV2_2.sol)
+- **Live contract:** [Etherscan](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48#readProxyContract)
+
+### USDC (Circle)
+
+USDC is issued by Circle and is widely used in DeFi. Like USDT, it implements the most common structure in stablecoins: minting, burning, blacklisting, and pausing transactions.
+
+- [Issue (minting)](https://github.com/circlefin/stablecoin-evm/blob/master/contracts/v1/FiatTokenV1.sol#L121)
+- [Redeem (burning)](https://github.com/circlefin/stablecoin-evm/blob/master/contracts/v1/FiatTokenV1.sol#L360)
+- [Pause transactions](https://github.com/circlefin/stablecoin-evm/blob/master/contracts/v1/Pausable.sol#L70)
+- [Blacklist addresses](https://github.com/circlefin/stablecoin-evm/blob/master/contracts/v1/Blacklistable.sol#L71)
+
+More details:
+
+- **Source code:** [GitHub](https://github.com/circlefin/stablecoin-evm/blob/master/contracts/v2/FiatTokenV2_2.sol)
+- **Live contract:** [Etherscan](https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48#readProxyContract)
+
+---
+
+Thanks for reading this article! Dollar-pegged stablecoins hold the top spot in the stablecoin space, by providing price stability and ease of use. However, an alternative exists that removes reliance on a central issuer, and that is overcollateralized debt stablecoins. Check out our next article to learn more!
