@@ -26,13 +26,16 @@ There are 4 types of variables in Vyper:
 
   - Provides information about the blockchain
 
-- `self` Variable [CONTINUE HERE]
+- `self` Variable
+
+  - Naming convention which read and write to state variables
+  - Call internal functions within the contract
 
 ```python
 # pragma version 0.4.0
 
 # State variables
-SUPPLY_AMOUNT: constant(uint256) = 21000000
+SUPPLY_AMOUNT: uint256
 BYTES_VALUE: constant(bytes32) = 0xabcd1123f8ae9a65dcc16f95643f2030aa505c6b465c8206e26ae84b525cdacb
 STRING_VALUE: constant(String[13]) = "Hello, world!"
 
@@ -51,6 +54,15 @@ def retrieveGlobalVariables() -> (address, uint256, bytes32):
     block_difficulty: uint256 = block.difficulty
     block_prevrandao: bytes32 = block.prevrandao
     return (block_coinbase, block_difficulty, block_prevrandao)
+
+@external
+def setSelfVariable():
+    self.SUPPLY_AMOUNT = 999
+
+@external
+@view
+def viewSelfVariable() -> (uint256):
+    return self.SUPPLY_AMOUNT
 ```
 
 <details>
@@ -58,10 +70,14 @@ def retrieveGlobalVariables() -> (address, uint256, bytes32):
     <strong>Vyper Differentiators (wrt Solidity)</strong>
   </summary>
   <ul>
-    <li>You cannot assign a value to an `immutable` global variable</li>
+    <li>
+      Vyper has an additional `self` variable similar to Python used to refer to
+      the contract itself.
+    </li>
   </ul>
 </details>
 
 ### Further Reading:
 
-- [Vyper Lang Docs](https://docs.vyperlang.org/en/stable/scoping-and-declarations.html#declaring-immutable-variables)
+- [Vyper Lang Variable Docs](https://docs.vyperlang.org/en/latest/constants-and-vars.html)
+- [Vyper Lang `self` Variable Docs](https://docs.vyperlang.org/en/latest/constants-and-vars.html#the-self-variable)
