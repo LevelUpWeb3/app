@@ -22,6 +22,8 @@ Vyper is a statically typed Pythonic language. The type of each variable (state 
 ```python
 # pragma version 0.4.0
 
+# like Solidity, state variables are by default private visibility
+# use `public` keyword to make them public
 boo: public(bool)
 signed_int: public(int256)
 unsigned_int: public(uint64)
