@@ -24,9 +24,10 @@ Crypto-collateralized stablecoins, in contrast to fiat-backed stablecoins, offer
 
 Stablecoins are minted by depositing collateral that backs them. Every stablecoin minted is over-collateralized, meaning the amount of collateral is always greater than the amount of stablecoins minted. If a user's collateral becomes insufficient to back the stablecoins they minted, their position is liquidated, resulting in the loss of their collateral.
 
-![Hypotehetical Scenario where a user mints stablecoin backed ETH](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/er9er5ov8r61yj4ujliz.png)
-
-Hypotehetical Scenario where a user mints stablecoin backed ETH
+<div className="text-center">
+  <img src="/images/contents/stablecoins-module2/stablecoin_scenario.png" alt="Stablecoin Hypotehetical Scenario" />
+  _Hypotehetical Scenario where a user mints stablecoin backed ETH_
+</div>
 
 ## **Why Do They Work?**
 
@@ -36,7 +37,10 @@ Stablecoins function by making sure that the protocol serves the needs of differ
 - **Stablecoin Users**: Utilize stablecoins in DeFi applications such as AMMs, yield-generating protocols, payments, and more.
 - **Liquidators**: Remove bad debt from the protocol and earn rewards for doing so.
 
-![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2tjtrftb3ublo2eyctpe.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2tjtrftb3ublo2eyctpe.png)
+<div className="text-center">
+  <img src="/images/contents/stablecoins-module2/stablecoin_users.png" alt="Stablecoin Users" />
+  _The three types of users that maintain stability in a crypto-backed stablecoin protocol._
+</div>
 
 ## **Creating a Minimal Stablecoin**
 
@@ -162,7 +166,10 @@ Stablecoin users have to keep in mind what are the main risks of using debt-base
 - [**Flash Minter Module**](https://github.com/aave/gho-core/blob/main/src/contracts/facilitators/flashMinter/GhoFlashMinter.sol): Allows minting and burning GHO within a single block.
 - [**AMM Module**](https://github.com/aave/gho-core/blob/main/src/contracts/facilitators/gsm/Gsm.sol): that specializes in keeping GHO tightly pegged to the dollar.
 
-![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6oikktjhhd3polk8aolg.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6oikktjhhd3polk8aolg.png)
+<div className="text-center">
+  <img src="/images/contents/stablecoins-module2/gho_buckets.png" alt="GHO Buckets" />
+  _GHO governance can mint tokens into selected 'buckets'._
+</div>
 
 GHO is minted through a governance vote that authorizes its allocation into Buckets managed by various Modules. This framework enables multiple methods for interacting with GHO.
 

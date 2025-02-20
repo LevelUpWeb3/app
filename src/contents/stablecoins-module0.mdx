@@ -29,11 +29,12 @@ Now, let's get started with the ERC20 standard and Ethereum basics.
 
 ## The ERC20 standard
 
-At its core, tokens can be represented as a hashmap of balances, where the key is the account that owns the tokens, and the value represents the account’s balance.
+At its core, tokens can be represented as a hashmap of balances (learn more about hashmaps [here](https://www.interviewcake.com/concept/java/hash-map)), where the key is the account that owns the tokens, and the value represents the account’s balance.
 
-![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kxbhkojsdpc50tfvp2v4.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kxbhkojsdpc50tfvp2v4.png)
-
-*Token contracts can be represented as hashmaps where the key is the account's owner and the value the account's balance*
+<div className="text-center">
+  <img src="/images/contents/stablecoins-module0/token_hashmap.png" alt="token hashmap" />
+  _Token contracts can be represented as hashmaps where the key is the account's owner and the value the account's balance._
+</div>
 
 In Solidity, we can define it as:
 
@@ -68,7 +69,10 @@ First, install a wallet like [MetaMask](https://metamask.io/) or [Rabby](https:/
 - **Currency Symbol:** Sepolia ETH
 - **Block Explorer:** [Scroll Sepolia Scan](https://sepolia.scrollscan.dev/)
 
-![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6wvmmk0uezonwe02bt3c.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6wvmmk0uezonwe02bt3c.png)
+<div className="text-center">
+  <img src="/images/contents/stablecoins-module0/scroll_testnet_metamask.png" alt="scroll testnet metamask" />
+  _Add Scroll Testnet to your metamask._
+</div>
 
 ### 2. Get Test Funds
 
@@ -153,7 +157,10 @@ contract MinimalERC20 {
 
 Alternatively, you can use [OpenZeppelin’s Contract Wizard](https://wizard.openzeppelin.com/) to generate an ERC20 contract with additional features like minting and access control.
 
-![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/9p3v07vd848mqiqk4p04.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/9p3v07vd848mqiqk4p04.png)
+<div className="text-center">
+  <img src="/images/contents/stablecoins-module0/openzeppelin_wizard.png" alt="OpenZeppelin’s Token Wizard" />
+  _OpenZeppelin’s Token Wizard._
+</div>
 
 ### 4. Deploy the Contract on Scroll
 
