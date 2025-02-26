@@ -1,0 +1,55 @@
+---
+name: Mutability
+index: 9
+lesson: 9
+summary: Introduction to Vyper mutability
+labels: ["vyper"]
+---
+
+# Mutability
+
+In addition to visibility decorators, Vyper have four types of optional decorators which can be used to declare a function's mutability.
+
+- @pure: purely to execute a function without reading or modifying state.
+- @view: to read state but not modify it. Necessary decorator to define getter functions.
+
+- @nonpayable(default): prevents receival of Ether.
+- @payable: can receive and access Ether via `msg.value`.
+
+```python
+# pragma version 0.4.0
+
+example_integer: public(uint256)
+
+# If the decorator "@payable" is absent, the contract will not be able to receive Ether
+@deploy
+@payable
+def __init__():
+    self.example_integer = 534532
+
+# Pure function to test addition function without modifying state
+@external
+@pure
+def purelyAddingFunction(x: uint256, y: uint256) -> uint256:
+    return x + y
+
+@external
+@view
+def getExampleInteger() -> uint256:
+    return self.example_integer
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators (wrt Solidity)</strong>
+  </summary>
+  <ul>
+    <li>
+      Initiate the contract with @payable to allow contract to hold Ether.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/control-structures.html#mutability)
