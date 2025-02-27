@@ -33,7 +33,7 @@ string: public(String[13]) #the maximum length of string here is 13
 addy: public(address)
 
 # use --enable-decimals flag when compiling Vyper code containing decimal type
-decimal: public(decimal)
+decimal_variable: public(decimal)
 
 @deploy
 def __init__():
@@ -44,7 +44,7 @@ def __init__():
     self.dynamic_size_bytes = b"\x01" # b"" syntax indicates content inside quotes is a byte array
     self.string = "Hello, world!"
     self.addy = 0xE2b4795039517653c5Ae8C2A9BFdd783b48f447A
-    self.decimal = 22.77
+    self.decimal_variable = 22.77
 ```
 
 <details>
