@@ -1,0 +1,85 @@
+---
+name: Interface
+index: 10
+lesson: 10
+summary: Introduction to Vyper interface
+labels: ["vyper"]
+---
+
+# Interface
+
+Interface defines all of the contract's externally available functions. It enables calls between contracts.
+
+Important to specify the interface with [mutability](https://docs.vyperlang.org/en/latest/control-structures.html#mutability) decorator. This indicates whether the call will modify the state or not.
+
+- `extcall` keyword shall be used for `payable` and `nonpayable` functions.
+- `staticcall` keyword shall be used for `pure` and `view` functions.
+
+You can create interface to interact with other contract using `interface` keyword.
+
+`Reference.vy`:
+
+```python
+# pragma version 0.4.0
+
+example_integer: public(uint256)
+
+@external
+def set_example_integer(x: uint256):
+    self.example_integer = x
+
+@external
+@view
+def get_example_integer() -> uint256:
+    return self.example_integer
+```
+
+`InterfaceExample.vy`:
+
+```python
+# pragma version 0.4.0
+
+interface ExampleInterface:
+    def example_integer() -> uint256: view
+    def set_example_interface(x: uint256): nonpayable
+    def get_example_integer() -> uint256: view
+
+# state variable to reference `Reference.vy`
+interface_reference: public(ExampleInterface)
+
+interface_variable: public(uint256)
+
+@deploy
+def __init__(reference_addr: address):
+    self.interface_reference = ExampleInterface(reference_addr)
+
+# pass the `Reference.vy` deployed contract address to test out function below
+@external
+def setInterfaceVariable(x: uint256):
+
+    # declare `extcall` keyword for functions which modifies state
+    extcall self.interface_reference.set_example_interface(x)
+
+@external
+@view
+def getInterfaceVariable() -> uint256:
+
+    # declare `staticcall` keyword for functions which does not modify state
+    return staticcall self.interface_reference.get_example_integer()
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators (wrt Solidity)</strong>
+  </summary>
+  <ul>
+    <li>Vyper has built-in interfaces such as IERC20 and IERC721.</li>
+  </ul>
+  <ul>
+    <li>You can also import interface via a separate `.vyi` file.</li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/interfaces.html#interfaces)
