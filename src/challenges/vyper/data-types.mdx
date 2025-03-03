@@ -65,9 +65,14 @@ def __init__():
       Use `--enable-decimals` flag when compiling Vyper code containing decimal
       type.
     </li>
+    <li>
+      Converting `decimal` to `uint256` or `int256` will result in truncation
+      (i.e., `7.5` becomes `7`).
+    </li>
   </ul>
 </details>
 
 ### Further Reading:
 
-- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/types.html#)
+- [Vyper Lang - Data Types](https://docs.vyperlang.org/en/latest/types.html#)
+- [Vyper Lang - Built-In Function `convert()`](https://docs.vyperlang.org/en/stable/built-in-functions.html#convert)
