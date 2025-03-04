@@ -1,0 +1,39 @@
+---
+name: Structs
+index: 12
+lesson: 12
+summary: Introduction to Vyper structs
+labels: ["vyper"]
+---
+
+# Structs
+
+Structs are custom data types to define a group of variables. They can be used inside mappings and arrays.
+
+Struct members can be accessed via `struct.argument_name`.
+
+```python
+# pragma version 0.4.0
+
+struct ExampleStruct:
+    sender_address: address
+    amount_sent: uint256
+
+exampleStruct: public(ExampleStruct)
+
+# State modifying function to update struct variable
+@external
+def modify_struct_variable(amount: uint256):
+    self.exampleStruct.sender_address = msg.sender
+    self.exampleStruct.amount_sent = amount
+
+# Getter function to return struct variable
+@external
+@view
+def get_struct_variable() -> ExampleStruct:
+    return self.exampleStruct
+```
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/types.html#structs)
