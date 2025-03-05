@@ -10,15 +10,15 @@ readTime: 15 min read
 labels: ["Protocol", "Social"]
 ---
 
-Over 950 million users rely on Telegram each month, making it a fundamental part of Web3 communities, announcements, and project updates. However, creating web3 interatctions on Telegram comes the challenge of secure authentication.
+Telegram has around a billion active users per month and is a fundamental part of Web3 products and communities. However, many Telegram bots still rely on insecure interaction methods.
 
-By completing the techiques in this guide, yo can develop better engagement and build stronger communities with Telegram. This tutorial will show you how to authenticate Telegram users by using their Web3 wallets, without ever storing private keys.
+By completing this guide, you'll improve user engagement and community building for your Web3 product by offering an interface over Telegram. This tutorial will show you how to authenticate Telegram users with their Web3 wallets, without ever accesing the user's private keys.
 
 In this tutorial you will learn how to:
 
 1. **Create a secure Telegram bot**: Build a bot that authenticates users through web3 wallet signatures without storing any private keys.
-2. **Implement ERC-712 signatures**: Create a good authentication where the user signs messages in a readable format.
-3. **Enable diverse mechanisms**: From token and NFT gatekeeping to rewarding communities with surprise gifts.
+2. **Implement ERC-712 signatures**: Create a good authentication flow where the user signs messages in a readable format.
+3. **Implement flexible authentication**: Use token and NFT gating to restrict access, distribute exclusive content, or reward community members with surprise gifts.
 
 For the full project, check out the [complete source code](https://github.com/Turupawn/web3-telegram-auth).
 
@@ -29,7 +29,7 @@ For the full project, check out the [complete source code](https://github.com/Tu
 
 ## 1. Create a new Telegram bot
 
-Creating a telegram bot is very simple, you can do it by sending a direct message to the [@BotFather](https://core.telegram.org/bots#botfather) account. Just send `/newbot` to him, follow the instructions and you will get a _bot token_ to interact with the Telegram library we will use in the next step.
+Creating a telegram bot is very simple, you can do it by sending a direct message to the [@BotFather](https://core.telegram.org/bots#botfather) telegram account. Just send `/newbot` to him, follow the instructions and you will get a _bot token_ to interact with the Telegram library we will use in the next step.
 
 <div className="text-center">
   <img src="/images/contents/telegram-bot/bot_father.png" alt="TODO" />
@@ -49,8 +49,8 @@ Now, let's create the `.env` file with the following variables:
 `.env`
 ```
 BOT_TOKEN=your_telegram_bot_token
-CHAIN_ID=your_chain_id
-WEB_DAPP_URL=your_web_dapp_url
+CHAIN_ID=534352
+WEB_DAPP_URL=http://localhost:3000
 ```
 
 Don't forget to create a `.gitignore` file to avoid committing the `.env` file to your public repository.
@@ -61,9 +61,9 @@ Don't forget to create a `.gitignore` file to avoid committing the `.env` file t
 node_modules
 ```
 
-This is the `bot.js` file that launches a bot that listens for telegram messages and verifies the signature. Telegram bots _polls_ messages locally, this means that it will be constantly checking the telegram servers for new messages. In a production environment with a lot of users this could be a problem, and you should use the _webhook_ method instead and host a server remotely. For this tutorial we will use the polling method locally, if you want to learn more about the webhook method you can check the [Telegram Bot API documentation](https://core.telegram.org/bots/api#webhooks).
+This is the `bot.js` file that launches a bot that listens for telegram messages and verifies the signature. Telegram bots _polls_ messages locally, this means that it will be constantly checking the telegram servers for new messages. In a production environment with a lot of users this could be a problem, and you should use the _webhook_ method and host a server remotely instead. For this tutorial we will use the polling method locally, if you want to learn more about the webhook method you can check the [Telegram Bot API documentation](https://core.telegram.org/bots/api#getting-updates).
 
-When the user sends the `/authenticate` command to the bot, the bot will send a message to the user to visit the web dApp. The web dApp will sign a message and send it to the bot, which will verify the signature and send a welcome message to the user.
+When the user sends the `authenticate` command to the bot, the bot will send a message to the user to visit the web dApp. The web dApp will sign a message and send it to the bot, which will verify the signature and send a welcome message to the user.
 
 `bot.js`
 ```js
@@ -199,7 +199,7 @@ Let's start with the HTML file that has a _sign_ that will pop up the user's wal
 </body>
 
   <script>
-    <!-- The signMessage function is called when the user clicks the sign button -->
+    // The signMessage function is called when the user clicks the sign button
     function _signMessage()
     {
       const urlParams = new URLSearchParams(window.location.search);
@@ -405,7 +405,7 @@ Your dApp should be running on `http://127.0.0.1:3000`.
 
 Now, let's test the authentication.
 
-1. Send the `/authenticate` command to the bot.
+1. Send the `authenticate` command to the bot.
 2. Sign the message in your wallet.
 3. Check the bot's response.
 
