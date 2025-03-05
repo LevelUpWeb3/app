@@ -1,0 +1,422 @@
+---
+name: "Create a Telegram Bot With Secure Authentication"
+index: 15
+summary: Launch a Telegram bot and authenticate users by following the ERC712 standard.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Feb 13, 2024
+readTime: 15 min read
+labels: ["Protocol", "Social"]
+---
+
+Over 950 million users rely on Telegram each month, making it a fundamental part of Web3 communities, announcements, and project updates. However, creating web3 interatctions on Telegram comes the challenge of secure authentication.
+
+By completing the techiques in this guide, yo can develop better engagement and build stronger communities with Telegram. This tutorial will show you how to authenticate Telegram users by using their Web3 wallets, without ever storing private keys.
+
+In this tutorial you will learn how to:
+
+1. **Create a secure Telegram bot**: Build a bot that authenticates users through web3 wallet signatures without storing any private keys.
+2. **Implement ERC-712 signatures**: Create a good authentication where the user signs messages in a readable format.
+3. **Enable diverse mechanisms**: From token and NFT gatekeeping to rewarding communities with surprise gifts.
+
+For the full project, check out the [complete source code](https://github.com/Turupawn/web3-telegram-auth).
+
+<div className="text-center">
+  <img src="/images/contents/telegram-bot/flow.png" alt="TODO" />
+  _User experience flow of a secure Telegram bot._
+</div>
+
+## 1. Create a new Telegram bot
+
+Creating a telegram bot is very simple, you can do it by sending a direct message to the [@BotFather](https://core.telegram.org/bots#botfather) account. Just send `/newbot` to him, follow the instructions and you will get a _bot token_ to interact with the Telegram library we will use in the next step.
+
+<div className="text-center">
+  <img src="/images/contents/telegram-bot/bot_father.png" alt="TODO" />
+  _Send `/newbot` to the @BotFather to create a new Telegram bot._
+</div>
+
+## 2. Launch a Telegram bot backend
+
+Let's start by installing the dependencies:
+
+```
+npm install node-telegram-bot-api ethers dotenv express cors
+```
+
+Now, let's create the `.env` file with the following variables:
+
+`.env`
+```
+BOT_TOKEN=your_telegram_bot_token
+CHAIN_ID=your_chain_id
+WEB_DAPP_URL=your_web_dapp_url
+```
+
+Don't forget to create a `.gitignore` file to avoid committing the `.env` file to your public repository.
+
+`.gitignore`
+```
+.env
+node_modules
+```
+
+This is the `bot.js` file that launches a bot that listens for telegram messages and verifies the signature. Telegram bots _polls_ messages locally, this means that it will be constantly checking the telegram servers for new messages. In a production environment with a lot of users this could be a problem, and you should use the _webhook_ method instead and host a server remotely. For this tutorial we will use the polling method locally, if you want to learn more about the webhook method you can check the [Telegram Bot API documentation](https://core.telegram.org/bots/api#webhooks).
+
+When the user sends the `/authenticate` command to the bot, the bot will send a message to the user to visit the web dApp. The web dApp will sign a message and send it to the bot, which will verify the signature and send a welcome message to the user.
+
+`bot.js`
+```js
+// We'll use the official node-telegram-bot-api library to interact with the Telegram API and ethers to verify the signature
+const TelegramBot = require("node-telegram-bot-api");
+const { ethers } = require("ethers");
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+
+const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
+const CHAIN_ID = process.env.CHAIN_ID;
+const WEB_DAPP_URL = process.env.WEB_DAPP_URL;
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+//  Starts the telegram bot and the API server that recieves the signature and verifies it
+(async () => {
+    try {
+        bot.botInfo = await bot.getMe();
+        app.listen(8080, () => {
+            console.log("\nServer is running on port 8080");
+            console.log("Bot is running...");
+        });
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
+})();
+
+// The /verify endpoint is used to verify the signature and send a welcome message to the user
+app.post("/verify", async (req, res) => {
+    const { userId, message, signature } = req.body;
+    try {
+        const signerAddress = await getAuthenticationSigner(userId, message, signature);
+        await bot.sendMessage(
+            Number(userId), 
+            `Welcome! You're authenticated as ${signerAddress}.\n\nEnjoy your welcome gift! 🎁`
+        );
+        res.json({ success: true, signerAddress });
+    } catch (error) {
+        console.error("Verification error:", error);
+        res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+// getAuthenticationSigner returns the signer address by verifying the signature
+function getAuthenticationSigner(userId, message, signature) {
+    // accessRequest is the actual data schema of the message that we want to verify
+    const accessRequest = {
+        userId: userId,
+        message: message,
+    };
+    // domain is the general information about your dapp, this is the same for all the messages
+    const domain = {
+        name: "Telegram Group Access",
+        version: "1",
+        chainId: CHAIN_ID,
+    };
+    // types is the data schema of the message that we want to verify
+    const types = {
+    AccessRequest: [
+            { name: "userId", type: "uint256" },
+            { name: "message", type: "string" },
+        ]
+    };
+    // verifyTypedData verifies the signature in the erc712 style and return the signer address by ecrecovering
+    // We don't need to do worry about those details, ethers does it for us
+    return ethers.verifyTypedData(domain, types, accessRequest, signature);
+}
+
+// This is the main function that runs when the bot receives a message
+bot.on("message", async (msg) => {
+    const text = msg.text || "";
+    // It checks if the message is "authenticate" and if so, it sends a message to the user to visit the website
+    if (text.toLowerCase() === "authenticate") {
+        // userId is the user's id in telegram
+        const userId = msg.from.id;
+        // We send the user to the web dapp to authenticate
+        bot.sendMessage(WEB_DAPP_URL, userId, `Please visit: ${WEB_DAPP_URL}?userId=${userId}`);
+        return;
+    }
+});
+
+console.log("\nBot is running...");
+```
+
+Now, start the bot by running the following command:
+
+```
+node bot.js
+```
+
+Your bot is now running on `http://127.0.0.1:8080`.
+
+In the next step we will create a web dApp that interacts with our bot.
+
+## 3. Create a Web dApp to Sign Messages
+
+The dApp will be a simple HTML file that has a _sign_ button that will pop up the user's wallet to sign a message.
+
+<div className="text-center">
+  <img src="/images/contents/telegram-bot/webapp.png" alt="TODO" />
+  _Clicking the sign button will open the ERC712 signing modal._
+</div>
+
+Let's start with the HTML file that has a _sign_ that will pop up the user's wallet to sign a message.
+
+`index.html`
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  <div>
+    <!-- Wallet connection button, only visible if the wallet is not connected -->
+    <input id="connect_button" type="button" value="Connect" onclick="connectWallet()" style="display: none"></input>
+    <h1>Telegram Bot Authentication</h1>
+    <p id="web3_message"></p>
+    <h3>Sign Authentication Request</h3>
+    <!-- This is the sign button, it will pop up the user's wallet to sign a message -->
+    <button type="button" id="sign" onclick="_signMessage()">Sign</button>
+    <p id="signature"></p>
+  </div>
+    <!-- In this tutorial we use the web3.js library and a couple of js files that we'll create next -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.5/web3.min.js"></script>
+  <script type="text/javascript" src="wallet_connection.js"></script>
+  <script type="text/javascript" src="signature_messaging.js"></script>
+</body>
+
+  <script>
+    <!-- The signMessage function is called when the user clicks the sign button -->
+    function _signMessage()
+    {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get('userId');
+      signMessage(userId, "I'm requesting access to the telegram group.")
+    }
+  </script>
+</html>
+```
+
+The `signature_messaging.js` file defines how the message is signed and sent to the backend. We'll use the ERC712 standard to sign the message that provides an explanation of the message that is signed on the wallet. In order to do this, we need to define the domain and the types of the message which defines the data schema of the message. Also, we'll use the `eth_signTypedData_v4` method which is the most advanced method for signing messages currently supported by all the wallets.
+
+`signature_messaging.js`
+```js
+const BOT_API_URL = 'http://localhost:8080'
+// Sign the message using the ERC712 format
+async function signMessage(userId, message)
+{
+  // ERC712 expects you to send the message in a specific format
+  // We define the Domain, which has general information about the dapp and has to be the same for all the messages
+  // Then, we define the types of the message, which are the fields of the message
+  // Finally, we define the message, which is the actual message to be signed
+  const msgParams = JSON.stringify({
+    types: {
+      EIP712Domain: [
+        { name: 'name', type: 'string' },
+        { name: 'version', type: 'string' },
+        { name: 'chainId', type: 'uint256' },
+      ],
+      AccessRequest: [
+        { name: 'userId', type: 'uint256' },
+        { name: 'message', type: 'string' }
+      ],
+    },
+    primaryType: 'AccessRequest',
+    domain: {
+      name: 'Telegram Group Access',
+      version: '1',
+      chainId: NETWORK_ID,
+    },
+    message: {
+      userId: userId,
+      message: message,
+    },
+  });
+
+  // ERC712 introduced the eth_signTypedData_v4 method, which is now widely supported by all the wallets
+  const signature = await ethereum.request({
+    method: "eth_signTypedData_v4",
+    params: [accounts[0], msgParams],
+  });
+
+  document.getElementById("signature").textContent="Signature: " + signature;
+
+  // Send the message to the telegram bot
+  await sendSignature(userId, message, signature);
+}
+
+// Send the signature to the telegram bot
+async function sendSignature(userId, message, signature) {
+  // Let's start by grouping the data to send to the telegram bot
+  const requestData = {
+    userId: userId,
+    message: message,
+    signature: signature
+  };
+
+  try {
+    // Send the data to the telegram bot by calling the /verify POST endpoint
+    // If the signature is valid, the bot will send a message to the user
+    const response = await fetch(BOT_API_URL + '/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    alert("Message sent successfully!");
+  } catch (error) {
+    console.error('Error:', error);
+    alert("Failed to send message: " + error.message);
+  }
+}
+```
+
+The `wallet_connection.js` file handles the wallet connection, it will pop up the wallet connection modal and reload the page when the wallet is changed.
+
+`wallet_connection.js`
+```js
+// CONSTANTS
+const NETWORK_ID = 534352
+var accounts
+var web3
+
+// If the wallet is changed, reload the page
+function metamaskReloadCallback() {
+  window.ethereum.on('accountsChanged', (accounts) => {
+    document.getElementById("web3_message").textContent="Se cambió el account, refrescando...";
+    window.location.reload()
+  })
+  window.ethereum.on('networkChanged', (accounts) => {
+    document.getElementById("web3_message").textContent="Se el network, refrescando...";
+    window.location.reload()
+  })
+}
+
+// Get the web3 instance
+const getWeb3 = async () => {
+  return new Promise((resolve, reject) => {
+    if(document.readyState=="complete")
+    {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum)
+        window.location.reload()
+        resolve(web3)
+      } else {
+        reject("must install MetaMask")
+        document.getElementById("web3_message").textContent="Error: Porfavor conéctate a Metamask";
+      }
+    }else
+    {
+      window.addEventListener("load", async () => {
+        if (window.ethereum) {
+          const web3 = new Web3(window.ethereum)
+          resolve(web3)
+        } else {
+          reject("must install MetaMask")
+          document.getElementById("web3_message").textContent="Error: Please install Metamask";
+        }
+      });
+    }
+  });
+};
+
+// Load the dapp, connect to the wallet and get the web3 instance
+async function loadDapp() {
+  metamaskReloadCallback()
+  document.getElementById("web3_message").textContent="Please connect to Metamask"
+  var awaitWeb3 = async function () {
+    web3 = await getWeb3()
+    web3.eth.net.getId((err, netId) => {
+      if (netId == NETWORK_ID) {
+        var awaitContract = async function () {
+          document.getElementById("web3_message").textContent="You are connected to Metamask"
+          web3.eth.getAccounts(function(err, _accounts){
+            accounts = _accounts
+            if (err != null)
+            {
+              console.error("An error occurred: "+err)
+            } else if (accounts.length > 0)
+            {
+              onWalletConnectedCallback()
+              document.getElementById("account_address").style.display = "block"
+            } else
+            {
+              document.getElementById("connect_button").style.display = "block"
+            }
+          });
+        };
+        awaitContract();
+      } else {
+        document.getElementById("web3_message").textContent="Please connect to Scroll";
+      }
+    });
+  };
+  awaitWeb3();
+}
+
+// Connect to the wallet
+async function connectWallet() {
+  await window.ethereum.request({ method: "eth_requestAccounts" })
+  accounts = await web3.eth.getAccounts()
+  onWalletConnectedCallback()
+}
+
+// Callback function when the wallet is connected, for this particular case, it's not used
+const onWalletConnectedCallback = async () => {
+}
+
+// Start the wallet connection
+loadDapp()
+```
+
+Install a web server library to run your dApp. I recommend lite-server.
+
+```
+npm install -g lite-server
+```
+
+Now, run the dApp by running the following command:
+
+```
+lite-server
+```
+
+Your dApp should be running on `http://127.0.0.1:3000`.
+
+## 4. Test the authentication
+
+Now, let's test the authentication.
+
+1. Send the `/authenticate` command to the bot.
+2. Sign the message in your wallet.
+3. Check the bot's response.
+
+<div className="text-center">
+  <img src="/images/contents/telegram-bot/tg_message.png" alt="TODO" />
+  _Using this flow makes it possible to authenticate users securely and do actions in their behalf without storing private keys._
+</div>
+
+## Next steps
+
+In this tutorial we have learned how to authenticate users in Telegram using a web3 wallet. We have used the ERC712 standard to sign the message and the `eth_signTypedData_v4` method to sign the message. We have also used the Telegram API to send the message to the user and receive the response. 
+
+In the next tutorial we will learn how to use the authentication to gatekeep a telegram group.
+
