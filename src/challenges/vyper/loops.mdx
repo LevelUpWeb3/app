@@ -1,0 +1,89 @@
+---
+name: Loops
+index: 14
+lesson: 14
+summary: Introduction to loops in Vyper
+labels: ["vyper"]
+---
+
+# Loops
+
+Loops are used to repeat a block of code multiple times. Vyper only uses `for` keyword to define loops.
+
+For loops can be used together with the `range` function. This allows looping over a fixed range.
+
+Vyper also have special statements to control `for` loop flow:
+
+- `break`: to terminate `for` loop.
+- `continue`: to start the next cycle of `for` loop in the code block.
+
+```python
+# pragma version 0.4.0
+
+# Function below loops and sum the elements from 0 to 9
+@external
+@pure
+def basic_sum_range() -> uint256:
+    total: uint256 = 0
+
+    for i: uint256 in range (10):
+        total += i
+
+    return total
+
+# Function with control statements
+@external
+@pure
+def controlled_sum_range() -> uint256:
+    total: uint256 = 0
+
+    for i: uint256 in range (10):
+
+        # Applying `break` here would return `total` = 10
+        # Applying `continue` here would return `total` = 40
+        if i == 5:
+            break
+        else:
+            total += i
+
+    return total
+
+# Function below evaluates sum of input in a fixed sized array of 5
+@external
+@pure
+def fixed_array_loop(arr: uint256[5]) -> uint256:
+    total: uint256 = 0
+
+    for i: uint256 in arr:
+        total += i
+
+    return total
+
+# Loop below is restricted by a bound size of 5 and it returns the final value of the loop before `higher_bound`
+@external
+@pure
+def for_loop_bound(lower_bound: uint256, higher_bound: uint256) -> uint256:
+    final_loop_value: uint256 = lower_bound
+
+    for i: uint256 in range(lower_bound, higher_bound, bound = 5):
+        final_loop_value = i
+
+    return final_loop_value
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators (wrt Solidity)</strong>
+  </summary>
+  <ul>
+    <li>
+      The `n` for `range(n)` must be a compile-time constant (meaning it cannot
+      be a variable).
+    </li>
+    <li>Vyper does not have `while` and `do-while` keywords for loops.</li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/latest/control-structures.html#for-loops)
