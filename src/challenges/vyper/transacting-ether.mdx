@@ -1,0 +1,75 @@
+---
+name: Transacting Ether
+index: 16
+lesson: 16
+summary: Introduction to transacting Ether on Vyper
+labels: ["vyper"]
+---
+
+# Transacting Ether
+
+Vyper has special [built-in functions](https://docs.vyperlang.org/en/stable/built-in-functions.html#) to help with transacting ether. The `send` keyword can be used to send Ether from the contract to a specified Ethereum address.
+
+The contract will also need to be marked as `@payable` to transact Ether.
+
+`EthSenderContract.vy`
+
+```python
+# pragma version 0.4.0
+
+balances: public(uint256)
+recipient_to_balances_mapping: HashMap[address, uint256]
+
+# General function to send Ether
+@external
+@payable
+def send_ether(_recipient: address, _amount: uint256):
+    assert _amount > 0, "Amount must be greater than zero"
+    send(_recipient, _amount)
+
+# You may also define `_gas` to attach it to the `send` function so state-altering functions can be invoked
+@external
+@payable
+def send_to_other_address(_recipient: address, _amount: uint256, _gas: uint256):
+    assert _amount > 0, "Amount must be greater than zero"
+
+    self.recipient_to_balances_mapping[_recipient] = _amount
+    self.balances += _amount
+    send(_recipient, _amount, gas=_gas)
+
+```
+
+`RecipientContract.vy`
+
+```python
+# pragma version 0.4.0
+
+interaction_count: public(uint256)
+
+event SendEtherEvent:
+    sender: indexed(address)
+    amount: uint256
+
+# The attached `_gas` from `send_to_other_address` used to change state
+@external
+@payable
+def __default__():
+    self.interaction_count += 1
+    log SendEtherEvent(msg.sender, msg.value)
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators (wrt Solidity)</strong>
+  </summary>
+  <ul>
+    <li>
+      Transacting Ether on Vyper is straightforward relative to Solidity's use
+      of different keywords like `transfer`, `call` and `send`.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs](https://docs.vyperlang.org/en/stable/built-in-functions.html#send)
