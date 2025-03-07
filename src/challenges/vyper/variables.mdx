@@ -41,7 +41,7 @@ STRING_VALUE: constant(String[13]) = "Hello, world!"
 
 @external
 @view
-def retrieveLocalVariable() -> (uint256):
+def retrieve_local_variable() -> (uint256):
 
     # Local Variables
     data: (uint256) = 123456
@@ -49,19 +49,19 @@ def retrieveLocalVariable() -> (uint256):
 
 @external
 @view
-def retrieveGlobalVariables() -> (address, uint256, bytes32):
+def retrieve_global_variables() -> (address, uint256, bytes32):
     block_coinbase: address = block.coinbase
     block_difficulty: uint256 = block.difficulty
     block_prevrandao: bytes32 = block.prevrandao
     return (block_coinbase, block_difficulty, block_prevrandao)
 
 @external
-def setSelfVariable():
+def set_self_variable():
     self.SUPPLY_AMOUNT = 999
 
 @external
 @view
-def viewSelfVariable() -> (uint256):
+def view_self_variable() -> (uint256):
     return self.SUPPLY_AMOUNT
 ```
 
