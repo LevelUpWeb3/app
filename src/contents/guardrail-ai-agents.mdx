@@ -20,7 +20,7 @@ However, a critical problem remains: the current meta of AI agents lacks verifia
 
 Zero Knowledge, provides two distinct capabilities: privacy and scalability.
 
-For this particular case, we’ll focus on the second one. It's currently impossible to verify on-chain the computation of a Machine Learning (ML) model by normal means because it's too expensive and in most cases won't even fit in a an Ethereum block. Instead, we’ll compute the ML model off-chain and use ZK to generate a proof of that computation. This proof can then be verified cheaply on-chain by a Solidity smart contract, ensuring trust without requiring full on-chain execution.
+For this particular case, we’ll focus on the second one. It's currently impossible to verify on-chain the computation of a Machine Learning (ML) model by normal means because it's too expensive and in most cases won't even fit in an Ethereum block. Instead, we’ll compute the ML model off-chain and use ZK to generate a proof of that computation. This proof can then be verified cheaply on-chain by a Solidity smart contract, ensuring trust without requiring full on-chain execution.
 
 ## Building a Verifiable Tipper AI Agent
 
@@ -46,7 +46,7 @@ EZKL provides convenient Google Colab notebooks to help you get started quickly.
 
 ## Step 0: Generate an AI model
 
-A model can, for example, decide who deserves a tip based who has the best comments on Farcaster, buy a token based on market conditions, or [mint an NFT based on your singing skills](https://cryptoidol.tech/). There are endless possibilities in terms of what an AI model can do on-chain.
+A model can, for example, decide who deserves a tip based on who has the best comments on Farcaster, buy a token based on market conditions, or [mint an NFT based on your singing skills](https://cryptoidol.tech/). There are endless possibilities in terms of what an AI model can do on-chain.
 
 In this example we'll keep it simple, we'll generate a model that just decides who deserves a `1000` token tip deterministically to an address provided.
 
@@ -159,7 +159,7 @@ res = ezkl.encode_evm_calldata(
         calldata,
     )
 
-# Optionally, print the the JSON data
+# Optionally, print the JSON data
 # print(res)
 
 # Convert the proof from json format to hexadecimal bytes
@@ -208,9 +208,9 @@ interface IERC20 {
     function transfer(address to, uint256 value) external returns (bool);
 }
 
-// The Tipper contract acts as a guardrail for the AI agent, only allows to perform an action is a valid ZKML proof was submitted
+// The Tipper contract acts as a guardrail for the AI agent, only allows to perform an action if a valid ZKML proof was submitted
 contract Tipper {
-    // Replace the following two address with the two contracts you just deployed
+    // Replace the following two addresses with the two contracts you just deployed
     address HALO2_VERIFIER = 0x84fBBc680F4aB4240e8cF6C488aEca03bfF91d2E;
     address TIP_TOKEN = 0x84fBBc680F4aB4240e8cF6C488aEca03bfF91d2E;
 
