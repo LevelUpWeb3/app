@@ -5,7 +5,7 @@ summary: Launch a Telegram bot and authenticate users by following the ERC712 st
 author: FilosofiaCodigo
 authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
 authorLink: https://x.com/FilosofiaCodigo
-published: Feb 13, 2024
+published: Mar 21, 2025
 readTime: 15 min read
 labels: ["Protocol", "Social"]
 ---
@@ -38,9 +38,9 @@ Creating a telegram bot is very simple, you can do it by sending a direct messag
 
 ## 2. Launch a Telegram bot backend
 
-Let's start by installing the dependencies:
+Let's start by installing the dependencies. But before that, make sure you have Node.js installed. I recommend using [nvm](https://github.com/nvm-sh/nvm) to install it. Once you have Node.js installed, you can install the dependencies with the following command:
 
-```
+```bash
 npm install node-telegram-bot-api ethers dotenv express cors
 ```
 
@@ -145,7 +145,7 @@ bot.on("message", async (msg) => {
         // userId is the user's id in telegram
         const userId = msg.from.id;
         // We send the user to the web dapp to authenticate
-        bot.sendMessage(WEB_DAPP_URL, userId, `Please visit: ${WEB_DAPP_URL}?userId=${userId}`);
+        bot.sendMessage(userId, `Please visit: ${WEB_DAPP_URL}?userId=${userId}`);
         return;
     }
 });
@@ -153,9 +153,9 @@ bot.on("message", async (msg) => {
 console.log("\nBot is running...");
 ```
 
-Now, start the bot by running the following command:
+Now, start the bot by running the following command in the same directory as the `bot.js` file:
 
-```
+```bash
 node bot.js
 ```
 
@@ -164,6 +164,12 @@ Your bot is now running on `http://127.0.0.1:8080`.
 In the next step we will create a web dApp that interacts with our bot.
 
 ## 3. Create a Web dApp to Sign Messages
+
+In this step we will create 3 files:
+
+- `index.html`: The HTML file that defines the wallet connection and the sign button.
+- `signature_messaging.js`: The file that defines how the message is signed and sent to the backend.
+- `wallet_connection.js`: The file that handles the wallet connection.
 
 The dApp will be a simple HTML file that has a _sign_ button that will pop up the user's wallet to sign a message.
 
@@ -389,13 +395,13 @@ loadDapp()
 
 Install a web server library to run your dApp. I recommend lite-server.
 
-```
+```bash
 npm install -g lite-server
 ```
 
-Now, run the dApp by running the following command:
+Now, run the dApp by running the following command in the same directory as the `index.html` file:
 
-```
+```bash
 lite-server
 ```
 
@@ -406,8 +412,8 @@ Your dApp should be running on `http://127.0.0.1:3000`.
 Now, let's test the authentication.
 
 1. Send the `authenticate` command to the bot.
-2. Sign the message in your wallet.
-3. Check the bot's response.
+2. Go to the website that the bot sent you, connect to Scroll Mainnet and sign the message with your wallet.
+3. Check the bot's response on Telegram.
 
 <div className="text-center">
   <img src="/images/contents/telegram-bot/tg_message.png" alt="TODO" />
