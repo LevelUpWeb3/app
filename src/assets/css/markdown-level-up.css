@@ -686,6 +686,11 @@
   .markdown-level-up ol {
     padding-left: 2rem;
   }
+
+  .code-viewer code[class*="language-"]::before,
+  .code-viewer code[class*="language-"]::after {
+    display: none !important;
+  }
 }
 
 @media screen and (min-width: 600px) and (max-width: 900px) {
