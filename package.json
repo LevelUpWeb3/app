@@ -46,7 +46,7 @@
     "mdx-mermaid": "^2.0.0",
     "mermaid": "^10.9.0",
     "next": "^14.2.18",
-    "next-mdx-remote": "^4.4.1",
+    "next-mdx-remote": "^5.0.0",
     "path-to-regexp": "^6.2.1",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
