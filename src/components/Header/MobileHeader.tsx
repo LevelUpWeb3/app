@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { Box, List, ListItem, Stack, SvgIcon, Typography } from "@mui/material";
 
-// import WalletToolkit from "@/components/WalletToolkit";
+import WalletToolkit from "@/components/WalletToolkit";
 
 import Logo from "../ScrollLogo";
 import { navigations } from "./constants";
@@ -53,7 +53,7 @@ const MobileHeader = () => {
             p: ["8px 20px", "8px 40px"],
             "&.active": { backgroundColor: "#fff" },
           }}
-          className={pathname.includes(item.key) ? "active" : ""}
+          className={pathname!.includes(item.key) ? "active" : ""}
           onClick={() => toggleDrawer(false)}
         >
           <Link href={item.href} className="flex w-full justify-between">
@@ -84,17 +84,18 @@ const MobileHeader = () => {
           height="64px"
           px={["20px", "40px"]}
         >
-          <Link href="/">
-            <Logo light={dark} />
-          </Link>
-          <MenuTrigger
-            sx={{ mr: "-8px" }}
-            isOpen={open}
-            onClick={() => toggleDrawer(!open)}
-          ></MenuTrigger>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "25px" }}>
+            <Link href="/">
+              <Logo light={dark} />
+            </Link>
+            <MenuTrigger
+              sx={{ mr: "-8px" }}
+              isOpen={open}
+              onClick={() => toggleDrawer(!open)}
+            ></MenuTrigger>
+          </Box>
 
-          {/* TODO: hidden temporarily */}
-          {/* <WalletToolkit dark={dark}></WalletToolkit> */}
+          <WalletToolkit dark={dark}></WalletToolkit>
         </Stack>
         {open && (
           <Box

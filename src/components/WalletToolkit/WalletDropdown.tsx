@@ -1,27 +1,15 @@
-import copy from "copy-to-clipboard";
-import { usePathname } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+"use client";
+import { useMemo, useState, useEffect } from "react";
 import { makeStyles } from "tss-react/mui";
+import { usePathname, useRouter } from "next/navigation";
 
-import {
-  ButtonBase,
-  Fade,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  SvgIcon,
-} from "@mui/material";
+import { Fade, ListItemText, Menu, MenuItem } from "@mui/material";
 import Button from "@/components/Button";
+import ProfileModal from "@/app/profile/components/ProfileModal";
 
-import CopySuccessSvg from "@/assets/svgs/bridge/copy-success.svg";
-import BlockSvg from "@/assets/svgs/wallet-connector/block.svg";
-import CopySvg from "@/assets/svgs/wallet-connector/copy.svg";
-import DisconnectSvg from "@/assets/svgs/wallet-connector/disconnect.svg";
-import DownTriangleSvg from "@/assets/svgs/wallet-connector/down-triangle.svg";
-import { CHAIN_ID, EXPLORER_URL } from "@/constants";
-import { useRainbowContext } from "@/contexts/RainbowProvider";
-import { generateExploreLink, truncateAddress } from "@/utils";
+import { usePrivy, useLogin } from "@privy-io/react-auth";
+import useProfileStore from "@/stores/profileStore";
+import useProgressStore from "@/stores/processStore";
 
 const useStyles = makeStyles<any>()((theme, { dark }) => ({
   button: {
@@ -57,14 +45,10 @@ const useStyles = makeStyles<any>()((theme, { dark }) => ({
     transform: "rotate(180deg)",
   },
   paper: {
-    borderRadius: "0.5rem",
-    border: dark
-      ? `1px solid ${(theme as any).vars.palette.primary.contrastText}`
-      : "none",
-    backgroundColor: dark
-      ? (theme as any).vars.palette.text.primary
-      : (theme as any).vars.palette.themeBackground.normal,
+    border: `1.5px solid ${(theme as any).vars.palette.text.primary}`,
+    backgroundColor: (theme as any).vars.palette.background.default,
     marginTop: "0.5rem",
+    borderRadius: "0",
   },
   list: {
     padding: 0,
@@ -83,17 +67,29 @@ const useStyles = makeStyles<any>()((theme, { dark }) => ({
     fontSize: "1.6rem",
     cursor: "pointer",
     color: dark ? (theme as any).vars.palette.primary.contrastText : "#473835",
+    fontWeight: "500",
   },
 }));
 
 const WalletDropdown = (props) => {
-  const { sx, dark } = props;
-  const { classes, cx } = useStyles({ dark });
+  const { dark } = props;
+  const { classes } = useStyles({ dark });
   const pathname = usePathname();
-
-  const { walletCurrentAddress, connect, disconnect, chainId } =
-    useRainbowContext();
-
+  const router = useRouter();
+  const { username, avatar, dialogOpen, setDialogOpen } = useProfileStore();
+  const { user, logout, authenticated, ready } = usePrivy();
+  const [isNewUser, setIsNewUser] = useState(false);
+  const { login } = useLogin({
+    onComplete: (user, isNewUser) => {
+      if (isNewUser) {
+        setIsNewUser(true);
+        setDialogOpen(true);
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [copied, setCopied] = useState(false);
 
@@ -108,63 +104,82 @@ const WalletDropdown = (props) => {
     setCopied(false);
   };
 
-  const viewScan = useCallback(() => {
-    window.open(
-      generateExploreLink(
-        EXPLORER_URL[chainId === CHAIN_ID.L1 ? "L1" : "L2"],
-        walletCurrentAddress,
-        "address",
-      ),
-    );
-  }, [walletCurrentAddress, chainId]);
+  const handleProfileModalClose = () => {
+    setIsNewUser(false);
+    setDialogOpen(false);
+  };
 
-  const copyAddress = useCallback(() => {
-    copy(walletCurrentAddress as string);
-    setCopied(true);
-  }, [walletCurrentAddress]);
+  const { initializeUserProfile } = useProfileStore();
+  const { initializeProgress } = useProgressStore();
+
+  useEffect(() => {
+    if (user) {
+      initializeUserProfile(user);
+      initializeProgress(user);
+    }
+  }, [user]);
 
   const operations = useMemo(
     () => [
       {
-        icon: BlockSvg,
-        label: "Block explorer",
-        action: viewScan,
-      },
-      {
-        icon: copied ? CopySuccessSvg : CopySvg,
-        label: "Copy address",
-        action: copyAddress,
-      },
-      {
-        icon: DisconnectSvg,
-        label: "Disconnect",
+        label: "View Profile",
         action: () => {
-          disconnect();
+          router.push("/profile");
+          handleClose();
+        },
+      },
+      {
+        label: "Log Out",
+        action: () => {
+          logout();
           handleClose();
         },
       },
     ],
-    [pathname, viewScan, copyAddress, copied, disconnect],
+    [pathname, copied],
   );
 
   return (
     <>
-      {chainId ? (
-        <ButtonBase
-          classes={{ root: classes.button }}
-          sx={sx}
+      {ready && authenticated ? (
+        <Button
           onClick={handleClick}
+          sx={(theme) => ({
+            [theme.breakpoints.down("sm")]: {
+              "&.MuiButtonBase-root": {
+                height: "3.2rem",
+                padding: "0 1rem 0.2rem",
+              },
+            },
+          })}
         >
-          {truncateAddress(walletCurrentAddress as string)}
-          <SvgIcon
-            className={cx(classes.endIcon, open && classes.reverseEndIcon)}
-            component={DownTriangleSvg}
-            inheritViewBox
-          ></SvgIcon>
-        </ButtonBase>
+          <img
+            src={avatar}
+            alt="User"
+            style={{
+              width: "24px",
+              height: "24px",
+              borderRadius: "50%",
+              marginRight: "8px",
+              objectFit: "cover",
+            }}
+          />
+          {username}
+        </Button>
       ) : (
-        <Button variant="contained" onClick={connect}>
-          Connect Wallet
+        <Button
+          variant="contained"
+          onClick={login}
+          sx={(theme) => ({
+            [theme.breakpoints.down("sm")]: {
+              "&.MuiButtonBase-root": {
+                height: "3.2rem",
+                padding: "0 1rem 0.2rem",
+              },
+            },
+          })}
+        >
+          Login
         </Button>
       )}
 
@@ -183,25 +198,23 @@ const WalletDropdown = (props) => {
         }}
         classes={{ paper: classes.paper, list: classes.list }}
       >
-        {operations.map(({ icon, label, action }) => (
+        {operations.map(({ label, action }) => (
           <MenuItem
             key={label}
             classes={{ root: classes.listItem }}
             onClick={action}
           >
-            <ListItemIcon classes={{ root: classes.listItemIcon }}>
-              <SvgIcon
-                sx={{ fontSize: "1.6rem" }}
-                component={icon}
-                inheritViewBox
-              ></SvgIcon>
-            </ListItemIcon>
             <ListItemText classes={{ primary: classes.listItemText }}>
               {label}
             </ListItemText>
           </MenuItem>
         ))}
       </Menu>
+      <ProfileModal
+        open={dialogOpen}
+        isNewUser={isNewUser}
+        onClose={handleProfileModalClose}
+      />
     </>
   );
 };

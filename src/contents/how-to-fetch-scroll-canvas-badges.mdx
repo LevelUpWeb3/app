@@ -1,0 +1,451 @@
+---
+name: "How to Fetch Scroll Canvas Badges"
+index: 12
+summary: Load Badges by querying EAS and the Scroll Canvas Profile Registry.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Jan 03, 2025
+readTime: 17 min read
+labels: ["Smart Contract", "Attestation"]
+---
+
+Scroll Canvas badges are stored permanently on-chain and can be accessed using open protocols. In this tutorial, we will fetch badges directly from Scroll Canvas contracts and display them on a locally hosted website.
+
+## Before you start: Learn about EAS, Badges and the Registry
+
+<div className="text-center">
+  <img src="/images/contents/how-to-fetch-scroll-canvas-badges/diagram.png" alt="matcha screenshot" />
+  _The step by step process to retrieve badge data._
+</div>
+
+The primary entry point for the Scroll Canvas contracts is the `ProfileRegistry` contract. This contract allows you to `mint` a profile, enabling you to set a username and associate it with your wallet address. Each profile is represented as a Scroll smart contract, whose address can be retrieved using the `getProfile` function.
+
+Once you have the profile contract address from a given ethereum account, you can call its `getValidBadges` function. This function returns a list of Ethereum Attestation Service (EAS) attestations for each badge. EAS provides a mechanism for verifying and attesting that specific claims are true, in this case, the issuance of badges by Scroll ecosystem projects.
+
+We will explore how to decode EAS data to extract the badge contract address. Each badge contract is a soulbound NFT, from which we can fetch metadata such as the badge name, description, and image. This information can then be displayed on the frontend to showcase the user's badges.
+
+## Step by step tutorial
+
+Let’s follow a step-by-step tutorial to display a user’s badges on a simple localhost website, using only the minimal code required.
+
+### Step 1: Get Badges Metadata
+
+Create the following file that returns the metadata array for all user badges.
+
+`scroll_badges.js`
+```js
+// Returns badge metadata from Etereum account
+const getBadgesData = async ({
+    web3,
+    account,
+    profileRegistryContract,
+    profileAbiPath,
+    badgeAbiPath,
+    easContract,
+}) => {
+    const badgesData = [];
+
+    // Fetch the profile contract address from the Scroll Canvas Profile Registry
+    let profileContractAddress = await profileRegistryContract.methods.getProfile(account).call();
+    let profileContract = await getContract(web3, profileContractAddress, profileAbiPath);
+
+    // Get all User's valid badges
+    const badges = await profileContract.methods.getValidBadges().call();
+
+    // Iterate over the badges to fetch their details
+    for (let i = 0; i < badges.length; i++) {
+        // The attestation returns all data encoded into a single byte array
+        let badgeAttestation = await easContract.methods.getAttestation(badges[i]).call();
+        let badgeAttestationData = badgeAttestation[badgeAttestation.length - 1];
+        // On this tutorial we'll only need the address encoded on the data. Let's extract it now
+        let badgeContractAddress = `0x${badgeAttestationData.slice(26, 66)}`;
+        // Now it's possible to load the contract and fetch the badge metadata url where name, description and image is stored
+        let badgeContract = await getContract(web3, badgeContractAddress, badgeAbiPath);
+        let tokenURI = await badgeContract.methods.badgeTokenURI(badges[i]).call();
+        
+        try {
+            // By fetching the token URI with a normal web2 GET we will be able to get all badge metadata
+            const response = await fetch(tokenURI);
+            const data = await response.json();
+
+            // We sture the badge metadata to be returned when this function ends
+            badgesData.push({
+                name: data.name,
+                description: data.description,
+                image: data.image,
+                badgeId: badges[i],
+                easScanLink: `https://scroll.easscan.org/attestation/view/${badges[i]}`
+            });
+        } catch (error) {
+            console.error(`Error fetching badge data for badge ID ${badges[i]}:`, error);
+        }
+    }
+
+    return badgesData;
+};
+
+```
+
+### Step 2: Initialize Web3 Contracts and Wallet
+
+Add the following file to initialize all the Web3 components your app needs. This demo uses web3.js, but you can achieve the same functionality with other Web3 frontend libraries like ethers.js or viem.
+
+`blockchain_stuff.js`
+```js
+// On this tutorial we're targeting Scroll Mainnet
+const NETWORK_ID = 534352
+
+// The following are the Canvas Profile Registry and EAS contracts
+const PROFILE_REGISTRY_ADDRESS = "0xB23AF8707c442f59BDfC368612Bd8DbCca8a7a5a"
+const EAS_ADDRESS = "0xC47300428b6AD2c7D03BB76D05A176058b47E6B0"
+
+const BADGE_ABI_PATH = "./json_abi/Badge.json"
+const EAS_ABI_PATH = "./json_abi/EAS.json"
+const PROFILE_ABI_PATH = "./json_abi/Profile.json"
+const PROFILE_REGISTRY_ABI_PATH = "./json_abi/ProfileRegistry.json"
+
+var profile_registry_contract
+var eas_contract
+
+var accounts
+var web3
+
+// Reload page if the user makes changes on metamask
+function metamaskReloadCallback() {
+  window.ethereum.on('accountsChanged', (accounts) => {
+    document.getElementById("web3_message").textContent="Account changed, reloading...";
+    window.location.reload()
+  })
+  window.ethereum.on('networkChanged', (accounts) => {
+    document.getElementById("web3_message").textContent="Network changed, reloading...";
+    window.location.reload()
+  })
+}
+
+// Initialize web3.js
+const getWeb3 = async () => {
+  return new Promise((resolve, reject) => {
+    if(document.readyState=="complete")
+    {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum)
+        window.location.reload()
+        resolve(web3)
+      } else {
+        reject("must install MetaMask")
+        document.getElementById("web3_message").textContent="Error: Please connect to Metamask";
+      }
+    }else
+    {
+      window.addEventListener("load", async () => {
+        if (window.ethereum) {
+          const web3 = new Web3(window.ethereum)
+          resolve(web3)
+        } else {
+          reject("must install MetaMask")
+          document.getElementById("web3_message").textContent="Error: Please install Metamask";
+        }
+      });
+    }
+  });
+};
+
+// Loads a contract given the address and abi
+const getContract = async (web3, address, abi_path) => {
+  const response = await fetch(abi_path);
+  const data = await response.json();
+  
+  const netId = await web3.eth.net.getId();
+  contract = new web3.eth.Contract(
+    data,
+    address
+    );
+  return contract
+}
+
+// Initialize contracts and wallet
+async function loadDapp() {
+  metamaskReloadCallback()
+  document.getElementById("web3_message").textContent="Please connect to Metamask"
+  var awaitWeb3 = async function () {
+    web3 = await getWeb3()
+    web3.eth.net.getId((err, netId) => {
+      if (netId == NETWORK_ID) {
+        var awaitContract = async function () {
+          profile_registry_contract = await getContract(web3, PROFILE_REGISTRY_ADDRESS, PROFILE_REGISTRY_ABI_PATH)
+          eas_contract = await getContract(web3, EAS_ADDRESS, EAS_ABI_PATH)
+          document.getElementById("web3_message").textContent="You are connected to Metamask"
+          web3.eth.getAccounts(function(err, _accounts){
+            accounts = _accounts
+            if (err != null)
+            {
+              console.error("An error occurred: "+err)
+            } else if (accounts.length > 0)
+            {
+              onWalletConnectedCallback()
+              document.getElementById("account_address").style.display = "block"
+            } else
+            {
+              document.getElementById("connect_button").style.display = "block"
+            }
+          });
+        };
+        awaitContract();
+      } else {
+        document.getElementById("web3_message").textContent="Please connect to Scroll Mainnet";
+      }
+    });
+  };
+  awaitWeb3();
+}
+
+// Loads a wallet
+async function connectWallet() {
+  await window.ethereum.request({ method: "eth_requestAccounts" })
+  accounts = await web3.eth.getAccounts()
+  onWalletConnectedCallback()
+}
+
+// This function is called when the user wallet is successfully connected
+const onWalletConnectedCallback = async () => {
+    const badgesData = await getBadgesData({
+        web3,
+        account: accounts[0],
+        profileRegistryContract: profile_registry_contract,
+        profileAbiPath: PROFILE_ABI_PATH,
+        badgeAbiPath: BADGE_ABI_PATH,
+        easContract: eas_contract,
+    });
+
+    const badgeContainer = document.getElementById('badge-container');
+    badgeContainer.innerHTML = '';
+
+    badgesData.forEach(badge => {
+        const badgeDiv = document.createElement('div');
+        badgeDiv.style.marginBottom = '20px'; 
+
+        // Create an image element
+        const imageElement = document.createElement('img');
+        imageElement.src = badge.image;
+        imageElement.alt = badge.name;
+        imageElement.style.maxWidth = '300px';
+
+        // Create a title and description
+        const titleElement = document.createElement('h3');
+        titleElement.textContent = badge.name;
+
+        const descriptionElement = document.createElement('p');
+        descriptionElement.textContent = badge.description;
+
+        // Create a link to EASScan
+        const easScanLink = document.createElement('a');
+        easScanLink.href = badge.easScanLink;
+        easScanLink.textContent = 'View on EASScan';
+
+        // Append the title, description, image, and EASScan link to the badge div
+        badgeDiv.appendChild(titleElement);
+        badgeDiv.appendChild(descriptionElement);
+        badgeDiv.appendChild(imageElement);
+        badgeDiv.appendChild(easScanLink);
+
+        // Append the badge div to the main badge container
+        badgeContainer.appendChild(badgeDiv);
+    });
+};
+
+// Kickstart the app
+loadDapp()
+```
+
+### Step 4: Create your HTML frontend
+
+Simple HTML file that will display the badges.
+
+`index.html`
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  <input id="connect_button" type="button" value="Connect" onclick="connectWallet()" style="display: none"></input>
+  <p id="account_address" style="display: none"></p>
+  <p id="web3_message"></p>
+  <div id="badge-container"></div>
+  <br>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.5/web3.min.js"></script>
+  <script type="text/javascript" src="blockchain_stuff.js"></script>
+  <script type="text/javascript" src="scrollBadges.js"></script>
+</body>
+</html>
+```
+
+### Step 4: Add your ABI
+
+Below are the ABI function entry points required for this tutorial. While the contracts include many additional functions, this tutorial focuses only on the ones essential for simplicity. Feel free to explore the full range of functionality on your own, I'll leave a link below with the complete APIs.
+
+`json_abi/Badge.json`
+```json
+[
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "uid",
+                "type": "bytes32"
+            }
+        ],
+        "name": "badgeTokenURI",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
+```
+
+`json_abi/EAS.json`
+```json
+[
+    {
+        "inputs": [
+        {
+            "internalType": "bytes32",
+            "name": "uid",
+            "type": "bytes32"
+        }
+        ],
+        "name": "getAttestation",
+        "outputs": [
+        {
+            "components": [
+            {
+                "internalType": "bytes32",
+                "name": "uid",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "schema",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint64",
+                "name": "time",
+                "type": "uint64"
+            },
+            {
+                "internalType": "uint64",
+                "name": "expirationTime",
+                "type": "uint64"
+            },
+            {
+                "internalType": "uint64",
+                "name": "revocationTime",
+                "type": "uint64"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "refUID",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "attester",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "revocable",
+                "type": "bool"
+            },
+            {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+            }
+            ],
+            "internalType": "struct Attestation",
+            "name": "",
+            "type": "tuple"
+        }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
+```
+
+`json_abi/Profile.json`
+```json
+[
+    {
+        "inputs": [],
+        "name": "getValidBadges",
+        "outputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "",
+                "type": "bytes32[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
+```
+
+`json_abi/ProfileRegistry.json`
+```json
+[
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "getProfile",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
+```
+
+### Step 5: Run the local server
+
+```bash
+# Install lite server if you haven't it
+npm i -g lite-server
+# Run the local server
+lite-server
+```
+
+Now on your browser, got to `http://localhost:3000` and connect your wallet. All your badges should be visible now.
+
+<div className="text-center">
+  <img src="/images/contents/how-to-fetch-scroll-canvas-badges/final-result.png" alt="matcha screenshot" />
+  _You will be able to see your badges once you run your server locally and connect your wallet_
+</div>
+
+Thank you for following this tutorial! Be sure to explore the [Scroll Canvas Contracts](https://github.com/scroll-tech/canvas-contracts) and the [EAS documentation](https://docs.attest.org/docs/welcome) for the full API that your app can access.

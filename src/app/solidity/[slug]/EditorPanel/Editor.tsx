@@ -5,14 +5,16 @@ import { useParams } from "next/navigation";
 import CodeEditor from "./CodeEditor";
 import DiffEditorComponent from "./DiffEditor";
 import SubmitButton from "./SubmitButton";
-import CongratualtionModal from "./CongratualtionModal";
+import CongratulationModal from "./CongratulationModal";
 import { CODE_SOLUTIONS } from "@/constants/solidity/code-solutions";
 import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
+import { useMessage } from "@/contexts/MessageProvider";
 
 import { Box, Stack } from "@mui/material";
 
 import Button from "@/components/Button";
 import EditorTooltip from "@/components/EditorTooltip";
+import useProgressStore from "@/stores/processStore";
 
 const Editor = ({
   data,
@@ -20,13 +22,16 @@ const Editor = ({
   completedExerciseNumber,
   onComplete,
 }) => {
+  const showMessage = useMessage();
   const [code, setCode] = useState("");
   const [tries, setTries] = useState<number>(0);
   const [editorType, setEditorType] = useState<"code" | "solution">("code");
 
+  const { updateLessonProgress, lessonLoading } = useProgressStore();
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
 
   const lessonId = slug as string;
 
@@ -42,11 +47,17 @@ const Editor = ({
     return { codeSolution: "", codeTemplate: "" };
   }, [lessonId, exercise]);
 
-  const handleSubmitCode = (isCorrect: boolean) => {
+  const handleSubmitCode = async (isCorrect: boolean) => {
     if (isCorrect) {
       const currentExerciseNumber = parseInt(exercise.replace("exercise", ""));
       if (currentExerciseNumber > completedExerciseNumber) {
-        onComplete(currentExerciseNumber);
+        try {
+          await updateLessonProgress(lessonId, currentExerciseNumber);
+          onComplete(currentExerciseNumber);
+        } catch (error) {
+          showMessage(error.message, "error");
+          console.error("Failed to update lesson progress:", error);
+        }
       } else {
         onComplete(currentExerciseNumber, false);
       }
@@ -63,14 +74,14 @@ const Editor = ({
   };
 
   useEffect(() => {
-    if (completedExerciseNumber === 5) {
+    if (completedExerciseNumber === 5 && exercise === "exercise6") {
       setIsModalOpen(true);
     }
   }, [completedExerciseNumber]);
 
   return (
     <Box sx={{ position: "relative", backgroundColor: "#232323" }}>
-      <CongratualtionModal
+      <CongratulationModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         name={data.name}
@@ -155,6 +166,7 @@ const Editor = ({
               code={code}
               codeSolution={codeSolution}
               onSubmission={handleSubmitCode}
+              loading={lessonLoading}
             />
           </>
         )}

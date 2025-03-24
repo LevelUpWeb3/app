@@ -65,6 +65,7 @@ const MoreContentSlide = async (props) => {
             className="flex-1 sm:flex-[0_0_60%] md:flex-[0_0_45%] lg:flex-[0_0_450px]"
             key={index}
             content={item}
+            baseURL="/content"
           />
         ))}
       </Stack>

@@ -1,4 +1,4 @@
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Box, Chip, Stack, Typography, SvgIcon } from "@mui/material";
 
 import Button from "@/components/Button";
 import Tooltip from "@/components/EditorTooltip";
@@ -8,6 +8,7 @@ import Link from "next/link";
 import XSvg from "@/assets/svgs/socials/x.svg";
 import TelegramSvg from "@/assets/svgs/socials/telegram.svg";
 import { generateShareTwitterURL } from "@/utils";
+import ChallengeStatus from "./ChallengeStatus";
 
 const ChallengeDetail = (props) => {
   const { challengeData, ...restProps } = props;
@@ -21,36 +22,41 @@ const ChallengeDetail = (props) => {
   return (
     <Box {...restProps}>
       <Stack
-        direction="column"
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
         spacing="10px"
-        sx={{ width: ["100%", "100%", "50%"] }}
+        sx={{ width: ["100%", "100%", "100%"] }}
       >
-        <Stack direction="row" spacing="8px">
-          {combinedLabels.map((label) => (
-            <Chip
-              sx={{
-                backgroundColor: "themeBackground.brand",
-                borderRadius: "6px",
-                p: "5px 10px",
-                height: "28px",
-                transform: "translateY(0.125em)",
-                [`.MuiChip-label`]: {
-                  fontSize: ["14px"],
-                  fontWeight: 500,
-                  p: 0,
-                },
-              }}
-              key={label}
-              label={label}
-            ></Chip>
-          ))}
+        <Stack spacing="10px" flex="1">
+          <Stack direction="row" spacing="8px">
+            {combinedLabels.map((label) => (
+              <Chip
+                sx={{
+                  backgroundColor: "themeBackground.brand",
+                  borderRadius: "6px",
+                  p: "5px 10px",
+                  height: "28px",
+                  transform: "translateY(0.125em)",
+                  [`.MuiChip-label`]: {
+                    fontSize: ["14px"],
+                    fontWeight: 500,
+                    p: 0,
+                  },
+                }}
+                key={label}
+                label={label}
+              ></Chip>
+            ))}
+          </Stack>
+          <Typography sx={{ fontSize: ["36px", "48px"], pt: "0.3em" }}>
+            {challengeData.name}
+          </Typography>
+          <Typography sx={{ fontSize: ["16px", "24px"] }}>
+            {challengeData.summary}
+          </Typography>
         </Stack>
-        <Typography sx={{ fontSize: ["36px", "48px"], pt: "0.3em" }}>
-          {challengeData.name}
-        </Typography>
-        <Typography sx={{ fontSize: ["16px", "24px"] }}>
-          {challengeData.summary}
-        </Typography>
+        <ChallengeStatus />
       </Stack>
       <Stack
         direction={["column", "row"]}

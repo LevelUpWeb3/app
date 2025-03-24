@@ -70,7 +70,7 @@ const List = (props) => {
           onChange={(e) => handleChangeSearchParams(e.target.value, "time")}
         ></PlainSelect>
         <PlainSelect
-          sx={{ width: ["180px", "190px"], minWidth: "170px" }}
+          sx={{ width: ["180px", "200px"], minWidth: "176px" }}
           data={EVENTS_REGION_LIST}
           value={searchParams.region}
           onChange={(e) => handleChangeSearchParams(e.target.value, "region")}
