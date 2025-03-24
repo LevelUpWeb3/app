@@ -15,8 +15,8 @@ import Link from "next/link";
 const CongratulationModal = (props) => {
   const { onClose, name, sx, ...restProps } = props;
 
-  const warpcastText = `I have successfully completed all five ${name} Vyper challenges in Level Up! Join me in my conquest to level up at levelup.xyz/!`;
-  const twitterText = `I have successfully completed all five ${name} Vyper challenges in @levelupweb3! Join me in my conquest to level up at levelup.xyz/!`;
+  const warpcastText = `I have successfully completed all five ${name} Vyper challenges in Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
+  const twitterText = `I have successfully completed all five ${name} Vyper challenges in @levelupweb3! Join me in my conquest to level up at levelupweb3.xyz/!`;
 
   const MEDIA_LIST = [
     {
@@ -27,7 +27,7 @@ const CongratulationModal = (props) => {
     {
       key: "Warpcast",
       icon: WarpcastSvg,
-      link: `https://warpcast.com/~/compose?text=${encodeURIComponent(warpcastText)}&embeds[]=levelup.xyz`,
+      link: `https://warpcast.com/~/compose?text=${encodeURIComponent(warpcastText)}&embeds[]=levelupweb3.xyz`,
     },
   ];
 
@@ -79,7 +79,7 @@ const CongratulationModal = (props) => {
             textAlign: "center",
           }}
         >
-          Congratulations on leveling up!
+          Congratualtions on leveling up!
         </Typography>
         <Typography sx={{ fontSize: "16px", textAlign: "center", mt: "-10px" }}>
           You have completed <span className="font-medium">{name}</span>{" "}

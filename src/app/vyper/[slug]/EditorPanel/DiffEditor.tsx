@@ -30,7 +30,7 @@ const DiffEditorComponent = ({ code, codeSolution }: DiffEditorProps) => {
           folding: false,
           onlyShowAccessibleDiffViewer: true,
           lineNumbersMinChars: 2,
-          scrollBeyondLastLine: true,
+          scrollBeyondLastLine: false,
           automaticLayout: true,
         }}
       />

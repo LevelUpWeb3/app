@@ -1,7 +1,7 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { SyntheticEvent, useMemo } from "react";
 import EditorTooltip from "@/components/EditorTooltip";
-import { CODE_EXERCISES } from "@/constants/vyper/code-exercises";
+import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
 
 import clsx from "clsx";
 import { useParams } from "next/navigation";
@@ -13,7 +13,7 @@ const getExerciseNumber = (exerciseKey) => {
 const ExerciseTabs = (props) => {
   const { value, onChange, completedExerciseNumber } = props;
 
-  const { slug } = useParams();
+  const { slug } = useParams() as { slug: string };
   const lessonId = slug as string;
 
   const EXERCISE_LIST = useMemo(() => {
@@ -37,7 +37,6 @@ const ExerciseTabs = (props) => {
     }
     onChange(newValue);
   };
-
   return (
     <Box
       sx={{
