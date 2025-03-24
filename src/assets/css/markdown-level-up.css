@@ -689,6 +689,7 @@
 
   .code-viewer code[class*="language-"]::before,
   .code-viewer code[class*="language-"]::after {
+    content: none !important;
     display: none !important;
   }
 }
