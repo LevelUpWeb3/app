@@ -6,8 +6,8 @@ import CodeEditor from "./CodeEditor";
 import DiffEditorComponent from "./DiffEditor";
 import SubmitButton from "./SubmitButton";
 import CongratulationModal from "./CongratulationModal";
-import { CODE_SOLUTIONS } from "@/constants/solidity/code-solutions";
-import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
+import { CODE_SOLUTIONS } from "@/constants/vyper/code-solutions";
+import { CODE_EXERCISES } from "@/constants/vyper/code-exercises";
 import { useMessage } from "@/contexts/MessageProvider";
 
 import { Box, Stack } from "@mui/material";

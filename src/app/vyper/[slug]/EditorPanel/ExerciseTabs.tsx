@@ -1,7 +1,7 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { SyntheticEvent, useMemo } from "react";
 import EditorTooltip from "@/components/EditorTooltip";
-import { CODE_EXERCISES } from "@/constants/solidity/code-exercises";
+import { CODE_EXERCISES } from "@/constants/vyper/code-exercises";
 
 import clsx from "clsx";
 import { useParams } from "next/navigation";
