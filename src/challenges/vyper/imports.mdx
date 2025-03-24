@@ -1,0 +1,79 @@
+---
+name: Imports
+index: 19
+lesson: 19
+summary: Introduction to import Vyper files to your codebase
+labels: ["vyper"]
+---
+
+# Imports
+
+The import statements allow us to import Vyper code using the `import` or `from ... import` syntax.
+
+Example of file structure:
+
+```bash
+├── YourContract.vy
+└── HelperContract.vy
+```
+
+`HelperContract.vy`
+
+```python
+# pragma version 0.4.0
+
+@external
+@pure
+def addition_function(x: uint256, y: uint256) -> uint256:
+    return x + y
+```
+
+`YourContract.vy`
+
+```python
+import HelperContract                  # accessed as `HelperContract`
+
+# Alternatives to importing `HelperContract.vy`
+# import HelperContract as hc            --> accessed as `hc`
+# from . import HelperContract           --> accessed as `HelperContract`
+# from . import HelperContract as hc     --> accessed as `ex`
+
+@external
+def calculate_sum(x: uint256, y: uint256) -> uint256:
+    return HelperContract.addition_function(x, y)
+
+```
+
+Vyper also includes built-in interfaces such as [IERC20](https://eips.ethereum.org/EIPS/eip-20) and [IERC721](https://eips.ethereum.org/EIPS/eip-721) in its language. These can be imported from `ethereum.ercs`.
+
+```python
+from ethereum.ercs import IERC20
+
+implements: IERC20
+
+balance_of_address: public(HashMap[address, uint256])
+
+# Example of `transfer` function accessing `IERC20` interface
+@external
+def transfer(_to: address, _value: uint256) -> bool:
+
+    self.balanceOf[msg.sender] -= _value
+    self.balanceOf[_to] += _value
+    log IERC20.Transfer(msg.sender, _to, _value)
+    return True
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>You can assign alias to the imported contract using `as` keyword.</li>
+    <li>Vyper has built-in interfaces</li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper - Imports](https://docs.vyperlang.org/en/latest/structure-of-a-contract.html#imports)
+- [Vyper Built-in Interfaces](https://docs.vyperlang.org/en/latest/interfaces.html#built-in-interfaces)

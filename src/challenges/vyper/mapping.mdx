@@ -1,0 +1,37 @@
+---
+name: Mapping
+index: 7
+lesson: 7
+summary: Introduction to Vyper mapping
+labels: ["vyper"]
+---
+
+# Mapping
+
+Mappings are data structures known has [hash tables](https://en.wikipedia.org/wiki/Hash_table), that associate keys with values. They are declared as `HashMap[KeyType, ValueType]`.
+
+To look up a mapping value, you will need to use the `keccak256` hash of the key data.
+
+Note that mappings can only be declared as state variables.
+
+```python
+# pragma version 0.4.0
+
+# Notice you will need to define mapping variable using `HashMap` keyword
+mapping_example: HashMap[uint256, String[100]]
+
+# Example below maps key value "1" to "Hello, World!"
+@external
+def set_mapping_pair():
+    self.mapping_example[1] = "Hello, World!"
+
+# Pass argument of "1" to deployed function below to view response
+@external
+@view
+def get_mapping_value(x: uint256) -> String[100]:
+    return self.mapping_example[x]
+```
+
+### Further Reading:
+
+- [Vyper Lang - Mapping](https://docs.vyperlang.org/en/stable/types.html#mappings)

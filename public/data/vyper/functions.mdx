@@ -1,0 +1,82 @@
+---
+name: Functions
+index: 11
+lesson: 11
+summary: Introduction to Vyper functions
+labels: ["vyper"]
+---
+
+# Functions
+
+Functions are executable units of code defined in a contract. It can be accessed internally or externally depending on their [visibility](https://docs.vyperlang.org/en/latest/control-structures.html#visibility).
+
+Vyper has two unique function declaration:
+
+- `__init__`: Constructor function which is only invoked during contract deployment.
+- `__default__`: Fallback function to handle undefined calls within a contract.
+
+```python
+# pragma version 0.4.0
+
+example_integer: public(uint256)
+example_string: public(String[100])
+
+# Example of constructor function from Mutability lesson
+@deploy
+@payable
+def __init__():
+    self.example_integer = 534532
+
+# Function example which modifies state
+@external
+def updateString(new_string: String[100]):
+    self.example_string = new_string
+
+# Example of pure function to test addition function without modifying state
+@external
+@pure
+def purelyAddingFunction(x: uint256, y: uint256) -> uint256:
+    return x + y
+
+# Example of getter function
+@external
+@view
+def getExampleInteger() -> uint256:
+    return self.example_integer
+```
+
+`__default__` function
+
+```python
+event FallbackEventLog:
+    amount: uint256
+    sender: indexed(address)
+
+# Default (fallback) function must always be annotated with `@external`
+# If the function has `@payable` decorator, it will be triggered when the contract receives Ether without data
+@external
+@payable
+def __default__():
+    log FallbackEventLog(msg.value, msg.sender)
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>The `__default__()` function cannot accept arguments.</li>
+  </ul>
+  <ul>
+    <li>
+      Vyper offers a collection of built-in functions used for bitwise
+      operations, chain interactions, and many more which are worth exploring.
+      Refer to the further reading section below for more details.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs - Functions](https://docs.vyperlang.org/en/latest/control-structures.html#functions)
+- [Vyper Lang Built-in Functions](https://docs.vyperlang.org/en/latest/built-in-functions.html#built-in-functions)

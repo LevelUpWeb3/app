@@ -48,7 +48,7 @@ const MDXCodeHighlighter = (theme = "dark"): MDXComponents => {
                   'code[class*="language-"]': {
                     ...defaultStyle['code[class*="language-"]'],
                     fontFamily: "'Fira Code', monospace",
-                    whiteSpace: "wrap",
+                    whiteSpace: "pre",
                     background: "transparent",
                   },
                 }}

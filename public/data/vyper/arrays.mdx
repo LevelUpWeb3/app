@@ -1,0 +1,70 @@
+---
+name: Arrays
+index: 6
+lesson: 6
+summary: Introduction to Vyper arrays
+labels: ["vyper"]
+---
+
+# Arrays
+
+Arrays can be defined with a fixed size at compile time, or they can be dynamically sized.
+
+Fixed size arrays are declared by specifying size `k` in data type `T`. This is written as `T[k]`.
+
+```python
+# pragma version 0.4.0
+
+# Define array with fixed size
+fixed_array: uint256[5]
+
+@external
+def setFixedArray():
+    self.fixed_array = [1,2,3,4,5]
+
+@external
+@view
+def getFixedArray() -> uint256[5]:
+    return self.fixed_array
+```
+
+> ℹ️ Note
+>
+> Avoid defining an array with size larger than `2**64` as this can result in security vulnerabilities due to risk of overflow.
+
+Dynamic arrays length can be modified at runtime, up to a bound specified in the type declaration. This is written as `dynArrayVariable: DynArray[T, k]`.
+
+```python
+# pragma version 0.4.0
+
+# Notice you will need to define the size of the dynamic array using `DynArray` keyword
+dynamicArrayList: DynArray[uint256, 5]
+
+@deploy
+def __init__():
+    self.dynamicArrayList.append(100)
+    self.dynamicArrayList.append(200)
+    self.dynamicArrayList.append(300)
+    self.dynamicArrayList.append(400)
+    self.dynamicArrayList.append(500)
+    # In this example, appending more than 5 elements would revert
+
+@external
+@view
+def getDynamicArray() -> uint256[5]:
+    return self.dynamicArrayList
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>Requires explicit specification of size of arrays at compile time.</li>
+    <li>This applies to both fixed and dynamic array.</li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang - Arrays](https://docs.vyperlang.org/en/stable/types.html#fixed-size-lists)

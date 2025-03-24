@@ -510,6 +510,13 @@
 .markdown-level-up-light pre code::before {
   content: normal;
 }
+
+.code-viewer code[class*="language-"]::before,
+.code-viewer code[class*="language-"]::after {
+  content: none !important;
+  display: none !important;
+}
+
 .markdown-level-up-light .full-commit .btn-outline:not(:disabled):hover {
   color: #005cc5;
   border-color: #005cc5;

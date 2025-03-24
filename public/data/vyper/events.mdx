@@ -1,0 +1,51 @@
+---
+name: Events
+index: 17
+lesson: 17
+summary: Introduction to Vyper events
+labels: ["vyper"]
+---
+
+# Events
+
+Vyper emits up to five event logs. Each log contains both topics and data.
+
+- Topics (indexed arguments) are 32-byte description used to describe an event.They can be queried by listeners,and are identified by the `indexed` keyword.
+- Data (value arguments) do not have limitations. They can be complex data structures like arrays or strings.
+
+Important thing to remember is that events are not stored in the state. They are only available to clients.
+
+> ℹ️ Note
+>
+> Like Solidity, the first topic of the log record stores the event signature.
+
+```python
+# pragma version 0.4.0
+
+event SendEtherEvent:
+    sender: indexed(address)
+    recipient: indexed(address)
+    value: uint256
+
+@external
+@payable
+def sendEther(_recipient: address, _amount: uint256):
+    assert _amount > 0, "Amount must be greater than 0"
+    send(_recipient, _amount)
+
+    # Emit event log
+    log SendEtherEvent(msg.sender, _recipient, _amount)
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>Vyper event does not use `emit` but use `log`.</li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang - Events](https://docs.vyperlang.org/en/latest/event-logging.html#event-logging)

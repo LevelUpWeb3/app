@@ -1,0 +1,192 @@
+[
+  {
+    "id": "data-types",
+    "name": "Data Types",
+    "index": 1,
+    "lesson": 1,
+    "summary": "Introduction to Vyper data types",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "operator",
+    "name": "Operator",
+    "index": 2,
+    "lesson": 2,
+    "summary": "Introduction to Vyper operators",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "constants",
+    "name": "Constants",
+    "index": 3,
+    "lesson": 3,
+    "summary": "Introduction to Vyper constants",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "immutable",
+    "name": "Immutable",
+    "index": 4,
+    "lesson": 4,
+    "summary": "Introduction to immutable keyword in Vyper",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "variables",
+    "name": "Variables",
+    "index": 5,
+    "lesson": 5,
+    "summary": "Introduction to Vyper variables",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "arrays",
+    "name": "Arrays",
+    "index": 6,
+    "lesson": 6,
+    "summary": "Introduction to Vyper arrays",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "mapping",
+    "name": "Mapping",
+    "index": 7,
+    "lesson": 7,
+    "summary": "Introduction to Vyper mapping",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "visibility",
+    "name": "Visibility",
+    "index": 8,
+    "lesson": 8,
+    "summary": "Introduction to function visibility in Vyper",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "mutability",
+    "name": "Mutability",
+    "index": 9,
+    "lesson": 9,
+    "summary": "Introduction to Vyper mutability",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "interface",
+    "name": "Interface",
+    "index": 10,
+    "lesson": 10,
+    "summary": "Introduction to Vyper interface",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "functions",
+    "name": "Functions",
+    "index": 11,
+    "lesson": 11,
+    "summary": "Introduction to Vyper functions",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "structs",
+    "name": "Structs",
+    "index": 12,
+    "lesson": 12,
+    "summary": "Introduction to Vyper structs",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "conditional-statements",
+    "name": "Conditional Statements",
+    "index": 13,
+    "lesson": 13,
+    "summary": "Introduction to Vyper conditional statements",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "loops",
+    "name": "Loops",
+    "index": 14,
+    "lesson": 14,
+    "summary": "Introduction to loops in Vyper",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "assertions-and-exceptions",
+    "name": "Assertions and Exceptions",
+    "index": 15,
+    "lesson": 15,
+    "summary": "Introduction to Vyper assertions and exceptions",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "transacting-ether",
+    "name": "Transacting Ether",
+    "index": 16,
+    "lesson": 16,
+    "summary": "Introduction to transacting Ether on Vyper",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "events",
+    "name": "Events",
+    "index": 17,
+    "lesson": 17,
+    "summary": "Introduction to Vyper events",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "reentrancy-locks",
+    "name": "Reentrancy Locks",
+    "index": 18,
+    "lesson": 18,
+    "summary": "Introduction to Vyper's built-in Reentrancy locks",
+    "labels": [
+      "vyper"
+    ]
+  },
+  {
+    "id": "imports",
+    "name": "Imports",
+    "index": 19,
+    "lesson": 19,
+    "summary": "Introduction to import Vyper files to your codebase",
+    "labels": [
+      "vyper"
+    ]
+  }
+]

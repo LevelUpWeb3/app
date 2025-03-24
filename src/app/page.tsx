@@ -40,31 +40,12 @@ const Home = () => {
             Level Up is your platform to learn solidity, build real projects,
             and find opportunities to build the future of Ethereum.
           </Typography>
-
-          <Button href="/solidity">Learn Solidity</Button>
+          <div className="flex gap-4">
+            <Button href="/solidity">Learn Solidity</Button>
+            <Button href="/vyper">Learn Vyper</Button>
+          </div>
         </Stack>
       </PageHeaderWrapper>
-      {/* <Box
-        sx={{
-          pt: ["124px", "159px"],
-          pb: ["30px", "60px"],
-          mt: ["-64px", "-75px"],
-          backgroundColor: "themeBackground.brand",
-        }}
-      >
-        <Container
-          sx={{
-            background: [
-              'url("/images/landing/hero-mobile.svg") right bottom 30px / auto 158px no-repeat',
-              'url("/images/landing/hero-mobile.svg") right bottom 30px / 85% auto no-repeat',
-              'url("/images/landing/hero.svg") right bottom 38px / 75% auto no-repeat',
-              'url("/images/landing/hero.svg") right bottom 38px / auto 313px no-repeat',
-            ],
-          }}
-        >
-          
-        </Container>
-      </Box> */}
 
       <Box className="bg-[#edfbfd]">
         <Container>

@@ -5,6 +5,11 @@ const navigations = [
     href: "/solidity",
   },
   {
+    label: "Vyper",
+    key: "vyper",
+    href: "/vyper",
+  },
+  {
     label: "Content",
     key: "content",
     href: "/content",
@@ -14,11 +19,6 @@ const navigations = [
     key: "challenges",
     href: "/challenges",
   },
-  // {
-  //   label: "Podcast",
-  //   key: "podcast",
-  //   href: "/podcast",
-  // },
   {
     label: "Events",
     key: "events",

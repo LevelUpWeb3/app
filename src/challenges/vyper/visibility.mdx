@@ -1,0 +1,64 @@
+---
+name: Visibility
+index: 8
+lesson: 8
+summary: Introduction to function visibility in Vyper
+labels: ["vyper"]
+---
+
+# Visibility
+
+Vyper have three types of decorator to declare a function's visibility.
+
+- @internal (default): can only be invoked within iself. The naming convention is to use `_` prefix.
+- @external: allows external calls into this contract
+- @deploy: invoked once during contract deployment
+
+```python
+# pragma version 0.4.0
+
+# Using mapping example to demonstrate visibility decorators
+mapping_example: HashMap[uint256, String[100]]
+
+@deploy
+def __init__():
+    self.mapping_example[0] = "Deploy Decorator"
+
+# This is an internal function that is invoked only when `setMappingPairOneAndTwo` is called
+def _setMappingPairOne():
+    self.mapping_example[1] = "Internal Decorator"
+
+# Example below maps key value "1" to "Hello, World!"
+@external
+def setMappingPairOneAndTwo():
+    self._setMappingPairOne()
+    self.mapping_example[2] = "External Decorator"
+
+# Only mapping_example[0] will have a value after contract deployment
+# mapping_example[1] and mapping_example[2] will only have values after calling `setMappingPairOneAndTwo`
+@external
+@view
+def viewMappingValue(x: uint256) -> String[100]:
+    return self.mapping_example[x]
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>
+      Do not need to explicitly declare `@internal` decorator as it is the
+      default.
+    </li>
+    <li>
+      You will need to use `@deploy` decorator together with `__init__()`
+      function to invoke the constructor. This is equivalent to Solidity's
+      `constructor` keyword.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang Docs - Visibility](https://docs.vyperlang.org/en/latest/control-structures.html#visibility)

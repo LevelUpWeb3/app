@@ -16,7 +16,7 @@ interface RootTemplateProps {
  */
 export default function RootTemplate({
   children,
-  announcementVisible = true,
+  announcementVisible = false,
 }: RootTemplateProps) {
   return (
     <main className="level-up-body">

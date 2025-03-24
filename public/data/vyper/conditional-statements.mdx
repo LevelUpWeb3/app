@@ -1,0 +1,58 @@
+---
+name: Conditional Statements
+index: 13
+lesson: 13
+summary: Introduction to Vyper conditional statements
+labels: ["vyper"]
+---
+
+# Conditional Statements
+
+Vyper uses the `if` , `elif`, and `else` statements to control flow for conditional logic.
+
+Conditions are evaluated from left-to-right, an expression at a time, until the logic is found to be `true` or `false`.
+
+```python
+# pragma version 0.4.0
+
+# Notice that the syntax for defining `bool` output must have the words "True" or "False" start with first letter capitalised
+@external
+@pure
+def check_less_than_ten(x: uint256) -> bool:
+    if (x < 10):
+        return True
+    else:
+        return False
+
+@external
+@pure
+def check_multiple_conditions(y: uint256) -> uint256:
+    if (y < 5):
+        return 1
+    elif (y == 5):
+        return 2
+    else:
+        return 3
+
+@external
+@pure
+def ternary_syntax(z: uint256) -> bool:
+    return True if z < 5 else False
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>
+      Vyper ternary operators start with defining the truthy output, then
+      condition logic, and followed by falsy output. It does not use `?` and `:`
+      operator.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang - Conditional Statements](https://docs.vyperlang.org/en/latest/control-structures.html#if-statements)
