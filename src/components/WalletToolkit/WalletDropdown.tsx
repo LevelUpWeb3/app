@@ -72,6 +72,13 @@ const useStyles = makeStyles<any>()((theme, { dark }) => ({
 }));
 
 const WalletDropdown = (props) => {
+  if (!process.env.NEXT_PUBLIC_PRIVY_APP_ID) {
+    return (
+      <div>
+        <span>Privy is not configured</span>
+      </div>
+    );
+  }
   const { dark } = props;
   const { classes } = useStyles({ dark });
   const pathname = usePathname();
