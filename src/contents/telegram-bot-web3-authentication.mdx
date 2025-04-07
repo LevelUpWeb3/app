@@ -12,7 +12,7 @@ labels: ["Protocol", "Social"]
 
 Telegram has around a billion active users per month and is a fundamental part of Web3 products and communities. However, many Telegram bots still rely on insecure interaction methods.
 
-By completing this guide, you'll improve user engagement and community building for your Web3 product by offering an interface over Telegram. This tutorial will show you how to authenticate Telegram users with their Web3 wallets, without ever accesing the user's private keys.
+By completing this guide, you'll improve user engagement and community building for your Web3 product by offering an interface over Telegram. This tutorial will show you how to authenticate Telegram users with their Web3 wallets, without ever accessing the user's private keys.
 
 In this tutorial you will learn how to:
 
@@ -29,7 +29,7 @@ For the full project, check out the [complete source code](https://github.com/Tu
 
 ## 1. Create a new Telegram bot
 
-Creating a telegram bot is very simple, you can do it by sending a direct message to the [@BotFather](https://core.telegram.org/bots#botfather) telegram account. Just send `/newbot` to him, follow the instructions and you will get a _bot token_ to interact with the Telegram library we will use in the next step.
+Creating a Telegram bot is very simple, you can do it by sending a direct message to the [@BotFather](https://core.telegram.org/bots#botfather) Telegram account. Just send `/newbot` to him, follow the instructions and you will get a _bot token_ to interact with the Telegram library we will use in the next step.
 
 <div className="text-center">
   <img src="/images/contents/telegram-bot/bot_father.png" alt="TODO" />
@@ -61,7 +61,7 @@ Don't forget to create a `.gitignore` file to avoid committing the `.env` file t
 node_modules
 ```
 
-This is the `bot.js` file that launches a bot that listens for telegram messages and verifies the signature. Telegram bots _polls_ messages locally, this means that it will be constantly checking the telegram servers for new messages. In a production environment with a lot of users this could be a problem, and you should use the _webhook_ method and host a server remotely instead. For this tutorial we will use the polling method locally, if you want to learn more about the webhook method you can check the [Telegram Bot API documentation](https://core.telegram.org/bots/api#getting-updates).
+This is the `bot.js` file that launches a bot that listens for Telegram messages and verifies the signature. Telegram bots _polls_ messages locally, this means that it will be constantly checking the Telegram servers for new messages. In a production environment with a lot of users this could be a problem, and you should use the _webhook_ method and host a server remotely instead. For this tutorial we will use the polling method locally, if you want to learn more about the webhook method you can check the [Telegram Bot API documentation](https://core.telegram.org/bots/api#getting-updates).
 
 When the user sends the `authenticate` command to the bot, the bot will send a message to the user to visit the web dApp. The web dApp will sign a message and send it to the bot, which will verify the signature and send a welcome message to the user.
 
@@ -82,7 +82,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//  Starts the telegram bot and the API server that recieves the signature and verifies it
+//  Starts the Telegram bot and the API server that receives the signature and verifies it
 (async () => {
     try {
         bot.botInfo = await bot.getMe();
@@ -142,7 +142,7 @@ bot.on("message", async (msg) => {
     const text = msg.text || "";
     // It checks if the message is "authenticate" and if so, it sends a message to the user to visit the website
     if (text.toLowerCase() === "authenticate") {
-        // userId is the user's id in telegram
+        // userId is the user's id in Telegram
         const userId = msg.from.id;
         // We send the user to the web dapp to authenticate
         bot.sendMessage(userId, `Please visit: ${WEB_DAPP_URL}?userId=${userId}`);
@@ -210,7 +210,7 @@ Let's start with the HTML file that has a _sign_ that will pop up the user's wal
     {
       const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get('userId');
-      signMessage(userId, "I'm requesting access to the telegram group.")
+      signMessage(userId, "I'm requesting access to the Telegram group.")
     }
   </script>
 </html>
@@ -260,13 +260,13 @@ async function signMessage(userId, message)
 
   document.getElementById("signature").textContent="Signature: " + signature;
 
-  // Send the message to the telegram bot
+  // Send the message to the Telegram bot
   await sendSignature(userId, message, signature);
 }
 
-// Send the signature to the telegram bot
+// Send the signature to the Telegram bot
 async function sendSignature(userId, message, signature) {
-  // Let's start by grouping the data to send to the telegram bot
+  // Let's start by grouping the data to send to the Telegram bot
   const requestData = {
     userId: userId,
     message: message,
@@ -274,7 +274,7 @@ async function sendSignature(userId, message, signature) {
   };
 
   try {
-    // Send the data to the telegram bot by calling the /verify POST endpoint
+    // Send the data to the Telegram bot by calling the /verify POST endpoint
     // If the signature is valid, the bot will send a message to the user
     const response = await fetch(BOT_API_URL + '/verify', {
       method: 'POST',
@@ -307,11 +307,11 @@ var web3
 // If the wallet is changed, reload the page
 function metamaskReloadCallback() {
   window.ethereum.on('accountsChanged', (accounts) => {
-    document.getElementById("web3_message").textContent="Se cambió el account, refrescando...";
+    document.getElementById("web3_message").textContent="Account changed, refreshing...";
     window.location.reload()
   })
   window.ethereum.on('networkChanged', (accounts) => {
-    document.getElementById("web3_message").textContent="Se el network, refrescando...";
+    document.getElementById("web3_message").textContent="Network changed, refreshing...";
     window.location.reload()
   })
 }
@@ -327,7 +327,7 @@ const getWeb3 = async () => {
         resolve(web3)
       } else {
         reject("must install MetaMask")
-        document.getElementById("web3_message").textContent="Error: Porfavor conéctate a Metamask";
+        document.getElementById("web3_message").textContent="Error: Please connect to MetaMask";
       }
     }else
     {
@@ -424,5 +424,5 @@ Now, let's test the authentication.
 
 In this tutorial we have learned how to authenticate users in Telegram using a web3 wallet. We have used the ERC712 standard to sign the message and the `eth_signTypedData_v4` method to sign the message. We have also used the Telegram API to send the message to the user and receive the response. 
 
-In the next tutorial we will learn how to use the authentication to gatekeep a telegram group.
+In the next tutorial we will learn how to use the authentication to gatekeep a Telegram group.
 
