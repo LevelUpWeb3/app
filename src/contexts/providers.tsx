@@ -37,18 +37,22 @@ const privyConfig: PrivyClientConfig = {
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <PrivyProvider
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      apiUrl={process.env.NEXT_PUBLIC_PRIVY_AUTH_URL as string}
-      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID as string}
-      config={privyConfig}
-    >
-      <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
-          <MessageProvider>{children}</MessageProvider>
-        </WagmiProvider>
-      </QueryClientProvider>
-    </PrivyProvider>
+    <QueryClientProvider client={queryClient}>
+      {process.env.NEXT_PUBLIC_PRIVY_APP_ID ? (
+        <PrivyProvider
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          apiUrl={process.env.NEXT_PUBLIC_PRIVY_AUTH_URL as string}
+          appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID as string}
+          config={privyConfig}
+        >
+          <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
+            <MessageProvider>{children}</MessageProvider>
+          </WagmiProvider>
+        </PrivyProvider>
+      ) : (
+        <MessageProvider>{children}</MessageProvider>
+      )}
+    </QueryClientProvider>
   );
 }
