@@ -12,10 +12,9 @@ import { MessageProvider } from "./MessageProvider";
 const queryClient = new QueryClient();
 
 export const wagmiConfig = createConfig({
-  chains: [scroll, mainnet],
+  chains: [scroll],
   transports: {
     [scroll.id]: http(),
-    [mainnet.id]: http(),
   },
 });
 
