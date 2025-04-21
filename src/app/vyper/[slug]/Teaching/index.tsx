@@ -17,7 +17,7 @@ const Teaching = ({ params }) => {
   return (
     <Box
       sx={{
-        backgroundColor: "rgba(186, 240, 247, 0.2)",
+        backgroundColor: "rgba(251, 87, 50, 0.10)",
         height: ["auto", "auto", "820px"],
         p: ["30px 20px 10px 20px", "50px 50px 30px 50px", "50px 50px"],
         overflowY: "auto",
