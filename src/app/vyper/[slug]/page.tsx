@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 }
 
 export const generateMetadata = genMeta(({ params: { slug } }) => ({
-  titleSuffix: "Vyper Challenges",
+  titleSuffix: "Vyper Lessons",
   relativeURL: `/vyper/${slug}`,
 }));
 

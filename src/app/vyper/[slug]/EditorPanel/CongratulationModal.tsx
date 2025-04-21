@@ -15,8 +15,8 @@ import Link from "next/link";
 const CongratulationModal = (props) => {
   const { onClose, name, sx, ...restProps } = props;
 
-  const warpcastText = `I have successfully completed all five ${name} Vyper challenges in Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
-  const twitterText = `I have successfully completed all five ${name} Vyper challenges in @levelupweb3! Join me in my conquest to level up at levelupweb3.xyz/!`;
+  const warpcastText = `I have successfully completed all five ${name} Vyper lessons in Level Up! Join me in my conquest to level up at levelupweb3.xyz/!`;
+  const twitterText = `I have successfully completed all five ${name} Vyper lessons in @levelupweb3! Join me in my conquest to level up at levelupweb3.xyz/!`;
 
   const MEDIA_LIST = [
     {
