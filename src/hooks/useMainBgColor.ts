@@ -16,11 +16,7 @@ const useMainBgColor = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const matchingPath = Object.keys(CUSTOM_BG_PAGE_MAP).find((path) =>
-      pathname?.startsWith(path),
-    );
-
-    const bgColor = matchingPath ? CUSTOM_BG_PAGE_MAP[matchingPath] : "#fff";
+    const bgColor = CUSTOM_BG_PAGE_MAP[pathname!] || "#fff";
     document.documentElement.style.setProperty("--main-bg-color", bgColor);
   }, [pathname]);
 };
