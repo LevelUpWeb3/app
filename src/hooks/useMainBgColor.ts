@@ -9,13 +9,18 @@ const CUSTOM_BG_PAGE_MAP = {
   "/podcast": "#FFEEDA4D",
   "/events": "#E8F62833",
   "/profile": "#FFEEDA",
+  "/vyper": "#FB57321A",
 };
 
 const useMainBgColor = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const bgColor = CUSTOM_BG_PAGE_MAP[pathname!] || "#fff";
+    const matchingPath = Object.keys(CUSTOM_BG_PAGE_MAP).find((path) =>
+      pathname?.startsWith(path),
+    );
+
+    const bgColor = matchingPath ? CUSTOM_BG_PAGE_MAP[matchingPath] : "#fff";
     document.documentElement.style.setProperty("--main-bg-color", bgColor);
   }, [pathname]);
 };

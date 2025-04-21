@@ -20,7 +20,7 @@ const VyperPage = async () => {
             width: ["min-content", "max-content", "min-content"],
           }}
         >
-          Vyper Challenges
+          Vyper Lessons
         </Typography>
         <LessonList data={markdownData} />
       </Stack>

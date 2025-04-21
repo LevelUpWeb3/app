@@ -12,7 +12,7 @@ export default function LessonProgress() {
   const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
-    const lesson = lessons[lessonId];
+    const lesson = lessons[`vyper-${lessonId}`];
     if (lesson) {
       setProgress(lesson * 20);
     }

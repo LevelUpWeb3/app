@@ -52,7 +52,10 @@ const Editor = ({
       const currentExerciseNumber = parseInt(exercise.replace("exercise", ""));
       if (currentExerciseNumber > completedExerciseNumber) {
         try {
-          await updateLessonProgress(lessonId, currentExerciseNumber);
+          await updateLessonProgress(
+            `vyper-${lessonId}`,
+            currentExerciseNumber,
+          );
           onComplete(currentExerciseNumber);
         } catch (error) {
           showMessage(error.message, "error");

@@ -36,7 +36,7 @@ const EditorPanel = (props) => {
   };
 
   useEffect(() => {
-    const lesson = lessons[lessonId];
+    const lesson = lessons[`vyper-${lessonId}`];
     if (lesson && lesson > completedExerciseNumber) {
       handleCompleteExercise(lesson);
     }
