@@ -10,7 +10,7 @@ const VyperCardList = ({ content }) => {
   const { lessons } = useProgressStore();
 
   const handleClick = () => {
-    sendGAEvent("event", "challengeClicked", {
+    sendGAEvent("event", "vyperChallengeClicked", {
       value: `Lesson ${content.lesson}: ${content.name}`,
     });
   };
