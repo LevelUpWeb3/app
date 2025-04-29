@@ -25,6 +25,9 @@ interface Pagination {
   next: NavigationItem | null;
 }
 
+const navLinkStyle =
+  "flex items-center gap-[15px] text-[16px] text-[#101010] hover:text-[#2C2C2C] sm:gap-[20px] md:text-[32px]";
+
 const Navigation = (props: NavigationProps) => {
   const { id, data, baseURL, label } = props;
 
@@ -43,7 +46,7 @@ const Navigation = (props: NavigationProps) => {
     <NavigationWrapper>
       {pagination.prev ? (
         <Link
-          className="flex items-center gap-[15px] text-[16px] text-[#101010] hover:text-[#2C2C2C] sm:gap-[20px] md:text-[32px]"
+          className={navLinkStyle}
           href={`${baseURL}/${pagination.prev.id}`}
         >
           <LeftArrowSvg className="hidden md:inline-flex"></LeftArrowSvg>
@@ -53,11 +56,15 @@ const Navigation = (props: NavigationProps) => {
           </span>
         </Link>
       ) : (
-        <BackLink></BackLink>
+        <Link className={navLinkStyle} href="./">
+          <LeftArrowSvg className="hidden md:inline-flex"></LeftArrowSvg>
+          <LeftArrowMobileSvg className="md:hidden"></LeftArrowMobileSvg>
+          <span>Back</span>
+        </Link>
       )}
       {pagination.next ? (
         <Link
-          className="flex items-center gap-[15px] text-[16px] text-[#101010] hover:text-[#2C2C2C] sm:gap-[20px] md:text-[32px]"
+          className={navLinkStyle}
           href={`${baseURL}/${pagination.next.id}`}
         >
           <span>
