@@ -1,0 +1,85 @@
+---
+name: Reentrancy Locks
+index: 18
+lesson: 18
+summary: Introduction to Vyper's built-in Reentrancy locks
+labels: ["vyper"]
+---
+
+# Reentrancy Locks
+
+[Reentrancy attacks](https://owasp.org/www-project-smart-contract-top-10/2023/en/src/SC01-reentrancy-attacks.html#:~:text=A%20reentrancy%20attack%20exploits%20the,withdrawals%2C%20using%20the%20same%20state.) are malicious exploits which allows external contract to reenter original actions recursively, to drain funds or manipulate state.
+
+Vyper has built-in `@nonreentrant` decorator to prevent reentrancy attacks.
+
+`SampleContract.vy`
+
+```python
+# pragma version 0.4.0
+
+@external
+def vulnerable_function():
+    raw_call(msg.sender, b"Hello, World!")
+
+@external
+@nonreentrant
+def nonreentrant_function():
+    raw_call(msg.sender, b"Hello, World!")
+```
+
+> ℹ️ Note
+>
+> Learn more about the built-in `raw_call` function [here](https://docs.vyperlang.org/en/latest/built-in-functions.html#raw_call)
+
+`AttackerContract.vy`
+
+```python
+# pragma version ^0.4.0
+
+interface ExampleInterface:
+    def vulnerable_function(): nonpayable
+    def nonreentrant_function(): nonpayable
+
+interface_reference: public(ExampleInterface)
+
+entrant_count: public(uint256)
+
+@deploy
+def __init__(contract_addr: address):
+    self.interface_reference = ExampleInterface(contract_addr)
+
+@external
+@payable
+def __default__():
+    if self.entrant_count < 2:
+        self.entrant_count += 1
+
+        # switch `vulnerable_function` with  `nonreentrant_function` to see the difference
+        extcall self.interface_reference.vulnerable_function()
+
+@external
+def reset():
+    self.entrant_count = 0
+
+@external
+def test_function():
+
+    # switch `vulnerable_function` with  `nonreentrant_function` to see the difference
+    extcall self.interface_reference.vulnerable_function()
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>
+      Vyper has built-in Reentrancy lock (`@nonreentrant`) to prevent reentrancy
+      attacks.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang - Reentrancy Locks](https://docs.vyperlang.org/en/stable/control-structures.html#Reentrancy-locks)

@@ -1,0 +1,83 @@
+---
+name: Variables
+index: 5
+lesson: 5
+summary: Introduction to Vyper variables
+labels: ["vyper"]
+---
+
+# Variables
+
+Variable are objects containing information which can be referenced or manipulated throughout your code. Variables must be declared with data types.
+
+There are 4 types of variables in Vyper:
+
+- State Variables
+
+  - Declared outside of functions
+  - Stored on the blockchain
+
+- Local Variables
+
+  - Declared inside functions
+  - Not stored on the blockchain
+
+- Global Variables
+
+  - Provides information about the blockchain
+
+- `self` Variable
+
+  - Naming convention which read and write to state variables
+  - Call internal functions within the contract
+
+```python
+# pragma version 0.4.0
+
+# State variables
+SUPPLY_AMOUNT: uint256
+BYTES_VALUE: constant(bytes32) = 0xabcd1123f8ae9a65dcc16f95643f2030aa505c6b465c8206e26ae84b525cdacb
+STRING_VALUE: constant(String[13]) = "Hello, world!"
+
+@external
+@view
+def retrieve_local_variable() -> (uint256):
+
+    # Local Variables
+    data: (uint256) = 123456
+    return data
+
+@external
+@view
+def retrieve_global_variables() -> (address, uint256, bytes32):
+    block_coinbase: address = block.coinbase
+    block_difficulty: uint256 = block.difficulty
+    block_prevrandao: bytes32 = block.prevrandao
+    return (block_coinbase, block_difficulty, block_prevrandao)
+
+@external
+def set_self_variable():
+    self.SUPPLY_AMOUNT = 999
+
+@external
+@view
+def view_self_variable() -> (uint256):
+    return self.SUPPLY_AMOUNT
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>
+      Vyper has an additional `self` variable similar to Python used to refer to
+      the contract itself.
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang - Variable](https://docs.vyperlang.org/en/latest/constants-and-vars.html)
+- [Vyper Lang `self` Variable](https://docs.vyperlang.org/en/latest/constants-and-vars.html#the-self-variable)

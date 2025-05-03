@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http } from "viem";
-import { mainnet, scroll } from "viem/chains";
+import { scroll } from "viem/chains";
 
 import type { PrivyClientConfig } from "@privy-io/react-auth";
 import { PrivyProvider } from "@privy-io/react-auth";
@@ -15,7 +15,6 @@ export const wagmiConfig = createConfig({
   chains: [scroll],
   transports: {
     [scroll.id]: http(),
-    [mainnet.id]: http(),
   },
 });
 

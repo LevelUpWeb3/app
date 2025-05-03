@@ -9,6 +9,7 @@ const CUSTOM_BG_PAGE_MAP = {
   "/podcast": "#FFEEDA4D",
   "/events": "#E8F62833",
   "/profile": "#FFEEDA",
+  "/vyper": "#FB57321A",
 };
 
 const useMainBgColor = () => {

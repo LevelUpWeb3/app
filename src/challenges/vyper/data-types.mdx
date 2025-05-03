@@ -1,0 +1,77 @@
+---
+name: Data Types
+index: 1
+lesson: 1
+summary: Introduction to Vyper data types
+labels: ["vyper"]
+---
+
+# Data Types
+
+Vyper is a statically typed Pythonic language. The type of each variable (state and local) must be specified or at least known at compile-time. Vyper provides several elementary types such as:
+
+- `bool` (boolean)
+- `int256`,`int32` (signed integer)
+- `uint256`,`uint32` (unsigned integer)
+- `bytesM` (fixed size byte array)
+- `Bytes[100], Bytes[256]` (byte array with max size)
+- `String` (strings)
+- `decimal` (decimals)
+- `address` (Ethereum address)
+
+```python
+# pragma version 0.4.0
+
+# like Solidity, state variables are by default private visibility
+# use `public` keyword to make them public
+boo: public(bool)
+signed_int: public(int256)
+unsigned_int: public(uint64)
+fixed_size_bytes: public(bytes32)
+dynamic_size_bytes: public(Bytes[256]) #the maximum number of bytes here is 256
+string: public(String[13]) #the maximum length of string here is 13
+addy: public(address)
+
+# use --enable-decimals flag when compiling Vyper code containing decimal type
+decimal_variable: public(decimal)
+
+@deploy
+def __init__():
+    self.boo = False
+    self.signed_int = -100
+    self.unsigned_int = 999
+    self.fixed_size_bytes = 0xabcd1123f8ae9a65dcc16f95643f2030aa505c6b465c8206e26ae84b525cdacb
+    self.dynamic_size_bytes = b"\x01" # b"" syntax indicates content inside quotes is a byte array
+    self.string = "Hello, world!"
+    self.addy = 0xE2b4795039517653c5Ae8C2A9BFdd783b48f447A
+    self.decimal_variable = 22.77
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>
+      Requires explicit specification of bit width for integer and byte types
+      (i.e. `uint256`, `int32`, `bytes32`).
+    </li>
+    <li>
+      Requires explicit specification for dynamic arrays and strings (i.e.
+      String[13]).
+    </li>
+    <li>Floating point numbers (decimal) are supported.</li>
+    <li>
+      Use `--enable-decimals` flag when compiling Vyper code containing decimal
+      type.
+    </li>
+    <li>
+      Converting `decimal` to `uint256` or `int256` will result in truncation
+      (i.e., `7.5` becomes `7`).
+    </li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang - Data Types](https://docs.vyperlang.org/en/latest/types.html#)

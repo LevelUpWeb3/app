@@ -1,0 +1,60 @@
+---
+name: Assertions and Exceptions
+index: 15
+lesson: 15
+summary: Introduction to Vyper assertions and exceptions
+labels: ["vyper"]
+---
+
+# Assertions and Exceptions
+
+Vyper uses state-reverting exceptions to handle errors. The code stops executing when an exception is triggered, and the state is reverted to before the transaction took place. The remaining gas is returned to the transaction sender.
+
+## Assert
+
+Use `assert` statement to evaluate a condition. The transaction is reverted if the condition returns "False".
+
+Assertion statements should be written as `assert sample_logic < 5, "error_string"`.
+
+## Raise
+
+`raise` statment reverts current call and triggers an exception.
+
+Raise statements should be written as `raise "error_string"`.
+
+> ℹ️ Note
+>
+> While error strings are not required, it is recommended to be explicit with error messages to help with debugging.
+
+```python
+# pragma version 0.4.0
+
+sample_balance: public(uint256)
+FIXED_CONSTANT: constant(uint256) = 100
+
+@external
+def deposit(amount: uint256):
+    assert amount > 10, "Amount must be greater than 0"
+    self.sample_balance += amount
+
+@external
+def check_amount(num: uint256):
+
+    if num > FIXED_CONSTANT:
+        raise "Amount exceeds fixed constant"
+    else:
+        self.sample_balance += num
+```
+
+<details>
+  <summary>
+    <strong>Vyper Differentiators</strong>
+  </summary>
+  <ul>
+    <li>Vyper does not have `require` keyword.</li>
+  </ul>
+</details>
+
+### Further Reading:
+
+- [Vyper Lang - Assertions and Exceptions](https://docs.vyperlang.org/en/latest/statements.html#assertions-and-exceptions)
