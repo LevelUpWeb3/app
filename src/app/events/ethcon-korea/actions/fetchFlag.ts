@@ -1,7 +1,7 @@
 import { fetchBase } from ".";
 
 type SubmitFlagResultType = {
-  status: "correct" | "incorret";
+  status: "correct" | "Incorrect";
   message: "Correct" | "Incorrect";
 };
 

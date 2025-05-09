@@ -22,7 +22,7 @@ const lightTheme = {
   },
   palette: paletteOptions,
   typography: typographyOptions,
-  // diferrent from raw shadows
+  // different from raw shadows
   // boxShadows: boxShadowOptions,
   components: {
     MuiContainer: {
