@@ -1,0 +1,84 @@
+---
+name: "Introduction to Private DeFi on Ethereum: Stealth Addresses, Mixers, FHE and More"
+index: 16
+summary: Different approaches to private DeFi on Ethereum, how each method works and comparing its strengths and limitations.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Jul 09, 2025
+readTime: 15 min read
+labels: ["ZK", "DeFi"]
+---
+
+Privacy on Ethereum means keeping balances and transaction details invisible to on-chain observers. It involves hiding the sender, the recipient or even the amount transferred. Over the years, researchers and developers have proposed a variety of techniques that gives users greater control over their financial data and enable use cases that wouldn’t be possible on fully transparent dApps. In this article, we list several approaches to private DeFi on Ethereum, describing how each method works and comparing its strengths and limitations.
+
+## Stealth Addresses (ERC‑5564)
+
+Stealth addresses solve the problem of hiding who receives assets. When Bob wants to receive a token transfer without revealing his main wallet, he publishes a *stealth meta‑address*. Anyone who knows that *meta‑address* can derive a new *stealth address* for Bob and send funds there. On-chain observers see only a random address with an incoming transfer and cannot link it back to Bob’s main account.
+
+<div className="text-center">
+  <img src="/images/contents/private-defi/img02.png" alt="stealth addresses" />
+  _Alice is able to generate a stealth address based on Bob’s meta address and send tokens and even NFTs without interacting with him._
+</div>
+
+Under [ERC‑5564](https://eips.ethereum.org/EIPS/eip-5564), developers choose how stealth keys are generated and shared. For example, stealth meta-addresses can be linked to ENS NFTs for a simpler UX. All actions occur within a singleton contract, this means that all users share the same pool but maintain separate stealth addresses, this way, users can even do internal transactions like swapping or re-transfering funds before they decide to leave the system. This contract can even handle private NFT transfers without revealing ownership until the user chooses to leave the pool.
+
+The main challenge with stealth addresses happens when a user withdraws funds back to their external EOA. If Bob suddenly transfers assets out of the singleton contract in a single transaction, that action ties all of his previous stealth addresses back to his public key. To preserve privacy without sacrificing too much the user experience, stealth addresses can be combined with other privacy systems or introduce new layers of key rotation.
+
+## Mixers
+
+Mixers, also called shielded pools, hide both who sends and who receives assets, as well as the amounts involved. Users deposit tokens into a common pool and later withdraw to any address. Because deposits and withdrawals share the same pool, it becomes impossible for observers to match deposits to withdrawals. Zero‑knowledge proofs ensure that users cannot withdraw more than they deposited.
+
+The design space for mixers is very big and remains largely unexplored. Some may allow internal transfers within the pool, others may let users leave the pool, perform a swap on a decentralized exchange and re‑enter the pool all within one atomic transaction. A new generation of mixer design implement the *proof of exclusion* techniques so compliant users can prove they are not on a blacklist without revealing their identity, this is able to adapt to any type of regulatory jurisdiction.
+
+<div className="text-center">
+  <img src="/images/contents/private-defi/img07.png" alt="mixers" />
+  _Alice, Bob and Carl deposit 1 ETH to the pool, then one of them withdraws with a ZK proof. We are not able to tell which one withdraws._
+</div>
+
+Despite the strong privacy guarantees, mixers come with trade‑offs. Generating zero‑knowledge proofs can be computationally intensive, often requiring users to run heavy workloads on users phone devices. Additionally, these pools restrict deposit sizes (for example, Tornado Cash only accepts 0.1, 1, 10, or 100 ETH) and rely on extended waiting periods to further obscure the link between deposits and withdrawals.
+
+Despite all that, the success of protocols like Tornado Cash and Railgun shows that demand for private pooling remains high, and improvements in UX and performance will only make shielded pools more accessible.
+
+## Fully Homomorphic Encryption (FHE)
+
+Unlike mixers and stealth addresses, privacy projects using fully homomorphic encryption are able to hide transactions amounts without long wait times or amount restrictions. This means that when Bob sends 5 USDC to Alice, on‑chain viewers see that Bob called a transfer function but cannot figure out the actual amount. FHE is capable of performing arithmetic operations on encrypted numbers. This means that when Alice sends tokens to Bob, we use FHE to subtract from Alice’s balance and to sum to Bob’s. 
+
+However, creating a private DeFi token requires more than arithmetic operations. The protocol must also enforce rules against overspending and double spending. Because FHE struggles with complex boolean operations, designers often combine it with zero-knowledge proofs. FHE handles the balance updates, and ZK enforces that the encrypted operation results followed all rules.
+
+<div className="text-center">
+  <img src="/images/contents/private-defi/img08.png" alt="fhe" />
+  _FHE processes arithmetic operations while ZK enforces transaction validity._
+</div>
+
+FHE shows great promise for private DeFi, but its computational costs are still very high. Researchers continue to optimize algorithms to bring FHE into everyday use. Until then, most implementations remain in experimental stages, waiting for breakthroughs that will make encrypted DeFi significantly fast and cheap.
+
+## Validiums and Plasma
+
+Validium and Plasma chains are an alternative to layer 2 rollups that can achieve lower costs and faster finality by keeping transaction data off-chain. Instead of keeping the state record on Ethereum blobs, these systems rely on external data-availability services. Validity proofs, also called ZK proofs, can be submitted on‑chain to verify that the sequencer processed transactions correctly. As a result, neither node operators nor relayers can impersonate users or perform double‑spends.
+
+By hiding transaction details and the mempool from Ethereum’s layer 1, the full history remains private. So this means that if a single trusted operator manages both the sequencer and the node network, it can keep transactions and the mempool private while still proving the integrity of all computations via on‑chain ZK proofs on the main chain.
+
+<div className="text-center">
+  <img src="/images/contents/private-defi/img09.png" alt="fhe" />
+  _Users submit transactions to the Validium sequencer, the sequencer publicly posts the state root and validity proof while keeping the mempool and transaction history private._
+</div>
+
+The trade‑off is censorship risk due to data not being posted to layer 1, users cannot force inclusion of transactions as they can with typical rollups. Nonetheless, this model is especially appealing for institutions and enterprises in need to create privacy by default chains. It can make use of already existing battle tested rollup infrastructure, like sequencers, ZK provers, and relayers, while introducing a privacy layer that can bring closer trusted institutions with the full permissionless Ethereum we use today.
+
+## One Address per Transaction (Ephemeral Accounts)
+
+Many Ethereum users already maintain multiple accounts to separate activities and achieve a certain level of privacy. Taking this further, protocols can automate the creation of an account for each dApp interaction. Users can generate a new address every time they interact on-chain and never reuse an account publicly.
+
+<div className="text-center">
+  <img src="/images/contents/private-defi/img06.png" alt="fhe" />
+  _A new address is generated for each application or on-chain action._
+</div>
+
+Additionally, ephemeral accounts systems can generate noise, or dummy transactions, to obfuscate information to tracking tools and reduce the risk of linking their addresses to their account. However, this approach makes composability harder to maintain because the rest of the Ethereum ecosystem is not designed to be interacted this way. Also, consolidating funds across dozens of accounts requires either additional smart‑contract logic or manual processes, which can introduce bad UX experiences and high costs.
+
+While this approach may seem less powerful than others discussed above, it is already in use and can be significantly improved. For example, new tools that automate the creation and management of multiple accounts can be developed, or even explore protocol-level changes that make ephemeral account usage more practical.
+
+---
+
+Every privacy method in DeFi has trade‑offs, so users must select the approach that best serves their anonymity requirements. There is ongoing research that should bring a variety of new protocols, some by combining already existing techniques, others by introducing entirely new mechanisms. As these innovations mature, we can expect private DeFi to become ever more accessible and mainstream.
