@@ -1,0 +1,233 @@
+---
+name: "Practical Guide to EIP-7702: Bundle Transactions and Manage Privileges on Ethereum"
+index: 17
+summary: Learn how to bundle transactions and manage privileges on Ethereum using EIP-7702.
+author: FilosofiaCodigo
+authorIcon: https://avatars.githubusercontent.com/u/707484?s=96&v=4
+authorLink: https://x.com/FilosofiaCodigo
+published: Mar 26, 2025
+readTime: 15 min read
+labels: ["Protocol"]
+---
+
+EIP-7702 introduces a new transaction type that allows Externally Owned Accounts (aka. "normal wallets") to temporarily set their code and behave like smart contracts so they don't need to create a smart contract wallet. This makes possible a variety of user experience improvements such as transaction batching, sponsorship and fine-grained privilege setups.
+
+In this article, we’ll explore the capabilities of EIP-7702 and walk through a practical example to demonstrate how it can be used to batch transactions, so users can perform multiple actions in a single transaction.
+
+## Reach and Scope of EIP-7702
+
+Let's take a deeper look at the three most important use cases for EIP-7702.
+
+### 1. Transaction Batching
+
+<div className="text-center">
+  <img src="/images/contents/eip-7702/01_batching.png" alt="Batching Transactions with EIP-7702" />
+  _Batching Transactions makes possible to combine multiple actions into a single transaction._
+</div>
+
+This feature improves the user experience on any dApp by making possible to combine multiple actions into a single transaction. The most obvious use case is approving and transferring tokens in one go, such as approving a DEX to spend your tokens and then executing a trade. But it can also allow users to perform complex workflows in one click, like depositing collateral and borrowing funds in a single transaction, or interacting with multiple protocols without needing to sign multiple times. This is not only a UX improvement, it also improves security by minimizing the risk of errors or partial execution.
+
+### 2. Sponsorship
+
+<div className="text-center">
+  <img src="/images/contents/eip-7702/02_sponsorship.png" alt="Transaction Sponsorship with EIP-7702" />
+  _A user can sign a transaction and publish it for a sponsor to pay the fees and execute it on-chain._
+</div>
+
+Sponsorship makes Ethereum more accessible by allowing users to execute transactions without holding ETH for gas fees. Users sign a secure transaction, which is published publicly for a sponsor to pay the fees and execute it on-chain. Sponsors might recover their costs through wallet logic that rewards them for executing transactions, or as part of a business strategy, such as dApps covering fees to onboard new users and drive adoption.
+
+### 3. Fine-Grained Privilege Control
+
+<div className="text-center">
+  <img src="/images/contents/eip-7702/03_permissions.png" alt="Fine-grained permissions with EIP-7702" />
+  _Fine-grained permissions with EIP-7702_
+</div>
+
+Also known as privilege de-escalation, can be integrated into wallets to specify access controls to funds or any action in general. For example, you can limit spending power by setting a daily cap on how much a wallet can spend. Alternatively, you can restrict interactions to specific smart contracts, such as allowing an AI trading agent to only interact with certain token pairs on specific DEXes. Think of it as a personal wallet with the power of multi-sig security, but designed to be as simple and intuitive as a standard wallet.
+
+**Notice:** For security reasons, the implementation of EIP-7702 should be handled at the wallet level, not the application level. However, it’s very important for both dApp developers and users to understand how this feature works in order to build better products and use them more safely.
+
+## Practical Example: Deploying and Interacting with Contracts Using EIP-7702
+
+In this step-by-step tutorial, we’ll deploy a test contract where users deposit tokens, similar to swapping on Uniswap or depositing collateral on Aave. Normally, this would require two transactions: one to approve the contract and another to deposit the tokens. With EIP-7702, we’ll show how to do batch them in a single transaction.
+
+### Step 1: Deploy Test Contracts
+
+By the time of writing this article, EIP-7702 is already deployed on Holesky testnet.
+
+#### Connect to Holesky
+
+First, install a wallet like [MetaMask](https://metamask.io/) or [Rabby](https://rabby.io/) as a browser extension. To connect to Holesky, you can do so via [Chainlist.org](https://chainlist.org/chain/17000) by clicking "Connect to MetaMask" or manually using the following details:
+
+First, select the option to add a network from your wallet.
+
+<div className="text-center">
+  <img src="/images/contents/eip-7702/04_network.png" alt="Add network to MetaMask" />
+  _Holesky is not in the list of networks by default, so you need to add it manually._
+</div>
+
+Then enter the following details:
+
+- **Network Name:** Holesky
+- **RPC URL:** `https://1rpc.io/holesky` (the name can be left blank, and a URL is sufficient)
+- **Chain ID:** `17000`
+- **Currency Symbol:** ETH
+- **Block Explorer:** `https://holesky.etherscan.io/`
+
+<div className="text-center">
+  <img src="/images/contents/eip-7702/05_holesky.png" alt="Holesky Network on MetaMask" />
+  _Add Holesky details to your wallet._
+</div>
+
+#### Get Testnet Funds
+
+Visit the [Alchemy Faucet](https://www.alchemy.com/faucets/ethereum-holesky), log in with an Alchemy account, and enter your Ethereum wallet address (MetaMask, Rabby, ...). Note that you must have at least 0.001 real ether (on Ethereum Mainnet) in that wallet to receive test funds.
+
+<div className="text-center">
+  <img src="/images/contents/eip-7702/06_faucet.png" alt="Alchemy Faucet for Holesky" />
+  _I recommend using the Alchemy Faucet for Holesky._
+</div>
+
+Alternatively, you can request funds directly by tagging my user `@turupawn` on Discord. You can find the link to my server in my most recent YouTube video. If it's no longer active, you can request a new link by leaving a comment on the video.
+
+Remember, testnet funds have no monetary value.
+
+#### Deposit Contract
+The following contract allows users to deposit and withdraw ERC-20 tokens. You can deploy it using [Remix](https://remix.ethereum.org/) or any other Solidity IDE.
+
+```js
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+interface IERC20 {
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 value) external returns (bool);
+    function transferFrom(address from, address to, uint256 value) external returns (bool);
+}
+
+contract ERC20Deposit {
+    mapping(address => mapping(address => uint256)) public balances;
+
+    function deposit(address _token, uint256 _amount) external {
+        require(_amount > 0, "Amount must be greater than zero");
+        require(IERC20(_token).transferFrom(msg.sender, address(this), _amount), "Transfer failed");
+        balances[msg.sender][_token] += _amount;
+    }
+
+    function withdraw(address _token, uint256 _amount) external {
+        require(balances[msg.sender][_token] >= _amount, "Insufficient balance");
+        balances[msg.sender][_token] -= _amount;
+        require(IERC20(_token).transfer(msg.sender, _amount), "Transfer failed");
+    }
+}
+```
+
+#### ERC-20 Token Contract
+This is a simple ERC-20 token contract for testing.
+
+```js
+// SPDX-License-Identifier: MIT
+// Compatible with OpenZeppelin Contracts ^5.0.0
+pragma solidity ^0.8.22;
+
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    constructor() ERC20("MyToken", "MTK") {
+        _mint(msg.sender, 21000000 ether);
+    }
+}
+```
+
+### Step 2: Set Up Your Wallet Delegation Designation
+
+Before sending transactions, you need to set up your wallet to mimic [Multicall](https://www.multicall3.com/), a contract that makes possible transaction batching.
+
+#### Set Up the Environment Variables
+
+Run the following by replacing `YOUR_WALLET_ADDRESS` and `YOUR_PRIVATE_KEY` with your wallet details. And `YOUR_TOKEN_ADDRESS` and `YOUR_DEPOSITERC20_ADDRESS` with the two contract you just deployed.
+
+```bash
+my_wallet="YOUR_WALLET_ADDRESS"
+my_wallet_pk="YOUR_PRIVATE_KEY"
+
+# Contract address
+mytoken="YOUR_TOKEN_ADDRESS"
+depositcontract="YOUR_DEPOSITERC20_ADDRESS"
+multicall="0xcA11bde05977b3631167028862bE2a173976CA11"
+
+# We will send 1 token, in wei
+amount="1000000000000000000"
+
+# Target the holesky chain
+rpc_url="https://ethereum-holesky-rpc.publicnode.com"
+```
+
+#### Check Wallet Code
+Before delegation, your wallet’s code should return `0x`. You need to [install foundry](https://book.getfoundry.sh/getting-started/installation) before running the following command.
+
+```bash
+cast code --rpc-url $rpc_url "$my_wallet"
+```
+
+#### Execute EIP-7702 Delegation
+Delegate your wallet to act as the Multicall contract.
+
+```bash
+cast send --rpc-url $rpc_url --from "$my_wallet" --private-key "$my_wallet_pk" --auth "$multicall" $(cast az)
+```
+
+#### Verify Delegation
+After delegation, your wallet’s code should return `0xef0100ca11bde05977b3631167028862be2a173976ca11`, where `0xef0100` is the delegation prefix and `ca11bde05977b3631167028862be2a173976ca11` is the Multicall contract address.
+
+```bash
+cast code --rpc-url $rpc_url "$my_wallet"
+```
+
+### Step 3: Send an EIP-7702 Transaction
+
+Now that your wallet is ready, let’s send a batched transaction using EIP-7702.
+
+#### Construct the Sequence of Calls
+We’ll batch three actions: approve the tokens, deposit them, and reset the approval to 0.
+
+```bash
+calls=()
+
+calldata=$(cast calldata "approve(address spender, uint256 value)" "$depositcontract" "$amount")
+calls+=("($mytoken, false, 0, $calldata)")
+
+calldata=$(cast calldata "deposit(address _token,uint256 _amount)" "$mytoken" "$amount")
+calls+=("($depositcontract, false, 0, $calldata)")
+
+calldata=$(cast calldata "approve(address spender, uint256 value)" "$depositcontract" "0")
+calls+=("($mytoken, false, 0, $calldata)")
+```
+
+#### Send the Transaction
+Execute the batched transaction in one go.
+
+If you're using Linux run the following.
+
+```bash
+cast send --rpc-url $rpc_url --from "$my_wallet" --unlocked "$my_wallet" "aggregate3Value((address,bool,uint256,bytes)[] calldata calls)" "[${calls[0]}, ${calls[1]}, ${calls[2]}]"
+```
+
+If you're using MacOs run the following instead.
+
+```bash
+cast send --rpc-url $rpc_url --from "$my_wallet" --unlocked "$my_wallet" "aggregate3Value((address,bool,uint256,bytes)[] calldata calls)" "[${calls[1]}, ${calls[2]}, ${calls[3]}]"
+```
+
+You should be able to see your batched transactions on [Holesky Etherscan](https://holesky.etherscan.io/) marked as `self`.
+
+<div className="text-center">
+  <img src="/images/contents/eip-7702/07_etherscan.png" alt="EIP-7702 view in etherscan" />
+  _Etherscan marks the EIP-7702 transaction as `self` because it was executed by the wallet itself._
+</div>
+
+## Conclusion
+
+EIP-7702 is a significant step toward improving Ethereum’s UX, simplifying transactions and enabling users to perform multiple actions in a single, efficient transaction. By allowing EOAs to temporarily act like smart contracts, EIP-7702 unlocks powerful features like transaction batching, sponsorship, and fine-grained privilege control.
+
+To learn more about the technical details of EIP-7702, check out the [original EIP](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md), [this explanation](https://gist.github.com/Thegaram/64b5d43144d5740f01907b48d986b8e7) about the Pectra update and join the [discussion](https://ethereum-magicians.org/t/eip-7702-set-eoa-account-code/19923/1). 
