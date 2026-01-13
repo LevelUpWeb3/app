@@ -45,7 +45,7 @@
     "marked": "^12.0.1",
     "mdx-mermaid": "^2.0.0",
     "mermaid": "^10.9.0",
-    "next": "^14.2.18",
+    "next": "14.2.35",
     "next-mdx-remote": "^5.0.0",
     "path-to-regexp": "^6.2.1",
     "react": "^18.2.0",
