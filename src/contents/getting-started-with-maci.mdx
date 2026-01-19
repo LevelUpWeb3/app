@@ -1,0 +1,320 @@
+
+# Getting Started with MACI
+```jsx
+---
+name: "Getting Started with MACI";
+index: 12;
+summary: "In-depth guide to setup a your own MACI platform";
+author: "Benjamin Barahona";
+authorIcon: "https://avatars.githubusercontent.com/u/1316800?s=400&v=4";
+authorLink: "https://github.com/BenBarahona";
+published: "December 04, 2024"; // Date of article written
+readTime: "14 min read"; // Estimated read time in minutes
+labels: ["ZK", "Attestation"];
+---
+```
+
+Blockchain technology has been on the rise for the past 5+ years, and with it, many new applications, aimed at solving modern issues such as privacy, trust, data integrity, and more, are being developed. One potential use case for blockchain has been the concept of on-chain voting, or a way of handling any process where voters are involved (like public good funding, or electing a representative out of a number of candidates or any type of election) in a way that is safe as well as transparent and that guarantees the privacy and integrity of voters and their votes.
+
+In order to implement this, Privacy and Scaling Explorations created MACI. MACI stands for Minimal Anti-Collusion Infrastructure and is an open-source ethereum application used for private on-chain voting. MACI can run on most commonly used EVM supported chains and provides privacy and collusion resistance by using encryption and zero-knowledge proofs (zk-SNARKs) to maintain the privacy of votes, while still having final results publicly available. Using ZK proofs reduces the human-interference aspect, like bribes, for example, because users can't prove they voted for a specified option. This eliminates a lot of incentive to interfere with elections by bribing people to vote a certain way, as those voters cannot prove who they've voted for. As ZK technology is continuing to grow, MACI has been revolutionizing the way we are implementing zk-proofs to modern issues and also helping with the research to create more zk-based applications, increasing security and privacy as their core features.
+
+If you ever want to run on-chain elections or improve any type of voting system, MACI might just be for you. It provides the tools to setup a scaffold-like website that is easy to use, both for end-users and those in charge of an election or voting system.
+
+This article will cover the basics of MACI and provide a step-by-step guide to start developing with it. At the end of reading and following this guide, you should be able to create a platform powered by MACI where selected users will be able to submit votes on a number of user-submitted applications and where you can use a majority of votes to determine a winner.
+
+## Resources
+
+- MACI Github Repository: [https://github.com/privacy-scaling-explorations/maci](https://github.com/privacy-scaling-explorations/maci)
+- MACI Platform Scaffold: [https://github.com/privacy-scaling-explorations/maci-platform](https://github.com/privacy-scaling-explorations/maci-platform)
+- Official Documentation: [https://maci.pse.dev/docs/introduction](https://maci.pse.dev/docs/introduction)
+
+## Getting Started and Environment Setup
+
+Before getting started, you'll require the following:
+
+- `pnpm` is installed on your computer
+- A crypto wallet available with funds ( > 0.03 ETH) on the network of your choice and the secret passphrase (mnemonic)
+- Alchemy Project ID ([Create here](https://alchemy.com))
+- WalletConnect ID ([Create here](https://walletconnect.com))
+- An account on The Graph ([Create here](https://thegraph.com))
+- Graph CLI installed on your computer
+- Etherscan API key ([Create here](https://etherscan.io))
+- RPC URL of the chain of your choice ([Create here](https://ethereum.org/en/developers/docs/nodes-and-clients/#quick-start))
+- A Blob database on Vercel ([Create here](https://vercel.com))
+
+If you don't have a crypto wallet available, you can create one following [Metamask's tutorial](https://metamask.io). Make sure to write down your mnemonic, or secret passphrase, as this will be required later.
+
+## Deploy MACI
+
+We will first be deploying a MACI instance and poll.
+
+1. Download the MACI repository. Make sure to always use the latest release of MACI to ensure stability of the platform.
+2. Once downloaded, navigate to the `maci` folder.
+3. Run `git checkout` to the latest version. In the example below, we are using `v2.4.0`.
+4. Install dependencies & run the build process.
+
+```bash
+git clone https://github.com/privacy-scaling-explorations/maci.git && \
+cd maci && \
+git checkout v2.4.0 && \
+pnpm i && \
+pnpm run build
+```
+
+### Download ZKey Files
+
+Artifacts called `zkey` files are required for certain MACI operations and need to be downloaded prior to running any MACI operation. To do this, run the appropriate command for the environment used.
+
+> **Note**: Production keys also work on test-net.
+
+```bash
+//Production Ceremony Keys
+pnpm download:ceremony-zkeys
+
+//Testnet Keys
+pnpm download-zkeys:test
+```
+
+Once downloaded, note where files are located, as these will be set on a configuration file used later on in the guide. Generally, you can find them under the following hierarchy:
+
+## Generate MACI Keys
+
+MACI keys are intended to be handled only by coordinators, in other words, you, the person setting all this up! Once you generate a pair of keys, make sure to save both the public and private keys in a safe place as both are required as command line flags later in the process.
+
+```bash
+cd packages/cli && \
+node build/ts/index.js genMaciKeyPair
+```
+
+---
+
+## Setting Up the Deploy Configuration
+
+Now, head over to the `packages/contracts` folder, copy the `deploy-config-example.json` file, and name it `deploy-config.json`.
+
+```bash
+cp deploy-config-example.json deploy-config.json
+```
+
+This `deploy-config` file contains all the configuration values for a MACI round. These are set within a JSON object named after the network name. The image below shows the configurations for the `scroll_sepolia` network. If desired for production, for example, you would set the object as `scroll`. MACI generally supports the most popularly used EVM chains, but my recommendation is to confirm with MACI support for the desired chain to use.
+
+### Key Values to Update
+
+1. **`ConstantInitialVoiceCreditProxy.amount`**:  
+   This is the amount of vote credits available. Voters may distribute their vote credits among multiple projects with a maximum of the value you set here.
+
+2. **`MACI.gatekeeper`**:  
+   The criteria type to be used for voter verification. This means each possible value attempts a different strategy on how to determine if a user is eligible to participate in the MACI poll.  
+   Possible values are any of the `Gatekeeper` object keys found within the current config object. These values are: `FreeForAllGatekeeper`, `EASGatekeeper`, `GitcoinPassportGatekeeper`, or `ZupassGatekeeper`.  
+   For more information on Gatekeepers in MACI, refer to [these docs](https://maci.pse.dev/docs/introduction). Some Gatekeepers require a separate configuration. Each of these values requires a different setup.  
+   We aren't going to cover all of them in this article, so I recommend using `FreeForAllGatekeeper` as it does not require any extra configurations. Custom Gatekeepers are also supported; more information on this can be found [here](https://github.com/privacy-scaling-explorations/maci-platform).  
+
+   **Note**: Make sure the `.deploy` property of the chosen gatekeeper is set to `true`.
+
+3. **`Poll.pollDuration`**:  
+   This is the amount of time, in seconds, that a poll remains open and can accept new ballot submissions.
+
+4. **`Poll.coordinatorPubkey`**:  
+   This refers to the public key to be used in relation to submitted votes. This public key is the MACI public key that you generated a few steps above.  
+
+   **Note**: Make sure you do not lose possession of the private key. This will be needed near the final steps when votes are tallied.
+
+---
+
+## Deploying MACI
+
+With all the configurations in place, it is now time to deploy the MACI contracts. To execute and begin deployment, run the following command, replacing the network name with your choice (for supported networks, refer to the available scripts under the `package.json` file):
+
+```bash
+pnpm run deploy:<network name>
+```
+
+After deployment is finished, note and copy the MACI address from the deployment logs.
+
+---
+
+### Subgraph Configuration
+
+MACI uses subgraphs to store certain data regarding the MACI contract and those who sign up to vote. By default, MACI uses The Graph for this, but they also support other subgraph providers such as Alchemy. This is a required step in the process.
+
+#### Steps:
+
+1. Log into [The Graph](https://thegraph.com/) and create a new subgraph.  
+   Remember the name you choose, as this will be required in a future step.
+
+2. Authenticate the CLI to your newly created subgraph by running the command available under the **Auth and Deploy** section of the dashboard.
+
+3. In your folder explorer, navigate to the `apps/subgraph` folder:
+
+   ```bash
+   cd apps/subgraph
+   ```
+
+4. Locate the `network.json` file under the `config` folder.
+
+5. Update this file with the respective values for each property:
+
+   - **`network`**: This is the same network where the MACI contracts were deployed in the previous step. Supported network values can be found [here](https://github.com/privacy-scaling-explorations/maci-platform).
+   - **`maciContractAddress`**: The address you copied a few steps above, the MACI address that will be used.
+   - **`maciContractStartBlock`**: The block where the contract was deployed. It can be obtained via any transaction scanner for the MACI address.
+It is important to update this file first as it will be used when building the subgraph.
+
+6. Create an `.env` File
+Set the variable `NETWORK` with the same value as configured in Step 5.
+
+7. Build the Subgraph
+Run the build command. This will create a `subgraph.yaml` file containing the configurations set for the specified network. Double-check this file once the command finishes to ensure your configurations are correct:
+
+```bash
+pnpm run build
+```
+
+8. Navigate to the package.json file, and change the highlighted portion, seen in the image below, to the name of the subgraph you created in Step 1.
+
+9. Run the deploy command to finish setting up the subgraph. The terminal will ask your input for the version to be deployed.
+
+```bash
+pnpm run deploy
+```
+
+When the command line finishes, it will print a URL where the subgraph was deployed. This URL will be needed in a future step, when you’ll configure the front end application environment variables.
+
+This completes the “backend” configuration of our MACI project. The next step will be to configure a frontend application that will communicate with our deployed MACI contracts and handle all operations for the voting round, such as project submission, project approval, voter sign-up, vote submission, publishing results, and much more.
+
+---
+
+## Frontend Application
+**NOTE:** As MACI is an ongoing project, some parts of this guide may be subject to change, based on new updates to the maci-platform repository. This guide follows the main branch at the time of November 2024, i.e. release v1 of maci-platform.
+
+The first step is to clone the maci-platform scaffold project and install the required dependancies. Open a new terminal window and run the following commands:
+
+```bash
+git clone https://github.com/privacy-scaling-explorations/maci-platform
+pnpm install
+cp packages/interface/.env.example packages/interface/.env # and update .env variables
+pnpm build
+```
+
+1. First, you’ll clone the maci-platform scaffold project and install the required dependancies.
+
+2. Next, create a copy of the .env.example file to a create a new .env file.
+
+3. Run the build command using pnpm build.
+
+The following are the required values of the .ENV file you need to update:
+
+- **`BLOB_READ_WRITE_TOKEN`**: 
+    This is a token used to access a blob database. This blob is used mainly for applications’ image upload storage. Follow this link for instructions on how to obtain this token.
+
+- **`NEXT_PUBLIC_CHAIN_NAME`**:
+    This is the name of the network we’ll be using. This needs to be the same network where the MACI contracts were deployed to in the previous steps. A list of supported networks can be found here.
+
+- **`NEXT_PUBLIC_ALCHEMY_ID`**:
+    I highly recommend this is set in order to avoid certain issues related to transactions sent from the software.
+
+- **`NEXT_PUBLIC_WALLETCONNECT_ID`**:
+    I also highly recommend this for the same reasons stated above.
+
+- **`NEXT_PUBLIC_ADMIN_ADDRESS`**:
+    This is the votes administrator wallet address, which will be in charge of approving applications and voter whitelisting (for some gatekeepers). At the time of writing this article, MACI only supports a single address for an admin role. However, multiple admins could be supported in the future.
+
+- **`NEXT_PUBLIC_ROUND_ID`**:
+    This will serve as the unique identifier for the entire vote round. Project submissions and voters are grouped by this ID, so changing it will have a different set of information. It can be any alphanumeric character desired, for example “test-round-2024”.
+
+- **`NEXT_PUBLIC_APPROVAL_SCHEMA, NEXT_PUBLIC_METADATA_SCHEMA`**:
+    These are optional, and might be required depending on the Gatekeeper you are using (for example EASGatekeeper). By default, the example env will come with predefined values for these keys. What is important to verify is that these schema addresses exist for the network you are using. This can be checked using easscan.org, for the chosen network and searching for the address (like https://scroll.easscan.org/ for Scroll).
+
+- **`NEXT_PUBLIC_MACI_ADDRESS`**:
+    This is the MACI contract address we deployed in earlier steps.
+
+- **`NEXT_PUBLIC_MACI_START_BLOCK`**:
+    This is the block where the MACI contract was deployed. This can be obtained on any blockscanner for the network you’re using.
+
+- **`NEXT_PUBLIC_MACI_SUBGRAPH_URL`**:
+    This is the URL that the terminal logged in the final step of the Subgraph configuration steps above.
+
+- **`NEXT_PUBLIC_TALLY_URL`**:
+    This is the URL where the final tally will be hosted. As of writing this article, this URL is simply the base url for where the file is located. The tally file must also be named tally-0.json (0 being the pollID) and must be found within the specified URL here.
+
+With the configurations in place, run the project by executing the following command:
+
+```bash
+pnpm run dev:interface
+```
+
+The project will compile and run on your localhost using port 3000. You may also tweak the application as desired since it is a regular ReactJS project. For public deployment, you may use the hosting service of your choice. I recommend Vercel, which offers free plans to make test domains and run a full operation with low overhead costs.
+
+Now, you finally have a fully running application using MACI! Applications can be submitted by any user with a wallet, and once the set dates are reached, authorized users will be able to submit their votes.
+
+---
+
+## Closing the Poll
+
+Once the poll has finished (i.e. the `pollDuration` time runs out), it is required to merge and prove the votes. This will generate a tally file containing the final count and results. This process is request-intensive, so be mindful of any limitations on the RPC provider you are using.
+
+### Steps to Generate the Final Tally and Publish the Results
+
+1. Navigate back to the MACI project we downloaded at the beginning of this guide. Once here, head over to the `packages/contracts` folder and run the merge command.
+
+    ```bash
+    cd packages/contracts && \
+    pnpm merge:[network] --poll [poll-id]
+    ```
+
+    - Replace `[network]` with the appropriate network you have been using throughout the guide.  
+    - Replace `[poll-id]` with the poll ID. As of writing this article, MACI supports one poll per contract. This means the `poll-id` will always be `0`. Use `0` for this exercise when running the commands.
+
+2. As a coordinator, or person in charge of the voting operation, you must execute the `prove` command and send the appropriate values.
+
+    ```bash
+    pnpm run prove:[network] --poll [poll-id] \
+        --coordinator-private-key [coordinator-maci-private-key] \
+        --tally-file ../cli/tally.json \
+        --output-dir ../cli/proofs/ \
+        --start-block 12946802 \
+        --blocks-per-batch 100
+    ```
+
+    - `poll-id`: Set to `0`, as stated before.  
+    - `coordinator-maci-private-key`: This is the private key that was generated on the “Generate MACI Keys” step in this article.  
+    - `tally-file & output-dir`: You can leave the default folder location where the respective files will be saved.  
+    - `start-block`: **IMPORTANT** This is the block where the MACI contract being used was deployed.  
+    - `blocks-per-batch`: **OPTIONAL** I highly recommend you set this to the suggested amount of `100`. This flag is helpful in case of any Json-RPC errors that may be thrown.
+
+    This command may take several minutes to finish executing, depending on the amount you set on the `blocks-per-batch` flag. After it is done, the tally file will be generated and saved to the set location, and the terminal will print several objects similar to the picture below:
+
+    > The tally file is a JSON containing how many votes were counted for each submission in the round.
+
+3. Upload the tally file to the hosting service of your choice. Remember to name the file `tally-0.json` as the frontend we built will search for the tally using that filename.
+
+4. On the frontend application: Update, if needed, the `NEXT_PUBLIC_TALLY_URL` environment variable to the base URL where the tally was uploaded.
+
+The final tally will now be available publicly, and you have successfully closed your first voting round using MACI! 👏
+
+---
+
+## What’s Next?
+
+MACI has been pioneering research for zk technology, and as any open-source initiative, it is up to us, the users and developers, to figure out new use cases to contribute to its research. The above guide is just one example of how to use MACI from scratch. It’s encouraged that developers be creative and try to use the MACI contracts with more approaches or ways on-chain voting can solve modern issues.
+
+Personally, I’m fascinated by the potentials new research provides to the concept of on-chain voting. This idea of private voting has been bouncing around computer scientists’ minds since the 1980s, but new challenges continue to arise and have taken decades to solve. I think on-chain voting is a huge positive step toward making this idea a reality and protecting the integrity of electronic voting. 
+
+The latest challenge I’ve identified with this issue is maintaining voter privacy (who votes for what). Zero Knowledge proofs are the solution to this, and ZK technology is the main feature MACI provides. This Zero Knowledge technology is still on the rise, and I believe it is the future of privacy-powered software. Therefore, all the tests and research we developers provide will help shape this technology for the future.
+
+---
+
+### Official Docs:
+
+- [MACI Introduction](https://maci.pse.dev/docs/introduction)  
+- [MACI Platform GitHub](https://github.com/privacy-scaling-explorations/maci-platform)  
+- [MACI GitHub](https://github.com/privacy-scaling-explorations/maci)  
+
+---
+
+### Bonus Challenge!
+
+As a bonus challenge, you can follow the instructions on the following GitHub Repository:
+
+- **[GitHub - BenBarahona/maci-gatekeeper](https://github.com/BenBarahona/maci-gatekeeper): MACI Gatekeeper Challenge**
+
+The idea of this challenge is to create a gatekeeper using the provided smart contract, deploy it, and use it as a custom gatekeeper when making the configurations of the MACI contract. This is an example of what can be done to further customize a voting round experience!
