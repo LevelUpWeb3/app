@@ -12,7 +12,7 @@ import NoData from "@/components/NoData";
 
 interface DataItem {
   labels: string[];
-  index: number;
+  published: string;
 }
 
 const List = (props) => {
@@ -51,7 +51,7 @@ const List = (props) => {
           }}
         >
           {filteredData
-            .sort((a, b) => b.index - a.index)
+            .sort((a, b) => new Date(b.published).getTime() - new Date(a.published).getTime())
             .map((item) => (
               <Card
                 color="purple"
